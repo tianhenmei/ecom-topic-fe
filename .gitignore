@@ -1,0 +1,10 @@
+.idea
+.svn
+.DS_Store
+mock
+node_modules
+npm-debug.log
+jspm_packages
+*.psd
+*.map
+.sass-cache
