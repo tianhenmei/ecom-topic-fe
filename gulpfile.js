@@ -99,6 +99,84 @@ gulp.task('compile',['compile:es6','compile:browser']);
 /********************************************************************
  * dev: 将es6 打包成 es5，同时将vue文件打包成js使用浏览器访问
  * ****************************************************/
+
+/********************************************************************
+ * create: 新建项目或新建某个项目中的组件
+ * ****************************************************/
+gulp.task('create:componet',function(){
+    if(params.create.components){
+        let arr = params.create.components.split(/\//g),
+            name = arr[0],
+            style = arr.length > 1 ? arr[1] : 'style1',
+            dir = './src/'+params.create.sys+'/components/',
+            filepath = dir + params.create.components,
+            demopath = dir+'/demo/style1',
+            isExist = fs.existsSync(filepath)
+
+        if(!isExist){
+            console.log('Starting creating...')
+            mkdirp(filepath, function(err) {
+                if (err) console.error(err)
+            })
+            fs.readdir(demopath,function(err,files){
+                var i = 0,
+                    newpath = ''
+                for(i = 0; i < files.length; i++){
+                    newpath = path.join(demopath,files[i])
+                    gulp.src(newpath)
+                        .pipe(gulp.dest(filepath))
+                }
+                console.log('创建成功')
+            })
+        }else{
+            fs.readdir(dir+name,function(err,files){
+                if(err){
+                    console.log(err.message)
+                    return
+                }
+                var start = 'style'.length,
+                    curr = 1,
+                    num = 1
+                for(var i = 0; i < files.length; i++){
+                    curr = parseInt(files[i].slice(start))
+                    if(curr > num){
+                        num = curr
+                    }
+                }
+                console.log(chalk.red('【创建失败，当前目录已存在！】')+chalk.yellow('您可以创建: style'+(num+1)))
+            })
+        }
+    }
+})
+gulp.task('create:system',function(){
+    if(!params.create.components){
+        let dir = './src/'+params.create.sys,
+            isExist = fs.existsSync(dir)
+
+        if(!isExist){
+            console.log('Starting creating...')
+            mkdirp(dir, function(err) {
+                if (err) console.error(err)
+            })
+            console.log('创建成功')
+        }else{
+            console.log(chalk.red('【创建失败，当前项目已存在！请重新起名！】'))
+        }
+    }
+})
+// npm run create -- --sys:editorPC --components:test/style1
+// 新建项目editorPC的组件，类型: test ，样式：style1
+gulp.task('create',['create:componet','create:system'],function(){
+    
+});
+/********************************************************************
+ * create: 新建项目或新建某个项目中的组件
+ * ****************************************************/
+
+
+
+
+
 gulp.task('dev:client',function(){
     
 });

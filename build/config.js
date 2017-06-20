@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 // 分离CSS单独成文件
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var ExtractTextPlugin2 = require('extract-text-webpack-plugin')
 
 
 function getConfigPlugins(systemName,name,plugins){
@@ -18,6 +19,7 @@ function getConfigPlugins(systemName,name,plugins){
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoEmitOnErrorsPlugin(),
             new ExtractTextPlugin("css/index.css"),
+            new ExtractTextPlugin2("css/[name].css"),
             new HtmlWebpackPlugin({
                 filename: `src/${systemName}/index.html`,
                 template: path.resolve(__dirname, `../src/${systemName}/index.html`),
@@ -100,7 +102,7 @@ function getConfig(systemName,name,plugins='defalutPlugins'){
         // loader: "style!css"
         use:ExtractTextPlugin.extract({
             fallback:'style-loader', 
-            use:['css-loader','postcss-loader'],
+            use:['css-loader','postcss-loader','sass-loader'],
             allChunks:true
         })
     };
@@ -179,13 +181,14 @@ function getConfig(systemName,name,plugins='defalutPlugins'){
                     loader: 'url-loader'
                 },{
                     test: /\.scss$/,
-                    use: ExtractTextPlugin.extract({
+                    use: ExtractTextPlugin2.extract({
                         fallback: 'style-loader',
                         use: ['css-loader', 'sass-loader']
-                    })
+                    }),
+                    exclude: /node_modules/
                 },{
                     test: /\.less$/,
-                    use: ExtractTextPlugin.extract({
+                    use: ExtractTextPlugin2.extract({
                         fallback: 'style-loader',
                         use: ['css-loader', 'less-loader']
                     })

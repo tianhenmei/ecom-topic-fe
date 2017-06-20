@@ -16,6 +16,7 @@ var teacher_control = require('./teacher-control.js');
 var vue_server = require('./vue-server.js');
 var system_control = require('./system-control.js');
 var editor_control = require('./editor-control.js');
+var list_control = require('./list-control.js');
 var editorPC_control = require('./editorPC-control.js');
 var student_control = require('./student-control.js')
 
@@ -28,6 +29,7 @@ router.use('/yh',express.static('publish')); // 指定挂载路径（虚拟）
 router.use('/works/teacher',teacher_control);
 // router.use('/vue',vue_server);
 // router.use('/dist',system_control);
+router.use('/list',list_control);
 router.use('/editor',editor_control);
 router.use('/editorPC',editorPC_control);
 router.use('/student',student_control)
