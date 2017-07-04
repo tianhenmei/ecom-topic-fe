@@ -70,11 +70,25 @@
         methods:{
             setValue(name,value,designValue,status = true){
                 if(status){
-                    let elem = $('.setting'),
-                        content = elem.find('.kitty-button-content'),
-                        button = elem.find('.yh-button')
-                    
-                    button.css(name,value)
+                    let elem = document.getElementsByClassName('setting'),
+                        content = elem.getElementsByClassName('kitty-button-content'),
+                        button = elem.getElementsByClassName('yh-button'),
+                        i = 0,
+                        nameArr = name.split(/-/g)
+                        newname = ''
+                    for(i = 0; i < nameArr.length; i++){
+                        nameArr[i] = nameArr[i].trim()
+                        if(nameArr[i]){
+                            if(i == 0){
+                                newname = nameArr[i]
+                            }else(
+                                newname += nameArr[i][0].toUpperCase()+nameArr[i].slice(1)
+                            )
+                        }
+                    }
+                    for(i = 0; i < button.length; i++){
+                        button[i].style[newname] = value
+                    }
                     this.style[name] = designValue
                 }else{
                     this.style[name] = designValue

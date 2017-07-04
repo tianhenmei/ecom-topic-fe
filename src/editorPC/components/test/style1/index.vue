@@ -4,20 +4,20 @@
 <template>
     <div class="demo-style1" :id="props.id" yh-module="Demo_style1"
         :ref="props.id"
-        @click.stop.prevent="setAll"
+        @click.stop="setAll"
         >
         
         <!-- yh-edit 组件设置 -->
         <yh-edit-complicated
             ref="yh-edit-complicated"
             :css="props.css"
-            :parent_id="props.id"
+            :elem_id="props.id"
             :common="props.common"
             :owndata="props.data"></yh-edit-complicated>
     </div>
 </template>
 <script>
-    import {recoveryData,getDataID,settingBox} from '../../Base/Node.js'
+    import {recoveryData,getDataID,settingBox,initSelected} from '../../Base/Node.js'
     import YHEditComplicated from '../../../edit-components/yh-edit-complicated.vue'
 
     const baseData = {
@@ -69,17 +69,9 @@
             recoveryData,
             getDataID,
             settingBox,
+            initSelected,
             setAll(e){
-                let i = 0,
-                    id = ''
-                for(i = 0; i < e.path.length; i++){
-                    if(e.path[i].id){
-                        id = e.path[i].id
-                        break
-                    }
-                }
-                $('.setting').removeClass('setting')
-                $('.yh-edit-layer').addClass('hide')
+                let id = this.initSelected(e)
                 this.$refs[id].className += ' setting'
                 let yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id+'-yh-edit-layer']
                 yh_edit_layer.className = yh_edit_layer.className.replace(/( hide)/g,'')

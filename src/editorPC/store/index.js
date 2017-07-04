@@ -11,6 +11,25 @@ let store = new Vuex.Store({
         includes:[],
         count:0,
         host:'http://localhost:9000/',
+        topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
+        triggerId:'',
+        triggerClassify:'',
+        childClassify:'',
+        ajaxUrl:{
+            CompanyPositions:{
+                url:'company/getCompanyandPosition',
+                type:'GET',
+                param:'comAndPosi'
+            },
+            CompanyPosition:{
+                url:'company/speed_checkCompany/$id$',
+                type:'POST'
+            },
+            Position:{
+                url:'job/speed_checkPosition/$id$',
+                type:'GET'
+            }
+        },
         // 临时与页面无关数据
         defaultPage:{
             background:{
@@ -21,6 +40,11 @@ let store = new Vuex.Store({
                 backgroundSize:'100% 100%'
             },
             elements:[]
+        },
+        selected:{
+            id:'',
+            elem:null,   // jquery 对象
+            yh_module:''
         },
         data:{
             oparent:null,  // 临时父级
@@ -53,6 +77,14 @@ let store = new Vuex.Store({
                 JSON.parse(JSON.stringify(state.defaultPage))
             ]
         },
+        initSelected:(state) => {
+            state.selected.id = ''
+            state.selected.elem = null
+            state.selected.yh_module = ''
+        },
+        setSelected:(state,payload) => {
+
+        },
         addPage:(state,index) => {
             if(index == state.pages.length - 1){
                 state.pages.push(JSON.parse(JSON.stringify(state.defaultPage)))
@@ -67,11 +99,53 @@ let store = new Vuex.Store({
                 state.elements.push(payload)
             }
         },
+        addChildData:(state,payload) => {
+            store.commit('getData',state.triggerId)
+            let i = 0,j = '',
+                length = state.data.elemData.props.elements.length
+            for(i = 0; i < payload.length; i++){
+                if(length > 0){
+                    for(j in payload[i].props){
+                        switch(j){
+                            case 'data':
+                            case 'id':
+                                break
+                            default:
+                                payload[i].props[j] = state.data.elemData.props.elements[0].props[j]
+                                break
+                        }
+                    }
+                }
+                payload[i].props.ischild = 'ischild'
+                // payload[i].props.attribute.ischild.value = 'ischild'
+            }
+            state.data.elemData.props.elements = state.data.elemData.props.elements.concat(payload)
+        },
+        addChildElement:(state,payload) => {
+            store.commit('getData')
+            if(payload instanceof Array){
+                let i = 0
+                for(i = 0; i < payload.length; i++){
+                    // payload[i].props.attribute.ischild.value = 'ischild'
+                    payload[i].props.ischild = 'ischild'
+                }
+                state.data.elemData.props.elements = state.data.elemData.props.elements.concat(payload)
+            }else{
+                // payload.props.attribute.ischild.value = 'ischild'
+                payload.props.ischild = 'ischild'
+                state.data.elemData.props.elements.push(payload)
+            }
+        },
         addComplexElement:(state,payload) => {
             store.commit('getData')
             state.data.elemData
                 .props.base.tabs[payload.index].elements
                 .push(payload.elemData)
+        },
+        setTriggerID:(state,payload) => {
+            for(let s in payload){
+                state[s] = payload[s]
+            }
         },
         setFontSize:(state,fontSize) => {
             state.fontSize = fontSize
@@ -154,10 +228,7 @@ let store = new Vuex.Store({
                 if(parent.attributes['yh-editor-content']){
                     break
                 }
-                if(parent.attributes['yh-tab']
-                    || parent.attributes['yh-list']
-                    || parent.attributes['yh-block']
-                ){
+                if(parent.attributes['yh-vessel']){
                     shells.push(parent)
                 }
                 parent = parent.parentNode
@@ -171,31 +242,40 @@ let store = new Vuex.Store({
                     oelem = shells[i]
                     store.commit('getIndex',{
                         elem:oelem,
-                        name:'tabIndex'
-                    })
-                    store.commit('getChild',{  // 获取当前elem的[yh-tab-content]
-                        elem:oelem.children[0],
-                        type:'attributes',
-                        value:'yh-tab-content',
-                        name:'ochild'
-                    })
-                    store.commit('getChild',{  // 获取当前elem的[yh-tab-content]
-                        elem:state.data.ochild,
-                        type:'classname',
-                        value:'yh-tab-active',
-                        name:'ochild'
-                    })
-                    store.commit('getIndex',{
-                        elem:state.data.ochild,
-                        name:'oindex'
+                        name:'oIndex'
                     })
                     if(i == shells.length - 1){
-                        state.data.parentData = state.elements[state.data.tabIndex]
-                                              .props.children[state.data.oindex].elements   // 当前的tab的所有elements
+                        state.data.parentData = state.elements[state.data.oIndex].props.elements 
                     }else{
-                        state.data.parentData = state.data.parentData[state.data.tabIndex]
-                                              .props.children[state.data.oindex].elements  // tab 下的tab
+                        state.data.parentData = state.data.parentData[state.data.oIndex].props.elements 
                     }
+                    // store.commit('getIndex',{
+                    //     elem:oelem,
+                    //     name:'tabIndex'
+                    // })
+                    // store.commit('getChild',{  // 获取当前elem的[yh-tab-content]
+                    //     elem:oelem.children[0],
+                    //     type:'attributes',
+                    //     value:'yh-tab-content',
+                    //     name:'ochild'
+                    // })
+                    // store.commit('getChild',{  // 获取当前elem的[yh-tab-content]
+                    //     elem:state.data.ochild,
+                    //     type:'classname',
+                    //     value:'yh-tab-active',
+                    //     name:'ochild'
+                    // })
+                    // store.commit('getIndex',{
+                    //     elem:state.data.ochild,
+                    //     name:'oindex'
+                    // })
+                    // if(i == shells.length - 1){
+                    //     state.data.parentData = state.elements[state.data.tabIndex]
+                    //                           .props.children[state.data.oindex].elements   // 当前的tab的所有elements
+                    // }else{
+                    //     state.data.parentData = state.data.parentData[state.data.tabIndex]
+                    //                           .props.children[state.data.oindex].elements  // tab 下的tab
+                    // }
                 }
                 state.data.elemData = state.data.parentData[state.data.index]
             }else{
@@ -203,19 +283,70 @@ let store = new Vuex.Store({
                 state.data.elemData = state.data.parentData[state.data.index]             
             }
         },
-        getData:() => {
-            let elem = document.getElementsByClassName('setting')[0],
+        getData:(state,elemID = '') => {
+            let elem = null
+            if(elemID){
+                elem = document.getElementById(elemID)
+                if(!/(setting)/g.test(elem.className)){
+                    elem.className += ' setting'
+                }
+            }else{
+                elem = document.getElementsByClassName('setting')[0]
                 elemID = elem.id
+            }
             store.commit('getElemInfo',elem)
         },
         setValue:(state,payload) => {
+            // ischildset // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+            let i = 0
             store.commit('getData')
-            if(!payload.parent){
-                state.data.elemData.props[payload.stylename] = payload.actualValue
-            }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
-                state.data.elemData.props[payload.parent][payload.stylename].value = payload.actualValue
-            }else{
-                state.data.elemData.props[payload.parent][payload.index][payload.stylename].value = payload.actualValue
+            switch(payload.ischildset){
+                case 'ischildset':
+                    if(payload.parent == 'data' || payload.parent.indexOf('data.') == 0){ // 只针对单个组件
+                        let data = state.data.elemData.props.elements[payload.eindex].props,
+                            parent = payload.parent.split(/[.]/g)
+                        for(i = 0 ; i < parent.length; i++){
+                            if(parent[i].trim()){
+                                data = data[parent[i]]
+                            }
+                        }
+                        if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                            data[payload.stylename].value = payload.actualValue
+                        }else{
+                            data[payload.index][payload.stylename].value = payload.actualValue
+                        }
+                    }else{
+                        if(!payload.parent){
+                            for(i = 0; i < state.data.elemData.props.elements.length; i++){
+                                state.data.elemData.props.elements[i].props[payload.stylename] = payload.actualValue
+                            }
+                        }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                            for(i = 0; i < state.data.elemData.props.elements.length; i++){
+                                state.data.elemData.props.elements[i].props[payload.parent][payload.stylename].value = payload.actualValue
+                            }
+                        }else{
+                            for(i = 0; i < state.data.elemData.props.elements.length; i++){
+                                state.data.elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].value = payload.actualValue
+                            }
+                        }
+                    }
+                    break
+                default:
+                    if(!payload.parent){
+                        state.data.elemData.props[payload.stylename] = payload.actualValue
+                    }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                        state.data.elemData.props[payload.parent][payload.stylename].value = payload.actualValue
+                    }else{
+                        let data = state.data.elemData.props,
+                            parent = payload.parent.split(/[.]/g)
+                        for(i = 0 ; i < parent.length; i++){
+                            if(parent[i].trim()){
+                                data = data[parent[i]]
+                            }
+                        }
+                        data[payload.index][payload.stylename].value = payload.actualValue
+                    }
+                    break
             }
             store.commit('reinitData')
         },
@@ -242,26 +373,68 @@ let store = new Vuex.Store({
          ***************/
         setMultipleValue:(state,payload) => {
             store.commit('getData')
-            let i = 0
-            for(i = 0; i < payload.length; i++){
-                switch(payload[i].parent){
-                    case 'states':
-                        if(!state.data.elemData.props[payload[i].parent]){
-                            state.data.elemData.props[payload[i].parent] = {}
+            let i = 0,j = 0
+            switch(payload.ischildset){
+                case 'ischildset':
+                    for(i = 0; i < payload.length; i++){
+                        switch(payload[i].parent){
+                            case 'nonset':
+                            case 'css':
+                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
+                                    state.data.elemData.props.elements[j].props[payload[i].parent][payload[i].stylename].value = payload[i].actualValue
+                                }
+                                break;
+                            case 'states':
+                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
+                                    if(!state.data.elemData.props.elements[j].props[payload[i].parent]){
+                                        state.data.elemData.props.elements[j].props[payload[i].parent] = {}
+                                    }
+                                    state.data.elemData.props.elements[j].props[payload[i].parent][payload[i].index][payload[i].stylename] = payload[i].actualValue
+                                }
+                                break
+                            case 'style':
+                            case 'position':
+                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
+                                    if(!state.data.elemData.props.elements[j].props[payload[i].parent]){
+                                        state.data.elemData.props.elements[j].props[payload[i].parent] = {}
+                                    }
+                                    state.data.elemData.props.elements[j].props[payload[i].parent][payload[i].stylename] = payload[i].actualValue
+                                }
+                                break
+                            default:
+                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
+                                    state.data.elemData.props.elements[j].props[payload[i].stylename] = payload[i].actualValue
+                                }
+                                break
                         }
-                        state.data.elemData.props[payload[i].parent][payload[i].index][payload[i].stylename] = payload[i].actualValue
-                        break
-                    case 'style':
-                    case 'position':
-                        if(!state.data.elemData.props[payload[i].parent]){
-                            state.data.elemData.props[payload[i].parent] = {}
+                    }
+                    break
+                default:
+                    for(i = 0; i < payload.length; i++){
+                        switch(payload[i].parent){
+                            case 'nonset':
+                            case 'css':
+                                state.data.elemData.props[payload[i].parent][payload[i].stylename].value = payload[i].actualValue
+                                break;
+                            case 'states':
+                                if(!state.data.elemData.props[payload[i].parent]){
+                                    state.data.elemData.props[payload[i].parent] = {}
+                                }
+                                state.data.elemData.props[payload[i].parent][payload[i].index][payload[i].stylename] = payload[i].actualValue
+                                break
+                            case 'style':
+                            case 'position':
+                                if(!state.data.elemData.props[payload[i].parent]){
+                                    state.data.elemData.props[payload[i].parent] = {}
+                                }
+                                state.data.elemData.props[payload[i].parent][payload[i].stylename] = payload[i].actualValue
+                                break
+                            default:
+                                state.data.elemData.props[payload[i].stylename] = payload[i].actualValue
+                                break
                         }
-                        state.data.elemData.props[payload[i].parent][payload[i].stylename] = payload[i].actualValue
-                        break
-                    default:
-                        state.data.elemData.props[payload[i].stylename] = payload[i].actualValue
-                        break
-                }
+                    }
+                    break
             }
             store.commit('reinitData')
         },

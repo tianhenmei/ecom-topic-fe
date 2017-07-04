@@ -90,9 +90,9 @@
         },
         methods:{
             setEvent(name,value,designValue){
-                let elem = $('.setting'),
-                    content = elem.find('.kitty-button-content'),
-                    button = elem.find('.yh-button')
+                // let elem = document.getElementsByClassName('.setting')[0],
+                //     content = elem.getElementsByClassName('.kitty-button-content')[0],
+                //     button = elem.getElementsByClassName('.yh-button')[0]
                 
                 this.props.href = designValue
             },
@@ -101,14 +101,30 @@
                 this.$emit('setChangeStatus',true)
             },
             removeElement(e){
-                var elem = $('.setting'),
-                    elemID = elem.attr('id');
+                var elem = document.getElementsByClassName('.setting')[0],
+                    elemID = elem.getAttribute('id'),
+                    selection = document.getElementsByClassName('yh-selection'),
+                    i = 0
                 this.$store.commit('removeElement',elemID)
-                $('.yh-selection').hide()
+                for(i = 0; i < selection.length; i++){
+                    if(!/(hide)/g.test(selection[i].className)){
+                        selection[i].className = selection[i].className + ' hide'
+                    }
+                }
             },
             undoElement(e){
-                $('.setting').removeClass('setting')
-                $('.yh-selection').hide()
+                let selection = document.getElementsByClassName('yh-selection'),
+                    setting = document.getElementsByClassName('.setting'),
+                    i = 0
+                
+                for(i = 0; i < selection.length; i++){
+                    if(!/(hide)/g.test(selection[i].className)){
+                        selection[i].className = selection[i].className + ' hide'
+                    }
+                }
+                for(i = 0; i < setting.length; i++){
+                    setting[i].className = setting[i].className.replace('setting','').replace('  ','')
+                }
             }
         }
      }

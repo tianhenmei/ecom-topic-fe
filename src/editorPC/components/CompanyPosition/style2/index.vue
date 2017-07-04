@@ -4,48 +4,60 @@
 <template>
 <div class="company-position-style2" :id="props.id" yh-module="CompanyPosition_style2"
     :ref="props.id"
-    :industryfield="props.data.industryfield"
-    @click.stop.prevent="setAll">
+    :industryfield="props.data.industryfield.value"
+    @click.stop="setAll">
     <h3 class="title background clearfix" :style="{'background-color':props.css.background_background_color.value}">
-        <a :href="'https://www.lagou.com/gongsi/'+props.data.companyId+'.html'" class="logoUrl companyLink" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId">
-            <img class="logo" :src="'https://www.lgstatic.com/thumbnail_200x200/'+props.data.logo" />
+        <a :href="'https://www.lagou.com/gongsi/'+props.data.companyId.value+'.html'" class="logoUrl companyLink" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId.value">
+            <img class="logo" :src="'https://www.lgstatic.com/thumbnail_200x200/'+props.data.logo.value" />
         </a>
         <div class="right">
-            <a :href="'https://www.lagou.com/gongsi/'+props.data.companyId+'.html'" class="name" :style="{'color':props.css.name_color.value}" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId">
-                {{props.data.name}}
+            <a :href="'https://www.lagou.com/gongsi/'+props.data.companyId.value+'.html'" class="name" :style="{'color':props.css.name_color.value}" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId.value">
+                {{props.data.name.value}}
             </a>
             <p class="tag otherlabel clearfix">
-                <span v-for="one in props.data.otherlabel.split(/[,.，。]/g)">{{one}}</span>
+                <span v-for="one in props.data.otherlabel.value.split(/[,.，。]/g)">{{one}}</span>
             </p>
         </div>
     </h3>
-    <p class="slogan all" :style="{'color':props.css.all_color.value}">{{props.data.slogan}}</p>
+    <p class="slogan all" :style="{'color':props.css.all_color.value}">{{props.data.slogan.value}}</p>
     <div class="slideLayer hide">
         <ul class="position positionList background" :style="{'background-color':props.css.background_background_color.value}">
-            <li v-for="one in props.data.position" :dynamic_type="one.dynamic_type">
-                <a :href="'https://www.lagou.com/jobs/'+one.positionId+'.html'" :lagou-href="'https://www.lagou.com/jobs/'+one.positionId+'.html?source=pl&i=pl-0'" class="positionUrl positionLink clearfix" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="one.positionId">
-                    <p class="positionName" :style="{'color':props.css.positionName_color.value}">{{one.positionName}}</p>
-                    <p class="salary" :style="{color:props.css.salary_color.value}">{{one.salary}}</p>
+            <li v-for="one in props.data.position.value" :dynamic_type="one.dynamic_type.value">
+                <a :href="'https://www.lagou.com/jobs/'+one.positionId.value+'.html'" :lagou-href="'https://www.lagou.com/jobs/'+one.positionId.value+'.html?source=pl&i=pl-0'" class="positionUrl positionLink clearfix" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="one.positionId.value">
+                    <p class="positionName" :style="{'color':props.css.positionName_color.value}">{{one.positionName.value}}</p>
+                    <p class="salary" :style="{color:props.css.salary_color.value}">{{one.salary.value}}</p>
                 </a>
             </li>
         </ul>
-        <a :href="'https://www.lagou.com/gongsi/j'+props.data.companyId+'.html'" class="more infoWord button background-color" :style="{'background-color':props.css.button_background_color.value,'color':props.css.background_background_color.value}" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId">查看更多热招职位</a>
+        <a :href="'https://www.lagou.com/gongsi/j'+props.data.companyId.value+'.html'" class="more infoWord button background-color" :style="{'background-color':props.css.button_background_color.value,'color':props.css.background_background_color.value}" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId.value">查看更多热招职位</a>
     </div>
     <!-- yh-edit 组件设置 -->
     <yh-edit-complicated
         ref="yh-edit-complicated"
         :css="props.css"
-        :parent_id="props.id"
+        :elem_id="props.id"
         :common="props.common"
+        :ignorestatus="props.ignorestatus"
+        :ischild="props.ischild"
         :owndata="props.data"></yh-edit-complicated>
 </div>
 </template>
 <script>
-    import {recoveryData,getDataID,settingBox} from '../../Base/Node.js'
+    import {
+        recoveryData,
+        getDataID,
+        settingBox,
+        initSelected,
+        updateData,
+        setChildData
+    } from '../../Base/Node.js'
     import YHEditComplicated from '../../../edit-components/yh-edit-complicated.vue'
     
     const baseData = {
         id:'',
+        ignorestatus:'',  // 是否为类似LIST的子集（如果是则会忽略样式设置）为'ignorestatus' 时忽略
+        ischild:'',
+        yh_data_name:'name',  // 当作为子级时放入uplist中的title取值
         css:{
             background_background_color:{
                 cn:'背景颜色',
@@ -82,46 +94,206 @@
 
         },
         attribute:{
-
+            
         },
         data:{
-            name:'拉勾网',
-            companyId:147,
-            logo:'image1/M00/00/0D/Cgo8PFTUWCSAQmdFAABTPhyqM88355.jpg',
-            city:'北京',
-            companySize:'150-500人',
-            financestage:'C轮',
-            industryfield:'企业服务,招聘',
-            otherlabel:'节日礼物,股票期权,绩效奖金,年度旅游,领导好,五险一金,午餐补助,弹性工作,吃住全免',
-            slogan:'帮用户找到满意的工作',
-            description:'<p>拉勾是一家专注于为职场人提供职业成长机会，为中小型企业提供优质的人力资源服务的公司。成长三年、四轮巨额融资、服务千万用户，拉勾已成为互联网垂直招聘行业的佼佼者。</p>↵<p><br /></p>↵<p>拉勾人相信并恪守：无论如何，用户价值都是第一位的；我们绝不因为利益的获取而放下我们一直引以为傲的德行；我们要用最快的方式去践行质感与创新；我们坚信合作是1+1&gt;2；追求主动学习与承担，也就是为了成为我们自己。</p>↵<p><br /></p>↵<p>未来，拉勾人将继续专注于用户体验，精心耕耘两个业务（招聘业务、自由职业者业务）和一个平台（拉勾云平台），不忘初心，专心做好产品，帮助每一位互联网人获得更多更好的职业成长机会、帮助更多的互联网企业获得更轻便更专业的产品服务。</p>',
-            position:[{
-                dynamic_type:'设计',
-                positionId:'1777398',
-                positionName:'UI设计师',
-                salary:'7k-12k'
-            },{
-                dynamic_type:'设计',
-                positionId:'1777398',
-                positionName:'UI设计师',
-                salary:'7k-12k'
-            },{
-                dynamic_type:'设计',
-                positionId:'1777398',
-                positionName:'UI设计师',
-                salary:'7k-12k'
-            },{
-                dynamic_type:'设计',
-                positionId:'1777398',
-                positionName:'UI设计师',
-                salary:'7k-12k'
-            }]
+            companyId:{
+                cn:'公司ID',
+                en:'companyId',
+                value:147,
+                type:'request',
+                parent:'data'
+            },
+            name:{
+                cn:'公司名称',
+                en:'name',
+                value:'拉勾网',
+                type:'text',
+                parent:'data'
+            },
+            logo:{
+                cn:'公司LOGO',
+                en:'logo',
+                value:'i/image/M00/00/1F/Cgp3O1YtkIuAXCPUAAA28p_G-ck324.png',
+                type:'image',
+                mold:'src',
+                parent:'data'
+            },
+            otherlabel:{
+                cn:'公司标签',
+                en:'otherlabel',
+                value:'节日礼物,股票期权,绩效奖金,年度旅游,领导好,五险一金,午餐补助,弹性工作,吃住全免',
+                type:'text',
+                parent:'data'
+            },
+            industryfield:{
+                cn:'所属领域',
+                en:'industryfield',
+                value:'企业服务,招聘',
+                type:'text',
+                parent:'data'
+            },
+            slogan:{
+                cn:'slogan',
+                en:'slogan',
+                value:'帮用户找到满意的工作',
+                type:'text',
+                parent:'data'
+            },
+            position:{
+                cn:'职位设置',
+                en:'position',
+                type:'uplist',
+                name:'positionName',
+                parent:'data',
+                value:[{
+                    dynamic_type:{
+                        cn:'职位类别',
+                        en:'dynamic_type',
+                        value:'设计',
+                        type:'none',
+                        parent:'data.position.value'
+                    },
+                    positionId:{
+                        cn:'职位ID',
+                        en:'positionId',
+                        value:'1777398',
+                        type:'request',
+                        parent:'data.position.value'
+                    },
+                    positionName:{
+                        cn:'职位名称',
+                        en:'positionName',
+                        value:'UI设计师',
+                        type:'text',
+                        parent:'data.position.value'
+                    },
+                    salary:{
+                        cn:'职位薪资',
+                        en:'salary',
+                        value:'7k-12k',
+                        type:'text',
+                        parent:'data.position.value'
+                    }
+                },{
+                    dynamic_type:{
+                        cn:'职位类别',
+                        en:'dynamic_type',
+                        value:'设计',
+                        type:'none',
+                        parent:'data.position.value'
+                    },
+                    positionId:{
+                        cn:'职位ID',
+                        en:'positionId',
+                        value:'1777398',
+                        type:'request',
+                        parent:'data.position.value'
+                    },
+                    positionName:{
+                        cn:'职位名称',
+                        en:'positionName',
+                        value:'UI设计师',
+                        type:'text',
+                        parent:'data.position.value'
+                    },
+                    salary:{
+                        cn:'职位薪资',
+                        en:'salary',
+                        value:'7k-12k',
+                        type:'text',
+                        parent:'data.position.value'
+                    }
+                },{
+                    dynamic_type:{
+                        cn:'职位类别',
+                        en:'dynamic_type',
+                        value:'设计',
+                        type:'none',
+                        parent:'data.position.value'
+                    },
+                    positionId:{
+                        cn:'职位ID',
+                        en:'positionId',
+                        value:'1777398',
+                        type:'request',
+                        parent:'data.position.value'
+                    },
+                    positionName:{
+                        cn:'职位名称',
+                        en:'positionName',
+                        value:'UI设计师',
+                        type:'text',
+                        parent:'data.position.value'
+                    },
+                    salary:{
+                        cn:'职位薪资',
+                        en:'salary',
+                        value:'7k-12k',
+                        type:'text',
+                        parent:'data.position.value'
+                    }
+                },{
+                    dynamic_type:{
+                        cn:'职位类别',
+                        en:'dynamic_type',
+                        value:'设计',
+                        type:'none',
+                        parent:'data.position.value'
+                    },
+                    positionId:{
+                        cn:'职位ID',
+                        en:'positionId',
+                        value:'1777398',
+                        type:'request',
+                        parent:'data.position.value'
+                    },
+                    positionName:{
+                        cn:'职位名称',
+                        en:'positionName',
+                        value:'UI设计师',
+                        type:'text',
+                        parent:'data.position.value'
+                    },
+                    salary:{
+                        cn:'职位薪资',
+                        en:'salary',
+                        value:'7k-12k',
+                        type:'text',
+                        parent:'data.position.value'
+                    }
+                }]
+            }
         },
         positionData:{
-            dynamic_type:'设计',
-            positionId:'1777398',
-            positionName:'UI设计师',
-            salary:'7k-12k'
+            dynamic_type:{
+                cn:'职位类别',
+                en:'dynamic_type',
+                value:'设计',
+                type:'none',
+                parent:'data.position.value'
+            },
+            positionId:{
+                cn:'职位ID',
+                en:'positionId',
+                value:'1777398',
+                type:'request',
+                parent:'data.position.value'
+            },
+            positionName:{
+                cn:'职位名称',
+                en:'positionName',
+                value:'UI设计师',
+                type:'text',
+                parent:'data.position.value'
+            },
+            salary:{
+                cn:'职位薪资',
+                en:'salary',
+                value:'7k-12k',
+                type:'text',
+                parent:'data.position.value'
+            }
         }
     }
 
@@ -134,6 +306,9 @@
             return {
                 baseData:JSON.parse(JSON.stringify({
                     id:baseData.id,
+                    ignorestatus:baseData.ignorestatus,
+                    ischild:baseData.ischild,
+                    yh_data_name:baseData.yh_data_name,
                     css:baseData.css,
                     attribute:baseData.attribute,
                     data:baseData.data,
@@ -145,24 +320,15 @@
             
         },
         methods:{
-            recoveryData,
-            getDataID,
-            settingBox,
+            resetData(data){
+                return updateData(data,baseData)
+            },
             setAll(e){
-                let i = 0,
-                    id = ''
-                for(i = 0; i < e.path.length; i++){
-                    if(e.path[i].id){
-                        id = e.path[i].id
-                        break
-                    }
-                }
-                $('.setting').removeClass('setting')
-                $('.yh-edit-layer').addClass('hide')
+                let id = initSelected(e)
                 this.$refs[id].className += ' setting'
                 let yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id+'-yh-edit-layer']
                 yh_edit_layer.className = yh_edit_layer.className.replace(/( hide)/g,'')
-                this.settingBox(this.$refs[id])
+                settingBox(this.$refs[id],this.props.ischild)
             },
             recoveryModuleData(elem,baseData){
                 let data = {},
@@ -172,42 +338,43 @@
                     i = 0,curr = '',
                     cuArr = [],
                     childdata = {}
+                data = JSON.parse(JSON.stringify(baseData.data))
                 for(attr in baseData.data){
                     switch(attr){
                         case 'position':
                             current = elem.find('.'+attr).children()
-                            data[attr] = []
+                            data[attr].value = []
                             for(i = 0; i < current.length; i++){
-                                childdata = {}
+                                childdata = JSON.parse(JSON.stringify(baseData.positionData))
                                 for(curr in baseData.positionData){
                                     switch(curr){
                                         case 'dynamic_type':
-                                            childdata[curr] = current.eq(i).attr(curr) ? current.eq(i).attr(curr) : baseData.positionData[curr]
+                                            childdata[curr].value = current.eq(i).attr(curr) ? current.eq(i).attr(curr) : baseData.positionData[curr]
                                             break;
                                         case 'positionId':
                                             currentChild = current.eq(i).find('.positionLink')
-                                            childdata[curr] = this.getDataID(currentChild.attr('href'),27)
+                                            childdata[curr].value = getDataID(currentChild.attr('href'),27)
                                             break;
                                         case 'positionName':
                                         case 'salary':
                                             currentChild = current.eq(i).find('.'+curr)
-                                            childdata[curr] = currentChild.length > 0 ? currentChild.html() : baseData.positionData[curr]
+                                            childdata[curr].value = currentChild.length > 0 ? currentChild.html() : baseData.positionData[curr]
                                             break
                                     }
                                 }
-                                data[attr].push(JSON.parse(JSON.stringify(childdata)))
+                                data[attr].value.push(JSON.parse(JSON.stringify(childdata)))
                             }
                             break;
                         case 'companyId':
                             current = elem.find('.companyLink')
-                            data[attr] = this.getDataID(current.attr('href'),29)
+                            data[attr].value = getDataID(current.attr('href'),29)
                             break;
                         case 'logo':
                             current = elem.find('.'+attr)
-                            data[attr] = current.length > 0 ? current.attr('src').split('https://www.lgstatic.com/thumbnail_200x200/')[1] : baseData.data[attr]
+                            data[attr].value = current.length > 0 ? current.attr('src').split('https://www.lgstatic.com/thumbnail_200x200/')[1] : baseData.data[attr]
                             break
                         case 'industryfield':
-                            data[attr] = elem.attr(attr)
+                            data[attr].value = elem.attr(attr)
                             break;
                         case 'otherlabel':
                             current = elem.find('.'+attr).children()
@@ -215,7 +382,7 @@
                             for(i = 0; i < current.length; i++){
                                 cuArr.push(current.eq(i).html().trim())
                             }
-                            data[attr] = cuArr.join(',')
+                            data[attr].value = cuArr.join(',')
                             break;
                         case 'name':
                         case 'city':
@@ -225,7 +392,7 @@
                         case 'description':
                         default:
                             current = elem.find('.'+attr)
-                            data[attr] = current.length > 0 ? current.html() : baseData.data[attr]
+                            data[attr].value = current.length > 0 ? current.html() : baseData.data[attr]
                             break;
                     }
                 }
@@ -238,6 +405,9 @@
             let data = Object.assign(
                 {},
                 JSON.parse(JSON.stringify({
+                    ignorestatus:baseData.ignorestatus,
+                    ischild:baseData.ischild,
+                    yh_data_name:baseData.yh_data_name,
                     css:baseData.css,
                     attribute:baseData.attribute,
                     data:baseData.data,
@@ -247,12 +417,29 @@
             )
             return data
         },
+        setCtor(options,elemData){
+            let data = Object.assign(
+                {},
+                JSON.parse(JSON.stringify({
+                    ignorestatus:baseData.ignorestatus,
+                    ischild:baseData.ischild,
+                    yh_data_name:baseData.yh_data_name,
+                    css:baseData.css,
+                    attribute:baseData.attribute,
+                    data:setChildData(elemData,baseData.data),
+                    common:baseData.common
+                })),
+                options
+            )
+            return data
+        },
         recoveryCtor(elem,options){
             let data = Object.assign(
                 {},
-                this.methods.recoveryData(elem,baseData),
+                recoveryData(elem,baseData),
                 this.methods.recoveryModuleData(elem,baseData),
                 {
+                    yh_data_name:baseData.yh_data_name,
                     common:baseData.common
                 },
                 options

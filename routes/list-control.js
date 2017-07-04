@@ -46,31 +46,30 @@ router.post('/getListData',function(req,res){
     var page = req.body.page,
         eachPage = req.body.eachPage,
         i = 0,
-        list = [],
-        origin = {
-            title:'text',
-            templateId:10001,
-            html:'text',
-            type:'pc',
-            theme:'测试',
-            author:'gaohui',
-            editor:'gaohui',
-            createtime:'2017/06/19 15:26',
-            lasttime:'2017/06/19 15:26'
-        };
-    
-    for(i = 0; i < eachPage; i++){
-        list.push(JSON.parse(JSON.stringify(origin)));
-    }
-    res.json({
-        state:200,
-        success:true,
-        result:{
-            list:list,
-            total:99,
-            totalPage:10
+        list = [];
+    fs.readdir(path.resolve(__dirname,'../publish'),function(err,files){
+        if(err){
+            return console.log(err)
         }
-    });
+        files.forEach(function(file){
+            let filePath = path.resolve(__dirname,'../publish/'+file),
+                statInfo = fs.statSync(filePath)
+            
+            if(statInfo.isDirectory()){  // 目录
+                let content = JSON.parse(fs.readFileSync(filePath+'/js/index.json','utf-8'))
+                list.push(content.pageInfo)
+            }
+        })
+        res.json({
+            state:200,
+            success:true,
+            result:{
+                list:list,
+                total:99,
+                totalPage:10
+            }
+        });
+    })
 });
 
 

@@ -12,9 +12,6 @@ var uglify = require('uglify-js');
 var serverRenderer = require('vue-server-renderer')
 var Vue = require('vue')
 
-var mysql = require("./mysql.js");
-// var test = require("../public/dist/demo/js/test-main.js");
-
 var router = express.Router();
 
 router.use(bodyParser.json({limit: '50mb'}));
@@ -34,9 +31,9 @@ router.post('/savePage',function(req,res){
     });
 });
 
-router.post('/getPageData',function(req,res){
+router.get('/getPageData',function(req,res){
     var name = req.body.name ? req.body.name : 'text'
-    fs.readFile(path.resolve(__dirname,'../publish/'+name+'/index.html'),'utf-8',function(err,data){
+    fs.readFile(path.resolve(__dirname,'../publish/'+name+'/js/index.json'),'utf-8',function(err,data){
         if(err){
             console.log(err)
             res.json({
@@ -45,34 +42,54 @@ router.post('/getPageData',function(req,res){
                 content:'NOT FOUND PAGE '+name.toLocaleUpperCase()
             })
         }else{
-            var // html
-                index = data.indexOf('#PAGESTART#-->'),
-                length = '#PAGESTART#-->'.length,
-                lastIndex = data.indexOf('<!--#PAGEEND#'),
-                html = data.slice(index+length,lastIndex),
-                // elemdata
-                dindex = data.indexOf('#PAGEDATASTART#'),
-                dlength = '#PAGEDATASTART#'.length,
-                dlastIndex = data.indexOf('#PAGEDATAEND#'),
-                datastring = data.slice(dindex+dlength,dlastIndex)
-                elemdata = {
-                    includes:[],
-                    count:0
-                }
-            if(dindex > -1 && datastring && datastring != undefined){
-                elemdata = JSON.parse(datastring)
+            var data = JSON.parse(data)
+            if(data.count){
+                data.count = parseInt(data.count)
             }
             res.json({
                 state:200,
                 success:true,
-                content:{
-                    html:html,
-                    includes:elemdata.includes,
-                    count:elemdata.count
-                }
+                content:data
             });
         }
     })
+    // fs.readFile(path.resolve(__dirname,'../publish/'+name+'/index.html'),'utf-8',function(err,data){
+    //     if(err){
+    //         console.log(err)
+    //         res.json({
+    //             state:200,
+    //             success:false,
+    //             content:'NOT FOUND PAGE '+name.toLocaleUpperCase()
+    //         })
+    //     }else{
+    //         var // html
+    //             index = data.indexOf('#PAGESTART#-->'),
+    //             length = '#PAGESTART#-->'.length,
+    //             lastIndex = data.indexOf('<!--#PAGEEND#'),
+    //             html = data.slice(index+length,lastIndex),
+    //             // elemdata
+    //             dindex = data.indexOf('#PAGEDATASTART#'),
+    //             dlength = '#PAGEDATASTART#'.length,
+    //             dlastIndex = data.indexOf('#PAGEDATAEND#'),
+    //             datastring = data.slice(dindex+dlength,dlastIndex)
+    //             elemdata = {
+    //                 includes:[],
+    //                 count:0
+    //             }
+    //         if(dindex > -1 && datastring && datastring != undefined){
+    //             elemdata = JSON.parse(datastring)
+    //         }
+    //         res.json({
+    //             state:200,
+    //             success:true,
+    //             content:{
+    //                 html:html,
+    //                 includes:elemdata.includes,
+    //                 count:elemdata.count
+    //             }
+    //         });
+    //     }
+    // })
 });
 
 router.post('/upload',function(req,res){
@@ -132,6 +149,7 @@ function setFile(page){
     }
     writeCSS(page.includes,'publish/'+page.name+'/css/index.css')
     writeJS(page.includes,'publish/'+page.name+'/js/index.js');
+    writeFile('publish/'+page.name+'/js/index.json',page.elemDatas)
     writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/'),'publish/'+page.name+'/index.html',{
         includes:page.includes,
         count:page.count

@@ -1,13 +1,16 @@
 <template>
     <yh-edit-input 
         @setValue="setValue" 
-        :options="optionsData" >
+        :options="optionsData"
+        :ischildset="ischildset"
+        :eindex="eindex"
+        :index="index" >
         <div slot="chooser" class="yh-edit-chooser">
             <input class="yh-edit-vcolor" 
                 type="color"
                 @click.stop="setChangeStatus"
                 @change.stop="colorChange" />
-            <ul class="yh-edit-list clearfix">
+            <ul class="yh-edit-list clearfix" ref="yh-edit-list">
                 <li v-for="one in list" 
                     :class="one == 'transparent' ? 'transparent' : ''" 
                     :value="one" 
@@ -24,7 +27,13 @@
         components:{
             'yh-edit-input':YHEditInput,
         },
-        props:['parent','options'],
+        props:[
+            'eindex',  // elements中的索引
+            'index','parent','options',
+            'elem_id',   // 当前被选中元素的ID
+            'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+            'ischild'
+        ],
         data(){
             return {
                 optionsData:{
@@ -33,6 +42,7 @@
                     unit:'',
                     realunit:'',
                     type:'text',
+                    classname:'color',
                     style:this.parent
                 },
                 list:[
@@ -52,18 +62,20 @@
         mounted(){
             // @mouseenter="showEditLayer"
             // @mouseleave="hideEditLayer"
-            var textInput = $(this.$el).find('.yh-edit-value > input')[0]
+            var textInput = this.$el.getElementsByClassName('yh-edit-value')[0].getElementsByTagName('input')[0]
             textInput.addEventListener('focus',this.showEditLayer)
             this.$el.addEventListener('mouseleave',this.hideEditLayer)
         },
         methods:{
             showEditLayer(e){
-                $(e.target).closest('.yh-edit-input').find('.yh-edit-list').show()
+                // $(e.target).closest('.yh-edit-input').find('.yh-edit-list').show()
+                this.$refs['yh-edit-list'].style.display = 'block'
                 this.changeStatus = false
             },
             hideEditLayer(e){
                 if(!this.changeStatus){
-                    $(e.target).closest('.yh-edit-input').find('.yh-edit-list').hide()
+                    // $(e.target).closest('.yh-edit-input').find('.yh-edit-list').hide()
+                    this.$refs['yh-edit-list'].style.display = 'none'
                 }
             },
             setValue(name,actualValue,value){
@@ -71,8 +83,10 @@
                     this.$emit('setValue',name,value,value)
                 }else{
                     this.$store.commit('setValue',{
-                        parent:this.type ? this.type.parent : 'css',
-                        index:this.type ? this.type.index : -1,
+                        parent:this.options.parent ? this.options.parent : 'css',
+                        eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                        index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                        ischildset:this.ischildset ? this.ischildset : '',
                         stylename:name,
                         actualValue:value,
                         designValue:value
@@ -85,19 +99,19 @@
             },
             colorChange(e){
                 let target = e.target,
-                    value = target.value,
-                    input = $(target).closest('.yh-edit-input').find('.yh-edit-value > input')
+                    value = target.value //,
+                    // input = $(target).closest('.yh-edit-input').find('.yh-edit-value > input')
                 
                 this.setValue(this.options.en,value,value)
-                input.val(value)
+                // input.val(value)
             },
             setColor(e){
                 let target = e.target,
-                    value = target.attributes['value'].value,
-                    input = $(target).closest('.yh-edit-input').find('.yh-edit-value > input')
+                    value = target.attributes['value'].value//,
+                    // input = $(target).closest('.yh-edit-input').find('.yh-edit-value > input')
 
                 this.setValue(this.options.en,value,value)
-                input.val(value)
+                // input.val(value)
             }
         }
     }

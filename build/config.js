@@ -23,7 +23,7 @@ function getConfigPlugins(systemName,name,plugins){
             new HtmlWebpackPlugin({
                 filename: `src/${systemName}/index.html`,
                 template: path.resolve(__dirname, `../src/${systemName}/index.html`),
-                chunks:['jquery','lib','index'],
+                chunks:['jquery','lib','index'],  //'jquery'
                 inject: true
             })
         ],

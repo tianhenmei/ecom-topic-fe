@@ -10,13 +10,14 @@
     realunit   实际的数据单位，通常为rem
 -->
 <template>
-    <div class="yh-edit-input clearfix">
+    <div class="yh-edit-input clearfix" :class="setClassname">
         <div class="yh-edit-text">{{options.name}}{{options.name ? '：' : ''}}</div>
         <div class="yh-edit-value clearfix">
             <input
                 :class="{'yh-edit-value-input-long': !options.unit}"
                 :type="options.type"
                 :value="options.style[options.stylename] ? getDesignValue : (options.type == 'number' ? 0 : '')"
+                @click.stop.prevent="inputSelected"
                 @input="setValue"
             />
             <span v-if="options.unit">{{options.unit}}</span>
@@ -27,11 +28,19 @@
 <script>
     import {mapState} from 'vuex'
     export default {
-        props:['options','type'],
+        props:['eindex','index','options','type',
+            'ischildset'  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+        ],
         data(){
             return {}
         },
         computed:{
+            setClassname(){
+                if(this.options.classname){
+                    return 'yh-edit-'+this.options.classname
+                }
+                return ''
+            },
             getDesignValue(){
                 let actualValue = this.options.style[this.options.stylename].value
                 if(this.options.type === 'number'){
@@ -56,34 +65,39 @@
             getRemValue(value){
                 return value / (750 / 16)
             },
+            inputSelected(e){
+                
+            },
             setValue(e){
                 let target = e.target,
                     value = target.value,   // // 展示出来的字体大小（针对750的宽）
                     unit = this.options.unit ? this.options.unit : '',
                     realunit = this.options.realunit ? this.options.realunit : '',
                     stylename = this.options.stylename,
-                    actualValue = unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
+                    actualValue = value // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
                 
                 // actualValue : 实际上使用的值
                 // value : 展示用的值 （designValue）
                 // this.$emit('setValue',stylename,actualValue,value)
-                if(this.type && (this.type.index != -1 && this.type.index != undefined)){
+                if(this.index && (this.index != -1 && this.index != undefined)){
                     this.$emit('setValue',
                         stylename,
                         actualValue,
-                        value,
-                        this.type.index
+                        value
                     )
                 }else{
-                    console.log('stylename: '+stylename)
-                    this.$store.commit('setValue',{
-                        parent:this.type ? this.type.parent : 'css',
-                        stylename:stylename,
-                        actualValue:actualValue,
-                        designValue:value
-                    })
                     if(this.options.backstatus){
                         this.$emit('setValue',stylename,actualValue,value)
+                    }else{
+                        this.$store.commit('setValue',{
+                            parent:this.options.parent ? this.options.parent : 'css',
+                            eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                            index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                            ischildset:this.ischildset ? this.ischildset : '',
+                            stylename:stylename,
+                            actualValue:actualValue,
+                            designValue:value
+                        })
                     }
                 }
             }
@@ -108,13 +122,13 @@
         /*background: #fff;*/
     }
     .yh-edit-input .yh-edit-value{
-        width:100px;
+        width:115px;
         padding:0 5px 0 0;
         /*background: #fff;*/
         float:left;
     }
     .yh-edit-input .yh-edit-value input {
-        width: 78px;
+        width: 93px;
         height: 23px;
         line-height: 23px;
         border:1px solid #ccc;
@@ -124,7 +138,7 @@
         background: transparent;
     }
     .yh-edit-input .yh-edit-value input.yh-edit-value-input-long{
-        width:98px;
+        width:113px;
     }
     .yh-edit-input .yh-edit-value span {
         width: 20px;

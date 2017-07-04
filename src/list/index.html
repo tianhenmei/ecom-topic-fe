@@ -2,7 +2,7 @@
 <html lang="zh">
     <head>
         <meta charset="utf-8">
-        <title>YH EDITOR PC</title>
+        <title>YH EDITOR PC 3.0</title>
         <link type="text/css" rel="stylesheet" href="http://localhost:9000/static/css/init.css" />
         <!--<link type="text/css" rel="stylesheet" href="./css/style.scss" />-->
     </head>
@@ -21,7 +21,7 @@
                 <div class="right">
                     <div class="right-content">
                         <div class="right-top">
-                            <div class="create-pc">创建PC</div>
+                            <a class="create-pc" :href="host+href" target="_blank">创建PC</a>
                             <div class="create-h5">创建移动端</div>
                         </div>
                         <div class="right-detail">ALL专题列表</div>
@@ -31,12 +31,12 @@
                                     <div class="item-left">
                                         <div class="item-top clearfix">
                                             <a class="item-title" :href="host+'/yh/'+item.html+'/index.html'" target="_blank">{{item.title}}</a>
-                                            <div class="item-type">{{item.type}}</div>
-                                            <div class="item-theme">{{item.theme}}</div>
+                                            <div class="item-type">{{item.templateType}}</div>
+                                            <div class="item-theme">{{item.templateCategory}}</div>
                                         </div>
                                         <div class="item-bottom clearfix">
-                                            <div class="item-create">创建：{{item.createtime}} by: {{item.author}}</div>
-                                            <div class="item-update">更新：{{item.lasttime}} by: {{item.editor}}</div>
+                                            <div class="item-create">创建：{{item.createTime}} by: {{item.createAuthor}}</div>
+                                            <div class="item-update">更新：{{item.updateTime}} by: {{item.updateAuthor}}</div>
                                         </div>
                                     </div>
                                     <div class="item-right clearfix">
