@@ -687,7 +687,7 @@ Node.setCompanyData = (data) => {
         name:data.name,
         slogan:data.slogan,
         industryfield:data.industryfield,
-        otherlabel:data.otherlabel ? data.otherlabel.split(',') : [],
+        otherlabel:data.otherlabel,// ? data.otherlabel.split(',') : [],
         city:data.city,
         level:data.financestage,
         address:data.city,

@@ -40,7 +40,8 @@
             :common="props.common"
             :ignorestatus="props.ignorestatus"
             :ischild="props.ischild"
-            :owndata="props.data"></yh-edit-complicated>
+            :owndata="props.data"
+            :path="path"></yh-edit-complicated>
     </div>
 </template>
 <script>
@@ -59,6 +60,7 @@
         ignorestatus:'',  // 是否为类似LIST的子集（如果是则会忽略样式设置）为'ignorestatus' 时忽略
         ischild:'',
         yh_data_name:'name',  // 当作为子级时放入uplist中的title取值
+        path:'',
         css:{
             background_background_color:{
                 cn:'背景颜色',
@@ -329,22 +331,23 @@
         }
     }
     export default {
-        props:['props'],
+        props:['props','path'],
         components:{
             'yh-edit-complicated':YHEditComplicated
         },
         data(){
             return {
-                baseData:JSON.parse(JSON.stringify({
-                    id:baseData.id,
-                    ignorestatus:baseData.ignorestatus,  // 是否为类似LIST的子集（如果是则会忽略样式设置）
-                    ischild:baseData.ischild,
-                    yh_data_name:baseData.yh_data_name,
-                    css:baseData.css,
-                    common:baseData.common,
-                    attribute:baseData.attribute,
-                    data:baseData.data
-                }))
+                // baseData:JSON.parse(JSON.stringify({
+                //     id:baseData.id,
+                //     ignorestatus:baseData.ignorestatus,  // 是否为类似LIST的子集（如果是则会忽略样式设置）
+                //     ischild:baseData.ischild,
+                //     yh_data_name:baseData.yh_data_name,
+                //     path:baseData.path,
+                //     css:baseData.css,
+                //     common:baseData.common,
+                //     attribute:baseData.attribute,
+                //     data:baseData.data
+                // }))
             }
         },
         create(){
@@ -449,6 +452,7 @@
                     ignorestatus:baseData.ignorestatus,
                     ischild:baseData.ischild,
                     yh_data_name:baseData.yh_data_name,
+                    path:baseData.path,
                     css:baseData.css,
                     attribute:baseData.attribute,
                     data:setChildData(elemData,baseData.data),
@@ -465,7 +469,8 @@
                 this.methods.recoveryModuleData(elem,baseData),
                 {
                     common:baseData.common,
-                    yh_data_name:baseData.yh_data_name
+                    yh_data_name:baseData.yh_data_name,
+                    path:baseData.path
                 },
                 options
             )

@@ -24,7 +24,8 @@
                         :parent="css"
                         :options="one"
                         :elem_id="elem_id"
-                        :ischild="ischild">
+                        :ischild="ischild"
+                        :path="path">
                     </div>
                 </div>
                 <div v-else class="yh-component-set">
@@ -34,7 +35,8 @@
                             :parent="css"
                             :options="one"
                             :elem_id="elem_id"
-                            :ischild="ischild">
+                            :ischild="ischild"
+                            :path="path">
                         </div>
                     </yh-edit-uplist>
                     <div v-for="one in elements[0].props.css" :is="setModule(one)" v-if="one.type != 'none'"
@@ -42,7 +44,8 @@
                         :options="one"
                         ischildset="ischildset"
                         :elem_id="elem_id"
-                        :ischild="ischild">
+                        :ischild="ischild"
+                        :path="path">
                     </div>
                 </div>
             </div>
@@ -52,7 +55,8 @@
                         :parent="h5css"
                         :options="one"
                         :elem_id="elem_id"
-                        :ischild="ischild">
+                        :ischild="ischild"
+                        :path="path">
                     </div>
                 </div>
                 <div v-else class="yh-component-set">
@@ -62,7 +66,8 @@
                             :parent="h5css"
                             :options="one"
                             :elem_id="elem_id"
-                            :ischild="ischild">
+                            :ischild="ischild"
+                            :path="path">
                         </div>
                     </yh-edit-uplist>
                     <div v-for="one in elements[0].props.h5css" :is="setModule(one)" v-if="one.type != 'none'"
@@ -70,7 +75,8 @@
                         :options="one"
                         ischildset="ischildset"
                         :elem_id="elem_id"
-                        :ischild="ischild">
+                        :ischild="ischild"
+                        :path="path">
                     </div>
                 </div>
             </div>
@@ -81,7 +87,8 @@
                         :options="one"
                         ischildset=""
                         :elem_id="elem_id"
-                        :ischild="ischild">
+                        :ischild="ischild"
+                        :path="path">
                     </div>
                 </div>
                 <div v-else class="yh-component-set">
@@ -92,7 +99,8 @@
                             :options="one"
                             ischildset=""
                             :elem_id="elem_id"
-                            :ischild="ischild">
+                            :ischild="ischild"
+                            :path="path">
                         </div>
                     </yh-edit-uplist>
                     <yh-edit-uplist v-for="(one,index) in elements" :key="index"
@@ -103,7 +111,8 @@
                             :eindex="index"
                             ischildset="ischildset"
                             :elem_id="elem_id"
-                            :ischild="ischild">
+                            :ischild="ischild"
+                            :path="path">
                         </div>
                     </yh-edit-uplist>
                 </div>
@@ -149,7 +158,8 @@
             'owndata', // 组件的数据：如公司组件里公司名称、logo等
             'elem_id', // 当前组件的id
             'ignorestatus',  // 当前是否忽略样式设置
-            'ischild'  // 当前是否子元素，用于yh-edit-number 的宽高设置
+            'ischild',  // 当前是否子元素，用于yh-edit-number 的宽高设置
+            'path'
         ],
         data(){
             let tabs = []

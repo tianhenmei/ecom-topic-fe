@@ -2,14 +2,17 @@
     <div yh-editor
         @click.stop="undoSelection">
         {{pageInfo.title}}
-        <div class="CompanyPosition style1" @click="addComponets">companyPositionModule style1</div>
-        <div class="CompanyPosition style2" @click="addComponets">companyPositionModule style2</div>
-        <div class="List style1" @click="addComponets">ListModule style1</div>
-        <div yh-editor-content ref="yh-editor-content">
-            <div v-for="(element,index) in elements" :is="element.module" :props="element.props"></div>
-        </div>
+        <div class="CompanyPosition style1" @click.stop.prevent="addComponents">companyPositionModule style1</div>
+        <div class="CompanyPosition style2" @click.stop.prevent="addComponents" setListCol="setListCol">companyPositionModule style2</div>
+        <div class="List style1" @click.stop.prevent="addComponents">ListModule style1</div>
         <div id="save" @click="saveHTML">保存</div>
         <div id="preview" @click="previewHTML">预览</div>
+        <div yh-editor-content ref="yh-editor-content">
+            <div v-for="(element,index) in elements" :is="element.module" 
+                :props="element.props"
+                :path="element.path"></div>
+        </div>
+        
         <div class="yh-toast" ref="yh-toast">
             <div class="title">正在渲染组件，请稍后……</div>
         </div>
@@ -32,6 +35,7 @@
             <p></p>
         </div>
         <!--添加框-->
+        <yh-edit-prompt @setListCol="setListCol"></yh-edit-prompt>
         <yh-edit-add-companyposition @addChildData="addChildData"></yh-edit-add-companyposition>
     </div>
 </template>
@@ -39,11 +43,14 @@
     import {mapState} from 'vuex'
     import {recoveryData,undoSelected,
         isObject,
-        getNow
+        getNow,
+        getChildById
     } from '../components/Base/Node.js'
+    import YHEditPrompt from '../edit-components/yh-edit-prompt.vue'
     import YHEditAddCompanyPosition from '../edit-components/yh-edit-add-CompanyPosition.vue'
     let components = {
-        'yh-edit-add-companyposition':YHEditAddCompanyPosition
+        'yh-edit-add-companyposition':YHEditAddCompanyPosition,
+        'yh-edit-prompt':YHEditPrompt
     }
 
     export default{
@@ -54,10 +61,21 @@
             'elements',
             'count',
             'selected',
+            'triggerId',
             'childClassify'
         ]),
         data(){
             return {
+                currentChildData:{
+                    parentID:'',
+                    id:'',
+                    'yh-module':'',
+                    module:null,
+                    parentPath:'',
+                    path:'',
+                    ignorestatus:'',
+                    ischild:''
+                },
                 pageInfo:{
                     templateId:'10001',
                     templateType:'PC',
@@ -110,14 +128,32 @@
                     target = target.parentNode
                 }
             },
+            setListCol(col){
+                // let elem = document.getElementById(this.currentChildData.parentID+'-content')
+                let width = components[this.currentChildData['yh-module']].width * col
+                this.$store.commit('setValue',{
+                    parent:'css',
+                    eindex: -1,
+                    index:-1,
+                    ischildset:'',
+                    stylename:'width',
+                    actualValue:width,
+                    designValue:width,
+                    path:this.currentChildData.parentPath
+                })
+                this.setFirstChild()
+            },
             addChildData(data){
                 let i = 0,
-                    elemData = []
+                    elemData = [],
+                    elem = document.getElementById(this.triggerId)
                 for(i = 0; i < data.length; i++){
                     elemData.push({
                         id:data[i].elemID,
                         'yh-module':this.childClassify,
                         module:components[this.childClassify],
+                        parentPath:elem.getAttribute('yh-path'),
+                        path:'props.elements.cindex',//'elements.index.props.elements.cindex',
                         props:components[this.childClassify].setCtor({
                             id:data[i].elemID,
                             ignorestatus:'ignorestatus',
@@ -125,7 +161,7 @@
                         },data[i])
                     })
                 }
-                this.$store.commit('addChildData',elemData)
+                this.$store.commit('addChildElement',elemData)
             },
             getPageData(){
                 let self = this
@@ -178,6 +214,10 @@
                             }
                         })
                     })(includes[i])
+                }
+                if(includes.length == 0){
+                    self.initStatus = true
+                    self.$refs['yh-toast'].className += ' hide'
                 }
             },
             recoveryElements(elements){
@@ -240,11 +280,12 @@
                 this.$store.commit('addElement',elements)
                 this.initStatus = true
             },
-            addComponets(e){
+            addComponents(e){
                 let self = this,
                     classname = e.target.className,
                     path = classname.replace(' ','/'),
-                    name = classname.replace(' ','_')
+                    name = classname.replace(' ','_'),
+                    coltype = e.target.getAttribute('setListCol')
                 
                 if(this.includes.indexOf(name) == -1){
                     this.includes.push(name)
@@ -265,7 +306,7 @@
                             yh_module = elem.getAttribute('yh-module')
                             switch(yh_module){
                                 case 'List_style1':
-                                    length = this.getChildById(elem,elemID+'-content').children.length
+                                    length = getChildById(elem,elemID+'-content').children.length
                                     if(length == 0){
                                         status = false
                                         ignorestatus = 'ignorestatus',
@@ -281,27 +322,49 @@
                                 id:'element'+self.count,
                                 'yh-module':name,
                                 module:CompanyPositionStyle,
+                                path:'elements.index',
                                 props:components[name].initCtor({
                                     id:'element'+self.count
                                 })
                             })
-                        }else{
-                            self.$store.commit('addChildElement',{
-                                id:'element'+self.count,
-                                'yh-module':name,
-                                module:CompanyPositionStyle,
-                                props:components[name].initCtor({
-                                    id:'element'+self.count,
-                                    ignorestatus:ignorestatus,
-                                    ischild:ischild
-                                })
-                            })
+                        }else{  
+                            // 给父级添加子级 e.target.getAttribute('setListCol') == 'setListCol'  // coltype
+                            let parentPath = elem.getAttribute('yh-path'),
+                                prompt = document.getElementById('yh-edit-prompt')
+                            this.currentChildData.parentID = elemID
+                            this.currentChildData.id = 'element'+self.count
+                            this.currentChildData['yh-module'] = name
+                            this.currentChildData.parentPath = parentPath
+                            this.currentChildData.path = 'props.elements.cindex'
+                            this.currentChildData.ignorestatus = ignorestatus
+                            this.currentChildData.ischild = ischild
+                            switch(coltype){
+                                case 'setListCol':
+                                    prompt.className = prompt.className.replace(/(hide)/g,'').replace(/(  )/g,' ')
+                                    break
+                            }
                         }
                         self.$store.commit('changeCount')
                     })
                     .catch(function(err) {
                         console.log('Failed to load: '+path, err);
                     });
+            },
+            setFirstChild(){
+                // 第一次添加 需设置 data.childmodule.value = name
+                let name = this.currentChildData['yh-module']
+                this.$store.commit('addChildElement',{
+                    id:this.currentChildData.id,
+                    'yh-module':name,
+                    module:components[name],
+                    parentPath:this.currentChildData.parentPath,
+                    path:this.currentChildData.path,
+                    props:components[name].initCtor({
+                        id:this.currentChildData.id,
+                        ignorestatus:this.currentChildData.ignorestatus,
+                        ischild:this.currentChildData.ischild
+                    })
+                })
             },
             copyElementsData(elements){
                 let data = [],
@@ -322,10 +385,10 @@
                     yhEditLayer = yh_editor_content.getElementsByClassName('yh-edit-layer'),
                     yhEditorContent = yh_editor_content.getElementsByClassName('yh-vessel-add'),
                     i = 0
-                for(i = 0; i < yhEditLayer.length; i++){
+                for(i = 0; i < yhEditLayer.length; ){
                     yhEditLayer[i].parentNode.removeChild(yhEditLayer[i])
                 }
-                for(i = 0; i < yhEditorContent.length; i++){
+                for(i = 0; i < yhEditorContent.length; ){
                     yhEditorContent[i].parentNode.removeChild(yhEditorContent[i])
                 }
                 

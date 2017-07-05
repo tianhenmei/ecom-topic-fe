@@ -56,7 +56,8 @@ let store = new Vuex.Store({
             oindex:-1,
             parentData:null,
             elemData:null,
-            time:''  // 临时时间
+            time:'',  // 临时时间
+            path:''
         },
         fontSize:16
     },
@@ -93,14 +94,20 @@ let store = new Vuex.Store({
             }
         },
         addElement:(state,payload) => {
+            let i = 0,
+                length = state.elements.length  
             if(payload instanceof Array){
+                for(i = 0; i < payload.length; i++){
+                    payload[i].path = payload[i].path.replace(/(index)/g,length+i)
+                }
                 state.elements = state.elements.concat(payload)
             }else{
+                payload.path = payload.path.replace(/(index)/g,length)
                 state.elements.push(payload)
             }
         },
         addChildData:(state,payload) => {
-            store.commit('getData',state.triggerId)
+            // store.commit('getData',state.triggerId)
             let i = 0,j = '',
                 length = state.data.elemData.props.elements.length
             for(i = 0; i < payload.length; i++){
@@ -122,19 +129,64 @@ let store = new Vuex.Store({
             state.data.elemData.props.elements = state.data.elemData.props.elements.concat(payload)
         },
         addChildElement:(state,payload) => {
-            store.commit('getData')
+            // store.commit('getData')
+            let i = 0,
+                elemData = state,
+                parentData = state,
+                parentPath = payload instanceof Array ? payload[0].parentPath : payload.parentPath,
+                path = payload instanceof Array ? payload[0].path : payload.path,
+                parentPathArr = parentPath.split(/[.]/g),
+                pathArr = path.split(/[.]/g),
+                value = '',
+                status = false,
+                length = 0
+            for(i = 0; i < parentPathArr.length; i++){
+                value = parentPathArr[i]
+                if(value){
+                    if(/[0-9]/g.test(value)){
+                        value = parseInt(value)
+                    }
+                    parentData = parentData[value]
+                }
+            }
+            elemData = parentData 
+            for(i = 0; i < pathArr.length; i++){
+                value = pathArr[i]
+                if(value){
+                    if(/[0-9]/g.test(value)){
+                        value = parseInt(value)
+                    }
+                    switch(value){
+                        case 'cindex':
+                            status = true
+                            break
+                        default:
+                            elemData = elemData[value]
+                            break
+                    }
+                }
+                if(status){
+                    break
+                }
+            }
+            length = elemData.length
             if(payload instanceof Array){
-                let i = 0
                 for(i = 0; i < payload.length; i++){
                     // payload[i].props.attribute.ischild.value = 'ischild'
                     payload[i].props.ischild = 'ischild'
+                    payload[i].path = parentPath+'.'+payload[i].path.replace(/(cindex)/g,length+i)
                 }
-                state.data.elemData.props.elements = state.data.elemData.props.elements.concat(payload)
+                parentData.props.data.childmodule.value = payload[0]['yh-module']
+                elemData = elemData.concat(payload)
             }else{
                 // payload.props.attribute.ischild.value = 'ischild'
                 payload.props.ischild = 'ischild'
-                state.data.elemData.props.elements.push(payload)
+                payload.path = parentPath+'.'+payload.path.replace(/(cindex)/g,length)
+                parentData.props.data.childmodule.value = payload['yh-module']
+                elemData.push(payload)
             }
+            parentData.props.elements = elemData
+            // console.log(parentData)
         },
         addComplexElement:(state,payload) => {
             store.commit('getData')
@@ -298,12 +350,27 @@ let store = new Vuex.Store({
         },
         setValue:(state,payload) => {
             // ischildset // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            let i = 0
-            store.commit('getData')
+            let i = 0,
+                path = payload.path.split(/[.]/g),
+                elemData = state,
+                value = ''
+            if(state.data.path == payload.path){
+                elemData = state.data.elemData
+            }else{
+                for(i = 0; i < path.length; i++){
+                    value = path[i]
+                    if(value){
+                        if(/[0-9]/g.test(path[i])){
+                            value = parseInt(path[i])
+                        }
+                        elemData = elemData[value]
+                    }
+                }
+            }
             switch(payload.ischildset){
                 case 'ischildset':
                     if(payload.parent == 'data' || payload.parent.indexOf('data.') == 0){ // 只针对单个组件
-                        let data = state.data.elemData.props.elements[payload.eindex].props,
+                        let data = elemData.props.elements[payload.eindex].props,
                             parent = payload.parent.split(/[.]/g)
                         for(i = 0 ; i < parent.length; i++){
                             if(parent[i].trim()){
@@ -317,27 +384,27 @@ let store = new Vuex.Store({
                         }
                     }else{
                         if(!payload.parent){
-                            for(i = 0; i < state.data.elemData.props.elements.length; i++){
-                                state.data.elemData.props.elements[i].props[payload.stylename] = payload.actualValue
+                            for(i = 0; i < elemData.props.elements.length; i++){
+                                elemData.props.elements[i].props[payload.stylename] = payload.actualValue
                             }
                         }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
-                            for(i = 0; i < state.data.elemData.props.elements.length; i++){
-                                state.data.elemData.props.elements[i].props[payload.parent][payload.stylename].value = payload.actualValue
+                            for(i = 0; i < elemData.props.elements.length; i++){
+                                elemData.props.elements[i].props[payload.parent][payload.stylename].value = payload.actualValue
                             }
                         }else{
-                            for(i = 0; i < state.data.elemData.props.elements.length; i++){
-                                state.data.elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].value = payload.actualValue
+                            for(i = 0; i < elemData.props.elements.length; i++){
+                                elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].value = payload.actualValue
                             }
                         }
                     }
                     break
                 default:
                     if(!payload.parent){
-                        state.data.elemData.props[payload.stylename] = payload.actualValue
+                        elemData.props[payload.stylename] = payload.actualValue
                     }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
-                        state.data.elemData.props[payload.parent][payload.stylename].value = payload.actualValue
+                        elemData.props[payload.parent][payload.stylename].value = payload.actualValue
                     }else{
-                        let data = state.data.elemData.props,
+                        let data = elemData.props,
                             parent = payload.parent.split(/[.]/g)
                         for(i = 0 ; i < parent.length; i++){
                             if(parent[i].trim()){
@@ -348,8 +415,64 @@ let store = new Vuex.Store({
                     }
                     break
             }
-            store.commit('reinitData')
+            state.data.path = payload.path
+            state.data.elemData = elemData
+            // store.commit('reinitData')
         },
+        // setValue:(state,payload) => {
+        //     // ischildset // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+        //     let i = 0
+        //     store.commit('getData')
+        //     switch(payload.ischildset){
+        //         case 'ischildset':
+        //             if(payload.parent == 'data' || payload.parent.indexOf('data.') == 0){ // 只针对单个组件
+        //                 let data = state.data.elemData.props.elements[payload.eindex].props,
+        //                     parent = payload.parent.split(/[.]/g)
+        //                 for(i = 0 ; i < parent.length; i++){
+        //                     if(parent[i].trim()){
+        //                         data = data[parent[i]]
+        //                     }
+        //                 }
+        //                 if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+        //                     data[payload.stylename].value = payload.actualValue
+        //                 }else{
+        //                     data[payload.index][payload.stylename].value = payload.actualValue
+        //                 }
+        //             }else{
+        //                 if(!payload.parent){
+        //                     for(i = 0; i < state.data.elemData.props.elements.length; i++){
+        //                         state.data.elemData.props.elements[i].props[payload.stylename] = payload.actualValue
+        //                     }
+        //                 }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+        //                     for(i = 0; i < state.data.elemData.props.elements.length; i++){
+        //                         state.data.elemData.props.elements[i].props[payload.parent][payload.stylename].value = payload.actualValue
+        //                     }
+        //                 }else{
+        //                     for(i = 0; i < state.data.elemData.props.elements.length; i++){
+        //                         state.data.elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].value = payload.actualValue
+        //                     }
+        //                 }
+        //             }
+        //             break
+        //         default:
+        //             if(!payload.parent){
+        //                 state.data.elemData.props[payload.stylename] = payload.actualValue
+        //             }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+        //                 state.data.elemData.props[payload.parent][payload.stylename].value = payload.actualValue
+        //             }else{
+        //                 let data = state.data.elemData.props,
+        //                     parent = payload.parent.split(/[.]/g)
+        //                 for(i = 0 ; i < parent.length; i++){
+        //                     if(parent[i].trim()){
+        //                         data = data[parent[i]]
+        //                     }
+        //                 }
+        //                 data[payload.index][payload.stylename].value = payload.actualValue
+        //             }
+        //             break
+        //     }
+        //     store.commit('reinitData')
+        // },
         setTabValue:(state,payload) => {
             store.commit('getData')
             let status = payload.index == -1 || payload.index == undefined

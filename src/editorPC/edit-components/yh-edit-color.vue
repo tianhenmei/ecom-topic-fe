@@ -4,7 +4,8 @@
         :options="optionsData"
         :ischildset="ischildset"
         :eindex="eindex"
-        :index="index" >
+        :index="index"
+        :path="path" >
         <div slot="chooser" class="yh-edit-chooser">
             <input class="yh-edit-vcolor" 
                 type="color"
@@ -32,7 +33,8 @@
             'index','parent','options',
             'elem_id',   // 当前被选中元素的ID
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            'ischild'
+            'ischild',
+            'path'
         ],
         data(){
             return {
@@ -89,7 +91,8 @@
                         ischildset:this.ischildset ? this.ischildset : '',
                         stylename:name,
                         actualValue:value,
-                        designValue:value
+                        designValue:value,
+                        path:this.path
                     })
                 }
             },

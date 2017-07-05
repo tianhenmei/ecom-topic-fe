@@ -5,10 +5,11 @@
 <div class="company-position-style2" :id="props.id" yh-module="CompanyPosition_style2"
     :ref="props.id"
     :industryfield="props.data.industryfield.value"
+    :yh-path="path"
     @click.stop="setAll">
     <h3 class="title background clearfix" :style="{'background-color':props.css.background_background_color.value}">
         <a :href="'https://www.lagou.com/gongsi/'+props.data.companyId.value+'.html'" class="logoUrl companyLink" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId.value">
-            <img class="logo" :src="'https://www.lgstatic.com/thumbnail_200x200/'+props.data.logo.value" />
+            <img class="logo" :src="props.data.logo.value" />
         </a>
         <div class="right">
             <a :href="'https://www.lagou.com/gongsi/'+props.data.companyId.value+'.html'" class="name" :style="{'color':props.css.name_color.value}" target="_blank" data-link="1" data-lg-tj-id="" data-lg-tj-no="" :data-lg-tj-cid="props.data.companyId.value">
@@ -58,6 +59,7 @@
         ignorestatus:'',  // 是否为类似LIST的子集（如果是则会忽略样式设置）为'ignorestatus' 时忽略
         ischild:'',
         yh_data_name:'name',  // 当作为子级时放入uplist中的title取值
+        path:'',
         css:{
             background_background_color:{
                 cn:'背景颜色',
@@ -114,7 +116,7 @@
             logo:{
                 cn:'公司LOGO',
                 en:'logo',
-                value:'i/image/M00/00/1F/Cgp3O1YtkIuAXCPUAAA28p_G-ck324.png',
+                value:'https://www.lgstatic.com/thumbnail_200x200/i/image/M00/00/1F/Cgp3O1YtkIuAXCPUAAA28p_G-ck324.png',
                 type:'image',
                 mold:'src',
                 parent:'data'
@@ -298,22 +300,23 @@
     }
 
     export default {
-        props:['props'],
+        width:315,
+        props:['props','path'],
         components:{
             'yh-edit-complicated':YHEditComplicated
         },
         data(){
             return {
-                baseData:JSON.parse(JSON.stringify({
-                    id:baseData.id,
-                    ignorestatus:baseData.ignorestatus,
-                    ischild:baseData.ischild,
-                    yh_data_name:baseData.yh_data_name,
-                    css:baseData.css,
-                    attribute:baseData.attribute,
-                    data:baseData.data,
-                    common:baseData.common
-                }))
+                // baseData:JSON.parse(JSON.stringify({
+                //     id:baseData.id,
+                //     ignorestatus:baseData.ignorestatus,
+                //     ischild:baseData.ischild,
+                //     yh_data_name:baseData.yh_data_name,
+                //     css:baseData.css,
+                //     attribute:baseData.attribute,
+                //     data:baseData.data,
+                //     common:baseData.common
+                // }))
             }
         },
         mounted(){

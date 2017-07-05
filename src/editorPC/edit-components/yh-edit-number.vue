@@ -21,18 +21,36 @@
             'options',
             'elem_id',   // 当前被选中元素的ID
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            'ischild'
+            'ischild',
+            'path'
         ],
         data(){
+            let hasdef = false,
+                def = 'auto',
+                type = 'number'
+            switch(this.options.en){
+                case 'width':
+                    hasdef = true
+                    break
+                case 'height':
+                    hasdef = true
+                    if(this.parent[this.options.en].value == 'auto'){
+                        type = 'text'
+                        def = 100
+                    }
+                    break
+            }
             return {
                 optionsData:{
                     name:this.options.cn,
                     stylename:this.options.en,
                     unit:'px',
                     realunit:'px',
-                    type:'text',
+                    type:type,
                     classname:'number',
                     style:this.parent,
+                    hasdef:hasdef,
+                    def:def,
                     backstatus:true
                 },
                 changeStatus:false
@@ -67,7 +85,8 @@
                         ischildset:this.ischildset ? this.ischildset : '',
                         stylename:name,
                         actualValue:value,
-                        designValue:value
+                        designValue:value,
+                        path:this.path
                     })
                     // 非实时
                     switch(name){

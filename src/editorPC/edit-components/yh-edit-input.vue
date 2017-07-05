@@ -10,26 +10,37 @@
     realunit   实际的数据单位，通常为rem
 -->
 <template>
-    <div class="yh-edit-input clearfix" :class="setClassname">
+    <div class="yh-edit-input clearfix" :class="setClassname"
+        @mouseenter.stop.prevent="showChoice"
+        @mouseleave.stop.prevent="hideChoice">
         <div class="yh-edit-text">{{options.name}}{{options.name ? '：' : ''}}</div>
         <div class="yh-edit-value clearfix">
             <input
                 :class="{'yh-edit-value-input-long': !options.unit}"
                 :type="options.type"
                 :value="options.style[options.stylename] ? getDesignValue : (options.type == 'number' ? 0 : '')"
+                :readonly="options.hasdef && getDesignValue == options.def"
                 @click.stop.prevent="inputSelected"
                 @input="setValue"
             />
             <span v-if="options.unit">{{options.unit}}</span>
+        </div>
+        <div v-if="options.hasdef" 
+            class="yh-edit-choice hide" 
+            ref="yh-edit-choice"
+            @click.stop.prevent="setChoice">
+            {{options.def == 'auto' ? options.def : '输入数值'}}
         </div>
         <slot name="chooser"></slot>
     </div>
 </template>
 <script>
     import {mapState} from 'vuex'
+    import {getComputedValue,getPointValue} from '../components/Base/Node.js'
     export default {
         props:['eindex','index','options','type',
-            'ischildset'  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+            'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+            'path'
         ],
         data(){
             return {}
@@ -68,6 +79,51 @@
             inputSelected(e){
                 
             },
+            showChoice(e){
+                if(this.options.hasdef){
+                    let choice = this.$refs['yh-edit-choice']
+                    choice.className = choice.className.replace(/(hide)/g,'').replace(/  /g,' ')
+                }
+            },
+            hideChoice(e){
+                if(this.options.hasdef){
+                    let choice = this.$refs['yh-edit-choice']
+                    choice.className += ' hide'
+                }
+            },
+            setChoice(e){
+                let choice = this.$refs['yh-edit-choice'],
+                    elem = document.getElementsByClassName('setting')[0],
+                    height = elem.style.height,//getComputedValue(elem,'height'),
+                    paddingVerticle = getPointValue(elem,'padding-top') + getPointValue(elem,'padding-bottom'),
+                    nheight = elem.clientHeight - paddingVerticle
+                
+                choice.className += ' hide'
+                if(this.options.backstatus){
+                    this.$emit('setValue',this.options.stylename,this.options.def,this.options.def)
+                }else{
+                    this.$store.commit('setValue',{
+                        parent:this.options.parent ? this.options.parent : 'css',
+                        eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                        index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                        ischildset:this.ischildset ? this.ischildset : '',
+                        stylename:this.options.stylename,
+                        actualValue:this.options.def,
+                        designValue:this.options.def,
+                        path:this.path
+                    })
+                }
+                switch(height){
+                    case 'auto':
+                        this.options.def = 'auto'
+                        this.options.type = 'number'
+                        break
+                    default:
+                        this.options.def = nheight
+                        this.options.type = 'text'
+                        break
+                }
+            },
             setValue(e){
                 let target = e.target,
                     value = target.value,   // // 展示出来的字体大小（针对750的宽）
@@ -96,7 +152,8 @@
                             ischildset:this.ischildset ? this.ischildset : '',
                             stylename:stylename,
                             actualValue:actualValue,
-                            designValue:value
+                            designValue:value,
+                            path:this.path
                         })
                     }
                 }
@@ -148,5 +205,17 @@
         font-size: 12px;
         color: #666;
         float:left;
+    }
+    .yh-edit-input .yh-edit-choice {
+        width: 145px;
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #ccc;
+        position: absolute;
+        left: 80px;
+        top: 24px;
+        background-color: #fff;
+        z-index: 2;
+        color: #666;
     }
 </style>
