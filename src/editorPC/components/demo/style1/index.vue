@@ -48,7 +48,10 @@
                     // textarea(多行文字)
                     // uplist(内部多选项设置)
                     // request （数据请求：公司ID、职位ID、问题ID、回答ID等）
-                //name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
+                    // options 选项
+                // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
+                // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
+                // effect:['',''] 当前属性会影响的属性，如css.overflow
             },
             // name: 类名  color: css样式color
             name_color:{

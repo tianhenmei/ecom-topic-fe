@@ -160,6 +160,17 @@ Node.getParentByClassName = (elem,classname) => {
     return elem
 }
 /********************************************
+ * getParentByAttr 通过属性名获取父级
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getParentByAttr = (elem,attr) => {
+    while(elem && !elem.getAttribute(attr)){
+        elem = elem.parentNode
+    }
+    return elem
+}
+/********************************************
  * getChildrenByClassName: 通过类名获取所有子节点
  * elem: 初始元素
  * classname: 类名

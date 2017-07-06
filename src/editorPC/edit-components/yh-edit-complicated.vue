@@ -20,7 +20,7 @@
         <yh-edit-tab :props="tabOptions">
             <div v-if="getContentStatus('css')" :slot="setContentSlot('css')" class="yh-edit-tab-content yh-edit-css clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in css" :is="setModule(one)" v-if="one.type != 'none'"
+                    <div v-for="one in css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
                         :parent="css"
                         :options="one"
                         :elem_id="elem_id"
@@ -31,7 +31,7 @@
                 <div v-else class="yh-component-set">
                     <yh-edit-uplist
                         :options="{name:'外壳基本样式'}">
-                        <div v-for="one in css" :is="setModule(one)" v-if="one.type != 'none'"
+                        <div v-for="one in css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
                             :parent="css"
                             :options="one"
                             :elem_id="elem_id"
@@ -51,7 +51,7 @@
             </div>
             <div v-if="getContentStatus('h5css')" :slot="setContentSlot('h5css')" class="yh-edit-tab-content yh-edit-deployh5 clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'"
+                    <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
                         :parent="h5css"
                         :options="one"
                         :elem_id="elem_id"
@@ -62,7 +62,7 @@
                 <div v-else class="yh-component-set">
                     <yh-edit-uplist
                         :options="{name:'外壳基本样式'}">
-                        <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'"
+                        <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
                             :parent="h5css"
                             :options="one"
                             :elem_id="elem_id"
@@ -82,7 +82,7 @@
             </div>
             <div v-if="getContentStatus('data')" :slot="setContentSlot('data')" class="yh-edit-tab-content yh-edit-owndata clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'"
+                    <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
                         :parent="owndata"
                         :options="one"
                         ischildset=""
@@ -94,7 +94,7 @@
                 <div v-else class="yh-component-set">
                     <yh-edit-uplist
                         :options="{name:'外壳数据设置'}">
-                        <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'"
+                        <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
                             :parent="owndata"
                             :options="one"
                             ischildset=""
@@ -134,6 +134,7 @@
     import YHEditNumber from './yh-edit-number'
     import YHEditText from './yh-edit-text'
     import YHEditTextarea from './yh-edit-textarea'
+    import YHEditOptions from './yh-edit-options'
     import YHEditRequest from './yh-edit-request'
     import YHEditMutiple from './yh-edit-mutiple'
     // debugger
@@ -146,6 +147,7 @@
             'yh-edit-number':YHEditNumber,
             'yh-edit-text':YHEditText,
             'yh-edit-textarea':YHEditTextarea,
+            'yh-edit-options':YHEditOptions,
             'yh-edit-request':YHEditRequest,
             'yh-edit-mutiple':YHEditMutiple
         },
@@ -192,7 +194,8 @@
                     YHEditText,
                     YHEditTextarea,
                     YHEditRequest,
-                    YHEditMutiple
+                    YHEditMutiple,
+                    YHEditOptions
                 },
                 tabOptions:{
                     base:{
@@ -206,6 +209,33 @@
         },
         methods:{
             undoSelected,
+            setDisplayStatus(one){
+                return true
+                if(one.condition){  // 条件判断
+                    let data = this,
+                        status = /(!=)/g.test(one.condition),
+                        conditionArray = status ? one.condition.split(/(!=)/g) : one.condition.split(/(==)/g),
+                        dataPath = conditionArray[0],
+                        condition = conditionArray[1].trim(),
+                        pathArray = dataPath.split(/[. ]/g),
+                        i = 0
+                    for(i = 0; i < pathArray.length; i++){
+                        if(pathArray[i]){
+                            data = this[pathArray[i].trim()]
+                        }
+                    }
+
+                    if(status && data != condition){
+                        return true
+                    }else if(!status && data == condition){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return true
+                }
+            },
             getContentStatus(value){
                 let i = 0
                 for(i = 0; i < this.tabOptions.base.tabs.length; i++){
@@ -234,6 +264,8 @@
                         return this.yhmodule.YHEditText
                     case 'textarea':
                         return this.yhmodule.YHEditTextarea
+                    case 'options':
+                        return this.yhmodule.YHEditOptions
                     case 'uplist':
                         return this.yhmodule.YHEditMutiple
                     case 'request':

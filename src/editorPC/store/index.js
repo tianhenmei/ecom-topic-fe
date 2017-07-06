@@ -350,10 +350,13 @@ let store = new Vuex.Store({
         },
         setValue:(state,payload) => {
             // ischildset // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            let i = 0,
+            let i = 0,j = 0,t = 0,
                 path = payload.path.split(/[.]/g),
                 elemData = state,
-                value = ''
+                value = '',
+                one = {},
+                temp = {},
+                arr = []
             if(state.data.path == payload.path){
                 elemData = state.data.elemData
             }else{
@@ -379,30 +382,64 @@ let store = new Vuex.Store({
                         }
                         if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
                             data[payload.stylename].value = payload.actualValue
+                            if(payload.cnvalue){
+                                data[payload.stylename].cnvalue = payload.cnvalue
+                            }
                         }else{
                             data[payload.index][payload.stylename].value = payload.actualValue
+                            if(payload.cnvalue){
+                                data[payload.index][payload.stylename].cnvalue = payload.cnvalue
+                            }
                         }
                     }else{
                         if(!payload.parent){
                             for(i = 0; i < elemData.props.elements.length; i++){
-                                elemData.props.elements[i].props[payload.stylename] = payload.actualValue
+                                elemData.props.elements[i].props[payload.stylename].value = payload.actualValue
+                                if(payload.cnvalue){
+                                    elemData.props.elements[i].props[payload.stylename].cnvalue = payload.cnvalue
+                                }
                             }
                         }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
                             for(i = 0; i < elemData.props.elements.length; i++){
-                                elemData.props.elements[i].props[payload.parent][payload.stylename].value = payload.actualValue
+                                one = elemData.props.elements[i].props[payload.parent][payload.stylename]
+                                one.value = payload.actualValue
+                                if(payload.cnvalue){
+                                    one.cnvalue = payload.cnvalue
+                                }
+                                // if(one.effect){  //effect
+                                //     for(j = 0; j < one.effect.length; j++){
+                                //         temp = elemData.props.elements[i].props
+                                //         arr = one.effect[j].split(/[.]/g)
+                                //         for(t = 0; t < arr.length; t++){
+                                //             if(arr[t]){
+                                //                 temp = temp[arr[t]]
+                                //             }
+                                //         }
+                                //         temp.val
+                                //     }
+                                // }
                             }
                         }else{
                             for(i = 0; i < elemData.props.elements.length; i++){
                                 elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].value = payload.actualValue
+                                if(payload.cnvalue){
+                                    elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].cnvalue = payload.cnvalue
+                                }
                             }
                         }
                     }
                     break
                 default:
                     if(!payload.parent){
-                        elemData.props[payload.stylename] = payload.actualValue
+                        elemData.props[payload.stylename].value = payload.actualValue
+                        if(payload.cnvalue){
+                            elemData.props[payload.stylename].cnvalue = payload.cnvalue
+                        }
                     }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
                         elemData.props[payload.parent][payload.stylename].value = payload.actualValue
+                        if(payload.cnvalue){
+                            elemData.props[payload.parent][payload.stylename].cnvalue = payload.cnvalue
+                        }
                     }else{
                         let data = elemData.props,
                             parent = payload.parent.split(/[.]/g)
@@ -412,6 +449,9 @@ let store = new Vuex.Store({
                             }
                         }
                         data[payload.index][payload.stylename].value = payload.actualValue
+                        if(payload.cnvalue){
+                            data[payload.index][payload.stylename].cnvalue = payload.cnvalue
+                        }
                     }
                     break
             }

@@ -22,6 +22,7 @@
     import YHEditNumber from './yh-edit-number'
     import YHEditText from './yh-edit-text'
     import YHEditTextarea from './yh-edit-textarea'
+    import YHEditOptions from './yh-edit-options'
     import YHEditRequest from './yh-edit-request'
     import YHEditMutiple from './yh-edit-mutiple'
     export default {
@@ -32,6 +33,7 @@
             'yh-edit-number':YHEditNumber,
             'yh-edit-text':YHEditText,
             'yh-edit-textarea':YHEditTextarea,
+            'yh-edit-options':YHEditOptions,
             'yh-edit-request':YHEditRequest,
             'yh-edit-mutiple':YHEditMutiple
         },
@@ -52,7 +54,8 @@
                     YHEditText,
                     YHEditTextarea,
                     YHEditRequest,
-                    YHEditMutiple
+                    YHEditMutiple,
+                    YHEditOptions
                 },
                 optionsData:{
                     name:this.options.cn,
@@ -95,6 +98,8 @@
                         return this.yhmodule.YHEditText
                     case 'textarea':
                         return this.yhmodule.YHEditTextarea
+                    case 'options':
+                        return this.yhmodule.YHEditOptions
                     case 'uplist':
                         return this.yhmodule.YHEditMutiple
                     case 'request':

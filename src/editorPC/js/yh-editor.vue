@@ -1,12 +1,18 @@
 <template>
     <div yh-editor
         @click.stop="undoSelection">
-        {{pageInfo.title}}
-        <div class="CompanyPosition style1" @click.stop.prevent="addComponents">companyPositionModule style1</div>
-        <div class="CompanyPosition style2" @click.stop.prevent="addComponents" setListCol="setListCol">companyPositionModule style2</div>
-        <div class="List style1" @click.stop.prevent="addComponents">ListModule style1</div>
-        <div id="save" @click="saveHTML">保存</div>
-        <div id="preview" @click="previewHTML">预览</div>
+        <div class="top clearfix">
+            <img class="logo" src="http://localhost:9000/static/images/logo.png" />
+            <h1 class="title">TOPIC <i>3.0版</i></h1>
+            <yh-lib @addComponents="addComponents"></yh-lib>
+        </div>    
+        <ul class="yh-lib-operate clearfix">
+            <li id="save" @click="saveHTML"><span class="yh-lib-icon"></span>保存</li>
+            <li id="public"><span class="yh-lib-icon"></span>发布</li>
+            <li id="preview" @click="previewHTML"><span class="yh-lib-icon"></span>发布</li>
+            <li id="clear"><span class="yh-lib-icon"></span>清空</li>
+            <li id="lookH5"><span class="yh-lib-icon"></span>H5预览</li>
+        </ul>
         <div yh-editor-content ref="yh-editor-content">
             <div v-for="(element,index) in elements" :is="element.module" 
                 :props="element.props"
@@ -41,14 +47,19 @@
 </template>
 <script>
     import {mapState} from 'vuex'
-    import {recoveryData,undoSelected,
+    import {
+        recoveryData,
+        undoSelected,
         isObject,
         getNow,
-        getChildById
+        getChildById,
+        getParentByAttr
     } from '../components/Base/Node.js'
+    import YHLib from './yh-lib.vue'
     import YHEditPrompt from '../edit-components/yh-edit-prompt.vue'
     import YHEditAddCompanyPosition from '../edit-components/yh-edit-add-CompanyPosition.vue'
     let components = {
+        'yh-lib':YHLib,
         'yh-edit-add-companyposition':YHEditAddCompanyPosition,
         'yh-edit-prompt':YHEditPrompt
     }
@@ -64,7 +75,7 @@
             'triggerId',
             'childClassify'
         ]),
-        data(){
+        data() {
             return {
                 currentChildData:{
                     parentID:'',
@@ -282,7 +293,8 @@
             },
             addComponents(e){
                 let self = this,
-                    classname = e.target.className,
+                    target = getParentByAttr(e.target,'yh-module-name'),
+                    classname = target.getAttribute('yh-module-name'),
                     path = classname.replace(' ','/'),
                     name = classname.replace(' ','_'),
                     coltype = e.target.getAttribute('setListCol')
@@ -422,6 +434,75 @@
     }
 </script>
 <style>
+    /**页面样式**/
+    [yh-editor]{
+        padding:77px 0 0 0;
+        position:relative;
+    }
+    .top{
+        width:100%;
+        height:56px;
+        padding:10px 0 10px 0;
+        border-bottom: 1px solid #f1f1f1;
+        flex-grow:0;
+        position:fixed;
+        left:0;
+        top:0;
+        z-index: 2000;  
+        background-color: #fff;
+    }
+    .top .logo {
+        width:56px;
+        padding: 0 22px 0 22px;
+        float:left;
+    }
+    .top .title {
+        height:56px;
+        line-height:56px;
+        font-weight:normal;
+        color:#02d28f;
+        text-align: left;
+        font-size: 23px;
+        float:left;
+        padding: 0 10px 0 0;
+        border-right: 1px solid #f1f1f1;
+    }
+    .yh-lib-operate{
+        width: 200px;
+        position: fixed;
+        right: 20px;
+        top: 21px;
+        z-index: 2000;
+    }
+    .yh-lib-operate li {
+        position: relative;
+        width: 40px;
+        height: 50px;
+        line-height: 15px;
+        text-align: center;
+        color: #666;
+        white-space: nowrap;
+        font-size: 12px;
+        float: left;
+    }
+    .yh-lib-operate .yh-lib-icon {
+        width: 20px;
+        height: 20px;
+        margin: 0 10px;
+        background: url(http://localhost:9000/static/images/editorPC-icon.png) no-repeat -360px 0;
+        background-size: 512px;
+        display: block;
+    }
+    .yh-lib-operate li:nth-of-type(1) .yh-lib-icon {
+        background-position: -210px 0;
+    }
+    .yh-lib-operate li:nth-of-type(2) .yh-lib-icon {
+        background-position: -240px 0;
+    }
+    .yh-lib-operate li:nth-of-type(3) .yh-lib-icon {
+        background-position: -270px 0;
+    }
+    /**组件样式**/
     [yh-module] {
         position:relative;
     }

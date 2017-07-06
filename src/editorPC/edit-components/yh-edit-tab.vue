@@ -56,7 +56,7 @@
     background:#fff;
     position:fixed;
     right:0;
-    top:50px;
+    top:77px;
 }
 .yh-edit-tab .yh-edit-tabTitle{
     width:100%;

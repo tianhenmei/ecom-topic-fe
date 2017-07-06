@@ -12,23 +12,21 @@
     realList  实际用到的列表值
 -->
 <template>
-    <div :class="(options.isChild ? '' : 'yh-edit-options')+
-                ' yh-edit-choose yh-edit-'+options.stylename+' clearfix'" 
-         @mouseleave="hideEditList">
-        <div class="yh-edit-text" @click.stop="showEditList">{{options.name}}{{options.name ? ': ' : ''}}</div>
-        <div class="yh-edit-value" @click.stop="showEditList">{{options.style[options.stylename] ? getDesignValue : value}}{{options.unit}}</div>
-        <!--<div class="yh-edit-value" @click.stop="showEditList">{{options.style[options.stylename] ? options.style[options.stylename] : value}}{{options.unit}}</div>
-        --><div class="yh-edit-arrow" @click.stop="showEditList"></div>
-        <div class="yh-edit-list">
+    <div class="yh-edit-options clearfix" 
+        ref="yh-edit-options"
+        @mouseleave="hideEditList">
+        <div class="yh-edit-text" @click.stop="showEditList">{{options.cn}}{{options.cn ? '：' : ''}}</div>
+        <div class="yh-edit-value" @click.stop="showEditList">{{parent[options.en] ? getDesignValue : value}}{{options.unit ? options.unit : ''}}</div>
+        <div class="yh-edit-arrow" @click.stop="showEditList"></div>
+        <div class="yh-edit-list" ref="yh-edit-list">
             <ul>
                 <li 
-                    v-for="(one,index) in options.list" 
-                    :class="options.style[options.stylename] == one? 'active' : ''"
-                    :value="options.realList[index]" 
+                    v-for="(one,index) in options.options" 
+                    :value="one.value" 
                     :index="index"
-                    :style="(options.stylename == 'font-size' ? ('font-size:'+options.realList[index]+options.realunit) : '')"
+                    :style="(options.en == 'font-size' ? ('font-size:'+one.value + options.realunit) : '')"
                     @click.stop="setValue">
-                        {{one}}{{options.unit}}
+                        {{one.cn}}{{options.unit ? options.unit : ''}}
                 </li>
             </ul>
         </div>
@@ -37,59 +35,62 @@
 <script>
     import {mapState} from 'vuex'
     export default {
-        props:['options','type'],
+        props:[
+            'eindex',
+            'index',
+            'parent',
+            'options',
+            'elem_id',   // 当前被选中元素的ID
+            'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
+            'ischild',
+            'path'
+        ],
         data(){
             return {
-                value:0
             }
         },
         computed:mapState({
             getDesignValue(state){
-                let actualValue = this.options.style[this.options.stylename],
-                    value,
-                    index,
-                    status = false
-
-                if(this.options.type === 'number'){
-                    status = /(px)/g.test(actualValue)
-                    value = parseFloat(actualValue)
-                }else{
-                    value = actualValue
-                }
-                index = this.options.realList.indexOf(value)
-                if(index == -1){
-                    index = this.options.list.indexOf(value)
-                }
-                return status ? value : (index == -1 ? '' : this.options.list[index])
+                let one = this.parent[this.options.en],
+                    value = one.value,
+                    cnvalue = one.cnvalue
+                return cnvalue ? cnvalue : (/(px)/g.test(value) ? parseFloat(value) : value)
             }
         }),
         methods:{
             showEditList(e){
-                $(e.target).closest('.yh-edit-choose').children('.yh-edit-list').show()
+                this.$refs['yh-edit-list'].style.display = 'block'
             },
             hideEditList(e){
-                $(e.target).closest('.yh-edit-choose').children('.yh-edit-list').hide()
+                this.$refs['yh-edit-list'].style.display = 'none'
             },
             // yh-edit-options
             setValue(e){
                 let target = e.target,
                     value = target.attributes['value'].value,   // 最终设置的值
-                    index = target.attributes['index'].value,
-                    svalue = this.options.list[index],  // 展示出来的字体大小（针对750的宽）
-                    list = $(e.target).closest('.yh-edit-list')
-                this.value = svalue
-                list.hide()
+                    index = parseInt(target.attributes['index'].value),
+                    svalue = this.options.options[index],  // 展示出来的字体大小（针对750的宽）
+                    cnvalue = this.options.options[index].cn,
+                    list = this.$refs['yh-edit-list']
+                list.style.display = 'none'
                 
-                if(this.type){
+                if(this.options.backstatus){
                     this.$emit('setValue',
-                        this.options.stylename,
-                        value+this.options.realunit,
-                        svalue+this.options.unit,
-                        this.type.index
-                    )
+                        this.options.en,
+                        value+(this.options.realunit ? this.options.realunit : ''),
+                        svalue+(this.options.unit ? this.options.unit : ''))
                 }else{
-                    this.options.style[this.options.stylename] = value+this.options.realunit
-                    this.$emit('setValue',this.options.stylename,value+this.options.realunit,svalue+this.options.unit)
+                    this.$store.commit('setValue',{
+                        parent:this.options.parent ? this.options.parent : 'css',
+                        eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                        index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                        ischildset:this.ischildset ? this.ischildset : '',
+                        stylename:this.options.en,
+                        actualValue:value+(this.options.realunit ? this.options.realunit : ''),
+                        designValue:svalue+(this.options.unit ? this.options.unit : ''),
+                        cnvalue:cnvalue,
+                        path:this.path
+                    })
                 }
             }
         }
@@ -97,75 +98,84 @@
 </script>
 
 <style>
-    .yh-edit-choose {
-        width:140px;
-        position:relative;
-        /*background:#fff;*/
+    .yh-edit-options {
+        width: 100%;
+        padding: 0 0 5px 0;
+        position: relative;
     }
-    .yh-edit-choose .yh-edit-text {
-        width:55px;
-        font-size:12px;
-        color:#666;
-        float:left;
+    .yh-edit-options .yh-edit-text {
+        width: 80px;
+        height: 25px;
+        line-height: 25px;
+        float: left;
+        text-align: right;
+        font-size: 12px;
+        color: #666;
     }
-    .yh-edit-choose .yh-edit-value{
-        width:60px;
-        cursor: pointer;
-        float:left;
-        text-align: center;
-        font-size:12px;
-        /*background: #fff;*/
-        color:#666;
+    .yh-edit-options .yh-edit-value{
+        width: 113px;
+        height: 23px;
+        line-height: 23px;
+        border: 1px solid #ccc;
+        float: left;
+        font-size: 12px;
+        color: #666;
+        background: transparent;
+        margin: 0 5px 0 0;
+        float: left;
     }
-    .yh-edit-choose .yh-edit-arrow{
+    .yh-edit-options .yh-edit-arrow{
         width: 20px;
         height: 20px;
         line-height: 20px;
+        margin: 2px 0 0 0;
         cursor: pointer;
         position:relative;
         float:left;
-        /*background: #fff;*/
+        background: #ff47a3;
     }
-    .yh-edit-choose .yh-edit-arrow:after {
+    .yh-edit-options .yh-edit-arrow:after {
         width: 20px;
         height: 20px;
         line-height: 20px;
         content: "\F0D7";
         font-family: FontAwesome;
         font-size: 12px;
-        color: #666;
+        color: #fff;
         text-align: center;
         position: absolute;
         left: 0;
         top: 0;
     }
-    .yh-edit-choose .yh-edit-list > ul > li,
-    .yh-edit-choose .yh-edit-list > ul,
-    .yh-edit-choose .yh-edit-list{
-        width:130px;
+    .yh-edit-options .yh-edit-list > ul > li,
+    .yh-edit-options .yh-edit-list > ul,
+    .yh-edit-options .yh-edit-list{
+        width:100px;
         color:#666;
     }
-    .yh-edit-choose .yh-edit-list {
-        width: 138px;
+    .yh-edit-options .yh-edit-list {
+        width: 113px;
         display: none;
         position: absolute;
-        left: 0;
-        top: 100%;
-        /*height: 200px;*/
-        max-height:200px;
+        left: 80px;
+        top: 24px;
+        border: 1px solid #ccc;
+        /* height: 200px; */
+        max-height: 200px;
         overflow-y: scroll;
         overflow-x: hidden;
-        z-index:10;
+        z-index: 10;
     }
-    .yh-edit-choose .yh-edit-list > ul > li {
+    .yh-edit-options .yh-edit-list > ul > li {
+        line-height:25px;
         text-align:center;
         cursor:pointer;
         background:#fff;
     }
-    .yh-edit-choose .yh-edit-list > ul > li:hover {
+    .yh-edit-options .yh-edit-list > ul > li:hover {
         background:#eee;
     }
-    .yh-edit-choose .yh-edit-list > ul > li.active {
+    .yh-edit-options .yh-edit-list > ul > li.active {
         background:#ff0084;
         color:#fff;
     }

@@ -5,6 +5,7 @@
         :style="{backgroundColor:props.css.background_background_color.value,
                  backgroundImage:setImage,
                  height:props.css.height.value+(props.css.height.value == 'auto' ? '' : 'px'),
+                 overflow:props.css.overflow.value,
                  minHeight:props.nonset.min_height.value+'px'}"
         :background_background_image_h5="props.h5css.background_background_image_h5.value"
         :ref="props.id"
@@ -20,9 +21,11 @@
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')}">
             <div v-for="(element,index) in props.elements" :is="element.module" :props="element.props"></div>
         </div>
-        <div v-if="props.elements.length == 0" class="yh-list-initcontent">选中添加组件</div>
+        <div v-show="props.css.overflow.cnvalue == '滚动'" 
+            :id="props.id+'-bar'"></div>
+        <div v-show="props.elements.length == 0" class="yh-list-initcontent">选中添加组件</div>
         <div 
-            v-if="props.elements.length > 0" 
+            v-show="props.elements.length > 0" 
             class="yh-vessel-add yh-list-addone hide"
             @click.prevent="addElement"
             ref="yh-list-addone">+</div>
@@ -78,7 +81,27 @@
                 cn:'高度',
                 en:'height',
                 value:'auto',
-                type:'number'
+                type:'number',
+                effect:['css.overflow']
+            },
+            overflow:{
+                cn:'超过高度',
+                en:'overflow',
+                value:'visible',  // visible(显示)  hidden(隐藏或滚动)
+                cnvalue:'显示',
+                condition:'css.height.value=="auto"',//（条件）  只有条件满足时才会设置
+                implied:'visible',  // 条件不满足时，默认值
+                type:'options',
+                options:[{
+                    cn:'显示',
+                    value:'visible'
+                },{
+                    cn:'隐藏',
+                    value:'hidden'
+                },{
+                    cn:'滚动',
+                    value:'hidden'
+                }]
             },
             // background: 类名  background_color: css样式background-color
             background_background_color:{
@@ -298,7 +321,7 @@
         width: 100%;
         height: 50px;
         line-height: 50px;
-        margin: -3px auto 0;
+        margin: -50px auto 0;
         border: 1px solid #ccc;
         font-size: 40px;
         text-align: center;
