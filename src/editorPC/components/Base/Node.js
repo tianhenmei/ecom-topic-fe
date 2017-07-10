@@ -133,7 +133,9 @@ Node.undoSelected = () => {
         id = '',
         setting = document.getElementsByClassName('setting'),
         yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
-        selection = document.getElementsByClassName('yh-selection')
+        selection = document.getElementsByClassName('yh-selection'),
+        add = document.getElementsByClassName('yh-vessel-add')//,
+        // arr = [].concat(yhEditLayer,selection,add)
     for(i = 0; i < setting.length; i++){
         setting[i].className = setting[i].className.replace(/(setting)/g,'').replace(/  /g,' ')
     }
@@ -144,9 +146,26 @@ Node.undoSelected = () => {
     }
     for(i = 0; i < selection.length; i++){
         if(!/(hide)/g.test(selection[i].className)){
-            selection[i].className = selection[i].className + ' hide'
+            selection[i].className += ' hide'
         }
     }
+    for(i = 0; i < add.length; i++){
+        if(!/(hide)/g.test(add[i].className)){
+            add[i].className += ' hide'
+        }
+    }
+}
+Node.checkClassName = (current,classname) => {
+    let arr = current.split(/( )/g),
+        i = 0,
+        one = ''
+    for(i = 0; i < arr.length; i++){
+        one = arr[i].trim()
+        if(one && one == classname){
+            return true
+        }
+    }
+    return false
 }
 /********************************************
  * getParentByClassName: 通过类名获取父级
@@ -154,7 +173,7 @@ Node.undoSelected = () => {
  * classname: 类名
  *******************************************/
 Node.getParentByClassName = (elem,classname) => {
-    while(elem && !new RegExp('('+classname+')','g').test(elem.className)){
+    while(elem && !Node.checkClassName(elem.className,classname)){
         elem = elem.parentNode
     }
     return elem
@@ -180,7 +199,7 @@ Node.getChildrenByClassName = (elem,classname) => {
         a = [],
         i = 0
     for(i = 0; i < children.length; i++){
-        if(children[i] !== elem && new RegExp('('+classname+')','g').test(children[i].className)){
+        if(children[i] !== elem && Node.checkClassName(children[i].className,classname)){
             a.push(children[i])
         }
     }
@@ -196,7 +215,7 @@ Node.getSiblingsByClassName = (elem,classname) => {
         a = [],
         i = 0
     for(i = 0; i < children.length; i++){
-        if(children[i] !== elem && new RegExp('('+classname+')','g').test(children[i].className)){
+        if(children[i] !== elem && Node.checkClassName(children[i].className,classname)){
             a.push(children[i])
         }
     }
@@ -305,7 +324,9 @@ Node.settingBox = (elem,ischild,parentHeight = 0) => {   // 选中框
     selectRight.style.top = checkedboxStyle.top+'px'
     
     for(i = 0; i < selection.length; i++){
-        selection[i].style.display = 'block'
+        if(/(hide)/g.test(selection[i].className)){
+            selection[i].className = selection[i].className.replace(/(hide)/g,'').replace('  ',' ')
+        }
     }
 }
 /***********************************
@@ -413,7 +434,7 @@ Node.getRequestData = (store,id,type) =>{
 
 
 
-Node.recoveryChildElementsData = (parent,baseData,components,ignorestatus="") => {
+Node.recoveryChildElementsData = (parent,baseData,components,parentmodule="",ignorestatus="") => {
     let data = [],
         current = {},
         elem = parent[0].getAttribute('id') ? parent : parent.find('[id]').eq(0),
@@ -435,6 +456,7 @@ Node.recoveryChildElementsData = (parent,baseData,components,ignorestatus="") =>
             id:id,
             'yh-module':yhmodule,
             module:components[yhmodule],
+            recoveryChildElementsData:parentmodule,
             props:components[yhmodule].recoveryCtor(children.eq(i),{
                 id:id,
                 ignorestatus:ignorestatus,

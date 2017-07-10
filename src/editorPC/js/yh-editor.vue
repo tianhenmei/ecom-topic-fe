@@ -23,20 +23,20 @@
             <div class="title">正在渲染组件，请稍后……</div>
         </div>
         <!-- 选中框 -->
-        <div class="yh-selectTop yh-selection">
+        <div class="yh-selectTop yh-selection hide">
             <p class="center"></p>
             <p class="rotate"></p>
             <p></p>
         </div>
-        <div class="yh-selectRight yh-selection">
+        <div class="yh-selectRight yh-selection hide">
             <p class="center"></p>
             <p></p>
         </div>
-        <div class="yh-selectBottom yh-selection">
+        <div class="yh-selectBottom yh-selection hide">
             <p class="center"></p>
             <p></p>
         </div>
-        <div class="yh-selectLeft yh-selection">
+        <div class="yh-selectLeft yh-selection hide">
             <p class="center"></p>
             <p></p>
         </div>
@@ -73,7 +73,8 @@
             'count',
             'selected',
             'triggerId',
-            'childClassify'
+            'childClassify',
+            'parentmodule'
         ]),
         data() {
             return {
@@ -165,6 +166,7 @@
                         module:components[this.childClassify],
                         parentPath:elem.getAttribute('yh-path'),
                         path:'props.elements.cindex',//'elements.index.props.elements.cindex',
+                        parentmodule:this.parentmodule,
                         props:components[this.childClassify].setCtor({
                             id:data[i].elemID,
                             ignorestatus:'ignorestatus',
@@ -231,18 +233,23 @@
                     self.$refs['yh-toast'].className += ' hide'
                 }
             },
-            recoveryElements(elements){
+            recoveryElements(elements,path = ''){
                 let data = [],
                     childElements = []
                 for(let i = 0; i < elements.length; i++){
                     data.push(JSON.parse(JSON.stringify(elements[i])))
                     data[i].module = components[data[i]['yh-module']]
                     data[i].props = data[i].module.methods.resetData(data[i].props)
-                    
+                    if(!data[i].path){
+                        data[i].path = (path ? path+'.' : '') + 'elements.' + i
+                    }
+                    if(!data[i].props.data.anchorID.value){
+                        data[i].props.data.anchorID.value = data[i].id
+                    }
                     childElements = elements[i].props.elements
                     if(childElements && childElements.length > 0){
                         data[i].props.elements = []
-                        data[i].props.elements = this.recoveryElements(childElements)
+                        data[i].props.elements = this.recoveryElements(childElements,data[i].path+'.props')
                     }
                 }
                 return data
@@ -335,6 +342,7 @@
                                 'yh-module':name,
                                 module:CompanyPositionStyle,
                                 path:'elements.index',
+                                parentmodule:'',
                                 props:components[name].initCtor({
                                     id:'element'+self.count
                                 })
@@ -348,6 +356,7 @@
                             this.currentChildData['yh-module'] = name
                             this.currentChildData.parentPath = parentPath
                             this.currentChildData.path = 'props.elements.cindex'
+                            this.currentChildData.parentmodule = yh_module
                             this.currentChildData.ignorestatus = ignorestatus
                             this.currentChildData.ischild = ischild
                             switch(coltype){
@@ -371,6 +380,7 @@
                     module:components[name],
                     parentPath:this.currentChildData.parentPath,
                     path:this.currentChildData.path,
+                    parentmodule:this.currentChildData.parentmodule,
                     props:components[name].initCtor({
                         id:this.currentChildData.id,
                         ignorestatus:this.currentChildData.ignorestatus,
@@ -436,8 +446,10 @@
 <style>
     /**页面样式**/
     [yh-editor]{
+        width:100%;
         padding:77px 0 0 0;
         position:relative;
+        overflow:hidden;
     }
     .top{
         width:100%;
@@ -535,7 +547,7 @@
     }
 
     /*选中框********************************************/
-    .yh-selection {display: none; position:absolute; z-index: 999;}
+    .yh-selection {/*display: none;*/ position:absolute; z-index: 999;}
     .yh-selection p { 
         width:10px; 
         height:10px;  

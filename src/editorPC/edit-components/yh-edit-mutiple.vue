@@ -4,13 +4,15 @@
         <yh-edit-uplist  v-for="(one,index) in options.value" :key="index"
             :options="{name:options.value[index][options.name].value}">
             <div v-for="one in options.value[index]" :is="setModule(one)" v-if="one.type != 'none'"
+                v-show="getChildSetStatus(one)"
                 :parent="options.value[index]"
                 :eindex="eindex"
                 :index="index"
                 :options="one"
                 :ischildset="ischildset"
                 :elem_id="elem_id"
-                :ischild="ischild">
+                :ischild="ischild"
+                :path="path">
             </div>
         </yh-edit-uplist>
     </yh-edit-uplist>
@@ -21,6 +23,7 @@
     import YHEditImage from './yh-edit-image'
     import YHEditNumber from './yh-edit-number'
     import YHEditText from './yh-edit-text'
+    import YHEditCheckbox from './yh-edit-checkbox'
     import YHEditTextarea from './yh-edit-textarea'
     import YHEditOptions from './yh-edit-options'
     import YHEditRequest from './yh-edit-request'
@@ -32,6 +35,7 @@
             'yh-edit-image':YHEditImage,
             'yh-edit-number':YHEditNumber,
             'yh-edit-text':YHEditText,
+            'yh-edit-checkbox':YHEditCheckbox,
             'yh-edit-textarea':YHEditTextarea,
             'yh-edit-options':YHEditOptions,
             'yh-edit-request':YHEditRequest,
@@ -43,7 +47,9 @@
             'options',
             'elem_id',   // 当前被选中元素的ID
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            'ischild'
+            'ischild',
+            'path',
+            'parentmodule'
         ],
         data(){
             return {
@@ -52,6 +58,7 @@
                     YHEditImage,
                     YHEditNumber,
                     YHEditText,
+                    YHEditCheckbox,
                     YHEditTextarea,
                     YHEditRequest,
                     YHEditMutiple,
@@ -74,6 +81,23 @@
             
         },
         methods:{
+            getChildSetStatus(one){
+                switch(one.en){
+                    case 'toH5':
+                    case 'toPC':
+                    case 'anchorID':
+                        let l = this.path.match(/(elements)/g).length
+                        if(l == 2){
+                            switch(this.parentmodule){
+                                case 'List_style1':
+                                    return false
+                                    break
+                            }
+                        }
+                        break
+                }
+                return true
+            },
             setValue(name,actualValue,value){
                 if(this.options.backstatus){
                     this.$emit('setValue',name,value,value)
@@ -96,6 +120,8 @@
                         return this.yhmodule.YHEditNumber
                     case 'text':
                         return this.yhmodule.YHEditText
+                    case 'checkbox':
+                        return this.yhmodule.YHEditCheckbox
                     case 'textarea':
                         return this.yhmodule.YHEditTextarea
                     case 'options':

@@ -41,7 +41,8 @@
             :ignorestatus="props.ignorestatus"
             :ischild="props.ischild"
             :owndata="props.data"
-            :path="path"></yh-edit-complicated>
+            :path="path"
+            :parentmodule="parentmodule"></yh-edit-complicated>
     </div>
 </template>
 <script>
@@ -110,6 +111,27 @@
             // }
         },
         data:{
+            toH5:{
+                cn:'适配移动端',
+                en:'toH5',
+                value:1,
+                type:'checkbox',
+                parent:'data'
+            },
+            toPC:{
+                cn:'适配到PC',
+                en:'toPC',
+                value:1,
+                type:'checkbox',
+                parent:'data'
+            },
+            anchorID:{
+                cn:'锚点ID',
+                en:'anchorID',
+                value:'',
+                type:'text',
+                parent:'data'
+            },
             companyId:{
                 cn:'公司ID',
                 en:'companyId',
@@ -157,7 +179,7 @@
                 cn:'所属领域',
                 en:'industryfield',
                 value:'企业服务,招聘',
-                type:'text',
+                type:'none',
                 parent:'data'
             },
             slogan:{
@@ -331,7 +353,7 @@
         }
     }
     export default {
-        props:['props','path'],
+        props:['props','path','parentmodule'],
         components:{
             'yh-edit-complicated':YHEditComplicated
         },
@@ -443,6 +465,7 @@
                 })),
                 options
             )
+            data.data.anchorID.value = options.id
             return data
         },
         setCtor(options,elemData){
@@ -460,6 +483,7 @@
                 })),
                 options
             )
+            data.data.anchorID.value = options.id
             return data
         },
         recoveryCtor(elem,options){
@@ -474,6 +498,9 @@
                 },
                 options
             )
+            if(!data.data.anchorID.value){
+                data.data.anchorID.value = options.id
+            }
             return data
         }
     }

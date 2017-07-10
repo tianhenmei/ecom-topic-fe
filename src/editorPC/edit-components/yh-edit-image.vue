@@ -33,10 +33,11 @@
             setValue(e){
                 let target = e.target,
                     value = target.value,
-                    stylename = this.options.en
+                    stylename = this.options.en,
+                    image = null
                 switch(this.options.mold){
                     case 'bg':
-                        let image = new Image();
+                        image = new Image();
                         (function(self,value){
                             image.onload = function(){
                                 self.$store.commit('setMultipleValue',[{
@@ -61,6 +62,39 @@
                         image.src = value
                         break
                     default:
+                        image = new Image()
+                        let classname = this.options.en.split(/[_]/g),
+                            name = classname.length > 1 ? classname[0]+'_' : '_';
+                        (function(self,value){
+                            image.onload = function(){
+                                self.$store.commit('setMultipleValue',[{
+                                    parent:self.options.parent ? self.options.parent : 'css',
+                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
+                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
+                                    ischildset:self.ischildset ? self.ischildset : '',
+                                    stylename:self.options.en,
+                                    actualValue:value,
+                                    designValue:value
+                                },{
+                                    parent:self.options.parent ? self.options.parent : 'css',
+                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
+                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
+                                    ischildset:self.ischildset ? self.ischildset : '',
+                                    stylename:name+'width',
+                                    actualValue:image.width,
+                                    designValue:image.width
+                                },{
+                                    parent:self.options.parent ? self.options.parent : 'css',
+                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
+                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
+                                    ischildset:self.ischildset ? self.ischildset : '',
+                                    stylename:name+'height',
+                                    actualValue:image.height,
+                                    designValue:image.height
+                                }])
+                            }
+                        })(this,value)
+                        image.src = value
                         break;
                 }
             },

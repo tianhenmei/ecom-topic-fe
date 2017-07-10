@@ -2,11 +2,20 @@
     @import './index.css';
 </style>
 <template>
-    <div class="demo-style1" :id="props.id" yh-module="Demo_style1"
+    <div class="image-style1" :id="props.id" yh-module="Image_style1"
         :ref="props.id"
+        :style="{
+            height:props.css.content_height.value+'px',
+            backgroundColor:props.css.content_background_color.value,
+        }"
         @click.stop="setAll"
         >
-        
+        <img class="yh-image-content"
+            :style="{
+                marginTop:(-props.css.content_height.value / 2 + 'px'),
+                marginLeft:(-props.css.content_width.value / 2 + 'px')
+            }"
+            :src="props.css.content_src.value" />
         <!-- yh-edit 组件设置 -->
         <yh-edit-complicated
             ref="yh-edit-complicated"
@@ -41,10 +50,10 @@
         path:'',
         css:{
             // background: 类名  background_color: css样式background-color
-            background_background_color:{
+            content_background_color:{
                 cn:'背景颜色',
-                en:'background_background_color',
-                value:'#00c99b',
+                en:'content_background_color',
+                value:'#ffffff',
                 type:'color'  
                     // color(默认)   
                     // image（背景图(mold="bg")、图片(mold="src")）  
@@ -58,11 +67,39 @@
                 // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
                 // effect:['',''] 当前属性会影响的属性，如css.overflow
             },
-            // name: 类名  color: css样式color
-            name_color:{
-                cn:'名称颜色',
-                en:'name_color',
-                value:'#ffffff'
+            content_src:{
+                cn:'图片地址',
+                en:'content_src',
+                value:'https://www.lagou.com/topic/static/img/newEdit/topImg.png',
+                type:'image',
+                mold:'src'  
+            },
+            content_width:{
+                cn:'宽',
+                en:'content_width',
+                value:1210,
+                type:'none',
+            },
+            content_height:{
+                cn:'高',
+                en:'content_height',
+                value:200,
+                type:'none',
+            }
+        },
+        h5css:{
+            content_background_color:{
+                cn:'背景颜色',
+                en:'content_background_color',
+                value:'#00c99b',
+                type:'color'
+            },
+            content_src:{
+                cn:'背景图片',
+                en:'content_src',
+                value:'none',
+                type:'image',
+                mold:'bg'  
             }
         },
         common:{
@@ -99,6 +136,19 @@
         props:['props','path','parentmodule'],
         components:{
             'yh-edit-complicated':YHEditComplicated
+        },
+        computed:{
+            setImage(){
+                let src = this.props.css.background_background_image.value.trim()
+                switch(src){
+                    case 'none':
+                        return src
+                    case 'undefined':
+                        return 'none'
+                    default:
+                        return 'url('+src+')'
+                }
+            }
         },
         data(){
             return {

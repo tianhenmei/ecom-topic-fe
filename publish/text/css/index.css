@@ -21,11 +21,15 @@ img {
     display:block;
 }
 html,body {
-    font-size:14px;
+    font-size: 14px;
 }
 
 .hide {
     display:none;
+}
+.main {
+    width:100%;
+    overflow:hidden;
 }
 
 
@@ -51,6 +55,14 @@ html,body {
 
 
 [yh-module=List_style1] .company-position-style2{margin:0 10px 20px 10px;float:left}.company-position-style2{width:295px;height:325px;position:relative;margin:0 auto 20px;overflow:hidden;border-radius:7px}.company-position-style2 .title{height:142px;padding:25px 15px 0 21px;background:#0dcba0}.company-position-style2 .title .right{width:auto;float:left}.company-position-style2 .title>a{width:105px;height:103px;padding:2px 0 0 0;background:#000;background-color:rgba(0,0,0,.1);filter:Alpha(opacity=50);position:static;border-radius:6px;overflow:hidden;float:left}.company-position-style2 .title a.name{width:137px;text-align:left;text-decoration:none;font-size:20px;padding:0 0 0 11px;word-break:break-all;height:25px;line-height:25px;overflow:hidden;display:block}.company-position-style2 .title p.tag{width:143px;height:56px;padding:10px 0 0 11px;overflow:hidden}.company-position-style2 .title p.tag span{height:20px;line-height:20px;padding:0 5px;overflow:hidden;text-align:left;text-decoration:none;font-size:12px;color:#fff;border:1px solid #fff;opacity:.5;border-radius:100px;float:left;margin:0 4px 6px 0}.company-position-style2 .logoUrl img{width:101px;height:101px;margin:0 auto;border-radius:4px;background:#fff}.company-position-style2 .slogan{width:224px;height:68px;line-height:24px;padding:32px 30px 57px 39px;margin:0 auto;font-size:16px;color:#333;text-align:left;overflow:hidden;word-break:break-all;background:#f9fafa no-repeat 18px 23px;border:1px solid #f7f7f7;border-top:none;border-radius:0 0 7px 7px}.company-position-style2 .slideLayer{position:absolute;left:0;top:100%}.company-position-style2 .positionList{width:197px;height:265px;padding:48px 48px 0 50px;background:#0dcba0}.company-position-style2 .positionList li .positionUrl{height:32px;line-height:32px;display:block}.company-position-style2 .positionList li .positionUrl p,.company-position-style2 .positionList li .positionUrl span{font-size:16px;float:left;font-family:Arial}.company-position-style2 .positionList li .positionUrl p.positionName,.company-position-style2 .positionList li .positionUrl span.positionName{width:120px;height:32px;line-height:32px;padding-right:10px;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:left}.company-position-style2 .positionList li .positionUrl p.salary,.company-position-style2 .positionList li .positionUrl span.salary{width:60px;height:32px;line-height:32px;color:#fff}.company-position-style2 .more{width:195px;height:47px;line-height:47px;border-radius:3px;display:block;background:#fff;color:#0dcba0;text-align:center;font-size:18px;text-decoration:none;position:absolute;left:51px;bottom:51px}
+
+
+
+
+
+
+
+.image-style1{width:100%;height:100px;margin:0 auto;position:relative}.image-style1 .yh-image-content{position:absolute;left:50%;top:50%;margin:-50% 0 0 -50%}
 
 
 

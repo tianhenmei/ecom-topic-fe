@@ -58,16 +58,16 @@
                             <div class="cpElement clearfix">
                                 <p class="title twoTitle">图片</p>
                                 <ul class="yh-lib-subcomponents">
-                                    <li tmpl="hdimage" id="hdimage_style1">
+                                    <li yh-module-name="Image style1" @click.stop.prevent="addComponents" >
                                         头图
                                     </li>
-                                    <li id="image_style1" class="imageModule" moduletype="image">
+                                    <li id="image_style1" class="imageModule" moduletype="image" @click.stop.prevent="addComponents" >
                                         图片
                                     </li>
-                                    <li id="parallax_style1" class="parallaxModule" moduletype="parallax">
+                                    <li id="parallax_style1" class="parallaxModule" moduletype="parallax" @click.stop.prevent="addComponents" >
                                         视差图片
                                     </li>
-                                    <li id="parallax_style2" class="parallaxModule" moduletype="parallax">
+                                    <li id="parallax_style2" class="parallaxModule" moduletype="parallax" @click.stop.prevent="addComponents" >
                                         滑动视差
                                     </li>
                                 </ul>
@@ -575,8 +575,16 @@
         methods:{
             toggleListEvent(e){
                 let parent = getParentByClassName(e.target,'yh-lib-parent'),
-                    child = getChildrenByClassName(parent,'yh-lib-components')[0]
-                if(/(hide)/g.test(child.className)){
+                    libComponents = document.getElementsByClassName('yh-lib-components'),
+                    child = getChildrenByClassName(parent,'yh-lib-components')[0],
+                    status = /(hide)/g.test(child.className),
+                    i = 0
+                for(i = 0; i < libComponents.length; i++){
+                    if(!/(hide)/g.test(libComponents[i].className)){
+                        libComponents[i].className += ' hide'
+                    }
+                }
+                if(status){
                     child.className = child.className.replace(/(hide)/g,'').replace(/  /g,' ')
                 }else {
                     child.className += ' hide'

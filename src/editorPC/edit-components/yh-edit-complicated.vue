@@ -82,13 +82,14 @@
             </div>
             <div v-if="getContentStatus('data')" :slot="setContentSlot('data')" class="yh-edit-tab-content yh-edit-owndata clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
+                    <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one) && getChildSetStatus(one)"
                         :parent="owndata"
                         :options="one"
                         ischildset=""
                         :elem_id="elem_id"
                         :ischild="ischild"
-                        :path="path">
+                        :path="path"
+                        :parentmodule="parentmodule">
                     </div>
                 </div>
                 <div v-else class="yh-component-set">
@@ -125,7 +126,10 @@
     </div>
 </template>
 <script>
-    import {undoSelected} from '../components/Base/Node.js'
+    import {
+        undoSelected,
+        getParentByAttr
+    } from '../components/Base/Node.js'
     // edit-components
     import YHEditTab from './yh-edit-tab'
     import YHEditUplist from './yh-edit-uplist'
@@ -133,6 +137,7 @@
     import YHEditImage from './yh-edit-image'
     import YHEditNumber from './yh-edit-number'
     import YHEditText from './yh-edit-text'
+    import YHEditCheckbox from './yh-edit-checkbox'
     import YHEditTextarea from './yh-edit-textarea'
     import YHEditOptions from './yh-edit-options'
     import YHEditRequest from './yh-edit-request'
@@ -146,6 +151,7 @@
             'yh-edit-image':YHEditImage,
             'yh-edit-number':YHEditNumber,
             'yh-edit-text':YHEditText,
+            'yh-edit-checkbox':YHEditCheckbox,
             'yh-edit-textarea':YHEditTextarea,
             'yh-edit-options':YHEditOptions,
             'yh-edit-request':YHEditRequest,
@@ -161,11 +167,11 @@
             'elem_id', // 当前组件的id
             'ignorestatus',  // 当前是否忽略样式设置
             'ischild',  // 当前是否子元素，用于yh-edit-number 的宽高设置
-            'path'
+            'path',
+            'parentmodule'
         ],
         data(){
             let tabs = []
-            
             switch(this.ignorestatus){
                 case 'ignorestatus':
                     tabs = [{
@@ -192,6 +198,7 @@
                     YHEditImage,
                     YHEditNumber,
                     YHEditText,
+                    YHEditCheckbox,
                     YHEditTextarea,
                     YHEditRequest,
                     YHEditMutiple,
@@ -208,7 +215,23 @@
             
         },
         methods:{
-            undoSelected,
+            getChildSetStatus(one){
+                switch(one.en){
+                    case 'toH5':
+                    case 'toPC':
+                    case 'anchorID':
+                        let l = this.path.match(/(elements)/g).length
+                        if(l == 2){
+                            switch(this.parentmodule){
+                                case 'List_style1':
+                                    return false
+                                    break
+                            }
+                        }
+                        break
+                }
+                return true
+            },
             setDisplayStatus(one){
                 return true
                 if(one.condition){  // 条件判断
@@ -256,32 +279,24 @@
             },
             setModule(one){
                 switch(one.type){
-                    case 'image':
-                        return this.yhmodule.YHEditImage
-                    case 'number':
-                        return this.yhmodule.YHEditNumber
-                    case 'text':
-                        return this.yhmodule.YHEditText
-                    case 'textarea':
-                        return this.yhmodule.YHEditTextarea
-                    case 'options':
-                        return this.yhmodule.YHEditOptions
                     case 'uplist':
                         return this.yhmodule.YHEditMutiple
-                    case 'request':
-                        return this.yhmodule.YHEditRequest
                     default:
-                        return this.yhmodule.YHEditColor
+                        if(one.type){
+                            return this.yhmodule['YHEdit'+one.type[0].toLocaleUpperCase()+one.type.slice(1)]
+                        }else{
+                            return this.yhmodule.YHEditColor
+                        }
                 }
             },
             removeElement(e){
                 var elem = document.getElementByClassName('setting')[0],
                     elemID = elem.getAttribute('id')
                 this.$store.commit('removeElement',elemID)
-                this.undoSelected()
+                undoSelected()
             },
             undoElement(e){
-                this.undoSelected()
+                undoSelected()
             }
         }
      }

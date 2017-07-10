@@ -1,7 +1,8 @@
 <template>
-    <div class="list-style1 background clearfix" yh-module="List_style1"
+    <div class="list-style1 background clearfix" 
+        :id="props.id"
+        yh-module="List_style1"
         :class="{'yh-list-style1':props.elements.length > 0}"
-        :id="props.id" 
         :style="{backgroundColor:props.css.background_background_color.value,
                  backgroundImage:setImage,
                  height:props.css.height.value+(props.css.height.value == 'auto' ? '' : 'px'),
@@ -19,7 +20,11 @@
             :class="{'yh-init':!props.elements.length}"
             :style="{
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')}">
-            <div v-for="(element,index) in props.elements" :is="element.module" :props="element.props"></div>
+            <div v-for="(element,index) in props.elements" 
+                :is="element.module" 
+                :props="element.props"
+                :path="element.path"
+                parentmodule="List_style1"></div>
         </div>
         <div v-show="props.css.overflow.cnvalue == '滚动'" 
             :id="props.id+'-bar'"></div>
@@ -41,7 +46,8 @@
             :ignorestatus="props.ignorestatus"
             :ischild="props.ischild"
             :owndata="props.data"
-            :path="path"></yh-edit-complicated>
+            :path="path"
+            :parentmodule="parentmodule"></yh-edit-complicated>
     </div>
 </template>
 <script>
@@ -62,6 +68,7 @@
         ischild:'',
         yh_data_name:'name',  // 当作为子级时放入uplist中的title取值
         path:'',
+        parentmodule:'',  // 父级模版
         nonset:{
             min_height:{
                 cn:'最小高度',
@@ -134,6 +141,27 @@
         },
         elements:[],
         data:{  // 卡片数据
+            toH5:{
+                cn:'适配移动端',
+                en:'toH5',
+                value:1,
+                type:'checkbox',
+                parent:'data'
+            },
+            toPC:{
+                cn:'适配到PC',
+                en:'toPC',
+                value:1,
+                type:'checkbox',
+                parent:'data'
+            },
+            anchorID:{
+                cn:'锚点ID',
+                en:'anchorID',
+                value:'',
+                type:'text',
+                parent:'data'
+            },
             childmodule:{
                 cn:'子集模板',
                 en:'childmodule',
@@ -144,25 +172,13 @@
         }
     }
     export default {
-        props:['props','path'],
+        props:['props','path','parentmodule'],
         components:{
             'yh-edit-complicated':YHEditComplicated
         },
         data(){
             return {
-                // baseData:JSON.parse(JSON.stringify({
-                //     id:baseData.id,
-                //     ignorestatus:baseData.ignorestatus,
-                //     ischild:baseData.ischild,
-                //     yh_data_name:baseData.yh_data_name,
-                //     nonset:baseData.nonset,
-                //     css:baseData.css,
-                //     h5css:baseData.h5css,
-                //     elements:baseData.elements,
-                //     attribute:baseData.attribute,
-                //     data:baseData.data,
-                //     common:baseData.common
-                // }))
+                
             }
         },
         mounted(){
@@ -218,7 +234,8 @@
                 this.$store.commit('setTriggerID',{
                     triggerId:this.props.id,
                     triggerClassify:classify,
-                    childClassify:childmodule
+                    childClassify:childmodule,
+                    parentmodule:'List_style1'
                 })
             },
             recoveryModuleData(elem,baseData){
@@ -253,6 +270,7 @@
                 })),
                 options
             )
+            data.data.anchorID.value = options.id
             return data
         },
         setCtor(options,elemData){
@@ -273,6 +291,7 @@
                 })),
                 options
             )
+            data.data.anchorID.value = options.id
             return data
         },
         recoveryCtor(elem,options,components){
@@ -280,7 +299,7 @@
                 {},
                 recoveryData(elem,baseData),
                 this.methods.recoveryModuleData(elem,baseData),
-                recoveryChildElementsData(elem,baseData,components,'ignorestatus'),
+                recoveryChildElementsData(elem,baseData,components,'List_style1','ignorestatus'),
                 {
                     yh_data_name:baseData.yh_data_name,
                     path:path,
@@ -289,6 +308,9 @@
                 },
                 options
             )
+            if(!data.data.anchorID.value){
+                data.data.anchorID.value = options.id
+            }
             return data
         }
     }

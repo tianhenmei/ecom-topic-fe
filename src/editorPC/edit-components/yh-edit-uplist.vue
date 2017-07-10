@@ -28,10 +28,27 @@
             getChildrenByClassName,
             getSiblingsByClassName,
             toggleUplistContent(e){
-                let title = this.getParentByClassName(e.target,'yh-uplist-set-title'),
+                let parent = this.getParentByClassName(e.target,'yh-uplist-set'),
+                    siblings = this.getSiblingsByClassName(parent,'yh-uplist-set'),
+                    title = this.getParentByClassName(e.target,'yh-uplist-set-title'),
                     content = this.getSiblingsByClassName(title,'yh-uplist-set-content')[0],
-                    icon = this.getChildrenByClassName(title,'icon')[0]
-                if(/(hide)/g.test(content.className)){
+                    icon = this.getChildrenByClassName(title,'icon')[0],
+                    i = 0,
+                    stitle = null,
+                    scontent = null,
+                    sicon = null,
+                    status = /(hide)/g.test(content.className)
+                
+                for(i = 0; i < siblings.length; i++){
+                    stitle = this.getChildrenByClassName(siblings[i],'yh-uplist-set-title')[0]
+                    scontent = this.getChildrenByClassName(siblings[i],'yh-uplist-set-content')[0]
+                    sicon = this.getChildrenByClassName(stitle,'icon')[0]
+                    if(!/(hide)/g.test(scontent.className)){
+                        sicon.className = sicon.className.replace('listshow','').replace('  ',' ')
+                        scontent.className = scontent.className + ' hide'
+                    }
+                }
+                if(status){
                     if(!/(listshow)/g.test(icon.className)){
                         icon.className = icon.className + ' listshow'
                     }

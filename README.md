@@ -7,7 +7,7 @@
 ##开发命令##
 
 1.  npm run create -- --sys:projectName 创建项目projectName,如果想要创建某个项目中的组件，使用如下命令： 
-    npm run create -- --sys:projectName --components:componentName/style1  (style1：样式名，可为 1->n )
+    npm run create -- --sys:projectName --components:ComponentName/style1  (style1：样式名，可为 1->n )
 2.  npm run dev -- --sys:projectName 开发项目时启动项目projectName(监听8090)
 3.  npm run dist -- --sys:projectName 编译项目projectName，最终生成文件线上使用
 

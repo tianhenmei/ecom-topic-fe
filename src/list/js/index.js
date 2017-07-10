@@ -8,7 +8,7 @@ var pageVue = new Vue({
         return {
             title:'YH LIST',
             host:'http://localhost:9000',
-            href:'/dist/editorPC/index.html',
+            href:'/dist/createPC/index.html',
             chref:'/dist/createPC/index.html',
             total:0,
             eachPage:10,

@@ -15,6 +15,7 @@ let store = new Vuex.Store({
         triggerId:'',
         triggerClassify:'',
         childClassify:'',
+        parentmodule:'',
         ajaxUrl:{
             CompanyPositions:{
                 url:'company/getCompanyandPosition',
@@ -348,6 +349,18 @@ let store = new Vuex.Store({
             }
             store.commit('getElemInfo',elem)
         },
+        /**************
+         * payload:数组，数组成员如下
+         * parent: 当前style所在父级
+         * eindex: 如果当前是某个组件的子级（elements下的元素）
+         *         则eindex表示当前在elements中的索引值
+         *         否则为-1
+         * index: 如果当前元素的某个属性值为Array，index则表示所在属性值的索引
+         *        否则为-1
+         * stylename: 当前需修改的style名字
+         * actualValue: 实际用来赋值的值
+         * designValue: (非必须)设计的值
+         ***************/
         setValue:(state,payload) => {
             // ischildset // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
             let i = 0,j = 0,t = 0,
@@ -530,6 +543,11 @@ let store = new Vuex.Store({
         /**************
          * payload:数组，数组成员如下
          * parent: 当前style所在父级
+         * eindex: 如果当前是某个组件的子级（elements下的元素）
+         *         则eindex表示当前在elements中的索引值
+         *         否则为-1
+         * index: 如果当前元素的某个属性值为Array，index则表示所在属性值的索引
+         *        否则为-1
          * stylename: 当前需修改的style名字
          * actualValue: 实际用来赋值的值
          * designValue: (非必须)设计的值
