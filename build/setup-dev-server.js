@@ -24,7 +24,7 @@ module.exports = function setupDevServer (app, cb) {
 	clientConfig.entry.app = ['webpack-hot-middleware/client', clientConfig.entry.app]
 	clientConfig.output.filename = '[name].js'
 	clientConfig.plugins.push(
-		new webpack.HotModuleReplacementPlugin(),
+		// new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoEmitOnErrorsPlugin()
 	)
 

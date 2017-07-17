@@ -311,7 +311,8 @@ function writeHTML(pageHTML,filePath,pagedata){
 
 function createRenderer (bundle, options) {
 	return createBundleRenderer(bundle, Object.assign(options, {
-		template:templateH5,// （可选）页面模板
+        template:templateH5,// （可选）页面模板
+        inject: false,
 		// for component caching
 		cache: LRU({
 			max: 1000,
@@ -335,7 +336,11 @@ function render (filename,filePath,pagedata,data,renderer) {
 		}
 	}
 
-	renderer.renderToString({}, (err, html) => {
+	renderer.renderToString({
+        filename,
+        pagedata,
+        data
+    }, (err, html) => {
 		if (err) {
 			return handleError(err)
         }
@@ -354,7 +359,7 @@ function writeHTMLH5(filename,filePath,pagedata,data){
     console.log('writing HTML h5')
     readyPromise.then(() => {
         console.log('resoved...')
-        render(filename,filePath,pagedata,data,renderer)
+        render(filename,filePath,pagedata,JSON.parse(data),renderer)
     })
     
 }

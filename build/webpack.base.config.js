@@ -62,7 +62,7 @@ module.exports = {
           compress: { warnings: false }
         }),
         new ExtractTextPlugin({
-          filename: 'common.[chunkhash].css'
+          filename: 'm_index.[chunkhash].css'
         })
       ]
     : [

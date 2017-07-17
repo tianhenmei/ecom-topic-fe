@@ -1,57 +1,52 @@
-import { createApp } from './app'
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
+import App from '../../server-renderer/editorPC/App.vue'
+Vue.use(Vuex)
 
-const isDev = process.env.NODE_ENV !== 'production'
+let store = new Vuex.Store({
+    state:{
 
-// This exported function will be called by `bundleRenderer`.
-// This is where we perform data-prefetching to determine the
-// state of our application before actually rendering it.
-// Since data fetching is async, this function is expected to
-// return a Promise that resolves to the app instance.
-export default context => {
-    return new Promise((resolve, reject) => {
-        const s = isDev && Date.now()
-        const dataString = fs.readFileSync(path.resolve(__dirname,'../../publish/text/js/index.json'),'utf-8')
-        const data = JSON.parse(dataString)
-        const { app,store } = createApp(data)
-        console.log(context)
-        console.log(data)
-        // const { url } = context
-        // const fullPath = router.resolve(url).route.fullPath
+    }
+})
+// 通用入口
 
-        // if (fullPath !== url) {
-            // reject({ url: fullPath })
-        // }
-        // context.state = store.state
-        resolve(app)
+function createApp(pagedata={},data={}) {
+    // console.log(pagedata)
+    // store.state = data
+    const app = new Vue({
+        store:new Vuex.Store({
+            state:data
+        }),
+        created(){
+            // console.log(data.elements)
+            // console.log(this.$store)
+        },
+        render:h => h(App)
+    })
+    // console.log(app)
+    return { app }
+}
 
-        // set router's location
-        // router.push(url)
+export default (filename,pagedata,data) => {
+    // 因为有可能会是异步路由钩子函数或组件，所以我们将返回一个 Promise，
+    // 以便服务器能够等待所有的内容在渲染前，
+    // 就已经准备就绪。
+    return new Promise((resolve,reject) => {
+        let host = 'http://localhost:9000/'
+        axios.get(host+'editorPC/getPageData',{
+            id:'10000',
+            name:'text'
+        }).then(response => {
+            let content = response.data.content
+            
+            // console.log(response.data)
+            const { app } = createApp(pagedata,content)
+            // console.log(app)
 
-        // wait until router has resolved possible async hooks
-        // router.onReady(() => {
-        //     const matchedComponents = router.getMatchedComponents()
-        //     // no matched routes
-        //     if (!matchedComponents.length) {
-        //         reject({ code: 404 })
-        //     }
-        //     // Call fetchData hooks on components matched by the route.
-        //     // A preFetch hook dispatches a store action and returns a Promise,
-        //     // which is resolved when the action is complete and store state has been
-        //     // updated.
-        //     Promise.all(matchedComponents.map(({ asyncData }) => asyncData && asyncData({
-        //         store,
-        //         route: router.currentRoute
-        //     }))).then(() => {
-        //         isDev && console.log(`data pre-fetch: ${Date.now() - s}ms`)
-        //     // After all preFetch hooks are resolved, our store is now
-        //     // filled with the state needed to render the app.
-        //     // Expose the state on the render context, and let the request handler
-        //     // inline the state in the HTML response. This allows the client-side
-        //     // store to pick-up the server-side state without having to duplicate
-        //     // the initial data fetching on the client.
-        //         context.state = store.state
-        //         resolve(app)
-        //     }).catch(reject)
-        // }, reject)
+            resolve(app)
+        },response => {
+            console.log(response.body.message)
+        })
     })
 }
