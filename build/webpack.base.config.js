@@ -11,8 +11,8 @@ module.exports = {
     ? false
     : '#cheap-module-source-map',
   output: {
-    path: path.resolve(__dirname, '../publish'),
-    publicPath: '/publish/',
+    path: path.resolve(__dirname, '../dist/editorPC/js-h5'),
+    publicPath: '/dist/',
     filename: '[name].[chunkhash].js'
   },
   resolve: {

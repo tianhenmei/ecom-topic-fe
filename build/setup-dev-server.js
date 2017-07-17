@@ -2,16 +2,19 @@ const path = require('path')
 const webpack = require('webpack')
 // const fs = require('fs')
 const MFS = require('memory-fs')
-const clientConfig = require('./webpack.client.config')
-const serverConfig = require('./webpack.server.config')
 
-const readFile = (tempfs, file) => {
+// const output = path.resolve(__dirname, '../build')
+
+const readFile = (clientConfig,tempfs, file) => {
     try {
+		console.log(path.join(clientConfig.output.path, file))
         return tempfs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
     } catch (e) {}
 }
 
 module.exports = function setupDevServer (app, cb) {
+	let clientConfig = require('./webpack.client.config')()
+	let serverConfig = require('./webpack.server.config')()
 	let bundle, clientManifest
 	let resolve
 	const readyPromise = new Promise(r => { resolve = r })
@@ -43,6 +46,7 @@ module.exports = function setupDevServer (app, cb) {
 		if (stats.errors.length) return
 
 		clientManifest = JSON.parse(readFile(
+			clientConfig,
 			devMiddleware.fileSystem,
 			'vue-ssr-client-manifest.json'
 		))
@@ -53,6 +57,8 @@ module.exports = function setupDevServer (app, cb) {
 		}
 	})
 
+	console.log(serverConfig)
+
 	// watch and update server renderer
 	const serverCompiler = webpack(serverConfig)
 	const mfs = new MFS()
@@ -61,7 +67,7 @@ module.exports = function setupDevServer (app, cb) {
 		if (err) throw err
 		stats = stats.toJson()
 		if (stats.errors.length) return
-		bundle = JSON.parse(readFile(mfs, 'vue-ssr-server-bundle.json'))
+		bundle = JSON.parse(readFile(clientConfig,mfs, 'vue-ssr-server-bundle.json'))
 		if (clientManifest) {
 			ready(bundle, {
 				clientManifest

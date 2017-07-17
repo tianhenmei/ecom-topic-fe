@@ -401,7 +401,53 @@ gulp.task('dev:server',function(){
 
 gulp.task('dev',['dev:watch','dev:client', 'dev:server']);
 
-gulp.task('dist',function(){
+gulp.task('dist:client-h5',function(){
+    var systemName = params.dist.sys
+    if(!systemName) return
+    
+    var clientConfig = require('./build/webpack.client.config')();
+    let fileDir = path.join(clientConfig.output.path)
+    !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
+        if (err) console.error(err)
+    })
+    rimraf(fileDir+'/components-h5-js',(err) => {
+        if (err) throw err;
+        webpack(clientConfig, function(err, stats) {
+            process.stdout.write(stats.toString({
+                colors: true,
+                modules: false,
+                children: false,
+                chunks: false,
+                chunkModules: false
+            }) + '\n\n');
+        });
+    })
+})
+
+gulp.task('dist:server-h5',function(){
+    var systemName = params.dist.sys
+    if(!systemName) return
+    
+    var serverConfig = require('./build/webpack.server.config.js')();
+    let fileDir = path.join(serverConfig.output.path)
+    !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
+        if (err) console.error(err)
+    })
+    rimraf(fileDir+'/components-h5-js',(err) => {
+        if (err) throw err;
+        webpack(serverConfig, function(err, stats) {
+            process.stdout.write(stats.toString({
+                colors: true,
+                modules: false,
+                children: false,
+                chunks: false,
+                chunkModules: false
+            }) + '\n\n');
+        });
+    })
+});
+
+gulp.task('dist:pc',function(){
     var systemName = params.dist.sys
     if(!systemName) return
     
@@ -435,7 +481,9 @@ gulp.task('dist',function(){
             }) + '\n\n');
         });
     })
-});
+})
+
+gulp.task('dist',['dist:pc','dist:client-h5','dist:server-h5']);
 
 /** 推送线上单台 */
 gulp.task('upload', function() {
