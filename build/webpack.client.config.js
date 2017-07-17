@@ -7,7 +7,7 @@ const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 function getClientConfig(){
     return merge(base, {
 		entry: {
-			app: './src/editorPC/entry-client.js'
+			index: './src/editorPC/entry-client.js'
 		},
 		resolve: {
 			alias: {
@@ -22,7 +22,7 @@ function getClientConfig(){
 			}),
 			// extract vendor chunks for better caching
 			new webpack.optimize.CommonsChunkPlugin({
-				name: 'vendor',
+				name: 'lib.min',
 				minChunks: function (module) {
 				// a module is extracted into the vendor chunk if...
 				return (

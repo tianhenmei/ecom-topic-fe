@@ -401,17 +401,27 @@ gulp.task('dev:server',function(){
 
 gulp.task('dev',['dev:watch','dev:client', 'dev:server']);
 
-gulp.task('dist:client-h5',function(){
-    var systemName = params.dist.sys
-    if(!systemName) return
-    
+gulp.task('dist:rimraf-h5',function(){
     var clientConfig = require('./build/webpack.client.config')();
     let fileDir = path.join(clientConfig.output.path)
     !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
         if (err) console.error(err)
     })
-    rimraf(fileDir+'/components-h5-js',(err) => {
+    rimraf(fileDir+'/js-h5',(err) => {
         if (err) throw err;
+    })
+})
+gulp.task('dist:client-h5',['dist:rimraf-h5'],function(){
+    let systemName = params.dist.sys
+    if(!systemName) return
+    
+    let clientConfig = require('./build/webpack.client.config')();
+    // let fileDir = path.join(clientConfig.output.path)
+    // !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
+    //     if (err) console.error(err)
+    // })
+    // rimraf(fileDir+'/components-h5-js',(err) => {
+        // if (err) throw err;
         webpack(clientConfig, function(err, stats) {
             process.stdout.write(stats.toString({
                 colors: true,
@@ -421,10 +431,34 @@ gulp.task('dist:client-h5',function(){
                 chunkModules: false
             }) + '\n\n');
         });
-    })
+    // })
 })
 
 gulp.task('dist:server-h5',function(){
+    var systemName = params.dist.sys
+    if(!systemName) return
+    
+    var serverConfig = require('./build/webpack.server.config.js')();
+    // let fileDir = path.join(serverConfig.output.path)
+    // !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
+    //     if (err) console.error(err)
+    // })
+    // rimraf(fileDir+'/components-h5-js',(err) => {
+        // if (err) throw err;
+        webpack(serverConfig, function(err, stats) {
+            process.stdout.write(stats.toString({
+                colors: true,
+                modules: false,
+                children: false,
+                chunks: false,
+                chunkModules: false
+            }) + '\n\n');
+        });
+    // })
+});
+
+gulp.task('dist:h5',['dist:client-h5'],function(){
+    // dist:server-h5
     var systemName = params.dist.sys
     if(!systemName) return
     
@@ -483,7 +517,7 @@ gulp.task('dist:pc',function(){
     })
 })
 
-gulp.task('dist',['dist:pc','dist:client-h5','dist:server-h5']);
+gulp.task('dist',['dist:pc','dist:h5']);
 
 /** 推送线上单台 */
 gulp.task('upload', function() {
