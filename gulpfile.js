@@ -206,18 +206,19 @@ function watchFileCompile(config){
 gulp.task('dev:watch',function(){
     var systemName = params.dev.sys
     if(!systemName) return
-    watch('./src/'+systemName+'/components/*/*.vue')
+    watch('./src/'+systemName+'/components*/*/*/*.vue')
         .on('change',function(filepath){
             console.log('watch vue change: '+filepath)
             var dirArr = path.dirname(filepath).split('/'),
+                componentsname = dirArr[dirArr.length-3],
                 modulename = dirArr[dirArr.length-2],
                 dirname = dirArr[dirArr.length-1],
                 filename = path.basename(filepath).split('.')[0]
 
             var config = Object.assign({},getConfig(systemName,modulename+'_'+dirname,'vuePlugins'),{
-                entry: path.resolve(__dirname,`./src/${systemName}/components/${modulename}/${dirname}/${filename}.vue`),
+                entry: path.resolve(__dirname,`./src/${systemName}/${componentsname}/${modulename}/${dirname}/${filename}.vue`),
                 output: {
-                    path: path.resolve(__dirname,'./dist/'+systemName+'/components/'),//path.resolve(__dirname, `../dist/${systemName}/js/`),
+                    path: path.resolve(__dirname,'./dist/'+systemName+'/'+componentsname+'/'),//path.resolve(__dirname, `../dist/${systemName}/js/`),
                     publicPath: '',
                     filename:modulename+'_'+dirname+'.js',
                     hashDigestLength:8
@@ -226,31 +227,35 @@ gulp.task('dev:watch',function(){
 
             watchFileCompile(config)
         })
-    watch('./src/'+systemName+'/components/*/*/*.js')
+    watch('./src/'+systemName+'/components*/*/*/*.js')
         .on('change',function(filepath){
             var dirArr = path.dirname(filepath).split('/'),
+                componentsname = dirArr[dirArr.length-3],
                 modulename = dirArr[dirArr.length-2],
                 dirname = dirArr[dirArr.length-1],
-                filename = path.basename(filepath).split('.')[0]
+                filename = path.basename(filepath).split('.')[0],
+                narr = componentsname.split(/[-]/g),
+                type = narr.length > 1 ? '_'+narr[1] : ''
 
             var config = Object.assign({},getConfig(systemName,modulename+'_'+filename,'jsPlugins'),{
-                entry: path.resolve(__dirname,`./src/${systemName}/components/${modulename}/${dirname}/${filename}.js`),
+                entry: path.resolve(__dirname,`./src/${systemName}/${componentsname}/${modulename}/${dirname}/${filename}.js`),
                 output: {
                     path: path.resolve(__dirname,'./dist/'+systemName+'/publish/js'),//path.resolve(__dirname, `../dist/${systemName}/js/`),
                     publicPath: '',
-                    filename:modulename+dirname+'.js',
+                    filename:modulename+'_'+dirname+type+'.js',
                     hashDigestLength:8
                 }
             })
-
             watchFileCompile(config)
         })
-    watch('./src/'+systemName+'/components/common/*.js')
+    watch('./src/'+systemName+'/components*/common/*.js')
         .on('change',function(filepath){
-            var filename = path.basename(filepath).split('.')[0]
+            var dirArr = path.dirname(filepath).split('/'),
+                componentsname = dirArr[dirArr.length-3],
+                filename = path.basename(filepath).split('.')[0]
 
             var config = Object.assign({},getConfig(systemName,filename,'jsPlugins'),{
-                entry: path.resolve(__dirname,`./src/${systemName}/components/common/${filename}.js`),
+                entry: path.resolve(__dirname,`./src/${systemName}/${componentsname}/common/${filename}.js`),
                 output: {
                     path: path.resolve(__dirname,'./dist/'+systemName+'/publish/js'),//path.resolve(__dirname, `../dist/${systemName}/js/`),
                     publicPath: '',
@@ -266,14 +271,17 @@ gulp.task('dev:watch',function(){
                 filename = dirArr[dirArr.length-1].split('.')[0]
             fs.unlink(path.resolve(__dirname,'./dist/'+systemName+'/publish/js/'+filename+'.js'))
         })
-    watch('./src/'+systemName+'/components/*/*/*.scss')
+    watch('./src/'+systemName+'/components*/*/*/*.scss')
         .on('change', function(filepath) {
             var dirArr = path.dirname(filepath).split('/'),
+                componentsname = dirArr[dirArr.length-3],
                 modulename = dirArr[dirArr.length-2],
                 dirname = dirArr[dirArr.length-1],
-                filename = path.basename(filepath).split('.')[0]
+                filename = path.basename(filepath).split('.')[0],
+                narr = componentsname.split(/[-]/g),
+                type = narr.length > 1 ? '_'+narr[1] : ''
 
-            gulp.src(path.resolve(__dirname,`./src/${systemName}/components/${modulename}/${dirname}/${filename}.scss`))
+            gulp.src(path.resolve(__dirname,`./src/${systemName}/${componentsname}/${modulename}/${dirname}/${filename}.scss`))
                 .pipe(scss().on('error', function(error){
                     console.log(error)
                 }))
@@ -283,29 +291,33 @@ gulp.task('dev:watch',function(){
                 }))
                 .pipe(postcss([autoprefixer()]))
                 .pipe(cleanCSS({compatibility: 'ie8'}))
-                .pipe(gulp.dest(path.resolve(__dirname,`./src/${systemName}/components/${modulename}/${dirname}/`)))
+                .pipe(gulp.dest(path.resolve(__dirname,`./src/${systemName}/${componentsname}/${modulename}/${dirname}/`)))
                 .pipe(rename({
                     basename:modulename+'_'+dirname,
                     extname: '.css'
                 }))
-                .pipe(gulp.dest(path.resolve(__dirname,'./dist/'+systemName+'/components/')));
+                .pipe(gulp.dest(path.resolve(__dirname,'./dist/'+systemName+'/'+componentsname+'/')));
         })
         .on('unlink',function(filepath){
             var dirArr = filepath.split('/'),
+                componentsname = dirArr[dirArr.length-4],
                 modulename = dirArr[dirArr.length-3],
                 dirname = dirArr[dirArr.length-2],
                 filename = dirArr[dirArr.length-1].split('.')[0]
             console.log(filepath)
-            fs.unlink(path.resolve(__dirname,`./src/${systemName}/components/${modulename}/${dirname}/${filename}.css`))
+            fs.unlink(path.resolve(__dirname,`./src/${systemName}/${componentsname}/${modulename}/${dirname}/${filename}.css`))
         })
-    watch('./src/'+systemName+'/components/*/*/*.css')
+    watch('./src/'+systemName+'/components*/*/*/*.css')
         .on('change', function(filepath) {
             var dirArr = path.dirname(filepath).split('/'),
+                componentsname = dirArr[dirArr.length-3],
                 modulename = dirArr[dirArr.length-2],
                 dirname = dirArr[dirArr.length-1],
-                filename = path.basename(filepath).split('.')[0]
+                filename = path.basename(filepath).split('.')[0],
+                narr = componentsname.split(/[-]/g),
+                type = narr.length > 1 ? '_'+narr[1] : ''
 
-            gulp.src(path.resolve(__dirname,`./src/${systemName}/components/${modulename}/${dirname}/${filename}.css`))
+            gulp.src(path.resolve(__dirname,`./src/${systemName}/${componentsname}/${modulename}/${dirname}/${filename}.css`))
                 // .pipe(scss().on('error', gutil.log))
                 .pipe(rename({
                     basename:modulename+'_'+dirname,
@@ -313,14 +325,17 @@ gulp.task('dev:watch',function(){
                 }))
                 // .pipe(postcss([autoprefixer()]))
                 .pipe(cleanCSS({compatibility: 'ie8'}))
-                .pipe(gulp.dest(path.resolve(__dirname,'./dist/'+systemName+'/components/')));
+                .pipe(gulp.dest(path.resolve(__dirname,'./dist/'+systemName+'/'+componentsname+'/')));
         })
         .on('unlink',function(filepath){
             console.log(filepath)
             var dirArr = filepath.split('/'),
+                componentsname = dirArr[dirArr.length-4],
                 dirname = dirArr[dirArr.length-3],
-                filename = dirArr[dirArr.length-2]
-            fs.unlink(path.resolve(__dirname,'./dist/'+systemName+'/components/'+dirname+'_'+filename+'.css'))
+                filename = dirArr[dirArr.length-2],
+                narr = componentsname.split(/[-]/g),
+                type = narr.length > 1 ? '_'+narr[1] : ''
+            fs.unlink(path.resolve(__dirname,'./dist/'+systemName+'/'+componentsname+'/'+dirname+'_'+filename+'.css'))
         })
 })
 

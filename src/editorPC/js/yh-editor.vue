@@ -64,7 +64,7 @@
         'yh-edit-prompt':YHEditPrompt
     }
 
-    export default{
+    export default {
         components:components,
         computed:mapState([
             'host',

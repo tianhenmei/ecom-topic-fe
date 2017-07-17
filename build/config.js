@@ -55,15 +55,15 @@ function getConfigPlugins(systemName,name,plugins){
             })
         ],
         vuePlugins = [
-            new ExtractTextPlugin(name+".css"),
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false
-                },
-                output: {
-                    comments: false,
-                }
-            })
+            // new ExtractTextPlugin(name+".css"),
+            // new webpack.optimize.UglifyJsPlugin({
+                // compress: {
+                //     warnings: false
+                // },
+                // output: {
+                //     comments: false,
+                // }
+            // })
         ],
         jsPlugins = [
             new webpack.optimize.UglifyJsPlugin({

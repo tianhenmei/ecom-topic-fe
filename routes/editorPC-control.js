@@ -10,9 +10,21 @@ var sizeOf = require('image-size');
 var child_process = require('child_process');
 var uglify = require('uglify-js');
 var serverRenderer = require('vue-server-renderer')
+var setupDevServer = require('../build/setup-dev-server.js')
+var { createBundleRenderer } = serverRenderer
+var router = express.Router();
+var isProd = process.env.NODE_ENV === 'production'
+
 var Vue = require('vue')
 
-var router = express.Router();
+/****NODE SERVER RENDERER */
+var LRU = require('lru-cache')
+// var createAppH5 = require('./server-app-h5.js')
+var resolve = file => path.resolve(__dirname, file)
+const templateH5 = fs.readFileSync(resolve('../public/html/editorPC-h5.html'), 'utf-8')
+
+/****NODE SERVER RENDERER */
+
 
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -154,6 +166,12 @@ function setFile(page){
         includes:page.includes,
         count:page.count
     })
+    writeCSSH5(page.includes,'publish/'+page.name+'/css/m_index.css')
+    writeJSH5(page.includes,'publish/'+page.name+'/js/m_index.js');
+    writeHTMLH5(page.name,'publish/'+page.name+'/m_index.html',{
+        includes:page.includes,
+        count:page.count
+    },page.elemDatas)
     // writeFile('publish/'+page.name+'/index.html',writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/')))
 }
 
@@ -199,6 +217,23 @@ function writeJS(data,path){
     })
 }
 
+function writeJSH5(data,path){
+    let i = 0,
+        sdata = JSON.parse(JSON.stringify(data))
+    for(i = 0; i < sdata.length; i++){
+        sdata[i] += '_h5';
+    }
+    let jsList = ['event']
+    jsList = sdata.concat(jsList)
+    jsList = ['global'].concat(jsList)
+
+    concat(jsList,path,sdata);
+    
+    child_process.exec('npm run compile -- --dir test',function(){
+        console.log('node编译完成')
+    })
+}
+
 function writeCSS(data,fileOut){
     var finalCode = '',
         origCode = '',
@@ -233,6 +268,31 @@ function writeCSS(data,fileOut){
     fs.writeFileSync(fileOut, finalCode, 'utf8');
 }
 
+function writeCSSH5(data,fileOut){
+    var finalCode = '',
+        origCode = '',
+        path = '',
+        status = false,
+        cssArr = ['init'].concat(data);
+    for(var i = 0; i < cssArr.length; i++) {
+        origCode = ''
+        switch(cssArr[i]){
+            case 'init':
+                path = './public/css/'+cssArr[i]+'.css'
+                break;
+            default:
+                path = './dist/editorPC/components-h5/'+cssArr[i]+'.css'
+                break;
+        }
+        status = fs.existsSync(path)
+        if(status){
+            origCode = fs.readFileSync(path, 'utf8');
+        }
+        finalCode += origCode + '\n\n\n\n\n\n\n\n';
+    }
+    fs.writeFileSync(fileOut, finalCode, 'utf8');
+}
+
 function writeHTML(pageHTML,filePath,pagedata){
     var elemdataStr = '#PAGEDATASTART#'+JSON.stringify(pagedata)+'#PAGEDATAEND#', 
         app = new Vue({
@@ -249,17 +309,57 @@ function writeHTML(pageHTML,filePath,pagedata){
     })
 }
 
+function createRenderer (bundle, options) {
+	return createBundleRenderer(bundle, Object.assign(options, {
+		template:templateH5,// （可选）页面模板
+		// for component caching
+		cache: LRU({
+			max: 1000,
+			maxAge: 1000 * 60 * 15
+		}),
+		// this is only needed when vue-server-renderer is npm-linked
+		basedir: resolve('./dist'),
+		// recommended for performance
+		runInNewContext: false
+	}))
+}
+function render (filename,filePath,pagedata,data,renderer) {
+	const s = Date.now()
+    console.log('Rendering '+filename)
+	const handleError = err => {
+		if(err.code === 404) {
+			writeFile(filePath,'404 | Page Not Found')
+		} else {
+			// Render Error Page or Redirect
+			writeFile(filePath,'500 | Internal Server Error')
+		}
+	}
+
+	renderer.renderToString({}, (err, html) => {
+		if (err) {
+			return handleError(err)
+        }
+		writeFile(filePath,html)
+		if (!isProd) {
+			console.log(`whole request: ${Date.now() - s}ms`)
+		}
+	})
+}
+function writeHTMLH5(filename,filePath,pagedata,data){
+    let renderer = null,
+        readyPromise = setupDevServer(router, (bundle, options) => {
+            console.log('callback')
+            renderer = createRenderer(bundle, options)
+        })
+    console.log('writing HTML h5')
+    readyPromise.then(() => {
+        console.log('resoved...')
+        render(filename,filePath,pagedata,data,renderer)
+    })
+    
+}
+
 function writeFile(path,string){
-    // fs.open(path,'w+',function(err,fd){
-    //     if (err) { throw err; }
-    //     var writeBuffer = new Buffer( string),
-    //         bufferPosition = 0,
-    //         bufferLength = writeBuffer.length, filePosition = null;
-    //     fs.write( fd, writeBuffer,bufferPosition,bufferLength,filePosition,function(err, written) {
-    //         if (err) { throw err; }
-    //         console.log('update: '+path);
-    //     });
-    // });
     fs.writeFile(path,string,function(err) {
         if(err) {
             return console.log(err);
