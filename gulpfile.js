@@ -402,12 +402,15 @@ gulp.task('dev:server',function(){
 gulp.task('dev',['dev:watch','dev:client', 'dev:server']);
 
 gulp.task('dist:rimraf-h5',function(){
-    var clientConfig = require('./build/webpack.client.config')();
+    let systemName = params.dist.sys
+    if(!systemName) return
+        
+    var clientConfig = require('./build/webpack.client.config')(systemName);
     let fileDir = path.join(clientConfig.output.path)
     !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
         if (err) console.error(err)
     })
-    rimraf(fileDir+'/js-h5',(err) => {
+    rimraf(fileDir,(err) => {
         if (err) throw err;
     })
 })
@@ -415,46 +418,33 @@ gulp.task('dist:client-h5',['dist:rimraf-h5'],function(){
     let systemName = params.dist.sys
     if(!systemName) return
     
-    let clientConfig = require('./build/webpack.client.config')();
-    // let fileDir = path.join(clientConfig.output.path)
-    // !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
-    //     if (err) console.error(err)
-    // })
-    // rimraf(fileDir+'/components-h5-js',(err) => {
-        // if (err) throw err;
-        webpack(clientConfig, function(err, stats) {
-            process.stdout.write(stats.toString({
-                colors: true,
-                modules: false,
-                children: false,
-                chunks: false,
-                chunkModules: false
-            }) + '\n\n');
-        });
-    // })
+    let clientConfig = require('./build/webpack.client.config')(systemName);
+
+    webpack(clientConfig, function(err, stats) {
+        process.stdout.write(stats.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+        }) + '\n\n');
+    });
 })
 
 gulp.task('dist:server-h5',function(){
     var systemName = params.dist.sys
     if(!systemName) return
     
-    var serverConfig = require('./build/webpack.server.config.js')();
-    // let fileDir = path.join(serverConfig.output.path)
-    // !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
-    //     if (err) console.error(err)
-    // })
-    // rimraf(fileDir+'/components-h5-js',(err) => {
-        // if (err) throw err;
-        webpack(serverConfig, function(err, stats) {
-            process.stdout.write(stats.toString({
-                colors: true,
-                modules: false,
-                children: false,
-                chunks: false,
-                chunkModules: false
-            }) + '\n\n');
-        });
-    // })
+    var serverConfig = require('./build/webpack.server.config.js')(systemName);
+    webpack(serverConfig, function(err, stats) {
+        process.stdout.write(stats.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+        }) + '\n\n');
+    });
 });
 
 gulp.task('dist:h5',['dist:client-h5'],function(){
@@ -462,7 +452,7 @@ gulp.task('dist:h5',['dist:client-h5'],function(){
     var systemName = params.dist.sys
     if(!systemName) return
     
-    var serverConfig = require('./build/webpack.server.config.js')();
+    var serverConfig = require('./build/webpack.server.config.js')(systemName);
     let fileDir = path.join(serverConfig.output.path)
     !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
         if (err) console.error(err)

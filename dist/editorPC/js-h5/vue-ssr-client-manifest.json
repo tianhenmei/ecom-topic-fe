@@ -1,24 +1,24 @@
 {
   "publicPath": "/dist/",
   "all": [
-    "0.a503af7022e3dd7f46df.js",
-    "1.b4fb34a9c9a2b483b6fb.js",
-    "2.3b0a0d831501092c860f.js",
-    "3.7aca0171ee46f70ec605.js",
-    "index.801a11dca994fe2e2b31.js",
-    "lib.min.1cd0ccfd11f449efc94f.js",
-    "manifest.0408430155842c0fce73.js"
+    "0.f801d359.js",
+    "1.f801d359.js",
+    "2.f801d359.js",
+    "3.f801d359.js",
+    "index.f801d359.js",
+    "lib.min.f801d359.js",
+    "manifest.f801d359.js"
   ],
   "initial": [
-    "manifest.0408430155842c0fce73.js",
-    "lib.min.1cd0ccfd11f449efc94f.js",
-    "index.801a11dca994fe2e2b31.js"
+    "manifest.f801d359.js",
+    "lib.min.f801d359.js",
+    "index.f801d359.js"
   ],
   "async": [
-    "0.a503af7022e3dd7f46df.js",
-    "1.b4fb34a9c9a2b483b6fb.js",
-    "2.3b0a0d831501092c860f.js",
-    "3.7aca0171ee46f70ec605.js"
+    "0.f801d359.js",
+    "1.f801d359.js",
+    "2.f801d359.js",
+    "3.f801d359.js"
   ],
   "modules": {
     "12111472": [

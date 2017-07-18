@@ -34,7 +34,7 @@
 // }
 let webpack = require('webpack')
 let MFS = require('memory-fs')
-let serverConfig = require('../build/webpack.server.config')()
+let serverConfig = require('../build/webpack.server.config')('editorPC')
 
 function recoveryElements(elements){
     let data = [],

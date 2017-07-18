@@ -13,8 +13,8 @@ const readFile = (clientConfig,tempfs, file) => {
 }
 
 module.exports = function setupDevServer (app, cb) {
-	let clientConfig = require('./webpack.client.config')()
-	let serverConfig = require('./webpack.server.config')()
+	let clientConfig = require('./webpack.client.config')('editorPC')
+	let serverConfig = require('./webpack.server.config')('editorPC')
 	let bundle, clientManifest
 	let resolve
 	const readyPromise = new Promise(r => { resolve = r })
