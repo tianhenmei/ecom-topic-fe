@@ -53,7 +53,8 @@
         isObject,
         getNow,
         getChildById,
-        getParentByAttr
+        getParentByAttr,
+        getParentsByAttr
     } from '../components/Base/Node.js'
     import YHLib from './yh-lib.vue'
     import YHEditPrompt from '../edit-components/yh-edit-prompt.vue'
@@ -332,6 +333,15 @@
                                         ischild = 'ischild'
                                     }
                                     break
+                                case 'Block_style1':
+                                case 'Block_style2':
+                                case 'Block_style3':
+                                case 'Block_style4':
+                                case 'Row_style1':
+                                    status = false
+                                    ignorestatus = '',
+                                    ischild = 'ischild'
+                                    break
                                 default:
                                     break
                             }
@@ -348,21 +358,47 @@
                                 })
                             })
                         }else{  
-                            // 给父级添加子级 e.target.getAttribute('setListCol') == 'setListCol'  // coltype
-                            let parentPath = elem.getAttribute('yh-path'),
-                                prompt = document.getElementById('yh-edit-prompt')
-                            this.currentChildData.parentID = elemID
-                            this.currentChildData.id = 'element'+self.count
-                            this.currentChildData['yh-module'] = name
-                            this.currentChildData.parentPath = parentPath
-                            this.currentChildData.path = 'props.elements.cindex'
-                            this.currentChildData.parentmodule = yh_module
-                            this.currentChildData.ignorestatus = ignorestatus
-                            this.currentChildData.ischild = ischild
+                            // 给容器组件添加子组件，注：当前被选中的容器不一定就是最外层的容器
+                            // elem 为当前被选中的容器，可通过一层层往上查找带有属性 yh-module 的元素找到最外层
+                            // 但是由于选中的elem的yh-path就包含父级，所以没必要查找了
+                            // let parents = getParentsByAttr(elem,'yh-module'),
+                            //     parentPathArr = [],
+                            //     parentPath = '',
+                            //     i = 0
+                            // for(i = parents.length - 1 ; i >= 0; i-- ){
+                            //     parentPathArr.push(parents[i].getAttribute('yh-path'))
+                            // }
+                            // parentPath = parentPathArr.join('.')
+                            let parentPath = elem.getAttribute('yh-path')
                             switch(coltype){
                                 case 'setListCol':
+                                    // 给父级添加子级 e.target.getAttribute('setListCol') == 'setListCol'  // coltype
+                                    let prompt = document.getElementById('yh-edit-prompt')
+                                    this.currentChildData.parentID = elemID
+                                    this.currentChildData.id = 'element'+self.count
+                                    this.currentChildData['yh-module'] = name
+                                    this.currentChildData.parentPath = parentPath
+                                    this.currentChildData.path = 'props.elements.cindex'
+                                    this.currentChildData.parentmodule = yh_module
+                                    this.currentChildData.ignorestatus = ignorestatus
+                                    this.currentChildData.ischild = ischild
                                     prompt.className = prompt.className.replace(/(hide)/g,'').replace(/(  )/g,' ')
                                     break
+                                default:
+                                    this.$store.commit('addChildElement',{
+                                        id:'element'+self.count,
+                                        'yh-module':name,
+                                        module:components[name],
+                                        parentPath:parentPath,
+                                        path:'props.elements.cindex',
+                                        parentmodule:yh_module,
+                                        props:components[name].initCtor({
+                                            id:'element'+self.count,
+                                            ignorestatus:ignorestatus,
+                                            ischild:ischild
+                                        })
+                                    })
+                                    break;
                             }
                         }
                         self.$store.commit('changeCount')
@@ -403,6 +439,7 @@
                 return data
             },
             saveHTML(e){
+                undoSelected()
                 let yh_editor_content = this.$refs['yh-editor-content'].cloneNode(true),
                     yhEditLayer = yh_editor_content.getElementsByClassName('yh-edit-layer'),
                     yhEditorContent = yh_editor_content.getElementsByClassName('yh-vessel-add'),
@@ -614,4 +651,10 @@
     .yh-selectTop,.yh-selectBottom {border-top: 2px dashed #ff0084; }
     .yh-selectLeft,.yh-selectRight {border-left: 2px dashed #ff0084; }
 
+    /*被选中时，给父级 yh-module 添加padding值******/
+    .yh-module-selected {
+        padding:20px;
+        box-sizing:border-box;
+        border: 1px solid #ff0084;
+    }
 </style>

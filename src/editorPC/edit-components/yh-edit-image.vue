@@ -210,7 +210,7 @@
                     stylename:self.options.en,
                     actualValue:url,
                     designValue:url
-                },{
+                }])/*,{
                     parent:'nonset',
                     eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -218,7 +218,7 @@
                     stylename:'min_height',
                     actualValue:data.height+'px', // / (750 / 16)+'rem',
                     designValue:data.height+'px'
-                }])
+                }])*/
             },
         }
     }

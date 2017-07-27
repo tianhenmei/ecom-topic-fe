@@ -5,18 +5,14 @@
         :class="{'yh-list-style1':props.elements.length > 0}"
         :style="{backgroundColor:props.css.background_background_color.value,
                  backgroundImage:setImage,
-                 height:props.css.height.value+(props.css.height.value == 'auto' ? '' : 'px'),
-                 overflow:props.css.overflow.value,
-                 minHeight:props.nonset.min_height.value+'px'}"
+                 overflow:props.css.overflow.value}"
         :background_background_image_h5="props.h5css.background_background_image_h5.value"
         :ref="props.id"
         :yh-path="path"
         yh-vessel
         >
         <div :id="props.id+'-content'" class="yh-list-content clearfix" 
-            :class="{'yh-init':!props.elements.length}"
-            :style="{
-                width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')}">
+            :class="{'yh-init':!props.elements.length}">
             <div v-for="(element,index) in props.elements" 
                 :is="element.module" 
                 :props="element.props"

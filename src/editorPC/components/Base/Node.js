@@ -39,6 +39,23 @@ Node.isObject = (e) => {
 Node.isArray = (e) => {
     return e instanceof Array
 }
+
+/********************************************
+ * deepCopy: 深拷贝对象
+ * n: 需要拷贝的对象
+ * e：被拷贝的对象
+ *******************************************/
+Node.deepCopy = (n,c) => {
+    for (let i in c) {
+        if (typeof c[i] === 'object') {
+            n[i] = (c[i].constructor === Array) ? [] : {}
+            Node.deepCopy(c[i], n[i])
+        } else {
+            n[i] = c[i]
+        }
+    }
+    return c
+}
 /********************************************
  * getNow: 获取当前时间
  * now: 默认当前时间，类型Date
@@ -108,7 +125,11 @@ Node.initSelected = (e) => {
     let i = 0,
         id = '',
         setting = document.getElementsByClassName('setting'),
-        yhEditLayer = document.getElementsByClassName('yh-edit-layer')
+        selected = document.getElementsByClassName('yh-module-selected'),  // 被选中的父级
+        yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
+        parents = null,
+        childs = null,
+        elem = null
     for(i = 0; i < e.path.length; i++){
         if(e.path[i].getAttribute('yh-module')){
             id = e.path[i].id
@@ -118,11 +139,28 @@ Node.initSelected = (e) => {
     for(i = 0; i < setting.length; i++){
         setting[i].className = setting[i].className.replace(/(setting)/g,'').replace(/  /g,' ')
     }
+    for(i = 0; i < selected.length; i++){
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g,'').replace(/  /g,' ')
+    }
     for(i = 0; i < yhEditLayer.length; i++){
         if(!/(hide)/g.test(yhEditLayer[i].className)){
             yhEditLayer[i].className = yhEditLayer[i].className + ' hide'
         }
     }
+
+    elem = document.getElementById(id)
+    parents = Node.getParentsByAttr(elem,'yh-module')
+    childs = Node.getChildrenByAttr(elem,'yh-module')
+    for(i = 1; i < parents.length; i++){
+        parents[i].className += ' yh-module-selected'
+    }
+    if(elem.attributes['yh-vessel']){
+        elem.className += ' yh-module-selected'
+    }
+    for(i = 0; i < childs.length - 1; i++){
+        parents[i].className += ' yh-module-selected'
+    }
+    // .yh-module-selected
     return id
 }
 /********************************************
@@ -134,7 +172,8 @@ Node.undoSelected = () => {
         setting = document.getElementsByClassName('setting'),
         yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
         selection = document.getElementsByClassName('yh-selection'),
-        add = document.getElementsByClassName('yh-vessel-add')//,
+        add = document.getElementsByClassName('yh-vessel-add'),
+        selected = document.getElementsByClassName('yh-module-selected')//,
         // arr = [].concat(yhEditLayer,selection,add)
     for(i = 0; i < setting.length; i++){
         setting[i].className = setting[i].className.replace(/(setting)/g,'').replace(/  /g,' ')
@@ -148,6 +187,9 @@ Node.undoSelected = () => {
         if(!/(hide)/g.test(selection[i].className)){
             selection[i].className += ' hide'
         }
+    }
+    for(i = 0; i < selected.length; i++){
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g,'').replace(/(  )/g,' ')
     }
     for(i = 0; i < add.length; i++){
         if(!/(hide)/g.test(add[i].className)){
@@ -188,6 +230,37 @@ Node.getParentByAttr = (elem,attr) => {
         elem = elem.parentNode
     }
     return elem
+}
+/********************************************
+ * getParentsByAttr 通过属性名获取所有有此属性的父级
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getParentsByAttr = (elem,attr) => {
+    let parent = []
+    while(elem && !elem.attributes['yh-editor-content']){
+        if(elem.getAttribute('yh-module')){
+            parent.push(elem)
+        }
+        elem = elem.parentNode
+    }
+    return parent
+}
+/********************************************
+ * getChildrenByAttr: 通过属性名获取所有子节点
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getChildrenByAttr = (elem,attr) => {
+    let children = elem.children,
+        a = [],
+        i = 0
+    for(i = 0; i < children.length; i++){
+        if(children[i] !== elem && children[i].getAttribute(attr)){
+            a.push(children[i])
+        }
+    }
+    return a
 }
 /********************************************
  * getChildrenByClassName: 通过类名获取所有子节点
@@ -710,8 +783,42 @@ Node.setData = function(elem,attributes){
 /****
  * setCompanyData(): 设置公司数据（较全）
  * */
-Node.setCompanyData = (data) => {
-    let elemData = {}
+Node.setCompanyData = (data,leader) => {
+    let elemData = {},
+        l = 0
+    data.companyId = data.id
+    data.name = data.companyshortname
+    data.slogan = data.companyfeatures
+    data.companySize = data.companysize
+    if(data.logo.indexOf('http') == -1){
+        if(data.logo.indexOf('i/image/') != -1 || data.logo.indexOf('image1/') != -1 || data.logo.indexOf('image2/') != -1){
+            data.logo = 'https://www.lgstatic.com/thumbnail_200x200/'+data.logo
+        }else{
+            data.logo = 'https://www.lgstatic.com/'+data.logo
+        }
+    }else{
+        data.logo = ''+data.logo
+    }
+    data.companyLeader = {}
+    for(l = 0; l < leader.length; l++){
+        if(leader[l]){
+            data.companyLeader = {
+                name:leader[l].name,
+                photo:leader[l].photo,
+                remark:leader[l].remark
+            }
+            if(data.companyLeader.photo.indexOf('http') == -1){
+                if(data.companyLeader.photo.indexOf('i/image/') != -1 || data.companyLeader.photo.indexOf('image1/') != -1 || data.companyLeader.photo.indexOf('image2/') != -1){
+                    data.companyLeader.photo = 'https://www.lgstatic.com/thumbnail_200x200/'+data.companyLeader.photo
+                }else{
+                    data.companyLeader.photo = 'https://www.lgstatic.com/'+data.companyLeader.photo
+                }
+            }else{
+                data.companyLeader.photo = ''+data.companyLeader.photo
+            }
+            break;
+        }
+    }
     Node.setData(elemData,{
         companyId:data.companyId,
         description:data.description,

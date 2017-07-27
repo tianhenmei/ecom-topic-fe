@@ -53,7 +53,14 @@
             getDesignValue(state){
                 let one = this.parent[this.options.en],
                     value = one.value,
-                    cnvalue = one.cnvalue
+                    i = 0,
+                    cnvalue = '' //one.cnvalue
+                for(i = 0; i < one.options.length; i++){
+                    if(value == one.options[i].value){
+                        cnvalue = one.options[i].cn
+                        break
+                    }
+                }
                 return cnvalue ? cnvalue : (/(px)/g.test(value) ? parseFloat(value) : value)
             }
         }),
@@ -69,7 +76,7 @@
                 let target = e.target,
                     value = target.attributes['value'].value,   // 最终设置的值
                     index = parseInt(target.attributes['index'].value),
-                    svalue = this.options.options[index],  // 展示出来的字体大小（针对750的宽）
+                    svalue = this.options.options[index].value,  // 展示出来的字体大小（针对750的宽）
                     cnvalue = this.options.options[index].cn,
                     list = this.$refs['yh-edit-list']
                 list.style.display = 'none'

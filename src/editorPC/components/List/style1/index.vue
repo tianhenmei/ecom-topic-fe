@@ -89,6 +89,8 @@
                 en:'height',
                 value:'auto',
                 type:'number',
+                default:'auto',  // 默认值
+                ivalue:100,   // 初始值
                 effect:['css.overflow']
             },
             overflow:{

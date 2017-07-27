@@ -290,9 +290,11 @@
                 }
             },
             removeElement(e){
-                var elem = document.getElementByClassName('setting')[0],
+                var elem = document.getElementsByClassName('setting')[0],
                     elemID = elem.getAttribute('id')
-                this.$store.commit('removeElement',elemID)
+                this.$store.commit('removeElement',{
+                    path:this.path
+                })
                 undoSelected()
             },
             undoElement(e){

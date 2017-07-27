@@ -172,11 +172,6 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
-//
-//
-//
-//
-//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -191,6 +186,18 @@ exports.default = {
                 default:
                     return 'url(' + src + ')';
             }
+        },
+        getClassName: function getClassName() {
+            var classname = '';
+            switch (this.props.css.content_width.value) {
+                case 750:
+                    classname = 'yh-image-relative';
+                    break;
+                default:
+                    classname = '';
+                    break;
+            }
+            return classname;
         }
     },
     data: function data() {
@@ -198,7 +205,48 @@ exports.default = {
     },
     mounted: function mounted() {},
 
-    methods: {}
+    methods: {
+        getRemValue: function getRemValue(value) {
+            return value / (750 / 16);
+        },
+        setParentStyle: function setParentStyle() {
+            var style = {};
+            switch (this.props.css.content_width.value) {
+                case 750:
+                    style = {
+                        width: '100%',
+                        backgroundColor: this.props.css.content_background_color.value
+                    };
+                    break;
+                default:
+                    style = {
+                        height: this.getRemValue(this.props.css.content_height.value) + 'rem',
+                        backgroundColor: this.props.css.content_background_color.value
+                    };
+                    break;
+            }
+            return style;
+        },
+        setImageStyle: function setImageStyle() {
+            var style = {};
+            switch (this.props.css.content_width.value) {
+                case 750:
+                    style = {
+                        width: '100%'
+                        // backgroundColor:this.props.css.content_background_color.value,
+                    };
+                    break;
+                default:
+                    style = {
+                        height: this.getRemValue(this.props.css.content_height.value) + 'rem',
+                        marginTop: this.getRemValue(-this.props.css.content_height.value / 2) + 'rem',
+                        marginLeft: this.getRemValue(-this.props.css.content_width.value / 2) + 'rem'
+                    };
+                    break;
+            }
+            return style;
+        }
+    }
 };
 
 /***/ }),
@@ -306,20 +354,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "image-style1",
-    style: ({
-      height: _vm.props.css.content_height.value + 'px',
-      backgroundColor: _vm.props.css.content_background_color.value,
-    }),
+    style: (_vm.setParentStyle()),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Image_style1"
     }
   }, [_c('img', {
     staticClass: "yh-image-content",
-    style: ({
-      marginTop: (-_vm.props.css.content_height.value / 2 + 'px'),
-      marginLeft: (-_vm.props.css.content_width.value / 2 + 'px')
-    }),
+    class: _vm.getClassName,
+    style: (_vm.setImageStyle()),
     attrs: {
       "src": _vm.props.css.content_src.value
     }
@@ -382,7 +425,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".image-style1{width:100%;height:100px;margin:0 auto;position:relative}.image-style1 .yh-image-content{position:absolute;left:50%;top:50%;margin:-50% 0 0 -50%}", ""]);
+exports.push([module.i, ".image-style1{width:100%;height:100px;margin:0 auto;position:relative}.image-style1 .yh-image-content{position:absolute;left:50%;top:50%;margin:-50% 0 0 -50%}.image-style1 .yh-image-relative{position:relative;left:0;top:0;margin:0}", ""]);
 
 // exports
 

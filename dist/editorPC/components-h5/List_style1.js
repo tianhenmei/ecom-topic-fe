@@ -181,10 +181,6 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
-//
-//
-//
-//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -320,9 +316,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     style: ({
       backgroundColor: _vm.props.css.background_background_color.value,
       backgroundImage: _vm.setImage,
-      height: _vm.props.css.height.value + (_vm.props.css.height.value == 'auto' ? '' : 'px'),
-      overflow: _vm.props.css.overflow.value,
-      minHeight: _vm.props.nonset.min_height.value + 'px'
+      overflow: _vm.props.css.overflow.value
     }),
     attrs: {
       "id": _vm.props.id,
@@ -336,9 +330,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       'yh-init': !_vm.props.elements.length
     },
-    style: ({
-      width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px')
-    }),
     attrs: {
       "id": _vm.props.id + '-content'
     }

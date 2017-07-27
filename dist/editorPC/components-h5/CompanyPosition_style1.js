@@ -189,10 +189,6 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
-//
-//
-//
-//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -315,73 +311,56 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "industryfield": _vm.props.data.industryfield.value
     }
   }, [_c('div', {
-    staticClass: "leftDiv background",
+    staticClass: "title backgroundColor clearfix",
     style: ({
       'background-color': _vm.props.css.background_background_color.value
     })
-  }, [_c('h3', {
-    staticClass: "title"
-  }, [_c('a', {
-    staticClass: "nameTop companyLink",
+  }, [_c('div', {
+    staticClass: "titleBG blur",
+    style: ({
+      'background-image': 'url(' + _vm.props.data.logo.value + ')'
+    })
+  }), _vm._v(" "), _c('a', {
+    staticClass: "logo",
     attrs: {
-      "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
+      "href": "javascript:void(0);",
+      "onclick": 'self.location="https://www.lagou.com/center/company_' + _vm.props.data.companyId.value + '.html"',
+      "target": "_blank",
       "data-link": "1",
       "data-lg-tj-id": "",
       "data-lg-tj-no": "",
-      "data-lg-tj-cid": _vm.props.data.companyId.value,
-      "target": "_blank"
+      "data-lg-tj-cid": _vm.props.data.companyId.value
     }
   }, [_c('img', {
-    staticClass: "logo",
     attrs: {
       "src": _vm.props.data.logo.value
     }
-  }), _vm._v(" "), _c('p', {
+  })]), _vm._v(" "), _c('a', {
     staticClass: "name",
     style: ({
       'color': _vm.props.css.name_color.value
-    })
-  }, [_vm._v(_vm._s(_vm.props.data.name.value))])])]), _vm._v(" "), _c('div', {
-    staticClass: "infoWord button",
-    style: ({
-      'color': _vm.props.css.button_color.value,
-      'background-color': _vm.props.css.button_background_color.value
-    })
-  }, [_c('a', {
-    staticClass: "more",
+    }),
     attrs: {
-      "href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html',
+      "href": "javascript:void(0);",
+      "onclick": 'self.location="https://www.lagou.com/center/company_' + _vm.props.data.companyId.value + '.html"',
+      "target": "_blank",
       "data-link": "1",
       "data-lg-tj-id": "",
       "data-lg-tj-no": "",
-      "data-lg-tj-cid": _vm.props.data.companyId.value,
-      "target": "_blank"
+      "data-lg-tj-cid": _vm.props.data.companyId.value
     }
-  }, [_c('span', {
-    staticClass: "background-color button",
-    style: ({
-      'background-color': _vm.props.css.button_background_color.value,
-      'color': _vm.props.css.button_color.value
-    })
-  }, [_vm._v("更多职位 >")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "rightDiv"
-  }, [_c('div', {
-    staticClass: "slogan all",
-    style: ({
-      'color': _vm.props.css.all_color.value
-    })
-  }, [_vm._v(_vm._s(_vm.props.data.slogan.value))]), _vm._v(" "), _c('ul', {
-    staticClass: "position positionList clearfix"
-  }, _vm._l((_vm.props.data.position.value), function(one) {
+  }, [_vm._v("\n            " + _vm._s(_vm.props.data.name.value) + "\n        ")])]), _vm._v(" "), _c('ul', {
+    staticClass: "positionList clearfix"
+  }, [_vm._l((_vm.props.data.position.value), function(one) {
     return _c('li', {
       attrs: {
         "dynamic_type": one.dynamic_type.value
       }
     }, [_c('a', {
-      staticClass: "positionUrl positionLink clearfix",
+      staticClass: "positionUrl clearfix",
       attrs: {
-        "href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html',
-        "lagou-href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html?source=pl&i=pl-0',
+        "href": "javascript:void(0);",
+        "onclick": 'self.location="https://www.lagou.com/center/job_' + one.positionId.value + '.html"',
         "target": "_blank",
         "data-link": "1",
         "data-lg-tj-id": "",
@@ -391,15 +370,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('p', {
       staticClass: "positionName",
       style: ({
-        'color': _vm.props.css.positionName_color.value
+        'color': _vm.props.css.background_background_color.value
       })
     }, [_vm._v(_vm._s(one.positionName.value))]), _vm._v(" "), _c('p', {
       staticClass: "salary",
       style: ({
-        'color': _vm.props.css.salary_color.value
+        'color': _vm.props.css.background_background_color.value
       })
     }, [_vm._v(_vm._s(one.salary.value))])])])
-  }))])])
+  }), _vm._v(" "), _c('li', {
+    staticClass: "moreLi"
+  }, [_c('a', {
+    staticClass: "more",
+    attrs: {
+      "href": "javascript:void(0);",
+      "onclick": 'self.location="https://www.lagou.com/center/company_' + _vm.props.data.companyId.value + '.html"',
+      "target": "_blank",
+      "data-link": "1",
+      "data-lg-tj-id": "",
+      "data-lg-tj-no": "",
+      "data-lg-tj-cid": _vm.props.data.companyId.value
+    }
+  }, [_vm._v("\n                查看全部职位\n            ")])])], 2)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -444,7 +436,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 exports.i(__webpack_require__(6), "");
 
 // module
-exports.push([module.i, "\n/* @import 'http://localhost:9000/dist/editorPC/components/CompanyPosition_style1.css';\n*/\n", ""]);
+exports.push([module.i, "\n", ""]);
 
 // exports
 
@@ -455,10 +447,10 @@ exports.push([module.i, "\n/* @import 'http://localhost:9000/dist/editorPC/compo
 
 exports = module.exports = __webpack_require__(0)(undefined);
 // imports
-
+exports.push([module.i, "@import url(http://localhost:9000/static/css/init-h5.scss);", ""]);
 
 // module
-exports.push([module.i, ".company-position-style1{width:926px;height:280px;margin:0 auto;padding:0 0 20px 0;border-radius:5px;overflow:hidden}.company-position-style1>.leftDiv{width:222px;height:280px;background:#00c99b;float:left}.company-position-style1>.leftDiv .title{padding:38px 0 20px 0}.company-position-style1>.leftDiv img{width:115px;height:115px;border-radius:3px;margin:0 auto 10px;display:block}.company-position-style1>.leftDiv a.nameTop{display:block;font-size:20px;color:#fff;text-align:center;text-decoration:none}.company-position-style1>.leftDiv a.nameTop p.name{width:100%;height:26px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.company-position-style1>.leftDiv div.infoWord{width:116px;margin:0 auto;background:#fff;border-radius:2px;overflow:hidden}.company-position-style1>.leftDiv a.more{width:116px;height:41px;display:block;background:#000;background-color:rgba(0,0,0,.08);filter:Alpha(opacity=8);position:static;*zoom:1;text-decoration:none}.company-position-style1>.leftDiv a.more span{height:38px;line-height:38px;font-size:16px;color:#00c99b;text-align:center;display:block;background:#fff}.company-position-style1>.leftDiv a.more:hover{text-decoration:none}.company-position-style1>.rightDiv{width:703px;height:278px;background:#f0f0f0;float:left;border:solid 1px #e9e9e9;border-left:none;border-radius:0 5px 5px 0;overflow:hidden}.company-position-style1>.rightDiv .slogan{height:50px;line-height:24px;padding:40px 65px 30px;background:#fff no-repeat center center;font-size:16px;color:#555;text-align:left;word-break:break-all}.company-position-style1>.rightDiv .positionList{padding:6px 32px 17px}.company-position-style1>.rightDiv .positionList li{float:left}.company-position-style1>.rightDiv .positionList li .positionUrl{width:252px;height:48px;line-height:48px;padding:0 27px 0 17px;margin:18px 12px 0 11px;display:block;color:#00c99b;font-size:16px;background:#fff no-repeat 270px -158px}.company-position-style1>.rightDiv .positionList li .positionUrl p,.company-position-style1>.rightDiv .positionList li .positionUrl span{text-align:left;float:left}.company-position-style1>.rightDiv .positionList li .positionUrl p.positionName,.company-position-style1>.rightDiv .positionList li .positionUrl span.positionName{width:160px;padding-right:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}", ""]);
+exports.push([module.i, ".blur{-webkit-filter:blur(10px);-moz-filter:blur(10px);-ms-filter:blur(10px);filter:blur(10px);opacity:.1}.company-position-style1{width:14.976rem;margin:0 auto .64rem;border-radius:.21333rem;overflow:hidden}.company-position-style1 .title{padding:.74667rem 0 .42667rem 0;background:#ef2b6b;position:relative;overflow:hidden}.company-position-style1 .title .titleBG{width:100%;height:100%;position:absolute;left:0;top:0;background:center center no-repeat;background-size:100%}.company-position-style1 .title a{display:block;text-decoration:none;position:relative;z-index:10}.company-position-style1 .title .logo img{position:relative;width:3.84rem;height:3.84rem;display:block;margin:0 auto;overflow:hidden;border-radius:30px;border:solid .08533rem rgba(0,0,0,.1)}.company-position-style1 .title .logo:before{content:'';position:absolute;top:.08533rem;left:50%;margin:0 0 0 -1.92rem;width:3.84rem;height:3.84rem;border-radius:30px;background-color:#fff}.company-position-style1 .title .name{width:11.94667rem;margin:0 auto;line-height:1.536rem;font-size:.64rem;color:#fff;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.company-position-style1 .title a:hover{text-decoration:none}.company-position-style1 .positionList{width:14.44267rem;margin:0 auto;padding:.64rem 0 0 .53333rem;overflow:hidden;background:#f5f5f5}.company-position-style1 .positionList li{width:6.76267rem;height:1.55733rem;margin:0 .384rem .42667rem 0;background:#f8f9fc;overflow:hidden;position:relative;float:left}.company-position-style1 .positionList li p{width:3.41333rem;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;text-align:left;float:left}.company-position-style1 .positionList li p.salary{width:2.02667rem;font-size:.512rem;float:right;font-family:Helvetica}.company-position-style1 .positionList li a{width:5.44rem;height:1.00267rem;padding:.55467rem .93867rem 0 .384rem;display:block;font-size:.512rem;color:#ec0752;text-decoration:none;text-align:left;background:#fff url(https://activity.lagou.com/topic/static/img/newEdit/gIcon.png) no-repeat 5.97333rem -3.09333rem;background-size:5.46133rem 10.92267rem}.company-position-style1 .positionList li.moreLi{width:5.248rem;background:0 0;float:right}.company-position-style1 .positionList li a.more{height:1.17333rem;line-height:1.06667rem;font-size:.59733rem;color:#777;background:url(https://activity.lagou.com/topic/static/img/newEdit/gIcon.png) no-repeat -5.80267rem -19.072rem;background-size:10.92267rem 21.84533rem}", ""]);
 
 // exports
 

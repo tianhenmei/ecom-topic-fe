@@ -31,6 +31,10 @@
             switch(this.options.en){
                 case 'width':
                     hasdef = true
+                    if(this.parent[this.options.en].value == 'auto'){
+                        type = 'text'
+                        def = document.documentElement.clientWidth
+                    }
                     break
                 case 'height':
                     hasdef = true
@@ -51,6 +55,8 @@
                     style:this.parent,
                     hasdef:hasdef,
                     def:def,
+                    default:this.options.default,
+                    ivalue:this.options.ivalue,
                     backstatus:true
                 },
                 changeStatus:false

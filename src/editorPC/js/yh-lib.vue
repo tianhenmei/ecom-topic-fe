@@ -27,10 +27,10 @@
                             <div class="cpElement clearfix">
                                 <p class="title twoTitle">列</p>
                                 <ul class="yh-lib-subcomponents">
-                                    <li id="block_style1" class="blockModule" moduletype="block">一列</li>
-                                    <li id="block_style2" class="blockModule" moduletype="block">两列</li>
-                                    <li id="block_style3" class="blockModule" moduletype="block">三列</li>
-                                    <li id="block_style4" class="blockModule" moduletype="block">四列</li>
+                                    <li yh-module-name="Block style1" @click.stop.prevent="addComponents">一列</li>
+                                    <li yh-module-name="Block style2" @click.stop.prevent="addComponents">两列</li>
+                                    <li yh-module-name="Block style3" @click.stop.prevent="addComponents">三列</li>
+                                    <li yh-module-name="Block style4" @click.stop.prevent="addComponents">四列</li>
                                 </ul>
                             </div>
                             <div class="cpElement clearfix">
@@ -42,7 +42,7 @@
                         </div>
                     </li>
                     <li class="li_list yh-lib-parent">
-                        <p class="List style1" @click.stop.prevent="addComponents" yh-module-name="List style1">
+                        <p class="List style1" yh-module-name="List style1" @click.stop.prevent="addComponents">
                             <span class="yh-lib-icon"></span>列表
                         </p>
                     </li>

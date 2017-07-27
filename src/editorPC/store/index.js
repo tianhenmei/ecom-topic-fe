@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {
+    deepCopy
+} from '../components/Base/Node.js'
 
 Vue.use(Vuex)
 
@@ -140,7 +143,8 @@ let store = new Vuex.Store({
                 pathArr = path.split(/[.]/g),
                 value = '',
                 status = false,
-                length = 0
+                length = 0,
+                arr = []
             for(i = 0; i < parentPathArr.length; i++){
                 value = parentPathArr[i]
                 if(value){
@@ -171,23 +175,28 @@ let store = new Vuex.Store({
                 }
             }
             length = elemData.length
-            if(payload instanceof Array){
-                for(i = 0; i < payload.length; i++){
-                    // payload[i].props.attribute.ischild.value = 'ischild'
-                    payload[i].props.ischild = 'ischild'
-                    payload[i].path = parentPath+'.'+payload[i].path.replace(/(cindex)/g,length+i)
-                }
-                parentData.props.data.childmodule.value = payload[0]['yh-module']
-                elemData = elemData.concat(payload)
+            if(!(payload instanceof Array)){
+                arr = [payload]
             }else{
-                // payload.props.attribute.ischild.value = 'ischild'
-                payload.props.ischild = 'ischild'
-                payload.path = parentPath+'.'+payload.path.replace(/(cindex)/g,length)
-                parentData.props.data.childmodule.value = payload['yh-module']
-                elemData.push(payload)
+                arr = payload
             }
+            for(i = 0; i < arr.length; i++){
+                arr[i].props.ischild = 'ischild'
+                arr[i].path = parentPath+'.'+arr[i].path.replace(/(cindex)/g,length+i)
+                if(length > 0){
+                    switch(arr[0].parentmodule){
+                        case 'List_style1':
+                            arr[i].props.css = deepCopy(arr[i].props.css,elemData[0].props.css)
+                            arr[i].props.h5css = deepCopy(arr[i].props.h5css,elemData[0].props.h5css)
+                            break
+                    }
+                }
+            }
+            if(parentData.props.data.childmodule){
+                parentData.props.data.childmodule.value = arr[0]['yh-module']
+            }
+            elemData = elemData.concat(arr)
             parentData.props.elements = elemData
-            // console.log(parentData)
         },
         addComplexElement:(state,payload) => {
             store.commit('getData')
@@ -370,7 +379,7 @@ let store = new Vuex.Store({
                 one = {},
                 temp = {},
                 arr = []
-            if(state.data.path == payload.path){
+            if(state.data.path == payload.path && state.data.elemData){
                 elemData = state.data.elemData
             }else{
                 for(i = 0; i < path.length; i++){
@@ -720,10 +729,28 @@ let store = new Vuex.Store({
             }
             state.data.time = payload.format
         },
-        removeElement:(state,elemID) => {
-            store.commit('getData')
-            state.data.parentData.splice(state.data.index,1)
-            store.commit('reinitData')
+        removeElement:(state,payload) => {
+            // store.commit('getData')
+            let elemData = state,
+                path = payload.path.split(/[.]/g),
+                i = 0,
+                value = '',
+                last = path[path.length-1]
+            if(/[0-9]/g.test(last)){
+                last = parseInt(last)
+            }else{
+                last = -1;
+            }
+            for(i = 0; i < path.length - 1; i++){
+                value = path[i]
+                if(value){
+                    if(/[0-9]/g.test(path[i])){
+                        value = parseInt(path[i])
+                    }
+                    elemData = elemData[value]
+                }
+            }
+            elemData.splice(last,1)
         }
     },
     actions:{

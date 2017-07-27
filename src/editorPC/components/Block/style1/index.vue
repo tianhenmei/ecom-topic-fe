@@ -1,12 +1,26 @@
-<style>
-    @import './index.css';
-</style>
 <template>
-    <div class="demo-style1" :id="props.id" yh-module="Demo_style1"
+    <div class="block-style1" 
+        :id="props.id" 
+        yh-module="Block_style1"
         :ref="props.id"
+        :yh-path="path"
         @click.stop="setAll"
+        :style="{backgroundColor:props.css.background_background_color.value,
+            backgroundImage:setImage,
+            backgroundRepeat:props.css.background_background_repeat.value,
+            height:props.css.height.value+(props.css.height.value == 'auto' ? '' : 'px')}"
+        yh-vessel
         >
-        
+        <div :id="props.id+'-content'" class="yh-block-content clearfix" 
+            :class="{'yh-block-init':!props.elements.length}"
+            :style="{
+                width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')}">
+            <div v-for="(element,index) in props.elements" 
+                :is="element.module" 
+                :props="element.props"
+                :path="element.path"
+                parentmodule="Block_style1"></div>
+        </div>
         <!-- yh-edit 组件设置 -->
         <yh-edit-complicated
             ref="yh-edit-complicated"
@@ -41,42 +55,63 @@
         path:'',
         parentmodule:'',  // 父级模版
         css:{
-            // background: 类名  background_color: css样式background-color
+            width:{
+                cn:'宽度',
+                en:'width',
+                value:'auto',
+                default:'auto',  // 默认值
+                ivalue:document.documentElement.clientWidth,   // 初始值
+                type:'number'
+            },
+            height:{
+                cn:'高度',
+                en:'height',
+                value:'auto',
+                default:'auto',
+                ivalue:100,
+                type:'number',
+            },
             background_background_color:{
                 cn:'背景颜色',
                 en:'background_background_color',
-                value:'#00c99b',
-                type:'color'  
-                    // color(默认)   
-                    // image（背景图(mold="bg")、图片(mold="src")）  
-                    // number(数字)     
-                    // text(文本)
-                    // textarea(多行文字)
-                    // uplist(内部多选项设置)
-                    // request （数据请求：公司ID、职位ID、问题ID、回答ID等）
-                    // options 选项
-                // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
-                // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
-                // effect:['',''] 当前属性会影响的属性，如css.overflow
-                // default:'auto',  // 默认值
-                // ivalue:100,   // 初始值
-                // options:[{  // 选项的类容
-                    // cn:'',   ／／ 选项中文
-                    // value:'' // 选项真正的值
-                // }]
-                // 只有当前组件是容器组件时，一般只有设置数据才有，才会有eindex和index
-                // 其中 eindex 指的是子组件在容器组件里面的位置
-                //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表
+                value:'#ffffff',
+                type:'color'
             },
-            // name: 类名  color: css样式color
-            name_color:{
-                cn:'名称颜色',
-                en:'name_color',
-                value:'#ffffff'
+            background_background_image:{
+                cn:'背景图片',
+                en:'background_background_image',
+                value:'none',
+                type:'image',
+                mold:'bg'
+            },
+            background_background_repeat:{
+                cn:'背景重复',
+                en:'background_background_repeat',
+                value:'no-repeat',
+                type:'options',
+                options:[{
+                    cn:'不重复',
+                    value:'no-repeat'
+                },{
+                    cn:'重复',
+                    value:'repeat'
+                },{
+                    cn:'横向重复',
+                    value:'repeat-x'
+                },{
+                    cn:'纵向重复',
+                    value:'repeat-y'
+                }]
             }
         },
         h5css:{
-            
+            background_background_image_h5:{
+                cn:'H5背景图片',
+                en:'background_background_image_h5',
+                value:'none',
+                type:'image',
+                mold:'bg',
+            }
         },
         common:{
 
@@ -84,6 +119,7 @@
         attribute:{
             
         },
+        elements:[],
         data:{  // 卡片数据
             toH5:{
                 cn:'适配移动端',
@@ -116,6 +152,19 @@
         data(){
             return {
                 
+            }
+        },
+        computed:{
+            setImage(){
+                let src = this.props.css.background_background_image.value.trim()
+                switch(src){
+                    case 'none':
+                        return src
+                    case 'undefined':
+                        return 'none'
+                    default:
+                        return 'url('+src+')'
+                }
             }
         },
         mounted(){
@@ -209,3 +258,12 @@
         }
     }
 </script>
+<style>
+    @import './index.css';
+    .yh-block-init {
+        width:100%;
+        height:100px;
+        border:1px solid #ccc;
+        box-sizing:border-box;
+    }
+</style>

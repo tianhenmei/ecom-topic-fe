@@ -278,7 +278,7 @@ function writeCSSH5(data,fileOut){
         origCode = ''
         switch(cssArr[i]){
             case 'init':
-                path = './public/css/'+cssArr[i]+'.css'
+                path = './public/css/'+cssArr[i]+'-h5.css'
                 break;
             default:
                 path = './dist/editorPC/components-h5/'+cssArr[i]+'.css'

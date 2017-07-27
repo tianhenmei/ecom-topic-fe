@@ -40,45 +40,10 @@
                     if(data.companyInfo && data.companyInfo[companyPlain[c]]){
                         id = 'element' + this.count
                         newElement.push(id)
-                        one = null
                         one = data.companyInfo[companyPlain[c]]
-                        one.companyId = one.id
-                        one.name = one.companyshortname
-                        one.slogan = one.companyfeatures
-                        one.companySize = one.companysize
-                        if(one.logo.indexOf('http') == -1){
-                            if(one.logo.indexOf('i/image/') != -1 || one.logo.indexOf('image1/') != -1 || one.logo.indexOf('image2/') != -1){
-                                one.logo = 'https://www.lgstatic.com/thumbnail_200x200/'+one.logo
-                            }else{
-                                one.logo = 'https://www.lgstatic.com/'+one.logo
-                            }
-                        }else{
-                            one.logo = ''+one.logo
-                        }
-
                         leader = data.leaderInfos[one.id]
-                        one.companyLeader = {}
-                        for(l = 0; l < leader.length; l++){
-                            if(leader[l]){
-                                one.companyLeader = {
-                                    name:leader[l].name,
-                                    photo:leader[l].photo,
-                                    remark:leader[l].remark
-                                }
-                                if(one.companyLeader.photo.indexOf('http') == -1){
-                                    if(one.companyLeader.photo.indexOf('i/image/') != -1 || one.companyLeader.photo.indexOf('image1/') != -1 || one.companyLeader.photo.indexOf('image2/') != -1){
-                                        one.companyLeader.photo = 'https://www.lgstatic.com/thumbnail_200x200/'+one.companyLeader.photo
-                                    }else{
-                                        one.companyLeader.photo = 'https://www.lgstatic.com/'+one.companyLeader.photo
-                                    }
-                                }else{
-                                    one.companyLeader.photo = ''+one.companyLeader.photo
-                                }
-                                break;
-                            }
-                        }
-
-                        elementsData.push(setCompanyData(one))
+                        
+                        elementsData.push(setCompanyData(one,leader))
                         elementsData[c].elemID = id
                         for(l = 0; l < data.positionInfos[one.companyId].length; l++){
                             one2 = null

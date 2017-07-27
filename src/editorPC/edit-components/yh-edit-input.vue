@@ -19,17 +19,18 @@
                 :class="{'yh-edit-value-input-long': !options.unit}"
                 :type="options.type"
                 :value="options.style[options.stylename] ? getDesignValue : (options.type == 'number' ? 0 : '')"
-                :readonly="options.hasdef && getDesignValue == options.def"
+                :readonly="getDefaultStatus && getDesignValue == options.default"
                 @click.stop.prevent="inputSelected"
                 @input="setValue"
             />
             <span v-if="options.unit">{{options.unit}}</span>
         </div>
-        <div v-if="options.hasdef" 
+        <div v-if="getDefaultStatus" 
             class="yh-edit-choice hide" 
             ref="yh-edit-choice"
-            @click.stop.prevent="setChoice">
-            {{options.def == 'auto' ? options.def : '输入数值'}}
+            @click.stop.prevent="setChoice"
+            :value="options.style[options.stylename].value == options.default ? options.ivalue : options.default">
+            {{options.style[options.stylename].value == options.default ? '输入数值' : options.default }}
         </div>
         <slot name="chooser"></slot>
     </div>
@@ -46,6 +47,9 @@
             return {}
         },
         computed:{
+            getDefaultStatus(){
+                return this.options.default && this.options.default != false && this.options.default != 0
+            },
             setClassname(){
                 if(this.options.classname){
                     return 'yh-edit-'+this.options.classname
@@ -79,28 +83,36 @@
             inputSelected(e){
                 
             },
+            getDefStatus(){
+                return this.options.default && this.options.default != false && this.options.default != 0
+            },
             showChoice(e){
-                if(this.options.hasdef){
+                if(this.getDefStatus()){
                     let choice = this.$refs['yh-edit-choice']
                     choice.className = choice.className.replace(/(hide)/g,'').replace(/  /g,' ')
                 }
             },
             hideChoice(e){
-                if(this.options.hasdef){
+                if(this.getDefStatus()){
                     let choice = this.$refs['yh-edit-choice']
                     choice.className += ' hide'
                 }
             },
             setChoice(e){
                 let choice = this.$refs['yh-edit-choice'],
+                    value = parseInt(e.target.getAttribute('value')),
+                    number = (value || value == 0) ? value : e.target.getAttribute('value')/*,
                     elem = document.getElementsByClassName('setting')[0],
+                    width = elem.style.width,
                     height = elem.style.height,//getComputedValue(elem,'height'),
                     paddingVerticle = getPointValue(elem,'padding-top') + getPointValue(elem,'padding-bottom'),
-                    nheight = elem.clientHeight - paddingVerticle
+                    paddingHorizontal= getPointValue(elem,'padding-left') + getPointValue(elem,'padding-right'),
+                    nheight = elem.clientHeight - paddingVerticle,
+                    nwidth = elem.clientWidth - paddingHorizontal*/
                 
                 choice.className += ' hide'
                 if(this.options.backstatus){
-                    this.$emit('setValue',this.options.stylename,this.options.def,this.options.def)
+                    this.$emit('setValue',this.options.stylename,number,number)   // this.options.def
                 }else{
                     this.$store.commit('setValue',{
                         parent:this.options.parent ? this.options.parent : 'css',
@@ -108,21 +120,37 @@
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                         ischildset:this.ischildset ? this.ischildset : '',
                         stylename:this.options.stylename,
-                        actualValue:this.options.def,
-                        designValue:this.options.def,
+                        actualValue:number,
+                        designValue:number,
                         path:this.path
                     })
                 }
-                switch(height){
-                    case 'auto':
-                        this.options.def = 'auto'
-                        this.options.type = 'number'
-                        break
-                    default:
-                        this.options.def = nheight
-                        this.options.type = 'text'
-                        break
-                }
+                // switch(this.options.stylename){
+                //     case 'height':
+                //          switch(height){
+                //             case 'auto':
+                //                 this.options.def = 'auto'
+                //                 this.options.type = 'number'
+                //                 break
+                //             default:
+                //                 this.options.def = nheight
+                //                 this.options.type = 'text'
+                //                 break
+                //         }
+                //         break
+                //     case 'width':
+                //         switch(width){
+                //             case 'auto':
+                //                 this.options.def = 'auto'
+                //                 this.options.type = 'number'
+                //                 break
+                //             default:
+                //                 this.options.def = nwidth
+                //                 this.options.type = 'text'
+                //                 break
+                //         }
+                //         break
+                // }
             },
             setValue(e){
                 let target = e.target,
