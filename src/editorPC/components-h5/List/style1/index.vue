@@ -14,6 +14,7 @@
         <div :id="props.id+'-content'" class="yh-list-content clearfix" 
             :class="{'yh-init':!props.elements.length}">
             <div v-for="(element,index) in props.elements" 
+                v-if="element.props.data.toH5.value"
                 :is="element.module" 
                 :props="element.props"
                 :path="element.path"

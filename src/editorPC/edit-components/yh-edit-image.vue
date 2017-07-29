@@ -22,7 +22,8 @@
             'options',
             'elem_id',   // 当前被选中元素的ID
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            'ischild'
+            'ischild',
+            'path'
         ],
         data(){
             return {
@@ -30,68 +31,121 @@
             }
         },
         methods:{
+            setBackgroundImageValue(src,data){
+                let classname = this.options.en.split('_'),
+                    name = '',
+                    setArr = ['min_height'],  // 'width','height',
+                    list = [],
+                    i = 0,
+                    parentName = this.options.parent ? this.options.parent : 'css',
+                    eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                    index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                    ischildset = this.ischildset ? this.ischildset : '',
+                    imgAtrr = ''
+                // 默认为background_image
+                if(classname.length > 2){
+                    name = classname[0]+'_'
+                }
+                list = [{
+                    parent:parentName,
+                    eindex:eindex,
+                    index:index,
+                    ischildset:ischildset,
+                    stylename:this.options.en,
+                    actualValue:src,
+                    designValue:src
+                }]
+                for(i = 0; i < setArr.length; i++){
+                    if(this.parent[name+setArr[i]]){
+                        imgAtrr = /(width)/g.test(setArr[i]) ? 'width' : 'height'
+                        list.push({
+                            parent:parentName,
+                            eindex:eindex,
+                            index:index,
+                            ischildset:ischildset,
+                            stylename:name+setArr[i],
+                            actualValue:data[imgAtrr], // / (750 / 16)+'rem',
+                            designValue:data[imgAtrr]
+                        })
+                    }
+                }
+                this.$store.commit('setMultipleValue',{
+                    ischildset:ischildset,
+                    path:this.path,
+                    list:list
+                })
+            },
+            setSrcValue(src,data){
+                let classname = this.options.en.split('_'),
+                    name = classname.length > 1 ? classname[0]+'_' : '_',
+                    setArr = ['width','height'],  // 'width','height',
+                    list = [],
+                    i = 0,
+                    parentName = this.options.parent ? this.options.parent : 'css',
+                    eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                    index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                    ischildset = this.ischildset ? this.ischildset : '',
+                    imgAtrr = ''
+                list = [{
+                    parent:parentName,
+                    eindex:eindex,
+                    index:index,
+                    stylename:this.options.en,
+                    actualValue:src,
+                    designValue:src
+                }]
+                for(i = 0; i < setArr.length; i++){
+                    if(this.parent[name+setArr[i]]){
+                        imgAtrr = /(width)/g.test(setArr[i]) ? 'width' : 'height'
+                        list.push({
+                            parent:parentName,
+                            eindex:eindex,
+                            index:index,
+                            ischildset:ischildset,
+                            stylename:name+setArr[i],
+                            actualValue:data[imgAtrr], // / (750 / 16)+'rem',
+                            designValue:data[imgAtrr]
+                        })
+                    }
+                }
+                this.$store.commit('setMultipleValue',{
+                    ischildset:ischildset,
+                    path:this.path,
+                    list:list
+                })
+            },
             setValue(e){
                 let target = e.target,
                     value = target.value,
                     stylename = this.options.en,
-                    image = null
+                    image = null,
+                    classname = [],
+                    name = '',
+                    setArr = [],
+                    list = [],
+                    i = 0,
+                    parentName = '',
+                    eindex = -1,
+                    index = -1,
+                    ischildset = '',
+                    imgAtrr = ''
                 switch(this.options.mold){
                     case 'bg':
                         image = new Image();
                         (function(self,value){
                             image.onload = function(){
-                                self.$store.commit('setMultipleValue',[{
-                                    parent:self.options.parent ? self.options.parent : 'css',
-                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                    ischildset:self.ischildset ? self.ischildset : '',
-                                    stylename:self.options.en,
-                                    actualValue:value,
-                                    designValue:value
-                                },{
-                                    parent:'nonset',
-                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                    ischildset:self.ischildset ? self.ischildset : '',
-                                    stylename:'min_height',
-                                    actualValue:image.height, // / (750 / 16)+'rem',
-                                    designValue:image.height
-                                }])
+                                self.setBackgroundImageValue(value,image)
                             }
                         })(this,value)
                         image.src = value
                         break
                     default:
                         image = new Image()
-                        let classname = this.options.en.split(/[_]/g),
-                            name = classname.length > 1 ? classname[0]+'_' : '_';
+                        classname = this.options.en.split(/[_]/g)
+                        name = classname.length > 1 ? classname[0]+'_' : '_';
                         (function(self,value){
                             image.onload = function(){
-                                self.$store.commit('setMultipleValue',[{
-                                    parent:self.options.parent ? self.options.parent : 'css',
-                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                    ischildset:self.ischildset ? self.ischildset : '',
-                                    stylename:self.options.en,
-                                    actualValue:value,
-                                    designValue:value
-                                },{
-                                    parent:self.options.parent ? self.options.parent : 'css',
-                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                    ischildset:self.ischildset ? self.ischildset : '',
-                                    stylename:name+'width',
-                                    actualValue:image.width,
-                                    designValue:image.width
-                                },{
-                                    parent:self.options.parent ? self.options.parent : 'css',
-                                    eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                    index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                    ischildset:self.ischildset ? self.ischildset : '',
-                                    stylename:name+'height',
-                                    actualValue:image.height,
-                                    designValue:image.height
-                                }])
+                                self.setSrcValue(value,image)
                             }
                         })(this,value)
                         image.src = value
@@ -158,67 +212,27 @@
             },
             otherChange(self,data){
                 let src = self.$store.state.host+data.path
-                self.$store.commit('setMultipleValue',[{
-                    parent:this.parent ? this.parent : '',
-                    eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                    index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                    ischildset:this.ischildset ? this.ischildset : '',
-                    stylename:'audiosrc',
-                    actualValue:src,
-                    designValue:src
-                }])
+                self.$store.commit('setMultipleValue',{
+                    ischildset:self.ischildset ? self.ischildset : '',
+                    path:self.path,
+                    list:[{
+                        parent:this.parent ? this.parent : '',
+                        eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                        index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                        ischildset:this.ischildset ? this.ischildset : '',
+                        stylename:'audiosrc',
+                        actualValue:src,
+                        designValue:src
+                    }]
+                })
             },
             imageChange(self,data){
-                let elem = document.getElementsByClassName('setting')[0],
-                    // yhcontent = self.$root.$children[0].$refs['yh-content'],
-                    src = self.$store.state.host+data.path
-                // yhcontent.addSettingBox(elem)
-                self.$store.commit('setMultipleValue',[{
-                    parent:this.options ? this.options.parent : 'style',
-                    eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                    index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                    ischildset:this.ischildset ? this.ischildset : '',
-                    stylename:'width',
-                    actualValue:data.width / (750 / 16)+'rem',
-                    designValue:data.width+'px'
-                },{
-                    parent:this.options ? this.options.parent : 'style',
-                    eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                    index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string')? this.index : -1,
-                    ischildset:this.ischildset ? this.ischildset : '',
-                    stylename:'height',
-                    actualValue:data.height / (750 / 16)+'rem',
-                    designValue:data.height+'px'
-                },{
-                    parent:this.options ? this.options.parent : '',
-                    eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                    index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                    ischildset:this.ischildset ? this.ischildset : '',
-                    stylename:'src',
-                    actualValue:src,
-                    designValue:src
-                }])
+                let src = self.$store.state.host+data.path
+                self.setSrcValue(src,data)
             },
             setBackgroundImage(self,data){
                 let url = self.$store.state.host+data.path
-
-                self.$store.commit('setMultipleValue',[{
-                    parent:this.options.parent ? this.options.parent : 'css',
-                    eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                    index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                    ischildset:this.ischildset ? this.ischildset : '',
-                    stylename:self.options.en,
-                    actualValue:url,
-                    designValue:url
-                }])/*,{
-                    parent:'nonset',
-                    eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                    index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                    ischildset:this.ischildset ? this.ischildset : '',
-                    stylename:'min_height',
-                    actualValue:data.height+'px', // / (750 / 16)+'rem',
-                    designValue:data.height+'px'
-                }])*/
+                self.setBackgroundImageValue(url,data)
             },
         }
     }

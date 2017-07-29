@@ -1,8 +1,10 @@
 <template>
     <div yh-editor-content ref="yh-editor-content">
-        <div v-for="(element,index) in elements" :is="element.module" 
-        :props="element.props"
-        :path="element.path"></div>
+        <div v-for="(element,index) in elements" 
+            v-if="element.props.data.toH5.value"
+            :is="element.module" 
+            :props="element.props"
+            :path="element.path"></div>
     </div>
 </template>
 <script>

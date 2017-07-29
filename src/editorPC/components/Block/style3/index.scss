@@ -1,0 +1,15 @@
+/*block style3**************************************************************************/
+.block-style3 {
+    background-position:center top;
+}
+.block-style3 .yh-block-content {
+    margin:0 auto;
+    > div {
+        float:left;
+    }
+    > .block-style1{
+        width:auto;//33.333%;
+        overflow: hidden;
+    }
+}
+/*block style3**************************************************************************/

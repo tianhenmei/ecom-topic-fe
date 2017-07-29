@@ -8,6 +8,7 @@
             height:props.css.content_height.value+'px',
             backgroundColor:props.css.content_background_color.value,
         }"
+        :yh-path="path"
         @click.stop="setAll"
         >
         <img class="yh-image-content"
@@ -53,19 +54,8 @@
             content_background_color:{
                 cn:'背景颜色',
                 en:'content_background_color',
-                value:'#ffffff',
-                type:'color'  
-                    // color(默认)   
-                    // image（背景图(mold="bg")、图片(mold="src")）  
-                    // number(数字)     
-                    // text(文本)
-                    // textarea(多行文字)
-                    // uplist(内部多选项设置)
-                    // request （数据请求：公司ID、职位ID、问题ID、回答ID等）
-                    // options 选项
-                // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
-                // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
-                // effect:['',''] 当前属性会影响的属性，如css.overflow
+                value:'transparent',
+                type:'color'
             },
             content_src:{
                 cn:'图片地址',
@@ -91,15 +81,31 @@
             content_background_color:{
                 cn:'背景颜色',
                 en:'content_background_color',
-                value:'#00c99b',
-                type:'color'
+                value:'transparent',
+                type:'color',
+                parent:'h5css'
             },
             content_src:{
                 cn:'背景图片',
                 en:'content_src',
                 value:'none',
                 type:'image',
-                mold:'bg'  
+                mold:'src'  ,
+                parent:'h5css'
+            },
+            content_width:{
+                cn:'宽',
+                en:'content_width',
+                value:750,
+                type:'none',
+                parent:'h5css'
+            },
+            content_height:{
+                cn:'高',
+                en:'content_height',
+                value:100,
+                type:'none',
+                parent:'h5css'
             }
         },
         common:{

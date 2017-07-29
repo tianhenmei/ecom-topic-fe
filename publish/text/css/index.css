@@ -70,7 +70,31 @@ html,body {
 
 
 
-.block-style1{background-position:center top}
+.block-style1{background-position:center top}.block-style1 .yh-block-content{margin:0 auto}
+
+
+
+
+
+
+
+.block-style2{background-position:center top}.block-style2 .yh-block-content{margin:0 auto}.block-style2 .yh-block-content>div{float:left}.block-style2 .yh-block-content>.block-style1{width:auto;overflow:hidden}
+
+
+
+
+
+
+
+.block-style3{background-position:center top}.block-style3 .yh-block-content{margin:0 auto}.block-style3 .yh-block-content>div{float:left}.block-style3 .yh-block-content>.block-style1{width:auto;overflow:hidden}
+
+
+
+
+
+
+
+.row-style2{background-position:center top}.row-style2 .row-style1{overflow:hidden}.row-style2 .yh-row-content{margin:0 auto}.row-style2 .yh-row-content>div{float:left}
 
 
 

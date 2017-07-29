@@ -475,6 +475,8 @@ function applyToTag (styleElement, obj) {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var Node = {
     distance: 0,
     positionTag: {
@@ -516,6 +518,23 @@ Node.isObject = function (e) {
 Node.isArray = function (e) {
     return e instanceof Array;
 };
+
+/********************************************
+ * deepCopy: 深拷贝对象
+ * n: 需要拷贝的对象
+ * e：被拷贝的对象
+ *******************************************/
+Node.deepCopy = function (n, c) {
+    for (var i in c) {
+        if (_typeof(c[i]) === 'object') {
+            n[i] = c[i].constructor === Array ? [] : {};
+            Node.deepCopy(c[i], n[i]);
+        } else {
+            n[i] = c[i];
+        }
+    }
+    return c;
+};
 /********************************************
  * getNow: 获取当前时间
  * now: 默认当前时间，类型Date
@@ -550,6 +569,7 @@ Node.updateData = function (data, baseData) {
         switch (i) {
             case 'data':
             case 'css':
+            case 'h5css':
             case 'common':
             case 'attribute':
                 newdata[i] = {};
@@ -588,7 +608,12 @@ Node.initSelected = function (e) {
     var i = 0,
         id = '',
         setting = document.getElementsByClassName('setting'),
-        yhEditLayer = document.getElementsByClassName('yh-edit-layer');
+        selected = document.getElementsByClassName('yh-module-selected'),
+        // 被选中的父级
+    yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
+        parents = null,
+        childs = null,
+        elem = null;
     for (i = 0; i < e.path.length; i++) {
         if (e.path[i].getAttribute('yh-module')) {
             id = e.path[i].id;
@@ -598,11 +623,32 @@ Node.initSelected = function (e) {
     for (i = 0; i < setting.length; i++) {
         setting[i].className = setting[i].className.replace(/(setting)/g, '').replace(/  /g, ' ');
     }
+    for (i = 0; i < selected.length; i++) {
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g, '').replace(/  /g, ' ');
+    }
     for (i = 0; i < yhEditLayer.length; i++) {
         if (!/(hide)/g.test(yhEditLayer[i].className)) {
-            yhEditLayer[i].className = yhEditLayer[i].className + ' hide';
+            yhEditLayer[i].className = (yhEditLayer[i].className + ' hide').replace(/  /g, ' ');
         }
     }
+
+    elem = document.getElementById(id);
+    parents = Node.getParentsByAttr(elem, 'yh-module');
+    childs = Node.getChildrenByAttr(elem, 'yh-module');
+    for (i = 1; i < parents.length; i++) {
+        if (!/(yh-module-selected)/g.test(parents[i].className)) {
+            parents[i].className = (parents[i].className + ' yh-module-selected').replace(/  /g, ' ');
+        }
+    }
+    if (elem.attributes['yh-vessel']) {
+        elem.className += ' yh-module-selected';
+    }
+    for (i = 0; i < childs.length - 1; i++) {
+        if (!/(yh-module-selected)/g.test(childs[i].className)) {
+            childs[i].className = (childs[i].className + ' yh-module-selected').replace(/  /g, ' ');
+        }
+    }
+    // .yh-module-selected
     return id;
 };
 /********************************************
@@ -614,24 +660,28 @@ Node.undoSelected = function () {
         setting = document.getElementsByClassName('setting'),
         yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
         selection = document.getElementsByClassName('yh-selection'),
-        add = document.getElementsByClassName('yh-vessel-add'); //,
+        add = document.getElementsByClassName('yh-vessel-add'),
+        selected = document.getElementsByClassName('yh-module-selected'); //,
     // arr = [].concat(yhEditLayer,selection,add)
     for (i = 0; i < setting.length; i++) {
         setting[i].className = setting[i].className.replace(/(setting)/g, '').replace(/  /g, ' ');
     }
     for (i = 0; i < yhEditLayer.length; i++) {
         if (!/(hide)/g.test(yhEditLayer[i].className)) {
-            yhEditLayer[i].className = yhEditLayer[i].className + ' hide';
+            yhEditLayer[i].className = (yhEditLayer[i].className + ' hide').replace(/  /g, ' ');
         }
     }
     for (i = 0; i < selection.length; i++) {
         if (!/(hide)/g.test(selection[i].className)) {
-            selection[i].className += ' hide';
+            selection[i].className = (selection[i].className + ' hide').replace(/  /g, ' ');
         }
+    }
+    for (i = 0; i < selected.length;) {
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g, '').replace(/[ ]{2,n}/g, ' ');
     }
     for (i = 0; i < add.length; i++) {
         if (!/(hide)/g.test(add[i].className)) {
-            add[i].className += ' hide';
+            add[i].className = (add[i].className + ' hide').replace(/(  )/g, ' ');
         }
     }
 };
@@ -668,6 +718,37 @@ Node.getParentByAttr = function (elem, attr) {
         elem = elem.parentNode;
     }
     return elem;
+};
+/********************************************
+ * getParentsByAttr 通过属性名获取所有有此属性的父级
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getParentsByAttr = function (elem, attr) {
+    var parent = [];
+    while (elem && !elem.attributes['yh-editor-content']) {
+        if (elem.getAttribute('yh-module')) {
+            parent.push(elem);
+        }
+        elem = elem.parentNode;
+    }
+    return parent;
+};
+/********************************************
+ * getChildrenByAttr: 通过属性名获取所有子节点
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getChildrenByAttr = function (elem, attr) {
+    var children = elem.children,
+        a = [],
+        i = 0;
+    for (i = 0; i < children.length; i++) {
+        if (children[i] !== elem && children[i].getAttribute(attr)) {
+            a.push(children[i]);
+        }
+    }
+    return a;
 };
 /********************************************
  * getChildrenByClassName: 通过类名获取所有子节点
@@ -1189,8 +1270,42 @@ Node.setData = function (elem, attributes) {
 /****
  * setCompanyData(): 设置公司数据（较全）
  * */
-Node.setCompanyData = function (data) {
-    var elemData = {};
+Node.setCompanyData = function (data, leader) {
+    var elemData = {},
+        l = 0;
+    data.companyId = data.id;
+    data.name = data.companyshortname;
+    data.slogan = data.companyfeatures;
+    data.companySize = data.companysize;
+    if (data.logo.indexOf('http') == -1) {
+        if (data.logo.indexOf('i/image/') != -1 || data.logo.indexOf('image1/') != -1 || data.logo.indexOf('image2/') != -1) {
+            data.logo = 'https://www.lgstatic.com/thumbnail_200x200/' + data.logo;
+        } else {
+            data.logo = 'https://www.lgstatic.com/' + data.logo;
+        }
+    } else {
+        data.logo = '' + data.logo;
+    }
+    data.companyLeader = {};
+    for (l = 0; l < leader.length; l++) {
+        if (leader[l]) {
+            data.companyLeader = {
+                name: leader[l].name,
+                photo: leader[l].photo,
+                remark: leader[l].remark
+            };
+            if (data.companyLeader.photo.indexOf('http') == -1) {
+                if (data.companyLeader.photo.indexOf('i/image/') != -1 || data.companyLeader.photo.indexOf('image1/') != -1 || data.companyLeader.photo.indexOf('image2/') != -1) {
+                    data.companyLeader.photo = 'https://www.lgstatic.com/thumbnail_200x200/' + data.companyLeader.photo;
+                } else {
+                    data.companyLeader.photo = 'https://www.lgstatic.com/' + data.companyLeader.photo;
+                }
+            } else {
+                data.companyLeader.photo = '' + data.companyLeader.photo;
+            }
+            break;
+        }
+    }
     Node.setData(elemData, {
         companyId: data.companyId,
         description: data.description,
@@ -2609,26 +2724,35 @@ var baseData = {
     path: '',
     parentmodule: '', // 父级模版
     css: {
-        width: {
+        background_width: {
             cn: '宽度',
-            en: 'width',
+            en: 'background_width',
             value: 'auto',
             default: 'auto', // 默认值
             ivalue: document.documentElement.clientWidth, // 初始值
             type: 'number'
         },
-        height: {
+        background_height: {
             cn: '高度',
-            en: 'height',
+            en: 'background_height',
             value: 'auto',
             default: 'auto',
             ivalue: 100,
             type: 'number'
         },
+        background_min_height: {
+            cn: '最小高度',
+            en: 'background_min_height',
+            value: 'auto',
+            default: 'auto',
+            ivalue: 100,
+            type: 'none',
+            parent: 'css'
+        },
         background_background_color: {
             cn: '背景颜色',
             en: 'background_background_color',
-            value: '#ffffff',
+            value: 'transparent',
             type: 'color'
         },
         background_background_image: {
@@ -2659,12 +2783,67 @@ var baseData = {
         }
     },
     h5css: {
+        background_width: {
+            cn: '宽度',
+            en: 'background_width',
+            value: 'auto',
+            default: 'auto', // 默认值
+            ivalue: 750, // 初始值
+            type: 'none',
+            parent: 'h5css'
+        },
+        background_height: {
+            cn: '高度',
+            en: 'background_height',
+            value: 'auto',
+            default: 'auto',
+            ivalue: 100,
+            type: 'none',
+            parent: 'h5css'
+        },
+        background_min_height: {
+            cn: '最小高度',
+            en: 'background_min_height',
+            value: 0,
+            default: 0,
+            ivalue: 0,
+            type: 'none',
+            parent: 'h5css'
+        },
+        background_background_color: {
+            cn: '背景颜色',
+            en: 'background_background_color',
+            value: 'transparent',
+            type: 'color',
+            parent: 'h5css'
+        },
         background_background_image_h5: {
             cn: 'H5背景图片',
             en: 'background_background_image_h5',
             value: 'none',
             type: 'image',
-            mold: 'bg'
+            mold: 'bg',
+            parent: 'h5css'
+        },
+        background_background_repeat: {
+            cn: '背景重复',
+            en: 'background_background_repeat',
+            value: 'no-repeat',
+            type: 'options',
+            parent: 'h5css',
+            options: [{
+                cn: '不重复',
+                value: 'no-repeat'
+            }, {
+                cn: '重复',
+                value: 'repeat'
+            }, {
+                cn: '横向重复',
+                value: 'repeat-x'
+            }, {
+                cn: '纵向重复',
+                value: 'repeat-y'
+            }]
         }
     },
     common: {},
@@ -2802,7 +2981,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       backgroundColor: _vm.props.css.background_background_color.value,
       backgroundImage: _vm.setImage,
       backgroundRepeat: _vm.props.css.background_background_repeat.value,
-      height: _vm.props.css.height.value + (_vm.props.css.height.value == 'auto' ? '' : 'px')
+      minHeight: _vm.props.css.background_min_height.value + (_vm.props.css.background_min_height.value == 'auto' ? '' : 'px')
     }),
     attrs: {
       "id": _vm.props.id,
@@ -2822,7 +3001,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'yh-block-init': !_vm.props.elements.length
     },
     style: ({
-      width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px')
+      width: _vm.props.css.background_width.value + (_vm.props.css.background_width.value == 'auto' ? '' : 'px')
     }),
     attrs: {
       "id": _vm.props.id + '-content'
@@ -3422,9 +3601,11 @@ exports.default = {
             }
         },
         removeElement: function removeElement(e) {
-            var elem = document.getElementByClassName('setting')[0],
+            var elem = document.getElementsByClassName('setting')[0],
                 elemID = elem.getAttribute('id');
-            this.$store.commit('removeElement', elemID);
+            this.$store.commit('removeElement', {
+                path: this.path
+            });
             (0, _Node.undoSelected)();
         },
         undoElement: function undoElement(e) {
@@ -3463,74 +3644,129 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     props: ['eindex', 'index', 'parent', 'options', 'elem_id', // 当前被选中元素的ID
     'ischildset', // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-    'ischild'],
+    'ischild', 'path'],
     data: function data() {
         return {};
     },
 
     methods: {
+        setBackgroundImageValue: function setBackgroundImageValue(src, data) {
+            var classname = this.options.en.split('_'),
+                name = '',
+                setArr = ['min_height'],
+                // 'width','height',
+            list = [],
+                i = 0,
+                parentName = this.options.parent ? this.options.parent : 'css',
+                eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                ischildset = this.ischildset ? this.ischildset : '',
+                imgAtrr = '';
+            // 默认为background_image
+            if (classname.length > 2) {
+                name = classname[0] + '_';
+            }
+            list = [{
+                parent: parentName,
+                eindex: eindex,
+                index: index,
+                ischildset: ischildset,
+                stylename: this.options.en,
+                actualValue: src,
+                designValue: src
+            }];
+            for (i = 0; i < setArr.length; i++) {
+                if (this.parent[name + setArr[i]]) {
+                    imgAtrr = /(width)/g.test(setArr[i]) ? 'width' : 'height';
+                    list.push({
+                        parent: parentName,
+                        eindex: eindex,
+                        index: index,
+                        ischildset: ischildset,
+                        stylename: name + setArr[i],
+                        actualValue: data[imgAtrr], // / (750 / 16)+'rem',
+                        designValue: data[imgAtrr]
+                    });
+                }
+            }
+            this.$store.commit('setMultipleValue', {
+                ischildset: ischildset,
+                path: this.path,
+                list: list
+            });
+        },
+        setSrcValue: function setSrcValue(src, data) {
+            var classname = this.options.en.split('_'),
+                name = classname.length > 1 ? classname[0] + '_' : '_',
+                setArr = ['width', 'height'],
+                // 'width','height',
+            list = [],
+                i = 0,
+                parentName = this.options.parent ? this.options.parent : 'css',
+                eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                ischildset = this.ischildset ? this.ischildset : '',
+                imgAtrr = '';
+            list = [{
+                parent: parentName,
+                eindex: eindex,
+                index: index,
+                stylename: this.options.en,
+                actualValue: src,
+                designValue: src
+            }];
+            for (i = 0; i < setArr.length; i++) {
+                if (this.parent[name + setArr[i]]) {
+                    imgAtrr = /(width)/g.test(setArr[i]) ? 'width' : 'height';
+                    list.push({
+                        parent: parentName,
+                        eindex: eindex,
+                        index: index,
+                        ischildset: ischildset,
+                        stylename: name + setArr[i],
+                        actualValue: data[imgAtrr], // / (750 / 16)+'rem',
+                        designValue: data[imgAtrr]
+                    });
+                }
+            }
+            this.$store.commit('setMultipleValue', {
+                ischildset: ischildset,
+                path: this.path,
+                list: list
+            });
+        },
         setValue: function setValue(e) {
             var target = e.target,
                 value = target.value,
                 stylename = this.options.en,
-                image = null;
+                image = null,
+                classname = [],
+                name = '',
+                setArr = [],
+                list = [],
+                i = 0,
+                parentName = '',
+                eindex = -1,
+                index = -1,
+                ischildset = '',
+                imgAtrr = '';
             switch (this.options.mold) {
                 case 'bg':
                     image = new Image();
                     (function (self, value) {
                         image.onload = function () {
-                            self.$store.commit('setMultipleValue', [{
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: self.options.en,
-                                actualValue: value,
-                                designValue: value
-                            }, {
-                                parent: 'nonset',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: 'min_height',
-                                actualValue: image.height, // / (750 / 16)+'rem',
-                                designValue: image.height
-                            }]);
+                            self.setBackgroundImageValue(value, image);
                         };
                     })(this, value);
                     image.src = value;
                     break;
                 default:
                     image = new Image();
-                    var classname = this.options.en.split(/[_]/g),
-                        name = classname.length > 1 ? classname[0] + '_' : '_';
+                    classname = this.options.en.split(/[_]/g);
+                    name = classname.length > 1 ? classname[0] + '_' : '_';
                     (function (self, value) {
                         image.onload = function () {
-                            self.$store.commit('setMultipleValue', [{
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: self.options.en,
-                                actualValue: value,
-                                designValue: value
-                            }, {
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: name + 'width',
-                                actualValue: image.width,
-                                designValue: image.width
-                            }, {
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: name + 'height',
-                                actualValue: image.height,
-                                designValue: image.height
-                            }]);
+                            self.setSrcValue(value, image);
                         };
                     })(this, value);
                     image.src = value;
@@ -3597,68 +3833,27 @@ exports.default = {
         },
         otherChange: function otherChange(self, data) {
             var src = self.$store.state.host + data.path;
-            self.$store.commit('setMultipleValue', [{
-                parent: this.parent ? this.parent : '',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'audiosrc',
-                actualValue: src,
-                designValue: src
-            }]);
+            self.$store.commit('setMultipleValue', {
+                ischildset: self.ischildset ? self.ischildset : '',
+                path: self.path,
+                list: [{
+                    parent: this.parent ? this.parent : '',
+                    eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                    index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                    ischildset: this.ischildset ? this.ischildset : '',
+                    stylename: 'audiosrc',
+                    actualValue: src,
+                    designValue: src
+                }]
+            });
         },
         imageChange: function imageChange(self, data) {
-            var elem = document.getElementsByClassName('setting')[0],
-
-            // yhcontent = self.$root.$children[0].$refs['yh-content'],
-            src = self.$store.state.host + data.path;
-            // yhcontent.addSettingBox(elem)
-            self.$store.commit('setMultipleValue', [{
-                parent: this.options ? this.options.parent : 'style',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'width',
-                actualValue: data.width / (750 / 16) + 'rem',
-                designValue: data.width + 'px'
-            }, {
-                parent: this.options ? this.options.parent : 'style',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'height',
-                actualValue: data.height / (750 / 16) + 'rem',
-                designValue: data.height + 'px'
-            }, {
-                parent: this.options ? this.options.parent : '',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'src',
-                actualValue: src,
-                designValue: src
-            }]);
+            var src = self.$store.state.host + data.path;
+            self.setSrcValue(src, data);
         },
         setBackgroundImage: function setBackgroundImage(self, data) {
             var url = self.$store.state.host + data.path;
-
-            self.$store.commit('setMultipleValue', [{
-                parent: this.options.parent ? this.options.parent : 'css',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: self.options.en,
-                actualValue: url,
-                designValue: url
-            }]); /*,{
-                  parent:'nonset',
-                  eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                  index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                  ischildset:this.ischildset ? this.ischildset : '',
-                  stylename:'min_height',
-                  actualValue:data.height+'px', // / (750 / 16)+'rem',
-                  designValue:data.height+'px'
-                 }])*/
+            self.setBackgroundImageValue(url, data);
         }
     }
 };
@@ -4075,21 +4270,12 @@ exports.default = {
         var hasdef = false,
             def = 'auto',
             type = 'number';
-        switch (this.options.en) {
-            case 'width':
-                hasdef = true;
-                if (this.parent[this.options.en].value == 'auto') {
-                    type = 'text';
-                    def = document.documentElement.clientWidth;
-                }
-                break;
-            case 'height':
-                hasdef = true;
-                if (this.parent[this.options.en].value == 'auto') {
-                    type = 'text';
-                    def = 100;
-                }
-                break;
+        if (this.parent[this.options.en].hasOwnProperty('ivalue')) {
+            hasdef = true;
+            if (this.parent[this.options.en].value == 'auto') {
+                type = 'text';
+                def = this.parent[this.options.en].ivalue;
+            }
         }
         return {
             optionsData: {
@@ -4812,7 +4998,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".block-style1{background-position:center top}.block-style1 .yh-block-content{margin:0 auto}", ""]);
 
 // exports
 

@@ -36,7 +36,7 @@
                             <div class="cpElement clearfix">
                                 <p class="title oneTitle">行</p>
                                 <ul class="yh-lib-subcomponents">
-                                    <li id="row_style2" class="rowModule" moduletype="row">两行</li>
+                                    <li yh-module-name="Row style1" @click.stop.prevent="addComponents">两行</li>
                                 </ul>
                             </div>
                         </div>

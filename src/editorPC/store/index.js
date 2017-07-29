@@ -98,17 +98,33 @@ let store = new Vuex.Store({
             }
         },
         addElement:(state,payload) => {
-            let i = 0,
-                length = state.elements.length  
-            if(payload instanceof Array){
-                for(i = 0; i < payload.length; i++){
-                    payload[i].path = payload[i].path.replace(/(index)/g,length+i)
-                }
-                state.elements = state.elements.concat(payload)
+            let i = 0,j = 0,
+                length = state.elements.length,
+                yh_module = '',
+                arr = []
+            if(!(payload instanceof Array)){
+                arr = [payload]
             }else{
-                payload.path = payload.path.replace(/(index)/g,length)
-                state.elements.push(payload)
+                arr = payload
             }
+            for(i = 0; i < arr.length; i++){
+                yh_module = arr[i]['yh-module']
+                arr[i].path = arr[i].path.replace(/(index)/g,length+i)
+                switch(yh_module){
+                    case 'Block_style2':
+                    case 'Block_style3':
+                    case 'Block_style4':
+                    case 'Row_style1':
+                        for(j = 0; j < arr[i].props.elements.length; j++){
+                            if(!arr[i].props.elements[j].parentPath){
+                                arr[i].props.elements[j].parentPath = arr[i].path
+                                arr[i].props.elements[j].path = arr[i].path + '.'+arr[i].props.elements[j].path
+                            }
+                        }
+                        break
+                }
+            }
+            state.elements = state.elements.concat(arr)
         },
         addChildData:(state,payload) => {
             // store.commit('getData',state.triggerId)
@@ -134,7 +150,7 @@ let store = new Vuex.Store({
         },
         addChildElement:(state,payload) => {
             // store.commit('getData')
-            let i = 0,
+            let i = 0, j = 0,
                 elemData = state,
                 parentData = state,
                 parentPath = payload instanceof Array ? payload[0].parentPath : payload.parentPath,
@@ -144,7 +160,8 @@ let store = new Vuex.Store({
                 value = '',
                 status = false,
                 length = 0,
-                arr = []
+                arr = [],
+                yh_module = ''
             for(i = 0; i < parentPathArr.length; i++){
                 value = parentPathArr[i]
                 if(value){
@@ -181,6 +198,7 @@ let store = new Vuex.Store({
                 arr = payload
             }
             for(i = 0; i < arr.length; i++){
+                yh_module = arr[i]['yh-module']
                 arr[i].props.ischild = 'ischild'
                 arr[i].path = parentPath+'.'+arr[i].path.replace(/(cindex)/g,length+i)
                 if(length > 0){
@@ -190,6 +208,19 @@ let store = new Vuex.Store({
                             arr[i].props.h5css = deepCopy(arr[i].props.h5css,elemData[0].props.h5css)
                             break
                     }
+                }
+                switch(yh_module){
+                    case 'Block_style2':
+                    case 'Block_style3':
+                    case 'Block_style4':
+                    case 'Row_style1':
+                        for(j = 0; j < arr[i].props.elements.length; j++){
+                            if(!arr[i].props.elements[j].parentPath){
+                                arr[i].props.elements[j].parentPath = arr[i].path
+                                arr[i].props.elements[j].path = arr[i].path + '.'+arr[i].props.elements[j].path
+                            }
+                        }
+                        break
                 }
             }
             if(parentData.props.data.childmodule){
@@ -562,71 +593,79 @@ let store = new Vuex.Store({
          * designValue: (非必须)设计的值
          ***************/
         setMultipleValue:(state,payload) => {
-            store.commit('getData')
-            let i = 0,j = 0
+            // store.commit('getData')
+            let i = 0,j = 0,t = 0,
+                path = payload.path.split(/[.]/g),
+                elemData = state,
+                value = '',
+                one = {},
+                temp = {},
+                arr = []
+            if(state.data.path == payload.path && state.data.elemData){
+                elemData = state.data.elemData
+            }else{
+                for(i = 0; i < path.length; i++){
+                    value = path[i]
+                    if(value){
+                        if(/[0-9]/g.test(path[i])){
+                            value = parseInt(path[i])
+                        }
+                        elemData = elemData[value]
+                    }
+                }
+            }
             switch(payload.ischildset){
                 case 'ischildset':
-                    for(i = 0; i < payload.length; i++){
-                        switch(payload[i].parent){
-                            case 'nonset':
-                            case 'css':
-                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
-                                    state.data.elemData.props.elements[j].props[payload[i].parent][payload[i].stylename].value = payload[i].actualValue
+                    for(i = 0; i < payload.list.length; i++){
+                        if(payload.list[i].index == -1 || payload.list[i].index == undefined || typeof payload.list[i].index == 'string'){
+                            for(j = 0; j < elemData.props.elements.length; j++){
+                                one = elemData.props.elements[j].props[payload.list[i].parent][payload.list[i].stylename]
+                                one.value = payload.list[i].actualValue
+                                if(payload.list[i].cnvalue){
+                                    one.cnvalue = payload.list[i].cnvalue
                                 }
-                                break;
-                            case 'states':
-                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
-                                    if(!state.data.elemData.props.elements[j].props[payload[i].parent]){
-                                        state.data.elemData.props.elements[j].props[payload[i].parent] = {}
-                                    }
-                                    state.data.elemData.props.elements[j].props[payload[i].parent][payload[i].index][payload[i].stylename] = payload[i].actualValue
+                            }
+                        }else{
+                            for(j = 0; j < elemData.props.elements.length; j++){
+                                elemData.props.elements[j].props[payload.list[i].parent][payload.list[i].index][payload.list[i].stylename].value = payload.list[i].actualValue
+                                if(payload.list[i].cnvalue){
+                                    elemData.props.elements[j].props[payload.list[i].parent][payload.list[i].index][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
                                 }
-                                break
-                            case 'style':
-                            case 'position':
-                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
-                                    if(!state.data.elemData.props.elements[j].props[payload[i].parent]){
-                                        state.data.elemData.props.elements[j].props[payload[i].parent] = {}
-                                    }
-                                    state.data.elemData.props.elements[j].props[payload[i].parent][payload[i].stylename] = payload[i].actualValue
-                                }
-                                break
-                            default:
-                                for(j = 0; j < state.data.elemData.props.elements.length; j++){
-                                    state.data.elemData.props.elements[j].props[payload[i].stylename] = payload[i].actualValue
-                                }
-                                break
+                            }
                         }
                     }
                     break
                 default:
-                    for(i = 0; i < payload.length; i++){
-                        switch(payload[i].parent){
-                            case 'nonset':
-                            case 'css':
-                                state.data.elemData.props[payload[i].parent][payload[i].stylename].value = payload[i].actualValue
-                                break;
-                            case 'states':
-                                if(!state.data.elemData.props[payload[i].parent]){
-                                    state.data.elemData.props[payload[i].parent] = {}
+                    for(i = 0; i < payload.list.length; i++){
+                        if(!payload.list[i].parent){
+                            elemData.props[payload.list[i].stylename].value = payload.list[i].actualValue
+                            if(payload.list[i].cnvalue){
+                                elemData.props[payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
+                            }
+                        }else if(payload.list[i].index == -1 || payload.list[i].index == undefined || typeof payload.list[i].index == 'string'){
+                            elemData.props[payload.list[i].parent][payload.list[i].stylename].value = payload.list[i].actualValue
+                            if(payload.list[i].cnvalue){
+                                elemData.props[payload.list[i].parent][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
+                            }
+                        }else{
+                            let data = elemData.props,
+                                parent = payload.list[i].parent.split(/[.]/g)
+                            for(i = 0 ; i < parent.length; i++){
+                                if(parent[i].trim()){
+                                    data = data[parent[i]]
                                 }
-                                state.data.elemData.props[payload[i].parent][payload[i].index][payload[i].stylename] = payload[i].actualValue
-                                break
-                            case 'style':
-                            case 'position':
-                                if(!state.data.elemData.props[payload[i].parent]){
-                                    state.data.elemData.props[payload[i].parent] = {}
-                                }
-                                state.data.elemData.props[payload[i].parent][payload[i].stylename] = payload[i].actualValue
-                                break
-                            default:
-                                state.data.elemData.props[payload[i].stylename] = payload[i].actualValue
-                                break
+                            }
+                            data[payload.list[i].index][payload.list[i].stylename].value = payload.list[i].actualValue
+                            if(payload.list[i].cnvalue){
+                                data[payload.list[i].index][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
+                            }
                         }
                     }
                     break
             }
-            store.commit('reinitData')
+            state.data.path = payload.path
+            state.data.elemData = elemData
+            // store.commit('reinitData')
         },
         addElementStates:(state,payload) => {
             store.commit('getData')
@@ -635,6 +674,7 @@ let store = new Vuex.Store({
                         'box-shadow-blur','box-shadow-color',
                         'color','background-color','image'],
                 one = {}
+            console.log(payload)
             if(!state.data.elemData.props.states){
                 state.data.elemData.props.states = [];
             }

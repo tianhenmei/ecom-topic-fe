@@ -475,6 +475,8 @@ function applyToTag (styleElement, obj) {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var Node = {
     distance: 0,
     positionTag: {
@@ -515,6 +517,23 @@ Node.isObject = function (e) {
  *******************************************/
 Node.isArray = function (e) {
     return e instanceof Array;
+};
+
+/********************************************
+ * deepCopy: 深拷贝对象
+ * n: 需要拷贝的对象
+ * e：被拷贝的对象
+ *******************************************/
+Node.deepCopy = function (n, c) {
+    for (var i in c) {
+        if (_typeof(c[i]) === 'object') {
+            n[i] = c[i].constructor === Array ? [] : {};
+            Node.deepCopy(c[i], n[i]);
+        } else {
+            n[i] = c[i];
+        }
+    }
+    return c;
 };
 /********************************************
  * getNow: 获取当前时间
@@ -588,7 +607,12 @@ Node.initSelected = function (e) {
     var i = 0,
         id = '',
         setting = document.getElementsByClassName('setting'),
-        yhEditLayer = document.getElementsByClassName('yh-edit-layer');
+        selected = document.getElementsByClassName('yh-module-selected'),
+        // 被选中的父级
+    yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
+        parents = null,
+        childs = null,
+        elem = null;
     for (i = 0; i < e.path.length; i++) {
         if (e.path[i].getAttribute('yh-module')) {
             id = e.path[i].id;
@@ -598,11 +622,32 @@ Node.initSelected = function (e) {
     for (i = 0; i < setting.length; i++) {
         setting[i].className = setting[i].className.replace(/(setting)/g, '').replace(/  /g, ' ');
     }
+    for (i = 0; i < selected.length; i++) {
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g, '').replace(/  /g, ' ');
+    }
     for (i = 0; i < yhEditLayer.length; i++) {
         if (!/(hide)/g.test(yhEditLayer[i].className)) {
-            yhEditLayer[i].className = yhEditLayer[i].className + ' hide';
+            yhEditLayer[i].className = (yhEditLayer[i].className + ' hide').replace(/  /g, ' ');
         }
     }
+
+    elem = document.getElementById(id);
+    parents = Node.getParentsByAttr(elem, 'yh-module');
+    childs = Node.getChildrenByAttr(elem, 'yh-module');
+    for (i = 1; i < parents.length; i++) {
+        if (!/(yh-module-selected)/g.test(parents[i].className)) {
+            parents[i].className = (parents[i].className + ' yh-module-selected').replace(/  /g, ' ');
+        }
+    }
+    if (elem.attributes['yh-vessel']) {
+        elem.className += ' yh-module-selected';
+    }
+    for (i = 0; i < childs.length - 1; i++) {
+        if (!/(yh-module-selected)/g.test(childs[i].className)) {
+            childs[i].className = (childs[i].className + ' yh-module-selected').replace(/  /g, ' ');
+        }
+    }
+    // .yh-module-selected
     return id;
 };
 /********************************************
@@ -614,24 +659,28 @@ Node.undoSelected = function () {
         setting = document.getElementsByClassName('setting'),
         yhEditLayer = document.getElementsByClassName('yh-edit-layer'),
         selection = document.getElementsByClassName('yh-selection'),
-        add = document.getElementsByClassName('yh-vessel-add'); //,
+        add = document.getElementsByClassName('yh-vessel-add'),
+        selected = document.getElementsByClassName('yh-module-selected'); //,
     // arr = [].concat(yhEditLayer,selection,add)
     for (i = 0; i < setting.length; i++) {
         setting[i].className = setting[i].className.replace(/(setting)/g, '').replace(/  /g, ' ');
     }
     for (i = 0; i < yhEditLayer.length; i++) {
         if (!/(hide)/g.test(yhEditLayer[i].className)) {
-            yhEditLayer[i].className = yhEditLayer[i].className + ' hide';
+            yhEditLayer[i].className = (yhEditLayer[i].className + ' hide').replace(/  /g, ' ');
         }
     }
     for (i = 0; i < selection.length; i++) {
         if (!/(hide)/g.test(selection[i].className)) {
-            selection[i].className += ' hide';
+            selection[i].className = (selection[i].className + ' hide').replace(/  /g, ' ');
         }
+    }
+    for (i = 0; i < selected.length;) {
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g, '').replace(/[ ]{2,n}/g, ' ');
     }
     for (i = 0; i < add.length; i++) {
         if (!/(hide)/g.test(add[i].className)) {
-            add[i].className += ' hide';
+            add[i].className = (add[i].className + ' hide').replace(/(  )/g, ' ');
         }
     }
 };
@@ -668,6 +717,37 @@ Node.getParentByAttr = function (elem, attr) {
         elem = elem.parentNode;
     }
     return elem;
+};
+/********************************************
+ * getParentsByAttr 通过属性名获取所有有此属性的父级
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getParentsByAttr = function (elem, attr) {
+    var parent = [];
+    while (elem && !elem.attributes['yh-editor-content']) {
+        if (elem.getAttribute('yh-module')) {
+            parent.push(elem);
+        }
+        elem = elem.parentNode;
+    }
+    return parent;
+};
+/********************************************
+ * getChildrenByAttr: 通过属性名获取所有子节点
+ * elem: 初始元素
+ * attr: 类名
+ *******************************************/
+Node.getChildrenByAttr = function (elem, attr) {
+    var children = elem.children,
+        a = [],
+        i = 0;
+    for (i = 0; i < children.length; i++) {
+        if (children[i] !== elem && children[i].getAttribute(attr)) {
+            a.push(children[i]);
+        }
+    }
+    return a;
 };
 /********************************************
  * getChildrenByClassName: 通过类名获取所有子节点
@@ -1189,8 +1269,42 @@ Node.setData = function (elem, attributes) {
 /****
  * setCompanyData(): 设置公司数据（较全）
  * */
-Node.setCompanyData = function (data) {
-    var elemData = {};
+Node.setCompanyData = function (data, leader) {
+    var elemData = {},
+        l = 0;
+    data.companyId = data.id;
+    data.name = data.companyshortname;
+    data.slogan = data.companyfeatures;
+    data.companySize = data.companysize;
+    if (data.logo.indexOf('http') == -1) {
+        if (data.logo.indexOf('i/image/') != -1 || data.logo.indexOf('image1/') != -1 || data.logo.indexOf('image2/') != -1) {
+            data.logo = 'https://www.lgstatic.com/thumbnail_200x200/' + data.logo;
+        } else {
+            data.logo = 'https://www.lgstatic.com/' + data.logo;
+        }
+    } else {
+        data.logo = '' + data.logo;
+    }
+    data.companyLeader = {};
+    for (l = 0; l < leader.length; l++) {
+        if (leader[l]) {
+            data.companyLeader = {
+                name: leader[l].name,
+                photo: leader[l].photo,
+                remark: leader[l].remark
+            };
+            if (data.companyLeader.photo.indexOf('http') == -1) {
+                if (data.companyLeader.photo.indexOf('i/image/') != -1 || data.companyLeader.photo.indexOf('image1/') != -1 || data.companyLeader.photo.indexOf('image2/') != -1) {
+                    data.companyLeader.photo = 'https://www.lgstatic.com/thumbnail_200x200/' + data.companyLeader.photo;
+                } else {
+                    data.companyLeader.photo = 'https://www.lgstatic.com/' + data.companyLeader.photo;
+                }
+            } else {
+                data.companyLeader.photo = '' + data.companyLeader.photo;
+            }
+            break;
+        }
+    }
     Node.setData(elemData, {
         companyId: data.companyId,
         description: data.description,
@@ -2599,7 +2713,7 @@ var baseData = {
         background_background_color: {
             cn: '背景颜色',
             en: 'background_background_color',
-            value: '#00c99b',
+            value: 'transparent',
             type: 'color'
             // color(默认)   
             // image（背景图(mold="bg")、图片(mold="src")）  
@@ -2609,6 +2723,7 @@ var baseData = {
             // uplist(内部多选项设置)
             // request （数据请求：公司ID、职位ID、问题ID、回答ID等）
             // options 选项
+            // none  不编辑的属性
             // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
             // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
             // effect:['',''] 当前属性会影响的属性，如css.overflow
@@ -3342,9 +3457,11 @@ exports.default = {
             }
         },
         removeElement: function removeElement(e) {
-            var elem = document.getElementByClassName('setting')[0],
+            var elem = document.getElementsByClassName('setting')[0],
                 elemID = elem.getAttribute('id');
-            this.$store.commit('removeElement', elemID);
+            this.$store.commit('removeElement', {
+                path: this.path
+            });
             (0, _Node.undoSelected)();
         },
         undoElement: function undoElement(e) {
@@ -4100,7 +4217,14 @@ exports.default = {
         getDesignValue: function getDesignValue(state) {
             var one = this.parent[this.options.en],
                 value = one.value,
-                cnvalue = one.cnvalue;
+                i = 0,
+                cnvalue = ''; //one.cnvalue
+            for (i = 0; i < one.options.length; i++) {
+                if (value == one.options[i].value) {
+                    cnvalue = one.options[i].cn;
+                    break;
+                }
+            }
             return cnvalue ? cnvalue : /(px)/g.test(value) ? parseFloat(value) : value;
         }
     }),

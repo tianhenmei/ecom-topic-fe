@@ -8,13 +8,13 @@
         :style="{backgroundColor:props.css.background_background_color.value,
             backgroundImage:setImage,
             backgroundRepeat:props.css.background_background_repeat.value,
-            height:props.css.height.value+(props.css.height.value == 'auto' ? '' : 'px')}"
+            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')}"
         yh-vessel
         >
         <div :id="props.id+'-content'" class="yh-block-content clearfix" 
             :class="{'yh-block-init':!props.elements.length}"
             :style="{
-                width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')}">
+                width:props.css.background_width.value+(props.css.background_width.value == 'auto' ? '' : 'px')}">
             <div v-for="(element,index) in props.elements" 
                 :is="element.module" 
                 :props="element.props"
@@ -55,26 +55,35 @@
         path:'',
         parentmodule:'',  // 父级模版
         css:{
-            width:{
+            background_width:{
                 cn:'宽度',
-                en:'width',
+                en:'background_width',
                 value:'auto',
                 default:'auto',  // 默认值
                 ivalue:document.documentElement.clientWidth,   // 初始值
                 type:'number'
             },
-            height:{
+            background_height:{
                 cn:'高度',
-                en:'height',
+                en:'background_height',
                 value:'auto',
                 default:'auto',
                 ivalue:100,
                 type:'number',
             },
+            background_min_height:{
+                cn:'最小高度',
+                en:'background_min_height',
+                value:'auto',
+                default:'auto',
+                ivalue:100,
+                type:'none',
+                parent:'css'
+            },
             background_background_color:{
                 cn:'背景颜色',
                 en:'background_background_color',
-                value:'#ffffff',
+                value:'transparent',
                 type:'color'
             },
             background_background_image:{
@@ -105,12 +114,67 @@
             }
         },
         h5css:{
+            background_width:{
+                cn:'宽度',
+                en:'background_width',
+                value:'auto',
+                default:'auto',  // 默认值
+                ivalue:750,   // 初始值
+                type:'none',
+                parent:'h5css'
+            },
+            background_height:{
+                cn:'高度',
+                en:'background_height',
+                value:'auto',
+                default:'auto',
+                ivalue:100,
+                type:'none',
+                parent:'h5css'
+            },
+            background_min_height:{
+                cn:'最小高度',
+                en:'background_min_height',
+                value:0,
+                default:0,
+                ivalue:0,
+                type:'none',
+                parent:'h5css'
+            },
+            background_background_color:{
+                cn:'背景颜色',
+                en:'background_background_color',
+                value:'transparent',
+                type:'color',
+                parent:'h5css'
+            },
             background_background_image_h5:{
                 cn:'H5背景图片',
                 en:'background_background_image_h5',
                 value:'none',
                 type:'image',
                 mold:'bg',
+                parent:'h5css'
+            },
+            background_background_repeat:{
+                cn:'背景重复',
+                en:'background_background_repeat',
+                value:'no-repeat',
+                type:'options',
+                parent:'h5css',
+                options:[{
+                    cn:'不重复',
+                    value:'no-repeat'
+                },{
+                    cn:'重复',
+                    value:'repeat'
+                },{
+                    cn:'横向重复',
+                    value:'repeat-x'
+                },{
+                    cn:'纵向重复',
+                    value:'repeat-y'
+                }]
             }
         },
         common:{

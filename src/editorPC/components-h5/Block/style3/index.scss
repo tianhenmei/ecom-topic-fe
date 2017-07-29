@@ -1,0 +1,32 @@
+/*block style3**************************************************************************/
+.block-style3 {
+    background-position:center top;
+    background-size: 100%;
+    // float: left;
+    // position: relative;
+    // left: 50%;
+    text-align: center;
+    font-size: 0;
+    font-family: Arial;
+    letter-spacing: -3px;
+    white-space: nowrap;
+}
+.block-style3 > .yh-block-content {
+    // float: left;
+    // position: relative;
+    // left: -50%;
+    // margin:0 auto;
+    display:inline-block;
+    letter-spacing: 0;
+    font-size:12px;
+    vertical-align: top;
+    > div {
+        float:left;
+    }
+    > .block-style1{
+        width:auto;//33.333%;
+        margin:0 auto;
+        overflow: hidden;
+    }
+}
+/*block style3**************************************************************************/

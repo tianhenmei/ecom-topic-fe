@@ -87,6 +87,7 @@ Node.updateData = (data,baseData) =>{
         switch(i){
             case 'data':
             case 'css':
+            case 'h5css':
             case 'common':
             case 'attribute':
                 newdata[i] = {}
@@ -144,7 +145,7 @@ Node.initSelected = (e) => {
     }
     for(i = 0; i < yhEditLayer.length; i++){
         if(!/(hide)/g.test(yhEditLayer[i].className)){
-            yhEditLayer[i].className = yhEditLayer[i].className + ' hide'
+            yhEditLayer[i].className = (yhEditLayer[i].className + ' hide').replace(/  /g,' ')
         }
     }
 
@@ -152,13 +153,17 @@ Node.initSelected = (e) => {
     parents = Node.getParentsByAttr(elem,'yh-module')
     childs = Node.getChildrenByAttr(elem,'yh-module')
     for(i = 1; i < parents.length; i++){
-        parents[i].className += ' yh-module-selected'
+        if(!/(yh-module-selected)/g.test(parents[i].className)){
+            parents[i].className = (parents[i].className + ' yh-module-selected').replace(/  /g,' ')
+        }
     }
     if(elem.attributes['yh-vessel']){
         elem.className += ' yh-module-selected'
     }
     for(i = 0; i < childs.length - 1; i++){
-        parents[i].className += ' yh-module-selected'
+        if(!/(yh-module-selected)/g.test(childs[i].className)){
+            childs[i].className = (childs[i].className + ' yh-module-selected').replace(/  /g,' ')
+        }
     }
     // .yh-module-selected
     return id
@@ -180,20 +185,20 @@ Node.undoSelected = () => {
     }
     for(i = 0; i < yhEditLayer.length; i++){
         if(!/(hide)/g.test(yhEditLayer[i].className)){
-            yhEditLayer[i].className = yhEditLayer[i].className + ' hide'
+            yhEditLayer[i].className = (yhEditLayer[i].className + ' hide').replace(/  /g,' ')
         }
     }
     for(i = 0; i < selection.length; i++){
         if(!/(hide)/g.test(selection[i].className)){
-            selection[i].className += ' hide'
+            selection[i].className = (selection[i].className + ' hide').replace(/  /g,' ')
         }
     }
-    for(i = 0; i < selected.length; i++){
-        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g,'').replace(/(  )/g,' ')
+    for(i = 0; i < selected.length; ){
+        selected[i].className = selected[i].className.replace(/(yh-module-selected)/g,'').replace(/[ ]{2,n}/g,' ')
     }
     for(i = 0; i < add.length; i++){
         if(!/(hide)/g.test(add[i].className)){
-            add[i].className += ' hide'
+            add[i].className = (add[i].className + ' hide').replace(/(  )/g,' ')
         }
     }
 }

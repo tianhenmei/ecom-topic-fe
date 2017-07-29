@@ -25,3 +25,8 @@ body {
     width:100%;
     overflow-x:hidden;
 }
+
+[yh-editor-content]{
+    width:100%;
+    overflow-x:hidden;
+}

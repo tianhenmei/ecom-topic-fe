@@ -14,7 +14,7 @@
             <li id="lookH5"><span class="yh-lib-icon"></span>H5预览</li>
         </ul>
         <div yh-editor-content ref="yh-editor-content">
-            <div v-for="(element,index) in elements" :is="element.module" 
+            <div v-for="(element,index) in elements" :is="element.module"
                 :props="element.props"
                 :path="element.path"></div>
         </div>
@@ -299,6 +299,110 @@
                 this.$store.commit('addElement',elements)
                 this.initStatus = true
             },
+            loadComponentEvent(name,path,coltype,callback){
+                import(/* webpackChunkName:name */'../components/'+path+'/index.vue')
+                // import(/* webpackChunkName:name */'http://localhost:9000/dist/editorPC/components/'+name+'.js')
+                    .then(CompanyPositionStyle => {
+                        components[name] = CompanyPositionStyle
+                        callback(name,path,coltype)
+                    })
+                    .catch(function(err) {
+                        console.log('Failed to load: '+path, err);
+                    });
+            },
+            loadComponentCallBack(name,path,coltype){
+                let status = true,
+                    ignorestatus = '',
+                    ischild = '',
+                    length = 0,
+                    elem = document.getElementsByClassName('setting')[0],
+                    elemID = '',
+                    yh_module = '',
+                    newID = '',
+                    self = this
+                if(elem){
+                    elemID = elem.getAttribute('id')
+                    yh_module = elem.getAttribute('yh-module')
+                    switch(yh_module){
+                        case 'List_style1':
+                            length = getChildById(elem,elemID+'-content').children.length
+                            if(length == 0){
+                                status = false
+                                ignorestatus = 'ignorestatus',
+                                ischild = 'ischild'
+                            }
+                            break
+                        case 'Block_style1':
+                        case 'Block_style2':
+                        case 'Block_style3':
+                        case 'Block_style4':
+                        case 'Row_style1':
+                            status = false
+                            ignorestatus = '',
+                            ischild = 'ischild'
+                            break
+                        default:
+                            break
+                    }
+                }
+                newID = 'element'+self.count
+                self.$store.commit('changeCount')
+                if(status){
+                    self.$store.commit('addElement',{
+                        id:newID,
+                        'yh-module':name,
+                        module:components[name],
+                        path:'elements.index',
+                        parentmodule:'',
+                        props:components[name].initCtor({
+                            id:newID
+                        },this,components)
+                    })
+                }else{  
+                    // 给容器组件添加子组件，注：当前被选中的容器不一定就是最外层的容器
+                    // elem 为当前被选中的容器，可通过一层层往上查找带有属性 yh-module 的元素找到最外层
+                    // 但是由于选中的elem的yh-path就包含父级，所以没必要查找了
+                    // let parents = getParentsByAttr(elem,'yh-module'),
+                    //     parentPathArr = [],
+                    //     parentPath = '',
+                    //     i = 0
+                    // for(i = parents.length - 1 ; i >= 0; i-- ){
+                    //     parentPathArr.push(parents[i].getAttribute('yh-path'))
+                    // }
+                    // parentPath = parentPathArr.join('.')
+                    let parentPath = elem.getAttribute('yh-path')
+                    switch(coltype){
+                        case 'setListCol':
+                            // 给父级添加子级 e.target.getAttribute('setListCol') == 'setListCol'  // coltype
+                            let prompt = document.getElementById('yh-edit-prompt')
+                            this.currentChildData.parentID = elemID
+                            this.currentChildData.id = newID
+                            this.currentChildData['yh-module'] = name
+                            this.currentChildData.parentPath = parentPath
+                            this.currentChildData.path = 'props.elements.cindex'
+                            this.currentChildData.parentmodule = yh_module
+                            this.currentChildData.ignorestatus = ignorestatus
+                            this.currentChildData.ischild = ischild
+                            prompt.className = prompt.className.replace(/(hide)/g,'').replace(/(  )/g,' ')
+                            break
+                        default:
+                            this.$store.commit('addChildElement',{
+                                id:newID,
+                                'yh-module':name,
+                                module:components[name],
+                                parentPath:parentPath,
+                                path:'props.elements.cindex',
+                                parentmodule:yh_module,
+                                props:components[name].initCtor({
+                                    id:newID,
+                                    ignorestatus:ignorestatus,
+                                    ischild:ischild
+                                },this,components)
+                            })
+                            break;
+                    }
+                }
+            },
             addComponents(e){
                 let self = this,
                     target = getParentByAttr(e.target,'yh-module-name'),
@@ -310,102 +414,18 @@
                 if(this.includes.indexOf(name) == -1){
                     this.includes.push(name)
                 }
-                import(/* webpackChunkName:name */'../components/'+path+'/index.vue')
-                // import(/* webpackChunkName:name */'http://localhost:9000/dist/editorPC/components/'+name+'.js')
-                    .then(CompanyPositionStyle => {
-                        components[name] = CompanyPositionStyle
-                        let status = true,
-                            ignorestatus = '',
-                            ischild = '',
-                            length = 0,
-                            elem = document.getElementsByClassName('setting')[0],
-                            elemID = '',
-                            yh_module = ''
-                        if(elem){
-                            elemID = elem.getAttribute('id')
-                            yh_module = elem.getAttribute('yh-module')
-                            switch(yh_module){
-                                case 'List_style1':
-                                    length = getChildById(elem,elemID+'-content').children.length
-                                    if(length == 0){
-                                        status = false
-                                        ignorestatus = 'ignorestatus',
-                                        ischild = 'ischild'
-                                    }
-                                    break
-                                case 'Block_style1':
-                                case 'Block_style2':
-                                case 'Block_style3':
-                                case 'Block_style4':
-                                case 'Row_style1':
-                                    status = false
-                                    ignorestatus = '',
-                                    ischild = 'ischild'
-                                    break
-                                default:
-                                    break
-                            }
-                        }
-                        if(status){
-                            self.$store.commit('addElement',{
-                                id:'element'+self.count,
-                                'yh-module':name,
-                                module:CompanyPositionStyle,
-                                path:'elements.index',
-                                parentmodule:'',
-                                props:components[name].initCtor({
-                                    id:'element'+self.count
-                                })
-                            })
-                        }else{  
-                            // 给容器组件添加子组件，注：当前被选中的容器不一定就是最外层的容器
-                            // elem 为当前被选中的容器，可通过一层层往上查找带有属性 yh-module 的元素找到最外层
-                            // 但是由于选中的elem的yh-path就包含父级，所以没必要查找了
-                            // let parents = getParentsByAttr(elem,'yh-module'),
-                            //     parentPathArr = [],
-                            //     parentPath = '',
-                            //     i = 0
-                            // for(i = parents.length - 1 ; i >= 0; i-- ){
-                            //     parentPathArr.push(parents[i].getAttribute('yh-path'))
-                            // }
-                            // parentPath = parentPathArr.join('.')
-                            let parentPath = elem.getAttribute('yh-path')
-                            switch(coltype){
-                                case 'setListCol':
-                                    // 给父级添加子级 e.target.getAttribute('setListCol') == 'setListCol'  // coltype
-                                    let prompt = document.getElementById('yh-edit-prompt')
-                                    this.currentChildData.parentID = elemID
-                                    this.currentChildData.id = 'element'+self.count
-                                    this.currentChildData['yh-module'] = name
-                                    this.currentChildData.parentPath = parentPath
-                                    this.currentChildData.path = 'props.elements.cindex'
-                                    this.currentChildData.parentmodule = yh_module
-                                    this.currentChildData.ignorestatus = ignorestatus
-                                    this.currentChildData.ischild = ischild
-                                    prompt.className = prompt.className.replace(/(hide)/g,'').replace(/(  )/g,' ')
-                                    break
-                                default:
-                                    this.$store.commit('addChildElement',{
-                                        id:'element'+self.count,
-                                        'yh-module':name,
-                                        module:components[name],
-                                        parentPath:parentPath,
-                                        path:'props.elements.cindex',
-                                        parentmodule:yh_module,
-                                        props:components[name].initCtor({
-                                            id:'element'+self.count,
-                                            ignorestatus:ignorestatus,
-                                            ischild:ischild
-                                        })
-                                    })
-                                    break;
-                            }
-                        }
-                        self.$store.commit('changeCount')
-                    })
-                    .catch(function(err) {
-                        console.log('Failed to load: '+path, err);
-                    });
+                switch(name){
+                    case 'Block_style2':
+                    case 'Block_style3':
+                    case 'Block_style4':
+                        this.loadComponentEvent('Block_style1','Block/style1','',function(){
+                            self.loadComponentEvent(name,path,coltype,self.loadComponentCallBack)
+                        })
+                        break
+                    default:
+                        this.loadComponentEvent(name,path,coltype,this.loadComponentCallBack)
+                        break
+                }
             },
             setFirstChild(){
                 // 第一次添加 需设置 data.childmodule.value = name

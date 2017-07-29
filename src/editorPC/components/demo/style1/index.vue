@@ -45,7 +45,7 @@
             background_background_color:{
                 cn:'背景颜色',
                 en:'background_background_color',
-                value:'#00c99b',
+                value:'transparent',
                 type:'color'  
                     // color(默认)   
                     // image（背景图(mold="bg")、图片(mold="src")）  
@@ -55,6 +55,7 @@
                     // uplist(内部多选项设置)
                     // request （数据请求：公司ID、职位ID、问题ID、回答ID等）
                     // options 选项
+                    // none  不编辑的属性
                 // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
                 // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
                 // effect:['',''] 当前属性会影响的属性，如css.overflow

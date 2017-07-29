@@ -344,7 +344,7 @@ function render (filename,filePath,pagedata,data,renderer) {
 		if (err) {
 			return handleError(err)
         }
-		writeFile(filePath,html)
+		writeFile(filePath,html.replace(/(http:\/\/localhost:9000\/)/g,'/'))
 		if (!isProd) {
 			console.log(`whole request: ${Date.now() - s}ms`)
 		}

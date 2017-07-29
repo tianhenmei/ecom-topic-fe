@@ -28,21 +28,12 @@
             let hasdef = false,
                 def = 'auto',
                 type = 'number'
-            switch(this.options.en){
-                case 'width':
-                    hasdef = true
-                    if(this.parent[this.options.en].value == 'auto'){
-                        type = 'text'
-                        def = document.documentElement.clientWidth
-                    }
-                    break
-                case 'height':
-                    hasdef = true
-                    if(this.parent[this.options.en].value == 'auto'){
-                        type = 'text'
-                        def = 100
-                    }
-                    break
+            if(this.parent[this.options.en].hasOwnProperty('ivalue')){
+                hasdef = true
+                if(this.parent[this.options.en].value == 'auto'){
+                    type = 'text'
+                    def = this.parent[this.options.en].ivalue
+                }
             }
             return {
                 optionsData:{
