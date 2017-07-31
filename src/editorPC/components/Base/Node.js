@@ -97,11 +97,9 @@ Node.updateData = (data,baseData) =>{
                         if(data[i][j]){
                             newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]))
                             newdata[i][j].value = data[i][j].value
-                            // if(!status){ // 非对象非数组
-                                
-                            // }else{
-
-                            // }
+                            if(data[i][j].hasOwnProperty('status')){
+                                newdata[i][j].status = data[i][j].status
+                            }
                         }else{
                             newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]))
                         }

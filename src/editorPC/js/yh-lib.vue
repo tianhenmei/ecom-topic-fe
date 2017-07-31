@@ -22,7 +22,7 @@
             <li class="content">
                 <ul class="clearfix">
                     <li class="li_block yh-lib-parent" @click.stop.prevent="toggleListEvent">
-                        <p><span class="yh-lib-icon"></span>布局</p>
+                        <p><span class="yh-lib-icon"></span>容器</p>
                         <div class="yh-lib-components hide">
                             <div class="cpElement clearfix">
                                 <p class="title twoTitle">列</p>
@@ -39,13 +39,25 @@
                                     <li yh-module-name="Row style1" @click.stop.prevent="addComponents">两行</li>
                                 </ul>
                             </div>
+                            <div class="cpElement clearfix">
+                                <p class="title twoToOneTitle">列表</p>
+                                <ul class="yh-lib-subcomponents">
+                                    <li class="List style1" yh-module-name="List style1" @click.stop.prevent="addComponents">列表</li>
+                                </ul>
+                            </div>
+                            <div class="cpElement clearfix">
+                                <p class="title twoToOneTitle">轮播</p>
+                                <ul class="yh-lib-subcomponents">
+                                    <li class="Slider style1" yh-module-name="Slider style1" @click.stop.prevent="addComponents">轮播</li>
+                                </ul>
+                            </div>
                         </div>
                     </li>
-                    <li class="li_list yh-lib-parent">
+                    <!--<li class="li_list yh-lib-parent">
                         <p class="List style1" yh-module-name="List style1" @click.stop.prevent="addComponents">
                             <span class="yh-lib-icon"></span>列表
                         </p>
-                    </li>
+                    </li>-->
                 </ul>
             </li>
         </ul>
@@ -658,6 +670,16 @@
         white-space: normal;
         text-align: center;
     }
+    .yh-lib .yh-lib-components > div > p.oneTitle {
+        padding: 0 5px;
+        height: 32.5px;
+        line-height: 32.5px;
+    }
+    .yh-lib .yh-lib-components > div > p.twoToOneTitle {
+        height: 29.5px;
+        line-height: 14px;
+        padding: 3px 5px 0;
+    }
     .yh-lib .yh-lib-components > div > p.twoTitle {
         padding: 14px 5px 0;
     }
@@ -713,7 +735,7 @@
         float: left;
     }
     .yh-lib .yh-lib-layout .content {
-        width:80px;
+        width:40px;
     }
     .yh-lib .yh-lib-layout .content > ul > li {
         width:40px;

@@ -182,6 +182,8 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -200,6 +202,42 @@ exports.default = {
                 default:
                     return 'url(' + src + ')';
             }
+        },
+        setLayerClass: function setLayerClass() {
+            return this.props.h5css.layer_position.value;
+        },
+        setLayerStyle: function setLayerStyle() {
+            var style = {
+                backgroundColor: this.props.h5css.background_background_color.value,
+                backgroundImage: this.setImage,
+                backgroundRepeat: this.props.h5css.background_background_repeat.value,
+                minWidth: this.getRemValue(this.props.h5css.background_min_width.value) + 'rem',
+                minHeight: this.getRemValue(this.props.h5css.background_min_height.value) + 'rem'
+            };
+            switch (this.props.h5css.layer_position.value) {
+                case 'yh-block-fixed':
+                case 'yh-block-absolute':
+                    style.marginLeft = this.getRemValue(this.props.h5css.layer_margin_left.value) + 'rem';
+                    style.top = this.getRemValue(this.props.h5css.layer_top.value) + 'rem';
+                    break;
+                case 'yh-block-fixed-bottom':
+                    style.marginLeft = this.getRemValue(this.props.h5css.layer_margin_left.value) + 'rem';
+                    style.bottom = this.getRemValue(this.props.h5css.layer_bottom.value) + 'rem';
+                    break;
+                case 'yh-block-fixed-left':
+                    style.left = this.getRemValue(this.props.h5css.layer_left.value) + 'rem';
+                    style.top = this.getRemValue(this.props.h5css.layer_top.value) + 'rem';
+                    break;
+                case 'yh-block-fixed-right':
+                    style.right = this.getRemValue(this.props.h5css.layer_right.value) + 'rem';
+                    style.top = this.getRemValue(this.props.h5css.layer_top.value) + 'rem';
+                    break;
+                case 'yh-block-fixed-bright':
+                    style.right = this.getRemValue(this.props.h5css.layer_right.value) + 'rem';
+                    style.bottom = this.getRemValue(this.props.h5css.layer_bottom.value) + 'rem';
+                    break;
+            }
+            return style;
         }
     },
     mounted: function mounted() {},
@@ -316,12 +354,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "block-style3 clearfix",
-    style: ({
-      backgroundColor: _vm.props.h5css.background_background_color.value,
-      backgroundImage: _vm.setImage,
-      backgroundRepeat: _vm.props.h5css.background_background_repeat.value,
-      minHeight: _vm.getRemValue(_vm.props.h5css.background_min_height.value) + 'rem'
-    }),
+    class: _vm.setLayerClass,
+    style: (_vm.setLayerStyle),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Block_style3",
@@ -337,8 +371,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "yh-block-content clearfix",
     class: {
-      'yh-block-init': !_vm.props.elements.length
+      'yh-block-init': !_vm.props.elements.length,
+        'yh-block-absolute': _vm.props.h5css.content_position.value == 'yh-block-absolute'
     },
+    style: ({
+      marginLeft: _vm.props.h5css.content_position.value == 'yh-block-absolute' ? _vm.getRemValue(_vm.props.h5css.content_margin_left.value) + 'rem' : '',
+      top: _vm.props.h5css.content_position.value == 'yh-block-absolute' ? _vm.getRemValue(_vm.props.h5css.content_top.value) + 'rem' : '0'
+    }),
     attrs: {
       "id": _vm.props.id + '-content'
     }
@@ -410,7 +449,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".block-style3{background-position:center top;background-size:100%;text-align:center;font-size:0;font-family:Arial;letter-spacing:-3px;white-space:nowrap}.block-style3>.yh-block-content{display:inline-block;letter-spacing:0;font-size:12px;vertical-align:top}.block-style3>.yh-block-content>div{float:left}.block-style3>.yh-block-content>.block-style1{width:auto;margin:0 auto;overflow:hidden}", ""]);
+exports.push([module.i, ".block-style3{background-position:center top;background-size:100%;text-align:center;font-size:0;font-family:Arial;letter-spacing:-3px;white-space:nowrap;position:relative}.block-style3>.yh-block-content{display:inline-block;letter-spacing:0;font-size:12px;vertical-align:top}.block-style3>.yh-block-content>div{float:left}.block-style3>.yh-block-content>.block-style1{width:auto;margin:0 auto;overflow:hidden}.block-style3 .yh-block-content.yh-block-absolute{position:absolute;left:50%;top:0}.block-style3.yh-block-fixed{position:absolute;left:50%;top:0}.block-style3.yh-block-fixed{position:fixed;left:50%;top:0;z-index:100}.block-style3.yh-block-fixed-bottom{position:fixed;left:50%;bottom:0;z-index:100}.block-style3.yh-block-fixed-left{position:fixed;left:0;top:0;z-index:100}.block-style3.yh-block-fixed-right{position:fixed;right:0;top:0;z-index:100}.block-style3.yh-block-fixed-bright{position:fixed;right:0;bottom:0;z-index:100}.block-style3.yh-block-absolute{position:absolute;left:50%;top:0}", ""]);
 
 // exports
 

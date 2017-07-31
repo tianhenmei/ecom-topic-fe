@@ -579,11 +579,9 @@ Node.updateData = function (data, baseData) {
                         if (data[i][j]) {
                             newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]));
                             newdata[i][j].value = data[i][j].value;
-                            // if(!status){ // 非对象非数组
-
-                            // }else{
-
-                            // }
+                            if (data[i][j].hasOwnProperty('status')) {
+                                newdata[i][j].status = data[i][j].status;
+                            }
                         } else {
                             newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]));
                         }
@@ -2715,6 +2713,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
 
 var baseData = {
     id: '',
@@ -2780,6 +2779,121 @@ var baseData = {
                 cn: '纵向重复',
                 value: 'repeat-y'
             }]
+        },
+        // 外层定位
+        layer_position: {
+            en: 'layer_position',
+            cn: '父级定位',
+            value: '', // yh-block-fixed
+            type: 'options',
+            options: [{
+                cn: '不定位',
+                value: ''
+            }, {
+                cn: '自定义固定定位',
+                value: 'yh-block-fixed'
+            }, {
+                cn: '固定在底部',
+                value: 'yh-block-fixed-bottom'
+            }, {
+                cn: '固定在最左侧',
+                value: 'yh-block-fixed-left'
+            }, {
+                cn: '固定在最右侧',
+                value: 'yh-block-fixed-right'
+            }, {
+                cn: '固定在右下角',
+                value: 'yh-block-fixed-bright'
+            }, {
+                cn: '绝对定位',
+                value: 'yh-block-absolute'
+            }],
+            parent: 'css',
+            effect: ['css.layer_margin_left', 'css.layer_left', 'css.layer_top', 'css.layer_right', 'css.layer_bottom']
+        },
+        layer_margin_left: {
+            cn: '左',
+            en: 'layer_margin_left',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-fixed", "yh-block-absolute", "yh-block-fixed-bottom"],
+            status: false
+        },
+        layer_left: {
+            cn: '左',
+            en: 'layer_left',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-fixed-left"],
+            status: false
+        },
+        layer_top: {
+            cn: '上',
+            en: 'layer_top',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-fixed", "yh-block-fixed-left", "yh-block-absolute", "yh-block-fixed-right"],
+            status: false
+        },
+        layer_right: {
+            cn: '右',
+            en: 'layer_right',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-fixed-right", "yh-block-fixed-bright"],
+            status: false
+        },
+        layer_bottom: {
+            cn: '下',
+            en: 'layer_bottom',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-fixed-bottom", "yh-block-fixed-bright"],
+            status: false
+        },
+        // 内容定位
+        content_position: {
+            en: 'content_position',
+            cn: '内容定位',
+            value: '', // yh-block-absolute
+            type: 'options',
+            options: [{
+                cn: '不定位',
+                value: ''
+            }, {
+                cn: '定位',
+                value: 'yh-block-absolute'
+            }],
+            parent: 'css',
+            effect: ['css.content_margin_left', 'css.content_top']
+        },
+        content_margin_left: {
+            cn: '左',
+            en: 'content_margin_left',
+            value: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-absolute"],
+            status: false
+        },
+        content_top: {
+            cn: '上',
+            en: 'content_top',
+            value: 0,
+            type: 'number',
+            parent: 'css',
+            condition: ["yh-block-absolute"],
+            status: false
         }
     },
     h5css: {
@@ -2798,6 +2912,15 @@ var baseData = {
             value: 'auto',
             default: 'auto',
             ivalue: 100,
+            type: 'none',
+            parent: 'h5css'
+        },
+        background_min_width: {
+            cn: '最小宽度',
+            en: 'background_min_width',
+            value: 0,
+            default: 0,
+            ivalue: 0,
             type: 'none',
             parent: 'h5css'
         },
@@ -2844,6 +2967,121 @@ var baseData = {
                 cn: '纵向重复',
                 value: 'repeat-y'
             }]
+        },
+        // 外层定位
+        layer_position: {
+            en: 'layer_position',
+            cn: '父级定位',
+            value: '', // yh-block-fixed
+            type: 'options',
+            options: [{
+                cn: '不定位',
+                value: ''
+            }, {
+                cn: '自定义固定定位',
+                value: 'yh-block-fixed'
+            }, {
+                cn: '固定在底部',
+                value: 'yh-block-fixed-bottom'
+            }, {
+                cn: '固定在最左侧',
+                value: 'yh-block-fixed-left'
+            }, {
+                cn: '固定在最右侧',
+                value: 'yh-block-fixed-right'
+            }, {
+                cn: '固定在右下角',
+                value: 'yh-block-fixed-bright'
+            }, {
+                cn: '绝对定位',
+                value: 'yh-block-absolute'
+            }],
+            parent: 'h5css',
+            effect: ['h5css.layer_margin_left', 'h5css.layer_left', 'h5css.layer_top', 'h5css.layer_right', 'h5css.layer_bottom']
+        },
+        layer_margin_left: {
+            cn: '左',
+            en: 'layer_margin_left',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-fixed", "yh-block-absolute", "yh-block-fixed-bottom"],
+            status: false
+        },
+        layer_left: {
+            cn: '左',
+            en: 'layer_left',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-fixed-left"],
+            status: false
+        },
+        layer_top: {
+            cn: '上',
+            en: 'layer_top',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-fixed", "yh-block-fixed-left", "yh-block-absolute", "yh-block-fixed-right"],
+            status: false
+        },
+        layer_right: {
+            cn: '右',
+            en: 'layer_right',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-fixed-right", "yh-block-fixed-bright"],
+            status: false
+        },
+        layer_bottom: {
+            cn: '下',
+            en: 'layer_bottom',
+            value: 0,
+            default: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-fixed-bottom", "yh-block-fixed-bright"],
+            status: false
+        },
+        // 内容定位
+        content_position: {
+            en: 'content_position',
+            cn: '内容定位',
+            value: '', // yh-block-absolute
+            type: 'options',
+            options: [{
+                cn: '不定位',
+                value: ''
+            }, {
+                cn: '定位',
+                value: 'yh-block-absolute'
+            }],
+            parent: 'h5css',
+            effect: ['h5css.content_margin_left', 'h5css.content_top']
+        },
+        content_margin_left: {
+            cn: '左',
+            en: 'content_margin_left',
+            value: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-absolute"],
+            status: false
+        },
+        content_top: {
+            cn: '上',
+            en: 'content_top',
+            value: 0,
+            type: 'number',
+            parent: 'h5css',
+            condition: ["yh-block-absolute"],
+            status: false
         }
     },
     common: {},
@@ -2893,6 +3131,41 @@ exports.default = {
                 default:
                     return 'url(' + src + ')';
             }
+        },
+        setLayerClass: function setLayerClass() {
+            return this.props.css.layer_position.value;
+        },
+        setLayerStyle: function setLayerStyle() {
+            var style = {
+                backgroundColor: this.props.css.background_background_color.value,
+                backgroundImage: this.setImage,
+                backgroundRepeat: this.props.css.background_background_repeat.value,
+                minHeight: this.props.css.background_min_height.value + (this.props.css.background_min_height.value == 'auto' ? '' : 'px')
+            };
+            switch (this.props.css.layer_position.value) {
+                case 'yh-block-fixed':
+                case 'yh-block-absolute':
+                    style.marginLeft = this.props.css.layer_margin_left.value + 'px';
+                    style.top = this.props.css.layer_top.value + 'px';
+                    break;
+                case 'yh-block-fixed-bottom':
+                    style.marginLeft = this.props.css.layer_margin_left.value + 'px';
+                    style.bottom = this.props.css.layer_bottom.value + 'px';
+                    break;
+                case 'yh-block-fixed-left':
+                    style.left = this.props.css.layer_left.value + 'px';
+                    style.top = this.props.css.layer_top.value + 'px';
+                    break;
+                case 'yh-block-fixed-right':
+                    style.right = this.props.css.layer_right.value + 'px';
+                    style.top = this.props.css.layer_top.value + 'px';
+                    break;
+                case 'yh-block-fixed-bright':
+                    style.right = this.props.css.layer_right.value + 'px';
+                    style.bottom = this.props.css.layer_bottom.value + 'px';
+                    break;
+            }
+            return style;
         }
     },
     mounted: function mounted() {},
@@ -2977,12 +3250,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "block-style1",
-    style: ({
-      backgroundColor: _vm.props.css.background_background_color.value,
-      backgroundImage: _vm.setImage,
-      backgroundRepeat: _vm.props.css.background_background_repeat.value,
-      minHeight: _vm.props.css.background_min_height.value + (_vm.props.css.background_min_height.value == 'auto' ? '' : 'px')
-    }),
+    class: _vm.setLayerClass,
+    style: (_vm.setLayerStyle),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Block_style1",
@@ -2998,10 +3267,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "yh-block-content clearfix",
     class: {
-      'yh-block-init': !_vm.props.elements.length
+      'yh-block-init': !_vm.props.elements.length,
+        'yh-block-absolute': _vm.props.css.content_position.value == 'yh-block-absolute'
     },
     style: ({
-      width: _vm.props.css.background_width.value + (_vm.props.css.background_width.value == 'auto' ? '' : 'px')
+      width: _vm.props.css.background_width.value + (_vm.props.css.background_width.value == 'auto' ? '' : 'px'),
+      marginLeft: _vm.props.css.content_position.value == 'yh-block-absolute' ? _vm.props.css.content_margin_left.value + 'px' : '',
+      top: _vm.props.css.content_position.value == 'yh-block-absolute' ? _vm.props.css.content_top.value + 'px' : '0px'
     }),
     attrs: {
       "id": _vm.props.id + '-content'
@@ -3456,6 +3728,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     components: {
@@ -3543,29 +3825,10 @@ exports.default = {
             return true;
         },
         setDisplayStatus: function setDisplayStatus(one) {
-            return true;
+            // return true
             if (one.condition) {
                 // 条件判断
-                var data = this,
-                    status = /(!=)/g.test(one.condition),
-                    conditionArray = status ? one.condition.split(/(!=)/g) : one.condition.split(/(==)/g),
-                    dataPath = conditionArray[0],
-                    condition = conditionArray[1].trim(),
-                    pathArray = dataPath.split(/[. ]/g),
-                    i = 0;
-                for (i = 0; i < pathArray.length; i++) {
-                    if (pathArray[i]) {
-                        data = this[pathArray[i].trim()];
-                    }
-                }
-
-                if (status && data != condition) {
-                    return true;
-                } else if (!status && data == condition) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return one.status;
             } else {
                 return true;
             }
@@ -3653,7 +3916,7 @@ exports.default = {
         setBackgroundImageValue: function setBackgroundImageValue(src, data) {
             var classname = this.options.en.split('_'),
                 name = '',
-                setArr = ['min_height'],
+                setArr = ['min_width', 'min_height'],
                 // 'width','height',
             list = [],
                 i = 0,
@@ -4998,7 +5261,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".block-style1{background-position:center top}.block-style1 .yh-block-content{margin:0 auto}", ""]);
+exports.push([module.i, ".block-style1{background-position:center top;position:relative}.block-style1 .yh-block-content{margin:0 auto}.block-style1 .yh-block-content.yh-block-absolute{position:absolute;left:50%;top:0}.block-style1.yh-block-fixed{position:fixed;left:50%;top:0;z-index:100}.block-style1.yh-block-fixed-bottom{position:fixed;left:50%;bottom:0;z-index:100}.block-style1.yh-block-fixed-left{position:fixed;left:0;top:0;z-index:100}.block-style1.yh-block-fixed-right{position:fixed;right:0;top:0;z-index:100}.block-style1.yh-block-fixed-bright{position:fixed;right:0;bottom:0;z-index:100}.block-style1.yh-block-absolute{position:absolute;left:50%;top:0}", ""]);
 
 // exports
 
@@ -5439,8 +5702,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5464,8 +5727,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5498,8 +5761,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5523,8 +5786,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5557,8 +5820,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one) && _vm.getChildSetStatus(one)),
-        expression: "setDisplayStatus(one) && getChildSetStatus(one)"
+        value: ((!one.condition || (one.condition && one.status)) && _vm.getChildSetStatus(one)),
+        expression: "(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
       }],
       tag: "div",
       attrs: {
@@ -5584,8 +5847,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {

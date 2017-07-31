@@ -34,7 +34,7 @@
             setBackgroundImageValue(src,data){
                 let classname = this.options.en.split('_'),
                     name = '',
-                    setArr = ['min_height'],  // 'width','height',
+                    setArr = ['min_width','min_height'],  // 'width','height',
                     list = [],
                     i = 0,
                     parentName = this.options.parent ? this.options.parent : 'css',

@@ -389,6 +389,48 @@ let store = new Vuex.Store({
             }
             store.commit('getElemInfo',elem)
         },
+        setConditionStatus:(state,data) => {
+            if(data.child.effect){  //effect
+                let j = 0,t = 0,
+                    temp = null,
+                    arr = [],
+                    status = false,
+                    dataPath = '',
+                    condition = '',
+                    pathArray = [],
+                    current = null
+                for(j = 0; j < data.child.effect.length; j++){
+                    // temp 表示会被影响的元素
+                    // current 表示当前元素即data.child
+                    temp = data.parent
+                    current = data.parent
+                    arr = data.child.effect[j].split(/[.]/g)
+                    for(t = 0; t < arr.length; t++){
+                        if(arr[t]){
+                            temp = temp[arr[t]]
+                        }
+                    }
+                    temp.status = false
+                    for(t = 0; t < temp.condition.length; t++){
+                        if(data.child.value == temp.condition[t]){
+                            temp.status = true
+                            break
+                        }
+                    }
+                    // status = /(!=)/g.test(temp.condition)
+                    // arr = status ? temp.condition.split(/(!=)/g) : temp.condition.split(/(==)/g)
+                    // dataPath = arr[0].trim()
+                    // condition = arr[2].trim().replace(/"/g,'')
+                    // if(status && data.child.value != condition){
+                    //     temp.status = true
+                    // }else if(!status && data.child.value == condition){
+                    //     temp.status = true
+                    // }else {
+                    //     temp.status = false
+                    // }
+                }
+            }
+        },
         /**************
          * payload:数组，数组成员如下
          * parent: 当前style所在父级
@@ -451,6 +493,10 @@ let store = new Vuex.Store({
                                 if(payload.cnvalue){
                                     elemData.props.elements[i].props[payload.stylename].cnvalue = payload.cnvalue
                                 }
+                                store.commit('setConditionStatus',{
+                                    parent:elemData.props.elements[i].props,
+                                    child:elemData.props.elements[i].props[payload.stylename]
+                                })
                             }
                         }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
                             for(i = 0; i < elemData.props.elements.length; i++){
@@ -459,18 +505,10 @@ let store = new Vuex.Store({
                                 if(payload.cnvalue){
                                     one.cnvalue = payload.cnvalue
                                 }
-                                // if(one.effect){  //effect
-                                //     for(j = 0; j < one.effect.length; j++){
-                                //         temp = elemData.props.elements[i].props
-                                //         arr = one.effect[j].split(/[.]/g)
-                                //         for(t = 0; t < arr.length; t++){
-                                //             if(arr[t]){
-                                //                 temp = temp[arr[t]]
-                                //             }
-                                //         }
-                                //         temp.val
-                                //     }
-                                // }
+                                store.commit('setConditionStatus',{
+                                    parent:elemData.props.elements[i].props,
+                                    child:one
+                                })
                             }
                         }else{
                             for(i = 0; i < elemData.props.elements.length; i++){
@@ -478,6 +516,10 @@ let store = new Vuex.Store({
                                 if(payload.cnvalue){
                                     elemData.props.elements[i].props[payload.parent][payload.index][payload.stylename].cnvalue = payload.cnvalue
                                 }
+                                store.commit('setConditionStatus',{
+                                    parent:elemData.props.elements[i].props,
+                                    child:elemData.props.elements[i].props[payload.parent][payload.index]
+                                })
                             }
                         }
                     }
@@ -488,11 +530,19 @@ let store = new Vuex.Store({
                         if(payload.cnvalue){
                             elemData.props[payload.stylename].cnvalue = payload.cnvalue
                         }
+                        store.commit('setConditionStatus',{
+                            parent:elemData.props,
+                            child:elemData.props[payload.stylename]
+                        })
                     }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
                         elemData.props[payload.parent][payload.stylename].value = payload.actualValue
                         if(payload.cnvalue){
                             elemData.props[payload.parent][payload.stylename].cnvalue = payload.cnvalue
                         }
+                        store.commit('setConditionStatus',{
+                            parent:elemData.props,
+                            child:elemData.props[payload.parent][payload.stylename]
+                        })
                     }else{
                         let data = elemData.props,
                             parent = payload.parent.split(/[.]/g)
@@ -505,6 +555,10 @@ let store = new Vuex.Store({
                         if(payload.cnvalue){
                             data[payload.index][payload.stylename].cnvalue = payload.cnvalue
                         }
+                        store.commit('setConditionStatus',{
+                            parent:elemData.props,
+                            child:data[payload.index][payload.stylename]
+                        })
                     }
                     break
             }
@@ -624,6 +678,10 @@ let store = new Vuex.Store({
                                 if(payload.list[i].cnvalue){
                                     one.cnvalue = payload.list[i].cnvalue
                                 }
+                                store.commit('setConditionStatus',{
+                                    parent:elemData.props.elements[j].props,
+                                    child:one
+                                })
                             }
                         }else{
                             for(j = 0; j < elemData.props.elements.length; j++){
@@ -631,6 +689,10 @@ let store = new Vuex.Store({
                                 if(payload.list[i].cnvalue){
                                     elemData.props.elements[j].props[payload.list[i].parent][payload.list[i].index][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
                                 }
+                                store.commit('setConditionStatus',{
+                                    parent:elemData.props.elements[j].props,
+                                    child:elemData.props.elements[j].props[payload.list[i].parent][payload.list[i].index][payload.list[i].stylename]
+                                })
                             }
                         }
                     }
@@ -642,11 +704,19 @@ let store = new Vuex.Store({
                             if(payload.list[i].cnvalue){
                                 elemData.props[payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
                             }
+                            store.commit('setConditionStatus',{
+                                parent:elemData.props,
+                                child:elemData.props[payload.list[i].stylename]
+                            })
                         }else if(payload.list[i].index == -1 || payload.list[i].index == undefined || typeof payload.list[i].index == 'string'){
                             elemData.props[payload.list[i].parent][payload.list[i].stylename].value = payload.list[i].actualValue
                             if(payload.list[i].cnvalue){
                                 elemData.props[payload.list[i].parent][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
                             }
+                            store.commit('setConditionStatus',{
+                                parent:elemData.props,
+                                child:elemData.props[payload.list[i].parent][payload.list[i].stylename]
+                            })
                         }else{
                             let data = elemData.props,
                                 parent = payload.list[i].parent.split(/[.]/g)
@@ -659,6 +729,10 @@ let store = new Vuex.Store({
                             if(payload.list[i].cnvalue){
                                 data[payload.list[i].index][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
                             }
+                            store.commit('setConditionStatus',{
+                                parent:elemData.props,
+                                child:data[payload.list[i].index][payload.list[i].stylename]
+                            })
                         }
                     }
                     break

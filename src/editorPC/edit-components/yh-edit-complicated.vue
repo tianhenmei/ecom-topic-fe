@@ -14,13 +14,16 @@
         props：包括组件的基本样式
         mold: 针对设置项图片的设置  mold="src" || mold ="bg"
         without：当前不需要那些设置，不需要为true，没有可不传
+        setDisplayStatus(one)
 -->
 <template>
     <div class="yh-edit-layer clearfix hide" :ref="elem_id+'-yh-edit-layer'">
         <yh-edit-tab :props="tabOptions">
             <div v-if="getContentStatus('css')" :slot="setContentSlot('css')" class="yh-edit-tab-content yh-edit-css clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
+                    <div v-for="one in css" :is="setModule(one)" 
+                        v-if="one.type != 'none'" 
+                        v-show="!one.condition || (one.condition && one.status)"
                         :parent="css"
                         :options="one"
                         :elem_id="elem_id"
@@ -31,7 +34,9 @@
                 <div v-else class="yh-component-set">
                     <yh-edit-uplist
                         :options="{name:'外壳基本样式'}">
-                        <div v-for="one in css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
+                        <div v-for="one in css" :is="setModule(one)" 
+                            v-if="one.type != 'none'" 
+                            v-show="!one.condition || (one.condition && one.status)"
                             :parent="css"
                             :options="one"
                             :elem_id="elem_id"
@@ -39,7 +44,8 @@
                             :path="path">
                         </div>
                     </yh-edit-uplist>
-                    <div v-for="one in elements[0].props.css" :is="setModule(one)" v-if="one.type != 'none'"
+                    <div v-for="one in elements[0].props.css" :is="setModule(one)" 
+                        v-if="one.type != 'none'"
                         :parent="elements[0].props.css"
                         :options="one"
                         ischildset="ischildset"
@@ -51,7 +57,8 @@
             </div>
             <div v-if="getContentStatus('h5css')" :slot="setContentSlot('h5css')" class="yh-edit-tab-content yh-edit-deployh5 clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
+                    <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" 
+                        v-show="!one.condition || (one.condition && one.status)"
                         :parent="h5css"
                         :options="one"
                         :elem_id="elem_id"
@@ -62,7 +69,8 @@
                 <div v-else class="yh-component-set">
                     <yh-edit-uplist
                         :options="{name:'外壳基本样式'}">
-                        <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
+                        <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" 
+                            v-show="!one.condition || (one.condition && one.status)"
                             :parent="h5css"
                             :options="one"
                             :elem_id="elem_id"
@@ -82,7 +90,8 @@
             </div>
             <div v-if="getContentStatus('data')" :slot="setContentSlot('data')" class="yh-edit-tab-content yh-edit-owndata clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
-                    <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one) && getChildSetStatus(one)"
+                    <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" 
+                        v-show="(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
                         :parent="owndata"
                         :options="one"
                         ischildset=""
@@ -95,7 +104,8 @@
                 <div v-else class="yh-component-set">
                     <yh-edit-uplist
                         :options="{name:'外壳数据设置'}">
-                        <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" v-show="setDisplayStatus(one)"
+                        <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" 
+                            v-show="!one.condition || (one.condition && one.status)"
                             :parent="owndata"
                             :options="one"
                             ischildset=""
@@ -233,28 +243,9 @@
                 return true
             },
             setDisplayStatus(one){
-                return true
+                // return true
                 if(one.condition){  // 条件判断
-                    let data = this,
-                        status = /(!=)/g.test(one.condition),
-                        conditionArray = status ? one.condition.split(/(!=)/g) : one.condition.split(/(==)/g),
-                        dataPath = conditionArray[0],
-                        condition = conditionArray[1].trim(),
-                        pathArray = dataPath.split(/[. ]/g),
-                        i = 0
-                    for(i = 0; i < pathArray.length; i++){
-                        if(pathArray[i]){
-                            data = this[pathArray[i].trim()]
-                        }
-                    }
-
-                    if(status && data != condition){
-                        return true
-                    }else if(!status && data == condition){
-                        return true
-                    }else {
-                        return false
-                    }
+                    return one.status
                 }else{
                     return true
                 }

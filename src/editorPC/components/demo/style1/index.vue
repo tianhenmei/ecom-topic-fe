@@ -57,7 +57,8 @@
                     // options 选项
                     // none  不编辑的属性
                 // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
-                // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
+                // condition:["auto",0]（条件）  通过带有effect属性的设置项查找，当其值等于"auto"或0时才会显示设置
+                // status: false | true   条件控制的状态
                 // effect:['',''] 当前属性会影响的属性，如css.overflow
                 // default:'auto',  // 默认值
                 // ivalue:100,   // 初始值

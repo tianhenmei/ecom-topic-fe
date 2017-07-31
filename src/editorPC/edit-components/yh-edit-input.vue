@@ -19,7 +19,7 @@
                 :class="{'yh-edit-value-input-long': !options.unit}"
                 :type="options.type"
                 :value="options.style[options.stylename] ? getDesignValue : (options.type == 'number' ? 0 : '')"
-                :readonly="getDefaultStatus && getDesignValue == options.default"
+                :readonly="setReadonlyStatus"
                 @click.stop.prevent="inputSelected"
                 @input="setValue"
             />
@@ -48,7 +48,7 @@
         },
         computed:{
             getDefaultStatus(){
-                return this.options.default && this.options.default != false && this.options.default != 0
+                return (!!this.options.default) && this.options.default != false && this.options.default != 0
             },
             setClassname(){
                 if(this.options.classname){
@@ -66,6 +66,12 @@
                     return this.getDesign(value)
                 }
                 return actualValue
+            },
+            setReadonlyStatus(){
+                let status = this.getDefaultStatus
+                        && this.getDesignValue == this.options.default 
+                        && Object.prototype.toString.call(this.options.default) === '[object String]'
+                return status
             },
             ...mapState({
                 // getDesignValue(state){

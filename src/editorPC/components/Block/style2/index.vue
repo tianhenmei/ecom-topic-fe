@@ -1,20 +1,21 @@
 <template>
     <div class="block-style2" 
+        :class="setLayerClass"
         :id="props.id" 
         yh-module="Block_style2"
         :ref="props.id"
         :yh-path="path"
         @click.stop="setAll"
-        :style="{backgroundColor:props.css.background_background_color.value,
-            backgroundImage:setImage,
-            backgroundRepeat:props.css.background_background_repeat.value,
-            height:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')}"
+        :style="setLayerStyle"
         yh-vessel
         >
         <div :id="props.id+'-content'" class="yh-block-content clearfix" 
-            :class="{'yh-block-init':!props.elements.length}"
+            :class="{'yh-block-init':!props.elements.length,
+            'yh-block-absolute':props.css.content_position.value == 'yh-block-absolute'}"
             :style="{
-                width:props.css.background_width.value+(props.css.background_width.value == 'auto' ? '' : 'px')}">
+                width:props.css.background_width.value+(props.css.background_width.value == 'auto' ? '' : 'px'),
+                marginLeft:props.css.content_position.value == 'yh-block-absolute' ? props.css.content_margin_left.value+'px': '',
+                top:props.css.content_position.value == 'yh-block-absolute' ? props.css.content_top.value+'px': '0px'}">
             <div v-for="(element,index) in props.elements" 
                 :is="element.module" 
                 :props="element.props"
@@ -110,6 +111,121 @@
                     cn:'纵向重复',
                     value:'repeat-y'
                 }]
+            },
+            // 外层定位
+            layer_position:{
+                en:'layer_position',
+                cn:'父级定位',
+                value:'',  // yh-block-fixed
+                type:'options',
+                options:[{
+                    cn:'不定位',
+                    value:''
+                },{
+                    cn:'自定义固定定位',
+                    value:'yh-block-fixed'
+                },{
+                    cn:'固定在底部',
+                    value:'yh-block-fixed-bottom'
+                },{
+                    cn:'固定在最左侧',
+                    value:'yh-block-fixed-left'
+                },{
+                    cn:'固定在最右侧',
+                    value:'yh-block-fixed-right'
+                },{
+                    cn:'固定在右下角',
+                    value:'yh-block-fixed-bright'
+                },{
+                    cn:'绝对定位',
+                    value:'yh-block-absolute'
+                }],
+                parent:'css',
+                effect:['css.layer_margin_left','css.layer_left','css.layer_top','css.layer_right','css.layer_bottom']
+            },
+            layer_margin_left:{
+                cn:'左',
+                en:'layer_margin_left',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-fixed","yh-block-absolute","yh-block-fixed-bottom"],
+                status:false
+            },
+            layer_left:{
+                cn:'左',
+                en:'layer_left',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-fixed-left"],
+                status:false
+            },
+            layer_top:{
+                cn:'上',
+                en:'layer_top',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-fixed","yh-block-fixed-left","yh-block-absolute","yh-block-fixed-right"],
+                status:false
+            },
+            layer_right:{
+                cn:'右',
+                en:'layer_right',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-fixed-right","yh-block-fixed-bright"],
+                status:false
+            },
+            layer_bottom:{
+                cn:'下',
+                en:'layer_bottom',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-fixed-bottom","yh-block-fixed-bright"],
+                status:false
+            },
+            // 内容定位
+            content_position:{
+                en:'content_position',
+                cn:'内容定位',
+                value:'',  // yh-block-absolute
+                type:'options',
+                options:[{
+                    cn:'不定位',
+                    value:''
+                },{
+                    cn:'定位',
+                    value:'yh-block-absolute'
+                }],
+                parent:'css',
+                effect:['css.content_margin_left','css.content_top']
+            },
+            content_margin_left:{
+                cn:'左',
+                en:'content_margin_left',
+                value:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-absolute"],
+                status:false
+            },
+            content_top:{
+                cn:'上',
+                en:'content_top',
+                value:0,
+                type:'number',
+                parent:'css',
+                condition:["yh-block-absolute"],
+                status:false
             }
         },
         h5css:{
@@ -128,6 +244,15 @@
                 value:'auto',
                 default:'auto',
                 ivalue:100,
+                type:'none',
+                parent:'h5css'
+            },
+            background_min_width:{
+                cn:'最小宽度',
+                en:'background_min_width',
+                value:0,
+                default:0,
+                ivalue:0,
                 type:'none',
                 parent:'h5css'
             },
@@ -174,6 +299,121 @@
                     cn:'纵向重复',
                     value:'repeat-y'
                 }]
+            },
+            // 外层定位
+            layer_position:{
+                en:'layer_position',
+                cn:'父级定位',
+                value:'',  // yh-block-fixed
+                type:'options',
+                options:[{
+                    cn:'不定位',
+                    value:''
+                },{
+                    cn:'自定义固定定位',
+                    value:'yh-block-fixed'
+                },{
+                    cn:'固定在底部',
+                    value:'yh-block-fixed-bottom'
+                },{
+                    cn:'固定在最左侧',
+                    value:'yh-block-fixed-left'
+                },{
+                    cn:'固定在最右侧',
+                    value:'yh-block-fixed-right'
+                },{
+                    cn:'固定在右下角',
+                    value:'yh-block-fixed-bright'
+                },{
+                    cn:'绝对定位',
+                    value:'yh-block-absolute'
+                }],
+                parent:'h5css',
+                effect:['h5css.layer_margin_left','h5css.layer_left','h5css.layer_top','h5css.layer_right','h5css.layer_bottom']
+            },
+            layer_margin_left:{
+                cn:'左',
+                en:'layer_margin_left',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-fixed","yh-block-absolute","yh-block-fixed-bottom"],
+                status:false
+            },
+            layer_left:{
+                cn:'左',
+                en:'layer_left',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-fixed-left"],
+                status:false
+            },
+            layer_top:{
+                cn:'上',
+                en:'layer_top',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-fixed","yh-block-fixed-left","yh-block-absolute","yh-block-fixed-right"],
+                status:false
+            },
+            layer_right:{
+                cn:'右',
+                en:'layer_right',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-fixed-right","yh-block-fixed-bright"],
+                status:false
+            },
+            layer_bottom:{
+                cn:'下',
+                en:'layer_bottom',
+                value:0,
+                default:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-fixed-bottom","yh-block-fixed-bright"],
+                status:false
+            },
+            // 内容定位
+            content_position:{
+                en:'content_position',
+                cn:'内容定位',
+                value:'',  // yh-block-absolute
+                type:'options',
+                options:[{
+                    cn:'不定位',
+                    value:''
+                },{
+                    cn:'定位',
+                    value:'yh-block-absolute'
+                }],
+                parent:'h5css',
+                effect:['h5css.content_margin_left','h5css.content_top']
+            },
+            content_margin_left:{
+                cn:'左',
+                en:'content_margin_left',
+                value:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-absolute"],
+                status:false
+            },
+            content_top:{
+                cn:'上',
+                en:'content_top',
+                value:0,
+                type:'number',
+                parent:'h5css',
+                condition:["yh-block-absolute"],
+                status:false
             }
         },
         common:{
@@ -228,6 +468,42 @@
                     default:
                         return 'url('+src+')'
                 }
+            },
+            setLayerClass(){
+                return this.props.css.layer_position.value
+            },
+            setLayerStyle(){
+                let css = this.props.css,
+                    style = {
+                        backgroundColor:css.background_background_color.value,
+                        backgroundImage:this.setImage,
+                        backgroundRepeat:css.background_background_repeat.value,
+                        minHeight:css.background_min_height.value+(css.background_min_height.value == 'auto' ? '' : 'px'),
+                    }
+                switch(css.layer_position.value){
+                    case 'yh-block-fixed':
+                    case 'yh-block-absolute':
+                        style.marginLeft = css.layer_margin_left.value+'px'
+                        style.top = css.layer_top.value+'px'
+                        break
+                    case 'yh-block-fixed-bottom':
+                        style.marginLeft = css.layer_margin_left.value+'px'
+                        style.bottom = css.layer_bottom.value+'px'
+                        break
+                    case 'yh-block-fixed-left':
+                        style.left = css.layer_left.value+'px'
+                        style.top = css.layer_top.value+'px'
+                        break
+                    case 'yh-block-fixed-right':
+                        style.right = css.layer_right.value+'px'
+                        style.top = css.layer_top.value+'px'
+                        break
+                    case 'yh-block-fixed-bright':
+                        style.right = css.layer_right.value+'px'
+                        style.bottom = css.layer_bottom.value+'px'
+                        break
+                }
+                return style
             }
         },
         mounted(){

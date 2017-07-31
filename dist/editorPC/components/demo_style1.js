@@ -569,6 +569,7 @@ Node.updateData = function (data, baseData) {
         switch (i) {
             case 'data':
             case 'css':
+            case 'h5css':
             case 'common':
             case 'attribute':
                 newdata[i] = {};
@@ -578,11 +579,9 @@ Node.updateData = function (data, baseData) {
                         if (data[i][j]) {
                             newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]));
                             newdata[i][j].value = data[i][j].value;
-                            // if(!status){ // 非对象非数组
-
-                            // }else{
-
-                            // }
+                            if (data[i][j].hasOwnProperty('status')) {
+                                newdata[i][j].status = data[i][j].status;
+                            }
                         } else {
                             newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]));
                         }
@@ -2725,7 +2724,8 @@ var baseData = {
             // options 选项
             // none  不编辑的属性
             // name:'子级属性名'  只有点击显示多个编辑的时候，如果子级是数组，每个数组元素是对象，则取此对象的属性等于name值的值作为uplist的title
-            // condition:'css.height.value=="auto"'（条件）  只有条件满足时才会设置
+            // condition:["auto",0]（条件）  通过带有effect属性的设置项查找，当其值等于"auto"或0时才会显示设置
+            // status: false | true   条件控制的状态
             // effect:['',''] 当前属性会影响的属性，如css.overflow
             // default:'auto',  // 默认值
             // ivalue:100,   // 初始值
@@ -3312,6 +3312,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     components: {
@@ -3399,29 +3409,10 @@ exports.default = {
             return true;
         },
         setDisplayStatus: function setDisplayStatus(one) {
-            return true;
+            // return true
             if (one.condition) {
                 // 条件判断
-                var data = this,
-                    status = /(!=)/g.test(one.condition),
-                    conditionArray = status ? one.condition.split(/(!=)/g) : one.condition.split(/(==)/g),
-                    dataPath = conditionArray[0],
-                    condition = conditionArray[1].trim(),
-                    pathArray = dataPath.split(/[. ]/g),
-                    i = 0;
-                for (i = 0; i < pathArray.length; i++) {
-                    if (pathArray[i]) {
-                        data = this[pathArray[i].trim()];
-                    }
-                }
-
-                if (status && data != condition) {
-                    return true;
-                } else if (!status && data == condition) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return one.status;
             } else {
                 return true;
             }
@@ -3500,74 +3491,129 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     props: ['eindex', 'index', 'parent', 'options', 'elem_id', // 当前被选中元素的ID
     'ischildset', // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-    'ischild'],
+    'ischild', 'path'],
     data: function data() {
         return {};
     },
 
     methods: {
+        setBackgroundImageValue: function setBackgroundImageValue(src, data) {
+            var classname = this.options.en.split('_'),
+                name = '',
+                setArr = ['min_width', 'min_height'],
+                // 'width','height',
+            list = [],
+                i = 0,
+                parentName = this.options.parent ? this.options.parent : 'css',
+                eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                ischildset = this.ischildset ? this.ischildset : '',
+                imgAtrr = '';
+            // 默认为background_image
+            if (classname.length > 2) {
+                name = classname[0] + '_';
+            }
+            list = [{
+                parent: parentName,
+                eindex: eindex,
+                index: index,
+                ischildset: ischildset,
+                stylename: this.options.en,
+                actualValue: src,
+                designValue: src
+            }];
+            for (i = 0; i < setArr.length; i++) {
+                if (this.parent[name + setArr[i]]) {
+                    imgAtrr = /(width)/g.test(setArr[i]) ? 'width' : 'height';
+                    list.push({
+                        parent: parentName,
+                        eindex: eindex,
+                        index: index,
+                        ischildset: ischildset,
+                        stylename: name + setArr[i],
+                        actualValue: data[imgAtrr], // / (750 / 16)+'rem',
+                        designValue: data[imgAtrr]
+                    });
+                }
+            }
+            this.$store.commit('setMultipleValue', {
+                ischildset: ischildset,
+                path: this.path,
+                list: list
+            });
+        },
+        setSrcValue: function setSrcValue(src, data) {
+            var classname = this.options.en.split('_'),
+                name = classname.length > 1 ? classname[0] + '_' : '_',
+                setArr = ['width', 'height'],
+                // 'width','height',
+            list = [],
+                i = 0,
+                parentName = this.options.parent ? this.options.parent : 'css',
+                eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                ischildset = this.ischildset ? this.ischildset : '',
+                imgAtrr = '';
+            list = [{
+                parent: parentName,
+                eindex: eindex,
+                index: index,
+                stylename: this.options.en,
+                actualValue: src,
+                designValue: src
+            }];
+            for (i = 0; i < setArr.length; i++) {
+                if (this.parent[name + setArr[i]]) {
+                    imgAtrr = /(width)/g.test(setArr[i]) ? 'width' : 'height';
+                    list.push({
+                        parent: parentName,
+                        eindex: eindex,
+                        index: index,
+                        ischildset: ischildset,
+                        stylename: name + setArr[i],
+                        actualValue: data[imgAtrr], // / (750 / 16)+'rem',
+                        designValue: data[imgAtrr]
+                    });
+                }
+            }
+            this.$store.commit('setMultipleValue', {
+                ischildset: ischildset,
+                path: this.path,
+                list: list
+            });
+        },
         setValue: function setValue(e) {
             var target = e.target,
                 value = target.value,
                 stylename = this.options.en,
-                image = null;
+                image = null,
+                classname = [],
+                name = '',
+                setArr = [],
+                list = [],
+                i = 0,
+                parentName = '',
+                eindex = -1,
+                index = -1,
+                ischildset = '',
+                imgAtrr = '';
             switch (this.options.mold) {
                 case 'bg':
                     image = new Image();
                     (function (self, value) {
                         image.onload = function () {
-                            self.$store.commit('setMultipleValue', [{
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: self.options.en,
-                                actualValue: value,
-                                designValue: value
-                            }, {
-                                parent: 'nonset',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: 'min_height',
-                                actualValue: image.height, // / (750 / 16)+'rem',
-                                designValue: image.height
-                            }]);
+                            self.setBackgroundImageValue(value, image);
                         };
                     })(this, value);
                     image.src = value;
                     break;
                 default:
                     image = new Image();
-                    var classname = this.options.en.split(/[_]/g),
-                        name = classname.length > 1 ? classname[0] + '_' : '_';
+                    classname = this.options.en.split(/[_]/g);
+                    name = classname.length > 1 ? classname[0] + '_' : '_';
                     (function (self, value) {
                         image.onload = function () {
-                            self.$store.commit('setMultipleValue', [{
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: self.options.en,
-                                actualValue: value,
-                                designValue: value
-                            }, {
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: name + 'width',
-                                actualValue: image.width,
-                                designValue: image.width
-                            }, {
-                                parent: self.options.parent ? self.options.parent : 'css',
-                                eindex: !(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
-                                index: !(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
-                                ischildset: self.ischildset ? self.ischildset : '',
-                                stylename: name + 'height',
-                                actualValue: image.height,
-                                designValue: image.height
-                            }]);
+                            self.setSrcValue(value, image);
                         };
                     })(this, value);
                     image.src = value;
@@ -3634,68 +3680,27 @@ exports.default = {
         },
         otherChange: function otherChange(self, data) {
             var src = self.$store.state.host + data.path;
-            self.$store.commit('setMultipleValue', [{
-                parent: this.parent ? this.parent : '',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'audiosrc',
-                actualValue: src,
-                designValue: src
-            }]);
+            self.$store.commit('setMultipleValue', {
+                ischildset: self.ischildset ? self.ischildset : '',
+                path: self.path,
+                list: [{
+                    parent: this.parent ? this.parent : '',
+                    eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
+                    index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
+                    ischildset: this.ischildset ? this.ischildset : '',
+                    stylename: 'audiosrc',
+                    actualValue: src,
+                    designValue: src
+                }]
+            });
         },
         imageChange: function imageChange(self, data) {
-            var elem = document.getElementsByClassName('setting')[0],
-
-            // yhcontent = self.$root.$children[0].$refs['yh-content'],
-            src = self.$store.state.host + data.path;
-            // yhcontent.addSettingBox(elem)
-            self.$store.commit('setMultipleValue', [{
-                parent: this.options ? this.options.parent : 'style',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'width',
-                actualValue: data.width / (750 / 16) + 'rem',
-                designValue: data.width + 'px'
-            }, {
-                parent: this.options ? this.options.parent : 'style',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'height',
-                actualValue: data.height / (750 / 16) + 'rem',
-                designValue: data.height + 'px'
-            }, {
-                parent: this.options ? this.options.parent : '',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: 'src',
-                actualValue: src,
-                designValue: src
-            }]);
+            var src = self.$store.state.host + data.path;
+            self.setSrcValue(src, data);
         },
         setBackgroundImage: function setBackgroundImage(self, data) {
             var url = self.$store.state.host + data.path;
-
-            self.$store.commit('setMultipleValue', [{
-                parent: this.options.parent ? this.options.parent : 'css',
-                eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                ischildset: this.ischildset ? this.ischildset : '',
-                stylename: self.options.en,
-                actualValue: url,
-                designValue: url
-            }]); /*,{
-                  parent:'nonset',
-                  eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
-                  index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
-                  ischildset:this.ischildset ? this.ischildset : '',
-                  stylename:'min_height',
-                  actualValue:data.height+'px', // / (750 / 16)+'rem',
-                  designValue:data.height+'px'
-                 }])*/
+            self.setBackgroundImageValue(url, data);
         }
     }
 };
@@ -4112,21 +4117,12 @@ exports.default = {
         var hasdef = false,
             def = 'auto',
             type = 'number';
-        switch (this.options.en) {
-            case 'width':
-                hasdef = true;
-                if (this.parent[this.options.en].value == 'auto') {
-                    type = 'text';
-                    def = document.documentElement.clientWidth;
-                }
-                break;
-            case 'height':
-                hasdef = true;
-                if (this.parent[this.options.en].value == 'auto') {
-                    type = 'text';
-                    def = 100;
-                }
-                break;
+        if (this.parent[this.options.en].hasOwnProperty('ivalue')) {
+            hasdef = true;
+            if (this.parent[this.options.en].value == 'auto') {
+                type = 'text';
+                def = this.parent[this.options.en].ivalue;
+            }
         }
         return {
             optionsData: {
@@ -5290,8 +5286,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5315,8 +5311,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5349,8 +5345,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5374,8 +5370,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
@@ -5408,8 +5404,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one) && _vm.getChildSetStatus(one)),
-        expression: "setDisplayStatus(one) && getChildSetStatus(one)"
+        value: ((!one.condition || (one.condition && one.status)) && _vm.getChildSetStatus(one)),
+        expression: "(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
       }],
       tag: "div",
       attrs: {
@@ -5435,8 +5431,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (_vm.setDisplayStatus(one)),
-        expression: "setDisplayStatus(one)"
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
       }],
       tag: "div",
       attrs: {
