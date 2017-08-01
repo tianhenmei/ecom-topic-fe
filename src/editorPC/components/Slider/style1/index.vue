@@ -2,12 +2,21 @@
     @import './index.css';
 </style>
 <template>
-    <div class="demo-style1" :id="props.id" yh-module="Demo_style1"
+    <div class="slider-style1" :id="props.id" yh-module="Slider_style1"
         :ref="props.id"
         :yh-path="path"
         @click.stop="setAll"
+        yh-vessel
         >
-        
+        <div :id="props.id+'-content'" class="yh-slider-content clearfix"
+            :style="{
+                width:props.css.background_width.value+(props.css.background_width.value == 'auto' ? '' : 'px')}">
+            <div v-for="(element,index) in props.elements" 
+                :is="element.module" 
+                :props="element.props"
+                :path="element.path"
+                parentmodule="Slider_style1"></div>
+        </div>
         <!-- yh-edit 组件设置 -->
         <yh-edit-complicated
             ref="yh-edit-complicated"
@@ -71,16 +80,19 @@
                 // 其中 eindex 指的是子组件在容器组件里面的位置
                 //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表
             },
-            // name: 类名  color: css样式color
-            name_color:{
-                cn:'名称颜色',
-                en:'name_color',
-                value:'#ffffff'
+            background_width:{
+                cn:'宽度',
+                en:'background_width',
+                value:'auto',
+                default:'auto',  // 默认值
+                ivalue:document.documentElement.clientWidth,   // 初始值
+                type:'number'
             }
         },
         h5css:{
             
         },
+        elements:[],
         common:{
 
         },

@@ -13,7 +13,11 @@ var serverRenderer = require('vue-server-renderer')
 var setupDevServer = require('../build/setup-dev-server.js')
 var { createBundleRenderer } = serverRenderer
 var router = express.Router();
-var isProd = process.env.NODE_ENV === 'production'
+var isProd = process.env.NODE_ENV === 'production',
+    saveDir = isProd ? 'publish/' : 'publish/',
+    getDataPath = isProd ? '../publish/' : '../publish/',
+    concatPath = isProd ? './dist/editorPC/publish/' : './dist/editorPC/publish/',
+    staticPath = isProd ? './public/files/' : './public/files/'
 
 var Vue = require('vue')
 
@@ -31,11 +35,12 @@ router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
 router.use(bodyParser.urlencoded());
 
-router.post('/savePage',function(req,res){
+// 保存数据
+router.post('/saveData',function(req,res){
     var page = req.body;
-    console.log('get save page')
+    console.log('get save data')
     // 创建文件及文件夹
-    setFile(page);
+    writeFile(saveDir+page.name+'/js/index.json',page.elemDatas)
     res.json({
         state:200,
         success:true,
@@ -43,9 +48,16 @@ router.post('/savePage',function(req,res){
     });
 });
 
+router.post('/savePage',function(req,res){
+    var page = req.body;
+    console.log('get save page')
+    // 创建文件及文件夹
+    setFile(page,res);
+});
+
 router.get('/getPageData',function(req,res){
     var name = req.body.name ? req.body.name : 'text'
-    fs.readFile(path.resolve(__dirname,'../publish/'+name+'/js/index.json'),'utf-8',function(err,data){
+    fs.readFile(path.resolve(__dirname,getDataPath+name+'/js/index.json'),'utf-8',function(err,data){
         if(err){
             console.log(err)
             res.json({
@@ -65,48 +77,11 @@ router.get('/getPageData',function(req,res){
             });
         }
     })
-    // fs.readFile(path.resolve(__dirname,'../publish/'+name+'/index.html'),'utf-8',function(err,data){
-    //     if(err){
-    //         console.log(err)
-    //         res.json({
-    //             state:200,
-    //             success:false,
-    //             content:'NOT FOUND PAGE '+name.toLocaleUpperCase()
-    //         })
-    //     }else{
-    //         var // html
-    //             index = data.indexOf('#PAGESTART#-->'),
-    //             length = '#PAGESTART#-->'.length,
-    //             lastIndex = data.indexOf('<!--#PAGEEND#'),
-    //             html = data.slice(index+length,lastIndex),
-    //             // elemdata
-    //             dindex = data.indexOf('#PAGEDATASTART#'),
-    //             dlength = '#PAGEDATASTART#'.length,
-    //             dlastIndex = data.indexOf('#PAGEDATAEND#'),
-    //             datastring = data.slice(dindex+dlength,dlastIndex)
-    //             elemdata = {
-    //                 includes:[],
-    //                 count:0
-    //             }
-    //         if(dindex > -1 && datastring && datastring != undefined){
-    //             elemdata = JSON.parse(datastring)
-    //         }
-    //         res.json({
-    //             state:200,
-    //             success:true,
-    //             content:{
-    //                 html:html,
-    //                 includes:elemdata.includes,
-    //                 count:elemdata.count
-    //             }
-    //         });
-    //     }
-    // })
 });
 
 router.post('/upload',function(req,res){
     //生成multiparty对象，并配置上传目标路径
-    var form = new multiparty.Form({uploadDir: './public/files/'});
+    var form = new multiparty.Form({uploadDir: staticPath});
     //上传完成后处理
     form.parse(req, function(err, fields, files) {
         var filesTmp = JSON.stringify(files,null,2);
@@ -116,7 +91,7 @@ router.post('/upload',function(req,res){
         } else {
             var inputFile = files.files[0]
             var uploadedPath = inputFile.path
-            var dstPath = './public/files/' + inputFile.originalFilename
+            var dstPath = staticPath + inputFile.originalFilename
             var type = inputFile.headers['content-type']
             if(/(image)/g.test(type)){
                 var dimensions = sizeOf(uploadedPath);
@@ -124,7 +99,7 @@ router.post('/upload',function(req,res){
                     state:200,
                     success:true,
                     content:{
-                        path:uploadedPath.replace('public/','static/'),
+                        path:isProd ? uploadedPath : uploadedPath.replace('public/','static/'),
                         width:dimensions.width,
                         height:dimensions.height,
                         size:inputFile.size   // b 为单位
@@ -153,26 +128,25 @@ router.post('/upload',function(req,res){
     });
 });
 
-function setFile(page){
-    mkdirsSync('publish/'+page.name+'/js','0777');
-    mkdirsSync('publish/'+page.name+'/css','0777');
+function setFile(page,res){
+    mkdirsSync(saveDir+page.name+'/js','0777');
+    mkdirsSync(saveDir+page.name+'/css','0777');
     if(!page.includes){
         page.includes = [];
     }
-    writeCSS(page.includes,'publish/'+page.name+'/css/index.css')
-    writeJS(page.includes,'publish/'+page.name+'/js/index.js');
-    writeFile('publish/'+page.name+'/js/index.json',page.elemDatas)
-    writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/'),'publish/'+page.name+'/index.html',{
+    writeCSS(page.includes,saveDir+page.name+'/css/index.css')
+    writeJS(page.includes,saveDir+page.name+'/js/index.js');
+    writeFile(saveDir+page.name+'/js/index.json',page.elemDatas)
+    writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/'),saveDir+page.name+'/index.html',{
         includes:page.includes,
         count:page.count
     })
-    writeCSSH5(page.includes,'publish/'+page.name+'/css/m_index.css')
-    writeJSH5(page.includes,'publish/'+page.name+'/js/m_index.js');
-    writeHTMLH5(page.name,'publish/'+page.name+'/m_index.html',{
+    writeCSSH5(page.includes,saveDir+page.name+'/css/m_index.css')
+    writeJSH5(page.includes,saveDir+page.name+'/js/m_index.js');
+    writeHTMLH5(page.name,saveDir+page.name+'/m_index.html',{
         includes:page.includes,
         count:page.count
-    },page.elemDatas)
-    // writeFile('publish/'+page.name+'/index.html',writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/')))
+    },page.elemDatas,res)
 }
 
 function concat(fileIn,fileOut,data){
@@ -183,7 +157,7 @@ function concat(fileIn,fileOut,data){
         path = '',
         status = false;
     for(var i = 0; i < fileArray.length; i++) {
-        path = './dist/editorPC/publish/js/'+fileArray[i]+'.js'
+        path = concatPath+'js/'+fileArray[i]+'.js'
         origCode = ''
         status = fs.existsSync(path)
         if(status){
@@ -213,7 +187,7 @@ function writeJS(data,path){
     concat(jsList,path,data);  // ,'./publish/base/js/bgmusic.js'
     
     child_process.exec('npm run compile -- --dir test',function(){
-        console.log('node编译完成')
+        // console.log('node编译完成')
     })
 }
 
@@ -230,7 +204,7 @@ function writeJSH5(data,path){
     concat(jsList,path,sdata);
     
     child_process.exec('npm run compile -- --dir test',function(){
-        console.log('node编译完成')
+        // console.log('node编译完成')
     })
 }
 
@@ -324,15 +298,25 @@ function createRenderer (bundle, options) {
 		runInNewContext: false
 	}))
 }
-function render (filename,filePath,pagedata,data,renderer) {
+function render (filename,filePath,pagedata,data,renderer,res) {
 	const s = Date.now()
     console.log('Rendering '+filename)
 	const handleError = err => {
 		if(err.code === 404) {
-			writeFile(filePath,'404 | Page Not Found')
+            writeFile(filePath,'404 | Page Not Found')
+            res.json({
+                state:404,
+                success:true,
+                message:'页面不存在'
+            });
 		} else {
 			// Render Error Page or Redirect
-			writeFile(filePath,'500 | Internal Server Error')
+            writeFile(filePath,'500 | Internal Server Error')
+            res.json({
+                state:200,
+                success:true,
+                message:'页面渲染失败'
+            });
 		}
 	}
 
@@ -344,13 +328,18 @@ function render (filename,filePath,pagedata,data,renderer) {
 		if (err) {
 			return handleError(err)
         }
-		writeFile(filePath,html.replace(/(http:\/\/localhost:9000\/)/g,'/'))
+        writeFile(filePath,html.replace(/(http:\/\/localhost:9000\/)/g,'/'))
+        res.json({
+            state:200,
+            success:true,
+            message:'保存成功'
+        });
 		if (!isProd) {
 			console.log(`whole request: ${Date.now() - s}ms`)
 		}
 	})
 }
-function writeHTMLH5(filename,filePath,pagedata,data){
+function writeHTMLH5(filename,filePath,pagedata,data,res){
     let renderer = null,
         readyPromise
     if(isProd){
@@ -370,7 +359,7 @@ function writeHTMLH5(filename,filePath,pagedata,data){
         })
         console.log('Start writing HTML h5......')
         readyPromise.then(() => {
-            render(filename,filePath,pagedata,JSON.parse(data),renderer)
+            render(filename,filePath,pagedata,JSON.parse(data),renderer,res)
         })
     }
 }

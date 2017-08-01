@@ -2700,6 +2700,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var baseData = {
     id: '',
@@ -2738,14 +2747,17 @@ var baseData = {
             // 其中 eindex 指的是子组件在容器组件里面的位置
             //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表
         },
-        // name: 类名  color: css样式color
-        name_color: {
-            cn: '名称颜色',
-            en: 'name_color',
-            value: '#ffffff'
+        background_width: {
+            cn: '宽度',
+            en: 'background_width',
+            value: 'auto',
+            default: 'auto', // 默认值
+            ivalue: document.documentElement.clientWidth, // 初始值
+            type: 'number'
         }
     },
     h5css: {},
+    elements: [],
     common: {},
     attribute: {},
     data: { // 卡片数据
@@ -2861,11 +2873,12 @@ exports.default = {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     ref: _vm.props.id,
-    staticClass: "demo-style1",
+    staticClass: "slider-style1",
     attrs: {
       "id": _vm.props.id,
-      "yh-module": "Demo_style1",
-      "yh-path": _vm.path
+      "yh-module": "Slider_style1",
+      "yh-path": _vm.path,
+      "yh-vessel": ""
     },
     on: {
       "click": function($event) {
@@ -2873,7 +2886,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.setAll($event)
       }
     }
-  }, [_c('yh-edit-complicated', {
+  }, [_c('div', {
+    staticClass: "yh-slider-content clearfix",
+    style: ({
+      width: _vm.props.css.background_width.value + (_vm.props.css.background_width.value == 'auto' ? '' : 'px')
+    }),
+    attrs: {
+      "id": _vm.props.id + '-content'
+    }
+  }, _vm._l((_vm.props.elements), function(element, index) {
+    return _c(element.module, {
+      tag: "div",
+      attrs: {
+        "props": element.props,
+        "path": element.path,
+        "parentmodule": "Slider_style1"
+      }
+    })
+  })), _vm._v(" "), _c('yh-edit-complicated', {
     ref: "yh-edit-complicated",
     attrs: {
       "css": _vm.props.css,
@@ -2892,7 +2922,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-2fa6999b", module.exports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-3471953d", module.exports)
   }
 }
 
@@ -2907,13 +2937,13 @@ var content = __webpack_require__(36);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("7c258aea", content, false);
+var update = __webpack_require__(2)("45708580", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2fa6999b\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2fa6999b\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3471953d\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3471953d\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -4877,7 +4907,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components/demo/style1/index.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components/Slider/style1/index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -4888,9 +4918,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2fa6999b", Component.options)
+    hotAPI.createRecord("data-v-3471953d", Component.options)
   } else {
-    hotAPI.reload("data-v-2fa6999b", Component.options)
+    hotAPI.reload("data-v-3471953d", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

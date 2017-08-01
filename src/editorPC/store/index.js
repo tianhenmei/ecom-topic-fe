@@ -74,6 +74,9 @@ let store = new Vuex.Store({
                 state[attr] = data[attr]
             }
         },
+        clearPage:(state) => {
+            state.elements = []
+        },
         changeCount:(state) => {
             state.count++
         },

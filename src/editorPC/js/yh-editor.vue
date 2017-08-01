@@ -7,10 +7,12 @@
             <yh-lib @addComponents="addComponents"></yh-lib>
         </div>    
         <ul class="yh-lib-operate clearfix">
-            <li id="save" @click="saveHTML"><span class="yh-lib-icon"></span>保存</li>
-            <li id="public"><span class="yh-lib-icon"></span>发布</li>
-            <li id="preview" @click="previewHTML"><span class="yh-lib-icon"></span>发布</li>
-            <li id="clear"><span class="yh-lib-icon"></span>清空</li>
+            <li id="save" @click="saveData"><span class="yh-lib-icon"></span>保存</li>
+            <li id="publish" @click="publishHTML"><span class="yh-lib-icon"></span>发布</li>
+            <li id="preview" @click="previewHTML">
+                <a :href="host+'yh/'+pageInfo.html+'/index.html'" target="_blank"><span class="yh-lib-icon"></span>预览</a>
+            </li>
+            <li id="clear" @click="clearHTML"><span class="yh-lib-icon"></span>清空</li>
             <li id="lookH5"><span class="yh-lib-icon"></span>H5预览</li>
         </ul>
         <div yh-editor-content ref="yh-editor-content">
@@ -458,12 +460,31 @@
                 }
                 return data
             },
-            saveHTML(e){
+            saveData(e){
+                let elemDatas = this.copyElementsData(this.elements)
+                this.$http.post(this.host+'editorPC/saveData',{
+                    name:'text',
+                    elemDatas:JSON.stringify({
+                        pageInfo:this.pageInfo,
+                        elements:elemDatas,
+                        includes:this.includes,
+                        count:this.count
+                    })
+                },{
+                    emulateJSON:true
+                }).then(response => {
+                    alert(response.body.message)
+                },response =>{
+                    console.log(response.body.message)
+                })
+            },
+            publishHTML(e){
                 undoSelected()
                 let yh_editor_content = this.$refs['yh-editor-content'].cloneNode(true),
                     yhEditLayer = yh_editor_content.getElementsByClassName('yh-edit-layer'),
                     yhEditorContent = yh_editor_content.getElementsByClassName('yh-vessel-add'),
-                    i = 0
+                    i = 0,
+                    self = this
                 for(i = 0; i < yhEditLayer.length; ){
                     yhEditLayer[i].parentNode.removeChild(yhEditLayer[i])
                 }
@@ -475,6 +496,8 @@
                 let elemDatas = this.copyElementsData(this.elements)
 
                 this.pageInfo.updateTime = getNow()
+                this.$refs['yh-toast'].className = this.$refs['yh-toast'].className.replace(/( hide)/g,'')
+                this.$refs['yh-toast'].children[0].innerHTML = '正在发布页面，请稍后……'
                 this.$http.post(this.host+'editorPC/savePage',{
                     name:'text',
                     includes:this.includes,
@@ -489,10 +512,15 @@
                 },{
                     emulateJSON:true
                 }).then(response => {
-                    console.log(response.body.message)
+                    alert("发布成功!")
+                    self.$refs['yh-toast'].className += ' hide'
                 },response =>{
-                    console.log(response.body.message)
+                    alert(response.body.message)
+                    self.$refs['yh-toast'].className += ' hide'
                 })
+            },
+            clearHTML(e){
+                this.$store.commit('clearPage')
             },
             previewHTML(e){
 
@@ -554,6 +582,13 @@
         font-size: 12px;
         float: left;
     }
+    .yh-lib-operate a {
+        text-decoration:none;
+        color:#666;
+    }
+    .yh-lib-operate a:hover {
+        text-decoration:none;
+    }
     .yh-lib-operate .yh-lib-icon {
         width: 20px;
         height: 20px;
@@ -568,7 +603,7 @@
     .yh-lib-operate li:nth-of-type(2) .yh-lib-icon {
         background-position: -240px 0;
     }
-    .yh-lib-operate li:nth-of-type(3) .yh-lib-icon {
+    .yh-lib-operate li:nth-of-type(4) .yh-lib-icon {
         background-position: -270px 0;
     }
     /**组件样式**/

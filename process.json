@@ -1,0 +1,18 @@
+{
+	"apps" : [{
+		"name":"index",
+		"script"    : "./index.js",
+		"watch":true,
+		"ignore_watch":["node_modules"],
+		"env":{
+			"PORT": 9000,
+			"NODE_ENV":"development"
+		},
+		"env_production":{
+			"PORT":80,
+			"NODE_ENV":"production"
+		},
+		"instances" : 0,
+		"exec_mode" : "cluster"
+	}]
+}

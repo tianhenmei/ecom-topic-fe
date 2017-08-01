@@ -4,11 +4,12 @@
   "description": "topic 3.0",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start index.js",
-    "monit": "pm2 monit index.js",
-    "stop": "pm2 stop index.js",
+    "start": "pm2 start process.json",
+    "start --log":"pm2 start process.json --log-date-format",
+    "monit": "pm2 monit process.json",
+    "stop": "pm2 stop process.json",
     "list": "pm2 list",
-    "restart": "pm2 restart index.js",
+    "restart": "pm2 restart process.json",
     "create": "gulp create",
     "dev": "gulp dev",
     "dist": "cross-env NODE_ENV=production gulp dist"
