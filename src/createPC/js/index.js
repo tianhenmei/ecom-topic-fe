@@ -210,6 +210,7 @@ var pageVue = new Vue({
 			return true;
         },
         getLgID(){
+            let self = this
             this.$http.get("http://meta.lagou.com/code/create-jsonp",{
                 jsonp:'callback',
                 dataType:'jsonp'
@@ -222,13 +223,15 @@ var pageVue = new Vue({
                 if(data.success){
                     tips.innerHTML = "* 该URL已存在，请换一个吧，亲！"
 					// self.$refs['url'].focus();
-				    return data.success;
+                    // return data.success;
+                    self.one.lgID = data.data.code
+                    self.sendData()
 				}
             },response =>{
                 alert('meta.lagou.com服务器繁忙，请刷新重试\n如还不行，可联系数据组gim！');
             })
         },
-        saveEvent(e){
+        createSubject(e){
             var checkArray = [
                 {id:'name',elem:'专题名称',callFunction:this.checkNull},
                 {id:'title',elem:'专题标题',callFunction:this.checkNull},
@@ -251,10 +254,10 @@ var pageVue = new Vue({
             if(this.one.lgID){
                 this.sendData()
             }else{
-
+                this.getLgID()
             }
         },
-        backEvent(e){
+        backToHome(e){
 
         }
     }

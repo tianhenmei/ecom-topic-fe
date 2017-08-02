@@ -23,8 +23,8 @@ router.use('/dist',express.static('dist'));  // 指定挂载路径（虚拟）
 router.use('/yh',express.static('publish')); // 指定挂载路径（虚拟）
 router.use('/list',list_control);
 // router.use('/editor',editor_control);
-router.use('/editorPC',editorPC_control);
-router.use('/company',company_control);
+router.use('/v3/api/editorPC',editorPC_control);
+router.use('/v3/api/company',company_control);
 
 router.get('/',function(req,res){
     var html = getFile(req,res);

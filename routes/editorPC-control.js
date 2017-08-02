@@ -12,7 +12,8 @@ var uglify = require('uglify-js');
 var serverRenderer = require('vue-server-renderer')
 var setupDevServer = require('../build/setup-dev-server.js')
 var { createBundleRenderer } = serverRenderer
-var router = express.Router();
+var router = express.Router(),
+    crypto = require('crypto');
 var isProd = process.env.NODE_ENV === 'production',
     saveDir = isProd ? 'publish/' : 'publish/',
     getDataPath = isProd ? '../publish/' : '../publish/',
@@ -25,7 +26,7 @@ var Vue = require('vue')
 var LRU = require('lru-cache')
 // var createAppH5 = require('./server-app-h5.js')
 var resolve = file => path.resolve(__dirname, file)
-const templateH5 = fs.readFileSync(resolve('../public/html/editorPC-h5.html'), 'utf-8')
+const templateH5 = fs.readFileSync(resolve('../server-renderer/editorPC/m_index.html'), 'utf-8')
 
 /****NODE SERVER RENDERER */
 
@@ -56,14 +57,62 @@ router.post('/savePage',function(req,res){
 });
 
 router.get('/getPageData',function(req,res){
-    var name = req.body.name ? req.body.name : 'text'
+    var name = req.query.name ? req.query.name : 'text',
+        templateId = req.query.id,
+        dirpath = saveDir+req.query.name
+    if(!fs.existsSync(dirpath) && !templateId && req.query.name){
+        let secret = new Date().getTime()+'',
+            // hash = crypto.createHmac('md5', secret)
+            //             .update('yh')
+            //             .digest('hex')
+            hash = crypto.randomBytes(8)
+                        .toString('hex'),
+            newdata = {
+                pageInfo:{
+                    templateId:hash,
+                    templateType:'PC',
+                    templateCategory:'测试',
+                    createTime:new Date(),
+                    createAuthor:'gaohui',
+                    updateTime:'',
+                    updateAuthor:'gaohui',
+                    html:req.body.name,
+                    title:'YH EDITOR PC',
+                    description:'YH EDITOR PC TEST',
+                    activeTimeStart:'',
+                    activeTimeEnd:'',
+                    share:{
+                        status:false,
+                        title:'',
+                        desc:'',
+                        pic:''
+                    }
+                },
+                elements:[],
+                includes:[],
+                count:0
+            }
+        mkdirsSync(dirpath+'/js','0777');
+        writeFile(dirpath+'/js/index.json',JSON.stringify(newdata))
+        res.json({
+            state:200,
+            success:true,
+            content:newdata
+        });
+        return
+    }
     fs.readFile(path.resolve(__dirname,getDataPath+name+'/js/index.json'),'utf-8',function(err,data){
         if(err){
             console.log(err)
             res.json({
                 state:200,
                 success:false,
-                content:'NOT FOUND PAGE '+name.toLocaleUpperCase()
+                content:{
+                    message:'NOT FOUND PAGE '+name.toLocaleUpperCase(),
+                    count:0,
+                    includes:[],
+                    elements:[]
+                }
             })
         }else{
             var data = JSON.parse(data)
@@ -273,7 +322,7 @@ function writeHTML(pageHTML,filePath,pagedata){
             template:'<div class="main">'+pageHTML.trim()+'</div>'
         }),
         renderer = serverRenderer.createRenderer({
-            template: fs.readFileSync(path.resolve(__dirname,'../public/html/editorPC.html'), 'utf-8')
+            template: fs.readFileSync(path.resolve(__dirname,'../server-renderer/editorPC/index.html'), 'utf-8')
         }),
         context = {
             elemdata:elemdataStr

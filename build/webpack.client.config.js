@@ -7,7 +7,7 @@ function getClientConfig(sysname){  // editorPC
 	let base = require('./webpack.base.config')(sysname)
     return merge(base, {
 		entry: {
-			index: './src/'+sysname+'/entry-client.js'
+			index: './server-renderer/'+sysname+'/entry-client.js'
 		},
 		resolve: {
 			alias: {

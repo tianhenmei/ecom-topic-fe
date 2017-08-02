@@ -2,7 +2,7 @@
     <div yh-editor
         @click.stop="undoSelection">
         <div class="top clearfix">
-            <img class="logo" src="http://localhost:9000/static/images/logo.png" />
+            <img class="logo" :src="host+'static/images/logo.png'" />
             <h1 class="title">TOPIC <i>3.0版</i></h1>
             <yh-lib @addComponents="addComponents"></yh-lib>
         </div>    
@@ -48,8 +48,10 @@
     </div>
 </template>
 <script>
+    import axios from 'axios'
     import {mapState} from 'vuex'
     import {
+        getQueryString,
         recoveryData,
         undoSelected,
         isObject,
@@ -71,6 +73,7 @@
         components:components,
         computed:mapState([
             'host',
+            'connhost',
             'includes',
             'elements',
             'count',
@@ -180,12 +183,20 @@
                 this.$store.commit('addChildElement',elemData)
             },
             getPageData(){
-                let self = this
-                this.$http.get(this.host+'editorPC/getPageData',{
-                    id:'10000',
-                    name:'text'
+                let self = this,
+                    templateId = getQueryString('templateId'),
+                    name = getQueryString('name')
+                if(!name){
+                    self.$refs['yh-toast'].className += ' hide'
+                    return
+                }
+                axios.get(this.connhost+'v3/api/editorPC/getPageData',{
+                    params:{
+                        id:templateId,
+                        name:name
+                    }
                 }).then(response => {
-                    let content = response.body.content,
+                    let content = response.data.content,
                         i = '',j = ''
                     
                     self.loadComponents(content.includes,content.elements)
@@ -462,7 +473,7 @@
             },
             saveData(e){
                 let elemDatas = this.copyElementsData(this.elements)
-                this.$http.post(this.host+'editorPC/saveData',{
+                this.$http.post(this.connhost+'v3/api/editorPC/saveData',{
                     name:'text',
                     elemDatas:JSON.stringify({
                         pageInfo:this.pageInfo,
@@ -498,7 +509,7 @@
                 this.pageInfo.updateTime = getNow()
                 this.$refs['yh-toast'].className = this.$refs['yh-toast'].className.replace(/( hide)/g,'')
                 this.$refs['yh-toast'].children[0].innerHTML = '正在发布页面，请稍后……'
-                this.$http.post(this.host+'editorPC/savePage',{
+                this.$http.post(this.connhost+'v3/api/editorPC/savePage',{
                     name:'text',
                     includes:this.includes,
                     count:this.count,
@@ -528,7 +539,8 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
+    @import '../css/index.scss';
     /**页面样式**/
     [yh-editor]{
         width:100%;
@@ -593,7 +605,7 @@
         width: 20px;
         height: 20px;
         margin: 0 10px;
-        background: url(http://localhost:9000/static/images/editorPC-icon.png) no-repeat -360px 0;
+        background: url($host+"static/images/editorPC-icon.png") no-repeat -360px 0;
         background-size: 512px;
         display: block;
     }

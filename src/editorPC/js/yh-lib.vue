@@ -107,7 +107,7 @@
                                     <img 
                                         v-for="(one,index) in lib.elements.CompanyPosition" 
                                         class="hide"
-                                        :src="one.src">
+                                        :src="host+one.src">
                                 </div>
                             </div>
                             <div class="cpElement clearfix">
@@ -127,7 +127,7 @@
                                     <img 
                                         v-for="(one,index) in lib.elements.Position" 
                                         class="hide"
-                                        :src="one.src">
+                                        :src="host+one.src">
                                 </div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                                     <img 
                                         v-for="(one,index) in lib.elements.Company" 
                                         class="hide"
-                                        :src="one.src">
+                                        :src="host+one.src">
                                 </div>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                                     <img 
                                         v-for="(one,index) in lib.elements.Button" 
                                         class="hide"
-                                        :src="one.src">
+                                        :src="host+one.src">
                                 </div>
                             </div>
                         </div>
@@ -202,7 +202,7 @@
                                     <img 
                                         v-for="(one,index) in lib.elements.Title" 
                                         class="hide"
-                                        :src="one.src">
+                                        :src="host+one.src">
                                 </div>
                             </div>
                         </div>
@@ -245,7 +245,7 @@
                                     <img 
                                         v-for="(one,index) in lib.elements.TimeAxis" 
                                         class="hide"
-                                        :src="one.src">
+                                        :src="host+one.src">
                                 </div>
                             </div>
                         </div>
@@ -258,11 +258,11 @@
                                 <ul class="yh-lib-subcomponents">
                                     <li class="ScrollView style1" @click.stop.prevent="addComponents">
                                         竖向
-                                        <img src="http://topic.lagou.com/static/img/newEdit/scrollView_style1.png">
+                                        <img :src="host+'static/images/scrollView_style1.png'">
                                     </li>
                                     <li class="ScrollView style2" @click.stop.prevent="addComponents">
                                         横向
-                                        <img src="http://topic.lagou.com/static/img/newEdit/scrollView_style2.png">
+                                        <img :src="host+'static/images/scrollView_style2.png'">
                                     </li>
                                 </ul>
                             </div>
@@ -283,15 +283,15 @@
                                     </li>
                                     <li class="Debate style1" @click.stop.prevent="addComponents">
                                         辩论
-                                        <!--<img src="http://topic.lagou.com/static/img/newEdit/title_style3.png" />-->
+                                        <!--<img :src="host+'static/images/title_style3.png'" />-->
                                     </li>
                                     <li class="Vote style1" @click.stop.prevent="addComponents">
                                         投票
-                                        <!--<img src="http://topic.lagou.com/static/img/newEdit/title_style2.png" />-->
+                                        <!--<img :src="host+'static/images/title_style2.png'" />-->
                                     </li>
                                     <li class="Thumb style1" @click.stop.prevent="addComponents">
                                         点赞
-                                        <!--<img src="http://topic.lagou.com/static/img/newEdit/title_style2.png" />-->
+                                        <!--<img :src="host+'static/images/title_style2.png'" />-->
                                     </li>
                                 </ul>
                             </div>
@@ -305,15 +305,15 @@
                                 <ul class="yh-lib-subcomponents">
                                     <li class="Dialog style1" @click.stop.prevent="addComponents">
                                         样式一
-                                        <img src="http://topic.lagou.com/static/img/newEdit/dialog1.png">
+                                        <img :src="host+'static/images/dialog1.png'">
                                     </li>
                                     <li class="Dialog style2" @click.stop.prevent="addComponents">
                                         样式二
-                                        <img src="http://topic.lagou.com/static/img/newEdit/dialog2.png">
+                                        <img :src="host+'static/images/dialog2.png'">
                                     </li>
                                     <li class="Dialog style3" @click.stop.prevent="addComponents">
                                         样式三
-                                        <img src="http://topic.lagou.com/static/img/newEdit/dialog3.png">
+                                        <img :src="host+'static/images/dialog3.png'">
                                     </li>
                                 </ul>
                             </div>
@@ -322,7 +322,7 @@
                                 <ul class="yh-lib-subcomponents">
                                     <li class="News style1" @click.stop.prevent="addComponents">
                                         样式一
-                                        <img src="http://topic.lagou.com/static/img/newEdit/slideNews-style1.jpg">
+                                        <img :src="host+'static/images/slideNews-style1.jpg'">
                                     </li>
                                 </ul>
                             </div>
@@ -331,15 +331,15 @@
                                 <ul class="yh-lib-subcomponents">
                                     <li class="Page style1" @click.stop.prevent="addComponents">
                                         梦想合伙人
-                                        <img src="http://topic.lagou.com/static/img/newEdit/page_style1.png">
+                                        <img :src="host+'static/images/page_style1.png'">
                                     </li>
                                     <li class="Page style2" @click.stop.prevent="addComponents">
                                         百万CEO
-                                        <img src="http://topic.lagou.com/static/img/newEdit/page_style2.png">
+                                        <img :src="host+'static/images/page_style2.png'">
                                     </li>
                                     <li class="Page style3" @click.stop.prevent="addComponents">
                                         风暴周
-                                        <img src="http://topic.lagou.com/static/img/newEdit/page_style3.jpg">
+                                        <img :src="host+'static/images/page_style3.jpg'">
                                     </li>
                                 </ul>
                             </div>
@@ -385,11 +385,15 @@
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex'
     import {
         getParentByClassName,
         getChildrenByClassName
     } from '../components/Base/Node.js'
     export default {
+        computed:mapState([
+            'host',
+        ]),
         data(){
             return {
                 lib:{
@@ -397,187 +401,187 @@
                         CompanyPosition:[{
                             en:'style1',
                             cn:'样式一',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition1.png",
+                            src:"static/images/companyPosition1.png",
                             col:""
                         },{
                             en:'style2',
                             cn:'样式二',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition2.png",
+                            src:"static/images/companyPosition2.png",
                             col:"setListCol"
                         },{
                             en:'style3',
                             cn:'样式三',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition3.png",
+                            src:"static/images/companyPosition3.png",
                             col:""
                         },{
                             en:'style4',
                             cn:'样式四',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition4.png",
+                            src:"static/images/companyPosition4.png",
                             col:"setListCol"
                         },{
                             en:'style5',
                             cn:'样式五',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition5.png",
+                            src:"static/images/companyPosition5.png",
                             col:"setListCol"
                         },{
                             en:'style6',
                             cn:'样式六',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition6.png",
+                            src:"static/images/companyPosition6.png",
                             col:""
                         },{
                             en:'style7',
                             cn:'样式七',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition7.png",
+                            src:"static/images/companyPosition7.png",
                             col:"setListCol"
                         },{
                             en:'style8',
                             cn:'样式八',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition8.png",
+                            src:"static/images/companyPosition8.png",
                             col:"setListCol"
                         },{
                             en:'style9',
                             cn:'样式九',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition9.png",
+                            src:"static/images/companyPosition9.png",
                             col:"setListCol"
                         },{
                             en:'style10',
                             cn:'样式十',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition10.png",
+                            src:"static/images/companyPosition10.png",
                             col:"setListCol"
                         },{
                             en:'style11',
                             cn:'样式十一',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition11.png",
+                            src:"static/images/companyPosition11.png",
                             col:"setListCol"
                         },{
                             en:'style12',
                             cn:'样式十二',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition12.png",
+                            src:"static/images/companyPosition12.png",
                             col:"setListCol"
                         },{
                             en:'style13',
                             cn:'样式十三',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition13.png",
+                            src:"static/images/companyPosition13.png",
                             col:"setListCol"
                         },{
                             en:'style14',
                             cn:'样式十四',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition14.png",
+                            src:"static/images/companyPosition14.png",
                             col:""
                         },{
                             en:'style15',
                             cn:'样式十五',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition15.png",
+                            src:"static/images/companyPosition15.png",
                             col:"setListCol"
                         },{
                             en:'style16',
                             cn:'样式十六',
-                            src:"http://topic.lagou.com/static/img/newEdit/companyPosition16.png",
+                            src:"static/images/companyPosition16.png",
                             col:"setListCol"
                         }],
                         Position:[{
                             en:'style1',
                             cn:'样式一',
-                            src:'http://topic.lagou.com/static/img/newEdit/position2.png',
+                            src:'static/images/position2.png',
                             col:"setListCol"
                         },{
                             en:'style2',
                             cn:'样式二',
-                            src:'http://topic.lagou.com/static/img/newEdit/position3.png',
+                            src:'static/images/position3.png',
                             col:"setListCol"
                         },{
                             en:'style3',
                             cn:'样式三',
-                            src:'http://topic.lagou.com/static/img/newEdit/position4.png',
+                            src:'static/images/position4.png',
                             col:"setListCol"
                         }],
                         Company:[{
                             en:'style1',
                             cn:'样式一',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style1.png",
+                            src:"static/images/compIntroduce_style1.png",
                             col:""
                         },{
                             en:'style2',
                             cn:'样式二',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style2.png",
+                            src:"static/images/compIntroduce_style2.png",
                             col:""
                         },{
                             en:'style3',
                             cn:'样式三',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style3.png",
+                            src:"static/images/compIntroduce_style3.png",
                             col:""
                         },{
                             en:'style4',
                             cn:'样式四',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style4.png",
+                            src:"static/images/compIntroduce_style4.png",
                             col:"setListCol"
                         },{
                             en:'style5',
                             cn:'样式五',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style5.png",
+                            src:"static/images/compIntroduce_style5.png",
                             col:""
                         },{
                             en:'style6',
                             cn:'样式六',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style6.png",
+                            src:"static/images/compIntroduce_style6.png",
                             col:""
                         },{
                             en:'style7',
                             cn:'样式七',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style7.png",
+                            src:"static/images/compIntroduce_style7.png",
                             col:"setListCol"
                         },{
                             en:'style8',
                             cn:'样式八',
-                            src:"http://topic.lagou.com/static/img/newEdit/compIntroduce_style8.jpg",
+                            src:"static/images/compIntroduce_style8.jpg",
                             col:"setListCol"
                         }],
                         Button:[{
                             en:'style1',
                             cn:'样式一',
-                            src:"http://topic.lagou.com/static/img/newEdit/btn_style1.png",
+                            src:"static/images/btn_style1.png",
                             col:""
                         },{
                             en:'style2',
                             cn:'样式二',
-                            src:"http://topic.lagou.com/static/img/newEdit/btn_style2.png",
+                            src:"static/images/btn_style2.png",
                             col:""
                         },{
                             en:'style3',
                             cn:'样式三',
-                            src:"http://topic.lagou.com/static/img/newEdit/btn_style3.png",
+                            src:"static/images/btn_style3.png",
                             col:""
                         }],
                         Title:[{
                             en:'style1',
                             cn:'样式一',
-                            src:"http://topic.lagou.com/static/img/newEdit/title_style1.png",
+                            src:"static/images/title_style1.png",
                             col:""
                         },{
                             en:'style2',
                             cn:'样式二',
-                            src:"http://topic.lagou.com/static/img/newEdit/title_style2.png",
+                            src:"static/images/title_style2.png",
                             col:""
                         },{
                             en:'style3',
                             cn:'样式三',
-                            src:"http://topic.lagou.com/static/img/newEdit/title_style3.png",
+                            src:"static/images/title_style3.png",
                             col:""
                         }],
                         TimeAxis:[{
                             en:'style1',
                             cn:'样式一',
-                            src:"http://topic.lagou.com/static/img/newEdit/timeAxis_style1.png",
+                            src:"static/images/timeAxis_style1.png",
                             col:""
                         },{
                             en:'style2',
                             cn:'样式二',
-                            src:"http://topic.lagou.com/static/img/newEdit/timeAxis_style2.png",
+                            src:"static/images/timeAxis_style2.png",
                             col:""
                         },{
                             en:'style3',
                             cn:'样式三',
-                            src:"http://topic.lagou.com/static/img/newEdit/timeAxis_style3.png",
+                            src:"static/images/timeAxis_style3.png",
                             col:""
                         }]
                     }
@@ -631,7 +635,8 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
+    @import '../css/index.scss';
     .yh-lib > ul {
         float: left;
         margin: 0 20px 0 0;
@@ -641,7 +646,7 @@
         width: 20px;
         height: 20px;
         margin: 0 10px;
-        background: url(http://localhost:9000/static/images/editorPC-icon.png) no-repeat -360px 0;
+        background: url($host+"static/images/editorPC-icon.png") no-repeat -360px 0;
         background-size: 512px;
         display: block;
     }

@@ -10,6 +10,9 @@ var ExtractTextPlugin2 = require('extract-text-webpack-plugin')
 
 function getConfigPlugins(systemName,name,plugins){
     var defalutPlugins = [
+            new webpack.DefinePlugin({
+                '__isProd__':  process.argv.includes('--production')
+            }),
             // 添加三个插件
             // new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.optimize.CommonsChunkPlugin({
@@ -28,6 +31,9 @@ function getConfigPlugins(systemName,name,plugins){
             })
         ],
         distPlugins = [
+            new webpack.DefinePlugin({
+                '__isProd__':  process.argv.includes('--production')
+            }),
             new webpack.optimize.CommonsChunkPlugin({
                 name: 'lib',
                 filename: 'js/lib.min.js',

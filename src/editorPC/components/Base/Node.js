@@ -15,6 +15,17 @@ Node.setAll = (e) => {
     console.log(this.$refs)
 }
 /********************************************
+ * getQueryString: 获取url参数的值
+ * parm: 对象
+ *******************************************/
+Node.getQueryString = (parm) => {
+    var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+
+    if (r != null) return unescape(r[2]); 
+    return null;
+}
+/********************************************
  * isEmptyObject: 判断一个对象是否为空对象
  * e: 对象
  *******************************************/

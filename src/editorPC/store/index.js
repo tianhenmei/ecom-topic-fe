@@ -13,7 +13,8 @@ let store = new Vuex.Store({
         elements:[],
         includes:[],
         count:0,
-        host:'http://localhost:9000/',
+        host:__isProd__ ? 'http://topic.lagou.com/v3' : 'http://localhost:9000/',
+        connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         triggerId:'',
         triggerClassify:'',
@@ -21,16 +22,16 @@ let store = new Vuex.Store({
         parentmodule:'',
         ajaxUrl:{
             CompanyPositions:{
-                url:'company/getCompanyandPosition',
+                url:'v3/api/company/getCompanyandPosition',
                 type:'GET',
                 param:'comAndPosi'
             },
             CompanyPosition:{
-                url:'company/speed_checkCompany/$id$',
+                url:'v3/api/company/speed_checkCompany/$id$',
                 type:'POST'
             },
             Position:{
-                url:'job/speed_checkPosition/$id$',
+                url:'v3/api/job/speed_checkPosition/$id$',
                 type:'GET'
             }
         },

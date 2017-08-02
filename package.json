@@ -5,14 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start process.json",
-    "start --log":"pm2 start process.json --log-date-format",
+    "start --log": "pm2 start process.json --log-date-format",
     "monit": "pm2 monit process.json",
     "stop": "pm2 stop process.json",
     "list": "pm2 list",
+    "status": "pm2 status",
     "restart": "pm2 restart process.json",
     "create": "gulp create",
     "dev": "gulp dev",
-    "dist": "cross-env NODE_ENV=production gulp dist"
+    "dist": "cross-env NODE_ENV=production gulp dist",
+    "upload": "gulp upload",
+    "upload-test": "gulp upload-test"
   },
   "author": "yh",
   "license": "ISC",
@@ -65,6 +68,7 @@
     "axios": "^0.16.2",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
+    "crypto": "0.0.3",
     "express": "^4.15.3",
     "image-size": "^0.5.4",
     "mkdirp": "^0.5.1",

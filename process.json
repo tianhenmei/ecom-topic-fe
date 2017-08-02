@@ -1,6 +1,6 @@
 {
 	"apps" : [{
-		"name":"index",
+		"name":"ecom-topic-node",
 		"script"    : "./index.js",
 		"watch":true,
 		"ignore_watch":["node_modules"],
@@ -12,7 +12,7 @@
 			"PORT":80,
 			"NODE_ENV":"production"
 		},
-		"instances" : 0,
+		"instances" : 1,
 		"exec_mode" : "cluster"
 	}]
 }

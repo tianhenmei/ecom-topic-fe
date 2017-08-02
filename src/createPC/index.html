@@ -148,8 +148,8 @@
                             </div>
                         </div><!--<div class="right-list">-->
                         <div class="right-bottom clearfix">
-                            <div id="saveEvent">保存</div>
-                            <div id="backEvent">返回</div>
+                            <div id="saveEvent" @click.stop.prevent="createSubject">保存</div>
+                            <div id="backEvent" @click.stop.prevent="backToHome">返回</div>
                         </div>
                     </div><!--<div class="right-content">-->
                 </div><!--<div class="right">-->

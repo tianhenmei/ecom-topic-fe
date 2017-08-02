@@ -509,27 +509,95 @@ gulp.task('dist:pc',function(){
 
 gulp.task('dist',['dist:pc','dist:h5']);
 
-/** 推送线上单台 */
-gulp.task('upload', function() {
-    return gulp.src(['dist/**/*'])
-    .pipe(upload({
-        server: 'http://receiver1.lagou.com/upload',
+function uploadStatic(dir){
+    return upload({
+        server: 'http://10.1.200.150:9090/upload',
         data: {
             to: (file) => {
-                let src = file.history[0].replace(path.resolve(__dirname, 'dist'), '')
+                let src = file.history[0].replace(path.resolve(__dirname,'./'), '')
                            .replace(/^[\\\/]/, '')
                            .replace(/^template[\\\/]/i, '');
 
-                let dst = `/data/data/static/topic/${src}`;
+                let dst = `/data/static/topic_v3/v3/${src}`;
+                // if ( /[\\\/]index\.html$/i.test(src) ) {
+                //     dst = `/data/data/ecom/topic/${src}`;
+                // }
+                console.log('UPLOADING: '+chalk.yellow(src))
+                // console.log(chalk.cyan(src) + chalk.yellow(' => ') + chalk.magenta(dst)); // 打印提示信息
 
-                if ( /[\\\/]index\.html$/i.test(src) ) {
-                    dst = `/data/data/ecom/topic/${src}`;
-                }
-                
-                console.log(chalk.cyan(src) + chalk.yellow(' => ') + chalk.magenta(dst)); // 打印提示信息
+                return dst;
+            }
+        }
+    })
+}
+
+gulp.task('upload:dist', function() {
+    let dirPath = 'dist/'
+    if(params.upload && params.upload.sys){
+        dirPath += params.upload.sys+'/'
+    }
+    dirPath += '**/*'
+    return gulp.src([dirPath])
+    .pipe(uploadStatic('dist'));
+})
+
+gulp.task('upload:public', function() {
+    let dirPath = 'public/**/*'
+    return gulp.src([dirPath])
+    .pipe(upload({
+        server: 'http://10.1.200.150:9090/upload',
+        data: {
+            to: (file) => {
+                let src = file.history[0].replace(path.resolve(__dirname,'public'), 'static')
+                           .replace(/^[\\\/]/, '')
+                           .replace(/^template[\\\/]/i, '');
+
+                let dst = `/data/static/topic_v3/v3/${src}`;
+                // if ( /[\\\/]index\.html$/i.test(src) ) {
+                //     dst = `/data/data/ecom/topic/${src}`;
+                // }
+                console.log('UPLOADING: '+chalk.yellow(src))
+                // console.log(chalk.cyan(src) + chalk.yellow(' => ') + chalk.magenta(dst)); // 打印提示信息
 
                 return dst;
             }
         }
     }));
 })
+
+gulp.task('upload:client',['upload:dist','upload:public'])
+
+function uploadServe(){
+    return upload({
+        server: 'http://10.1.200.143:9090/upload',
+        data: {
+            to: (file) => {
+                let src = file.history[0].replace(path.resolve(__dirname, './'), '')
+                           .replace(/^[\\\/]/, '')
+                           .replace(/^template[\\\/]/i, '');
+
+                let dst = `/apps/ecom-topic-node/${src}`;
+                // if ( /[\\\/]index\.html$/i.test(src) ) {
+                //     dst = `/data/data/ecom/topic/${src}`;
+                // }
+                console.log('UPLOADING: '+chalk.yellow(src))
+                // console.log(chalk.cyan(src) + chalk.yellow(' => ') + chalk.magenta(dst)); // 打印提示信息
+
+                return dst;
+            }
+        }
+    })
+}
+
+gulp.task('upload:server',function() {
+    return gulp.src([
+        'build/**/*',
+        'server-renderer/**/*',
+        'routes/**/*',
+        'publish/**/*',
+        './index.js','./gulpfile.js','./package.json','./process.json'
+    ])
+    .pipe(uploadServe());
+})
+/** 推送线上单台 */
+gulp.task('upload-test', ['upload:client','upload:server'])
