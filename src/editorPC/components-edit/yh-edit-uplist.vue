@@ -67,7 +67,6 @@
                 
             },
             removeElement(e){
-                console.log(this.path+'.props.elements.'+this.index)
                 this.$store.commit('removeElement',{
                     path:this.path+'.props.elements.'+this.index
                 })
