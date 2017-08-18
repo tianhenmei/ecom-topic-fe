@@ -11,9 +11,9 @@
     </div>
 </template>
 <script>
-    import YHEditColor from '../edit-components/yh-edit-color.vue'
-    import borderWidth from '../edit-components/border-width.vue'
-    import borderStyle from '../edit-components/border-style.vue'
+    import YHEditColor from '../components-edit/yh-edit-color.vue'
+    import borderWidth from '../components-edit/border-width.vue'
+    import borderStyle from '../components-edit/border-style.vue'
     import YHEditInput from './yh-edit-input.vue'
     export default {
         components:{

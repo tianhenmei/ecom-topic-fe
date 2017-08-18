@@ -13,7 +13,7 @@ let store = new Vuex.Store({
         elements:[],
         includes:[],
         count:0,
-        host:__isProd__ ? 'http://topic.lagou.com/v3' : 'http://localhost:9000/',
+        host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/',
         connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         triggerId:'',
@@ -115,6 +115,7 @@ let store = new Vuex.Store({
                 yh_module = arr[i]['yh-module']
                 arr[i].path = arr[i].path.replace(/(index)/g,length+i)
                 switch(yh_module){
+                    case 'Slider_style1':
                     case 'Block_style2':
                     case 'Block_style3':
                     case 'Block_style4':
@@ -214,6 +215,7 @@ let store = new Vuex.Store({
                     }
                 }
                 switch(yh_module){
+                    case 'Slider_style1':
                     case 'Block_style2':
                     case 'Block_style3':
                     case 'Block_style4':

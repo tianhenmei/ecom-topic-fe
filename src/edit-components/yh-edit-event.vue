@@ -15,8 +15,8 @@
     </div>
 </template>
 <script>
-    import YHEditInput from '../edit-components/yh-edit-input.vue'
-    import YHEditOptions from '../edit-components/yh-edit-options.vue'
+    import YHEditInput from '../components-edit/yh-edit-input.vue'
+    import YHEditOptions from '../components-edit/yh-edit-options.vue'
 
     export default {
         components:{

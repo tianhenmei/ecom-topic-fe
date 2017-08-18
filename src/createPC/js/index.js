@@ -1,26 +1,34 @@
 import '../css/style.scss'
 import Vue from 'vue'
+import VueResource from 'vue-resource'
+// import axios from 'axios'
 
+Vue.use(VueResource)
 Vue.config.debug = true;//开启错误提示
 var pageVue = new Vue({
     el:'#app',
     data(){
         return {
             title:'YH LIST',
-            host:'http://localhost:9000',
+            host:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
+            editPage:__isProd__ ? 'http://topic.lagou.com/v3/dist/editorPC/index.html'
+                : 'http://localhost:9000/dist/editorPC/index.html',
             href:'/dist/editorPC/index.html',
             chref:'/dist/createPC/index.html',
             total:0,
             eachPage:10,
             currentPage:1,
             totalPage:10,
+            updateStatus:false,
+            oldhtml:'',
             one:{
+                templateId:"",
                 name:"",  // 专题名称
-                activityName:"-------",  // 专题标签
+                templateCategory:"-------",  // 专题标签
                 title:"",  // 专题标题
-                url:"",  // 专题URL
-                startTime:"",// 活动开始日期
-                endTime:"", // 活动结束日期
+                html:"",  // 专题URL
+                activeTimeStart:"",// 活动开始日期
+                activeTimeEnd:"", // 活动结束日期
                 keywords:"",  // 专题关键词
                 supportH5:1,  // 是否支持H5
                 shareTitle:"",  // 分享标题
@@ -30,39 +38,131 @@ var pageVue = new Vue({
                 file:"",
                 scripts:'',
                 scriptsJson:[],
-                lgID:""
+                lgID:"",
+                lgH5ID:"",
+                createTime:'',
+                createAuthor:'gaohui',
+                updateTime:'',
+                updateAuthor:'gaohui',
             }
         }
     },
     mounted(){
-        
+        let name = this.getQueryString('name')
+        if(name){
+            this.oldhtml = name
+            this.getData(name)
+        }
     },
     methods:{
+        getQueryString(parm){
+            var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+
+            if (r != null) return unescape(r[2]); 
+            return null;
+        },
         scriptsChange(e){
             let arr = e.target.value.split(/[(\n)(\t)]/g)
             this.one.scriptsJson = arr
         },
-        sendData(){
-            this.$http.post('http://topic.lagou.com/newEdit/baseStyle',{
-                name:this.one.name,
-                activityName:this.one.activityName,
-                title:this.one.title,
-                url:this.one.url,
-                startTime:this.one.startTime,
-                endTime:this.one.endTime,
-                keywords:this.one.keywords,
-                lgID:this.one.lgID,
-                supportH5:this.one.supportH5,
-                shareTitle:this.one.shareTitle,
-                shareDesc:this.one.shareDesc,
-                shareUrl:this.one.shareUrl,
-                shareImg:this.one.shareImg,
-                file:this.one.file,
-                scriptsJson:this.one.scriptsJson
+        getData(html){
+            let self = this
+            this.$http.post(this.host+'v3/api/createPC/getPageData',{
+                html:html
             },{
                 emulateJSON:true
             }).then(response => {
+                let data = response.body,
+                    arr = ''
+                if(data.success){
+                    for(arr in self.one){
+                        switch(arr){
+                            case 'templateId':
+                            case 'name':
+                            case 'templateCategory':
+                            case 'activeTimeStart':
+                            case 'activeTimeEnd':
+                            case 'keywords':
+                            case 'scriptsJson':
+                            case 'file':
+                            case 'title':
+                            case 'lgID':
+                            case 'lgH5ID':
+                            case 'createTime':
+                            case 'createAuthor':
+                                self.one[arr] = (!data.content[arr] || data.content[arr] == 'undefined') ? self.one[arr] : data.content[arr]
+                                break
+                            case 'supportH5':
+                                self.one['supportH5'] = (!data.content['share'].status || data.content['share'].status == 'undefined') ? '' : data.content['share'].status
+                                break
+                            case 'shareTitle':
+                                self.one['shareTitle'] = (!data.content['share'].title || data.content['share'].title == 'undefined') ? '' : data.content['share'].title
+                                break
+                            case 'shareDesc':
+                                self.one['shareDesc'] = (!data.content['share'].desc || data.content['share'].desc == 'undefined') ? '' : data.content['share'].desc
+                                break
+                            case 'shareImg':
+                                self.one['shareImg'] = (!data.content['share'].pic || data.content['share'].pic == 'undefined') ? '' : data.content['share'].pic
+                                break
+                            case 'shareUrl':
+                                self.one['shareUrl'] = (!data.content['share'].url || data.content['share'].url == 'undefined') ? '' : data.content['share'].url
+                                break
+                            case 'html':
+                                self.one[arr] = data.content[arr] +'.html'
+                                break
+                            case 'scripts':
+                                if(!data.content['scriptsJson'] || data.content['scriptsJson'] == 'undefined'){
+                                    self.one[arr] = ''
+                                }else{  
+                                    self.one[arr] = data.content['scriptsJson'].join('\n')
+                                }
+                                break
+                        }
+                    }
+                    self.updateStatus = true
+                }else{
+                    console.log(data.content)
+                }
+            },response => {
                 console.log(response.body.message)
+            })
+        },
+        sendData(){
+            let self = this,
+                html = this.one.html ? this.one.html.split('.')[0] : 'test'+new Date().getTime(),
+                requestUrl = this.updateStatus ? this.host+'v3/api/createPC/update' 
+                    : this.host+'v3/api/createPC/create',
+                data = {
+                    name:this.one.name,
+                    templateCategory:this.one.templateCategory,
+                    title:this.one.title,
+                    html:html,
+                    activeTimeStart:this.one.activeTimeStart,
+                    activeTimeEnd:this.one.activeTimeEnd,
+                    keywords:this.one.keywords,
+                    lgID:this.one.lgID,
+                    lgH5ID:this.one.lgH5ID,
+                    supportH5:this.one.supportH5,
+                    shareTitle:this.one.shareTitle,
+                    shareDesc:this.one.shareDesc,
+                    shareUrl:this.one.shareUrl,
+                    shareImg:this.one.shareImg,
+                    file:this.one.file,
+                    scriptsJson:this.one.scriptsJson
+                }
+            if(this.updateStatus){
+                data.templateId = this.one.templateId
+                data.createTime = this.one.createTime
+                data.createAuthor = this.one.createAuthor
+            }
+            //http://topic.lagou.com/newEdit/baseStyle
+            this.$http.post(requestUrl,data,{
+                emulateJSON:true
+            }).then(response => {
+                if(response.body.success){
+                    window.location.href = self.editPage+'?name='+html
+                }
             },response =>{
                 console.log(response.body.message)
             })
@@ -83,7 +183,7 @@ var pageVue = new Vue({
                 status = /(hide)/g.test(tips.className)
             if( !value ){
                 tips.innerHTML = "* "+name+"不能为空"
-                if(!status){
+                if(status){
                     tips.className = tips.className.replace(/(hide)/g,'').replace(/'  '/g,' ')
                 }
                 return false;
@@ -110,7 +210,7 @@ var pageVue = new Vue({
                 status = /(hide)/g.test(tips.className)
             if( value == '-------' ){
                 tips.innerHTML = "* "+name+"不能为-------"
-                if(!status){
+                if(status){
                     tips.className = tips.className.replace(/(hide)/g,'').replace(/'  '/g,' ')
                 }
                 return false;
@@ -137,7 +237,7 @@ var pageVue = new Vue({
                 status = /(hide)/g.test(tips.className)
             if( !value || value == "NaN-aN-aN" ){
                 tips.innerHTML = "* "+name+"不能为空"
-                if(!status){
+                if(status){
                     tips.className = tips.className.replace(/(hide)/g,'').replace(/'  '/g,' ')
                 }
                 return false;
@@ -162,44 +262,53 @@ var pageVue = new Vue({
         checkurl(id,value,name){
             let urlPattern = /^\w+\.html$/, //形如：　test.html
 			    curl = '$!template.url',
-			    url = this.one.url,
-			    correct = urlPattern.test(url),
+			    html = this.one.html,
+			    correct = urlPattern.test(html),
                 tips = this.$refs[id+'-tips'],
                 status = /(hide)/g.test(tips.className),
                 self = this
 			if (!correct) {
                 tips.innerHTML = "* URL格式不正确．请填写类似\"topic.html\""
-				if(!status){
+				if(status){
                     tips.className = tips.className.replace(/(hide)/g,'').replace(/'  '/g,' ')
                 }
 				return false;
 			}
-			if (url.length > 26){
+			if (html.length > 26){
                 tips.innerHTML = "* URL过长，请限制在27个字符以内！"
-				if(!status){
+				if(status){
                     tips.className = tips.className.replace(/(hide)/g,'').replace(/'  '/g,' ')
                 }
 				return false;
 			}
-			if(url == curl){
+			if(html == curl){
                 if(!status){
                     tips.className += ' hide'
                 }
 				return true;
 			}
 			
-			//checkurl
-			this.$http.post("http://topic.lagou.com/template/checkurl", {
-                "url":url
+            //checkurl
+            /*,*/
+            // http://topic.lagou.com/template/checkurl
+            if(this.updateStatus && html.split('.')[0] == this.oldhtml){
+                return true
+            }
+			this.$http.post(this.host+"v3/api/createPC/checkurl",{
+                "url":html.split('.')[0]
             },{
                 emulateJSON:true
-            }).then(response => {
-                let data = response.body
+            })
+            .then(response => {
+                let data = response.body,
+                    urlTips = self.$refs['html-tips']
                 if(data.success){
                     tips.innerHTML = "* 该URL已存在，请换一个吧，亲！"
-					// self.$refs['url'].focus();
-				    return data.success;
-				}
+                    urlTips.className = urlTips.className.replace(' hide','')
+				    return !data.success;
+				}else{
+                    urlTips.className += ' hide'
+                }
             },response =>{
                 console.log(response.body.message)
             })
@@ -219,12 +328,9 @@ var pageVue = new Vue({
             }).then(response => {
                 // $('.lgID').attr('value',data.data.code);
                 // $('#dataForm').submit();
-                let data = response.body
+                let data = response.data
                 if(data.success){
-                    tips.innerHTML = "* 该URL已存在，请换一个吧，亲！"
-					// self.$refs['url'].focus();
-                    // return data.success;
-                    self.one.lgID = data.data.code
+                    self.one.lgID = data.code
                     self.sendData()
 				}
             },response =>{
@@ -233,15 +339,17 @@ var pageVue = new Vue({
         },
         createSubject(e){
             var checkArray = [
-                {id:'name',elem:'专题名称',callFunction:this.checkNull},
-                {id:'title',elem:'专题标题',callFunction:this.checkNull},
-                {id:'url', callFunction:this.checkurl},
-                {id:'activityName',elem:'专题标签',callFunction:this.checkNullOptions},
-                {id:'startTime',elem:'活动开始日期',callFunction:this.checkNullTime},
-                {id:'endTime',elem:'活动结束日期',callFunction:this.checkNullTime}
-            ],
-            i = 0,status = false;
+                    {id:'name',elem:'专题名称',callFunction:this.checkNull},
+                    {id:'title',elem:'专题标题',callFunction:this.checkNull},
+                    {id:'html', callFunction:this.checkurl},
+                    {id:'templateCategory',elem:'专题标签',callFunction:this.checkNullOptions},
+                    {id:'activeTimeStart',elem:'活动开始日期',callFunction:this.checkNullTime},
+                    {id:'activeTimeEnd',elem:'活动结束日期',callFunction:this.checkNullTime}
+                ],
+                i = 0,status = false,
+                id = '';
             for( ; i < checkArray.length; i++){
+                id = checkArray[i].id
                 if(checkArray[i].elem){
                     status = checkArray[i].callFunction(id,this.one[id],checkArray[i].elem);
                 }else{
@@ -251,11 +359,11 @@ var pageVue = new Vue({
                     return;
                 }
             }
-            if(this.one.lgID){
+            // if(this.one.lgID){
                 this.sendData()
-            }else{
-                this.getLgID()
-            }
+            // }else{
+                // this.getLgID()
+            // }
         },
         backToHome(e){
 

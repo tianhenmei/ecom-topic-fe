@@ -7,16 +7,17 @@ const MFS = require('memory-fs')
 
 const readFile = (clientConfig,tempfs, file) => {
     try {
-		console.log(path.join(clientConfig.output.path, file))
         return tempfs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
     } catch (e) {}
 }
 
-module.exports = function setupDevServer (app, cb) {
-	let clientConfig = require('./webpack.client.config')('editorPC')
-	let serverConfig = require('./webpack.server.config')('editorPC')
-	let bundle, clientManifest
-	let resolve
+module.exports = function setupDevServer (app,item, cb) {
+	let clientConfig = require('./webpack.client.config')('editorPC',item),
+		serverConfig = require('./webpack.server.config')('editorPC',item),
+		bundle,
+		clientManifest,
+		resolve,
+		temp;
 	const readyPromise = new Promise(r => { resolve = r })
 	const ready = (...args) => {
 		resolve()
@@ -39,26 +40,23 @@ module.exports = function setupDevServer (app, cb) {
 	})
 	app.use(devMiddleware)
 	clientCompiler.plugin('done', stats => {
-		console.log('Client Compiler')
 		stats = stats.toJson()
 		stats.errors.forEach(err => console.error(err))
 		stats.warnings.forEach(err => console.warn(err))
 		if (stats.errors.length) return
-
-		clientManifest = JSON.parse(readFile(
+		
+		temp = readFile(
 			clientConfig,
 			devMiddleware.fileSystem,
 			'vue-ssr-client-manifest.json'
-		))
+		)
+		clientManifest = JSON.parse(temp ? temp : "{}")
 		if (bundle) {
 			ready(bundle, {
 				clientManifest
 			})
 		}
 	})
-
-	console.log(serverConfig)
-
 	// watch and update server renderer
 	const serverCompiler = webpack(serverConfig)
 	const mfs = new MFS()
@@ -67,7 +65,12 @@ module.exports = function setupDevServer (app, cb) {
 		if (err) throw err
 		stats = stats.toJson()
 		if (stats.errors.length) return
-		bundle = JSON.parse(readFile(clientConfig,mfs, 'vue-ssr-server-bundle.json'))
+		temp = readFile(
+			clientConfig,
+			mfs,
+			'vue-ssr-server-bundle.json'
+		)
+		bundle = JSON.parse(temp ? temp : "{}")
 		if (clientManifest) {
 			ready(bundle, {
 				clientManifest

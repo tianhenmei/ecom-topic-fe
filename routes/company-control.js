@@ -14,7 +14,7 @@ router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 router.use(bodyParser.urlencoded());
 
 
-router.get('/getCompanyandPosition',function(req,res){
+router.get('/api/company/getCompanyandPosition',function(req,res){
     res.json({
         code:null,
         msg:"查询成功",
@@ -213,8 +213,9 @@ router.get('/getCompanyandPosition',function(req,res){
 
 
 router.use(function(req,res,next){
-    console.log(req.url);
-    res.status(404).send('Sorry cant find that!');
+    // console.log(req.url);
+    // res.status(404).send('Sorry cant find that!');
+    next();
 });
 
 router.use(function(err,req,res,next){

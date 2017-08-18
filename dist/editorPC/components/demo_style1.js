@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 47);
+/******/ 	return __webpack_require__(__webpack_require__.s = 49);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -492,6 +492,17 @@ var Node = {
 Node.setAll = function (e) {
     console.log(e.target.path);
     console.log(undefined.$refs);
+};
+/********************************************
+ * getQueryString: 获取url参数的值
+ * parm: 对象
+ *******************************************/
+Node.getQueryString = function (parm) {
+    var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+
+    if (r != null) return unescape(r[2]);
+    return null;
 };
 /********************************************
  * isEmptyObject: 判断一个对象是否为空对象
@@ -1366,13 +1377,13 @@ module.exports = _extends({}, Node);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(65)
+  __webpack_require__(75)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(23),
   /* template */
-  __webpack_require__(52),
+  __webpack_require__(62),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1380,7 +1391,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-input.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-input.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-input.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1391,9 +1402,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1cace23a", Component.options)
+    hotAPI.createRecord("data-v-d3a0c83c", Component.options)
   } else {
-    hotAPI.reload("data-v-1cace23a", Component.options)
+    hotAPI.reload("data-v-d3a0c83c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1410,13 +1421,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(73)
+  __webpack_require__(71)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(19),
   /* template */
-  __webpack_require__(60),
+  __webpack_require__(58),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1424,7 +1435,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-checkbox.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-checkbox.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-checkbox.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1435,9 +1446,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6f271903", Component.options)
+    hotAPI.createRecord("data-v-7a6bc34a", Component.options)
   } else {
-    hotAPI.reload("data-v-6f271903", Component.options)
+    hotAPI.reload("data-v-7a6bc34a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1454,13 +1465,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(66)
+  __webpack_require__(74)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(20),
   /* template */
-  __webpack_require__(53),
+  __webpack_require__(61),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1468,7 +1479,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-color.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-color.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-color.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1479,9 +1490,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2d014553", Component.options)
+    hotAPI.createRecord("data-v-b2f8020a", Component.options)
   } else {
-    hotAPI.reload("data-v-2d014553", Component.options)
+    hotAPI.reload("data-v-b2f8020a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1498,13 +1509,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(75)
+  __webpack_require__(64)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(22),
   /* template */
-  __webpack_require__(62),
+  __webpack_require__(51),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1512,7 +1523,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-image.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-image.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-image.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1523,9 +1534,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-fad1f96a", Component.options)
+    hotAPI.createRecord("data-v-07cc861a", Component.options)
   } else {
-    hotAPI.reload("data-v-fad1f96a", Component.options)
+    hotAPI.reload("data-v-07cc861a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1542,13 +1553,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(74)
+  __webpack_require__(67)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(24),
   /* template */
-  __webpack_require__(61),
+  __webpack_require__(54),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1556,7 +1567,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-mutiple.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-mutiple.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-mutiple.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1567,9 +1578,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a38c7bc8", Component.options)
+    hotAPI.createRecord("data-v-5c169c78", Component.options)
   } else {
-    hotAPI.reload("data-v-a38c7bc8", Component.options)
+    hotAPI.reload("data-v-5c169c78", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1586,13 +1597,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(64)
+  __webpack_require__(70)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(25),
   /* template */
-  __webpack_require__(51),
+  __webpack_require__(57),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1600,7 +1611,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-number.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-number.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-number.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1611,9 +1622,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11888f89", Component.options)
+    hotAPI.createRecord("data-v-6f45ea3e", Component.options)
   } else {
-    hotAPI.reload("data-v-11888f89", Component.options)
+    hotAPI.reload("data-v-6f45ea3e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1630,13 +1641,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(68)
+  __webpack_require__(63)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(26),
   /* template */
-  __webpack_require__(55),
+  __webpack_require__(50),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1644,7 +1655,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-options.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-options.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-options.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1655,9 +1666,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3c469de4", Component.options)
+    hotAPI.createRecord("data-v-0597a0b6", Component.options)
   } else {
-    hotAPI.reload("data-v-3c469de4", Component.options)
+    hotAPI.reload("data-v-0597a0b6", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1674,13 +1685,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(67)
+  __webpack_require__(68)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(27),
   /* template */
-  __webpack_require__(54),
+  __webpack_require__(55),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1688,7 +1699,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-request.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-request.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-request.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1699,9 +1710,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3abbbc7f", Component.options)
+    hotAPI.createRecord("data-v-5e76ac27", Component.options)
   } else {
-    hotAPI.reload("data-v-3abbbc7f", Component.options)
+    hotAPI.reload("data-v-5e76ac27", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1718,13 +1729,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(72)
+  __webpack_require__(69)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(29),
   /* template */
-  __webpack_require__(59),
+  __webpack_require__(56),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1732,7 +1743,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-text.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-text.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-text.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1743,9 +1754,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6bf85d26", Component.options)
+    hotAPI.createRecord("data-v-64217a76", Component.options)
   } else {
-    hotAPI.reload("data-v-6bf85d26", Component.options)
+    hotAPI.reload("data-v-64217a76", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1762,13 +1773,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(71)
+  __webpack_require__(73)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(30),
   /* template */
-  __webpack_require__(58),
+  __webpack_require__(60),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1776,7 +1787,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-textarea.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-textarea.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-textarea.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1787,9 +1798,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5a8720fa", Component.options)
+    hotAPI.createRecord("data-v-a3abb35c", Component.options)
   } else {
-    hotAPI.reload("data-v-5a8720fa", Component.options)
+    hotAPI.reload("data-v-a3abb35c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1806,13 +1817,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(63)
+  __webpack_require__(72)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(31),
   /* template */
-  __webpack_require__(50),
+  __webpack_require__(59),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1820,7 +1831,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-uplist.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-uplist.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] yh-edit-uplist.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1831,9 +1842,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-06c2140e", Component.options)
+    hotAPI.createRecord("data-v-99191d5e", Component.options)
   } else {
-    hotAPI.reload("data-v-06c2140e", Component.options)
+    hotAPI.reload("data-v-99191d5e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -2670,7 +2681,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _Node = __webpack_require__(3);
 
-var _yhEditComplicated = __webpack_require__(48);
+var _yhEditComplicated = __webpack_require__(47);
 
 var _yhEditComplicated2 = _interopRequireDefault(_yhEditComplicated);
 
@@ -2734,6 +2745,7 @@ var baseData = {
             // cn:'',   ／／ 选项中文
             // value:'' // 选项真正的值
             // }]
+            // parentSetStatus:'common',  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             // 只有当前组件是容器组件时，一般只有设置数据才有，才会有eindex和index
             // 其中 eindex 指的是子组件在容器组件里面的位置
             //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表
@@ -2903,7 +2915,7 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(36);
+var content = __webpack_require__(35);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -3140,7 +3152,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _Node = __webpack_require__(3);
 
-var _yhEditTab = __webpack_require__(49);
+var _yhEditTab = __webpack_require__(48);
 
 var _yhEditTab2 = _interopRequireDefault(_yhEditTab);
 
@@ -3187,6 +3199,42 @@ var _yhEditMutiple2 = _interopRequireDefault(_yhEditMutiple);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // debugger
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3393,6 +3441,30 @@ exports.default = {
 
     computed: {},
     methods: {
+        getChildCssStatus: function getChildCssStatus(index) {
+            var css = this.elements[index].props.css,
+                status = false,
+                i = 0;
+            for (i in css) {
+                if (css[i].parentSetStatus == 'child') {
+                    status = true;
+                    break;
+                }
+            }
+            return status;
+        },
+        getChildH5CssStatus: function getChildH5CssStatus(index) {
+            var css = this.elements[index].props.h5css,
+                status = false,
+                i = 0;
+            for (i in css) {
+                if (css[i].parentSetStatus == 'child') {
+                    status = true;
+                    break;
+                }
+            }
+            return status;
+        },
         getChildSetStatus: function getChildSetStatus(one) {
             switch (one.en) {
                 case 'toH5':
@@ -3462,7 +3534,7 @@ exports.default = {
         }
     }
 };
-// edit-components
+// components-edit
 
 /***/ }),
 /* 22 */
@@ -3631,7 +3703,7 @@ exports.default = {
             (function (self, that) {
                 $.ajax({
                     type: 'post',
-                    url: self.$store.state.host + 'editorPC/upload',
+                    url: self.$store.state.connhost + 'v3/api/editorPC/upload',
                     data: fileData,
                     dataType: 'JSON',
                     cache: false,
@@ -4592,7 +4664,8 @@ Object.defineProperty(exports, "__esModule", {
 var _Node = __webpack_require__(3);
 
 exports.default = {
-    props: ['options'],
+    props: ['options', 'status' // 是否有子集
+    ],
     data: function data() {
         return {};
     },
@@ -4655,7 +4728,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n\n", ""]);
+exports.push([module.i, "\n.yh-edit-options {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-options .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-options .yh-edit-value{\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    float: left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    margin: 0 5px 0 0;\n    float: left;\n}\n.yh-edit-options .yh-edit-arrow{\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    margin: 2px 0 0 0;\n    cursor: pointer;\n    position:relative;\n    float:left;\n    background: #ff47a3;\n}\n.yh-edit-options .yh-edit-arrow:after {\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    content: \"\\F0D7\";\n    font-family: FontAwesome;\n    font-size: 12px;\n    color: #fff;\n    text-align: center;\n    position: absolute;\n    left: 0;\n    top: 0;\n}\n.yh-edit-options .yh-edit-list > ul > li,\n.yh-edit-options .yh-edit-list > ul,\n.yh-edit-options .yh-edit-list{\n    width:100px;\n    color:#666;\n}\n.yh-edit-options .yh-edit-list {\n    width: 113px;\n    display: none;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    border: 1px solid #ccc;\n    /* height: 200px; */\n    max-height: 200px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    z-index: 10;\n}\n.yh-edit-options .yh-edit-list > ul > li {\n    line-height:25px;\n    text-align:center;\n    cursor:pointer;\n    background:#fff;\n}\n.yh-edit-options .yh-edit-list > ul > li:hover {\n    background:#eee;\n}\n.yh-edit-options .yh-edit-list > ul > li.active {\n    background:#ff0084;\n    color:#fff;\n}\n", ""]);
 
 // exports
 
@@ -4669,7 +4742,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-number {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-number .yh-edit-value{\n    width: 145px;\n}\n.yh-edit-number .yh-edit-value input{\n    width: 113px;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-image {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-image .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-image .yh-edit-value {\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    float:left;\n}\n.yh-edit-image .yh-edit-image-local {\n    width: 20px;\n    height: 20px;\n    background: url(http://localhost:9000/static/images/icons.png) no-repeat -2px -194px;\n    position:absolute;\n    left:200px;\n    top:3px;\n}\n.yh-edit-image .yh-edit-imagefile{\n    width: 20px;\n    height: 20px;\n    border: none;\n    opacity:0;\n    display: block;\n}\n", ""]);
 
 // exports
 
@@ -4683,27 +4756,13 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-input {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-input .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-input .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-input .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-input .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-input .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-input .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-tab {\n    width:242px;\n    height:520px;\n    box-shadow:0px 0px 6px #ccc;\n    background:#fff;\n    position:fixed;\n    right:0;\n    top:77px;\n}\n.yh-edit-tab .yh-edit-tabTitle{\n    width:100%;\n}\n.yh-edit-tab .yh-edit-tabTitle > div {\n    padding: 0 10px;\n    line-height: 26px;\n    float:left;\n    text-align:center;\n    font-size:14px;\n    color:#666;\n    background:#efefef;\n    cursor:pointer;\n}\n.yh-edit-tab .yh-edit-tabTitle > div:hover,\n.yh-edit-tab .yh-edit-tabTitle > div.yh-tab-active{\n    background:#ff0084;\n    color:#fff;\n}\n.yh-edit-tab .yh-edit-tabContent > div{\n    position: relative;\n    display:none;\n}\n.yh-edit-tab .yh-edit-tabContent > div.yh-tab-active{\n    display:block;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.yh-edit-chooser {\n    width:25px;\n    height:25px;\n    float:left;\n    position:relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n    width:25px;\n    height:25px;\n    border:none;\n    position:absolute;\n    left:0;\n    top:0;\n}\n.yh-edit-chooser .yh-edit-list {\n    width:176px;\n    position: absolute;\n    right: 0;\n    top: 100%;\n    background: #fff;\n    padding:2px 0 0 2px;\n    box-shadow: 0 0 10px #ccc;\n    display:none;\n    z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n    width:18px;\n    height:18px;\n    margin:0 2px 2px 0;\n    border:1px solid #efefef;\n    cursor:pointer;\n    float:left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent{\n    background:url('http://localhost:9000/static/images/icons.png') no-repeat 0 -1700px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -4717,6 +4776,20 @@ exports.push([module.i, "\n", ""]);
 
 
 /***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.yh-edit-layer {\n    /* width: 100%;\n    height: 100%; */\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index:1000;\n}\n.yh-delete-undo{\n    width:45px;\n    height:17px;\n    font-family: serif;\n    position: absolute;\n    left: 0;\n    top: 0;\n}\n.yh-delete-undo .yh-delete,\n.yh-delete-undo .yh-undo {\n    width: 17px;\n    height: 17px;\n    line-height: 17px;\n    border: 1px solid #ff0084;\n    border-radius: 17px;\n    font-size: 12px;\n    text-align: center;\n    color: #ff0084;\n    cursor: pointer;\n    float:left;\n    margin:0 3px 0 0;\n}\n.yh-delete-undo .yh-delete {\n    font-family: initial;\n}\n.child-split {\n    line-height: 30px;\n    padding: 0 10px;\n    margin: 5px 0;\n    background-color: #ff0084;\n    color: #fff;\n    font-size: 14px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4725,7 +4798,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-request {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-request .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n}\n.yh-edit-request .yh-edit-value{\n    width: 140px;\n    padding:0 5px 0 0;\n    float:left;\n}\n.yh-edit-request .yh-edit-value input{\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-request .yh-edit-value span {\n    width: 40px;\n    height: 25px;\n    line-height: 25px;\n    margin: 0 0 0 5px;\n    text-align: center;\n    font-size: 12px;\n    color: #fff;\n    float: left;\n    background: #ff0084;\n    cursor:pointer;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-yhtext {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtext .yh-edit-value{\n    width: 145px;\n}\n.yh-edit-yhtext .yh-edit-value input{\n    width: 113px;\n}\n", ""]);
 
 // exports
 
@@ -4739,7 +4812,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-options {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-options .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-options .yh-edit-value{\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    float: left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    margin: 0 5px 0 0;\n    float: left;\n}\n.yh-edit-options .yh-edit-arrow{\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    margin: 2px 0 0 0;\n    cursor: pointer;\n    position:relative;\n    float:left;\n    background: #ff47a3;\n}\n.yh-edit-options .yh-edit-arrow:after {\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    content: \"\\F0D7\";\n    font-family: FontAwesome;\n    font-size: 12px;\n    color: #fff;\n    text-align: center;\n    position: absolute;\n    left: 0;\n    top: 0;\n}\n.yh-edit-options .yh-edit-list > ul > li,\n.yh-edit-options .yh-edit-list > ul,\n.yh-edit-options .yh-edit-list{\n    width:100px;\n    color:#666;\n}\n.yh-edit-options .yh-edit-list {\n    width: 113px;\n    display: none;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    border: 1px solid #ccc;\n    /* height: 200px; */\n    max-height: 200px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    z-index: 10;\n}\n.yh-edit-options .yh-edit-list > ul > li {\n    line-height:25px;\n    text-align:center;\n    cursor:pointer;\n    background:#fff;\n}\n.yh-edit-options .yh-edit-list > ul > li:hover {\n    background:#eee;\n}\n.yh-edit-options .yh-edit-list > ul > li.active {\n    background:#ff0084;\n    color:#fff;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-request {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-request .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n}\n.yh-edit-request .yh-edit-value{\n    width: 140px;\n    padding:0 5px 0 0;\n    float:left;\n}\n.yh-edit-request .yh-edit-value input{\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-request .yh-edit-value span {\n    width: 40px;\n    height: 25px;\n    line-height: 25px;\n    margin: 0 0 0 5px;\n    text-align: center;\n    font-size: 12px;\n    color: #fff;\n    float: left;\n    background: #ff0084;\n    cursor:pointer;\n}\n", ""]);
 
 // exports
 
@@ -4753,7 +4826,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-layer {\n    /* width: 100%;\n    height: 100%; */\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index:1000;\n}\n.yh-delete-undo{\n    width:45px;\n    height:17px;\n    font-family: serif;\n    position: absolute;\n    left: 0;\n    top: 0;\n}\n.yh-delete-undo .yh-delete,\n.yh-delete-undo .yh-undo {\n    width: 17px;\n    height: 17px;\n    line-height: 17px;\n    border: 1px solid #ff0084;\n    border-radius: 17px;\n    font-size: 12px;\n    text-align: center;\n    color: #ff0084;\n    cursor: pointer;\n    float:left;\n    margin:0 3px 0 0;\n}\n.yh-delete-undo .yh-delete {\n    font-family: initial;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-yhtext {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtext .yh-edit-value{\n    width: 145px;\n}\n.yh-edit-yhtext .yh-edit-value input{\n    width: 113px;\n}\n", ""]);
 
 // exports
 
@@ -4767,7 +4840,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-tab {\n    width:242px;\n    height:520px;\n    box-shadow:0px 0px 6px #ccc;\n    background:#fff;\n    position:fixed;\n    right:0;\n    top:77px;\n}\n.yh-edit-tab .yh-edit-tabTitle{\n    width:100%;\n}\n.yh-edit-tab .yh-edit-tabTitle > div {\n    padding: 0 10px;\n    line-height: 26px;\n    float:left;\n    text-align:center;\n    font-size:14px;\n    color:#666;\n    background:#efefef;\n    cursor:pointer;\n}\n.yh-edit-tab .yh-edit-tabTitle > div:hover,\n.yh-edit-tab .yh-edit-tabTitle > div.yh-tab-active{\n    background:#ff0084;\n    color:#fff;\n}\n.yh-edit-tab .yh-edit-tabContent > div{\n    position: relative;\n    display:none;\n}\n.yh-edit-tab .yh-edit-tabContent > div.yh-tab-active{\n    display:block;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-number {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-number .yh-edit-value{\n    width: 145px;\n}\n.yh-edit-number .yh-edit-value input{\n    width: 113px;\n}\n", ""]);
 
 // exports
 
@@ -4781,7 +4854,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-yhtextarea {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtextarea .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-yhtextarea .yh-edit-value{\n    width: 145px;\n    height: 60px;\n    float:left;\n}\n.yh-edit-yhtextarea .yh-edit-value textarea{\n    /*width: 113px;*/\n    height: 60px;\n    outline: none;\n    resize: none;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-checkbox {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-checkbox .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-checkbox .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-checkbox .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-checkbox .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
 
 // exports
 
@@ -4795,7 +4868,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-yhtext {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtext .yh-edit-value{\n    width: 145px;\n}\n.yh-edit-yhtext .yh-edit-value input{\n    width: 113px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n\n", ""]);
 
 // exports
 
@@ -4809,7 +4882,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-checkbox {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-checkbox .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-checkbox .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-checkbox .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-checkbox .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-yhtextarea {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtextarea .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-yhtextarea .yh-edit-value{\n    width: 145px;\n    height: 60px;\n    float:left;\n}\n.yh-edit-yhtextarea .yh-edit-value textarea{\n    /*width: 113px;*/\n    height: 60px;\n    outline: none;\n    resize: none;\n}\n", ""]);
 
 // exports
 
@@ -4823,7 +4896,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-yhtext {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtext .yh-edit-value{\n    width: 145px;\n}\n.yh-edit-yhtext .yh-edit-value input{\n    width: 113px;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-chooser {\n    width:25px;\n    height:25px;\n    float:left;\n    position:relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n    width:25px;\n    height:25px;\n    border:none;\n    position:absolute;\n    left:0;\n    top:0;\n}\n.yh-edit-chooser .yh-edit-list {\n    width:176px;\n    position: absolute;\n    right: 0;\n    top: 100%;\n    background: #fff;\n    padding:2px 0 0 2px;\n    box-shadow: 0 0 10px #ccc;\n    display:none;\n    z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n    width:18px;\n    height:18px;\n    margin:0 2px 2px 0;\n    border:1px solid #efefef;\n    cursor:pointer;\n    float:left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent{\n    background:url('http://localhost:9000/static/images/icons.png') no-repeat 0 -1700px;\n}\n", ""]);
 
 // exports
 
@@ -4837,7 +4910,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-image {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-image .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-image .yh-edit-value {\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    float:left;\n}\n.yh-edit-image .yh-edit-image-local {\n    width: 20px;\n    height: 20px;\n    background: url(http://localhost:9000/static/images/icons.png) no-repeat -2px -194px;\n    position:absolute;\n    left:200px;\n    top:3px;\n}\n.yh-edit-image .yh-edit-imagefile{\n    width: 20px;\n    height: 20px;\n    border: none;\n    opacity:0;\n    display: block;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-input {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-input .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-input .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-input .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-input .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-input .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-input .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
 
 // exports
 
@@ -4858,6 +4931,94 @@ exports.push([module.i, "", ""]);
 
 /***/ }),
 /* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(66)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(21),
+  /* template */
+  __webpack_require__(53),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-complicated.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-complicated.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-37523641", Component.options)
+  } else {
+    hotAPI.reload("data-v-37523641", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(65)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(28),
+  /* template */
+  __webpack_require__(52),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-tab.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-tab.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-27c6c62d", Component.options)
+  } else {
+    hotAPI.reload("data-v-27c6c62d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -4901,127 +5062,541 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(69)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(21),
-  /* template */
-  __webpack_require__(56),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-complicated.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-complicated.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4f675a99", Component.options)
-  } else {
-    hotAPI.reload("data-v-4f675a99", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(70)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(28),
-  /* template */
-  __webpack_require__(57),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/edit-components/yh-edit-tab.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-tab.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-55dc7af6", Component.options)
-  } else {
-    hotAPI.reload("data-v-55dc7af6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "yh-uplist-set"
+    ref: "yh-edit-options",
+    staticClass: "yh-edit-options clearfix",
+    on: {
+      "mouseleave": _vm.hideEditList
+    }
   }, [_c('div', {
-    staticClass: "yh-uplist-set-title",
+    staticClass: "yh-edit-text",
     on: {
       "click": function($event) {
         $event.stopPropagation();
-        $event.preventDefault();
-        _vm.toggleUplistContent($event)
+        _vm.showEditList($event)
       }
     }
-  }, [_c('span', {
-    staticClass: "icon"
-  }), _vm._v(" "), _c('span', {
-    staticClass: "name"
-  }, [_vm._v(_vm._s(_vm.options.name))])]), _vm._v(" "), _c('div', {
-    staticClass: "yh-uplist-set-content hide"
-  }, [_vm._t("default")], 2)])
+  }, [_vm._v(_vm._s(_vm.options.cn) + _vm._s(_vm.options.cn ? '：' : ''))]), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-value",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.showEditList($event)
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.parent[_vm.options.en] ? _vm.getDesignValue : _vm.value) + _vm._s(_vm.options.unit ? _vm.options.unit : ''))]), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-arrow",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.showEditList($event)
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    ref: "yh-edit-list",
+    staticClass: "yh-edit-list"
+  }, [_c('ul', _vm._l((_vm.options.options), function(one, index) {
+    return _c('li', {
+      style: ((_vm.options.en == 'font-size' ? ('font-size:' + one.value + _vm.options.realunit) : '')),
+      attrs: {
+        "value": one.value,
+        "index": index
+      },
+      on: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.setValue($event)
+        }
+      }
+    }, [_vm._v("\n                    " + _vm._s(one.cn) + _vm._s(_vm.options.unit ? _vm.options.unit : '') + "\n            ")])
+  }))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-06c2140e", module.exports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-0597a0b6", module.exports)
   }
 }
 
 /***/ }),
 /* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "yh-edit-image clearfix"
+  }, [_c('div', {
+    staticClass: "yh-edit-text"
+  }, [_vm._v(_vm._s(_vm.options.cn) + "：")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.parent[_vm.options.en].value),
+      expression: "parent[options.en].value"
+    }],
+    staticClass: "yh-edit-value",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.parent[_vm.options.en].value)
+    },
+    on: {
+      "input": [function($event) {
+        if ($event.target.composing) { return; }
+        _vm.parent[_vm.options.en].value = $event.target.value
+      }, _vm.setValue]
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-image-local"
+  }, [_c('input', {
+    staticClass: "yh-edit-imagefile",
+    attrs: {
+      "type": "file",
+      "accept": "image/gif,image/jpeg,image/jpg,image/png,image/svg",
+      "stylename": _vm.options.en
+    },
+    on: {
+      "change": function($event) {
+        $event.stopPropagation();
+        _vm.uploadFile($event)
+      }
+    }
+  })])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-07cc861a", module.exports)
+  }
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "yh-edit-tab"
+  }, [_c('div', {
+    staticClass: "clearfix yh-edit-tabTitle"
+  }, _vm._l((_vm.props.base.tabs), function(tab, index) {
+    return _c('div', {
+      staticClass: "yh-tab-one",
+      class: _vm.active == index ? 'yh-tab-active' : '',
+      attrs: {
+        "index": index
+      },
+      on: {
+        "touchstart": function($event) {
+          $event.stopPropagation();
+          $event.preventDefault();
+          _vm.changeTab($event)
+        },
+        "mousedown": function($event) {
+          $event.stopPropagation();
+          $event.preventDefault();
+          _vm.changeTab($event)
+        }
+      }
+    }, [_vm._v(_vm._s(tab.title))])
+  })), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-tabContent"
+  }, _vm._l((_vm.props.base.tabs), function(tab, index) {
+    return _c('div', {
+      class: _vm.active == index ? 'yh-tab-active' : '',
+      attrs: {
+        "index": index
+      }
+    }, [_vm._t('content' + index)], 2)
+  }))])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-27c6c62d", module.exports)
+  }
+}
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    ref: _vm.elem_id + '-yh-edit-layer',
+    staticClass: "yh-edit-layer clearfix hide"
+  }, [_c('yh-edit-tab', {
+    attrs: {
+      "props": _vm.tabOptions
+    }
+  }, [(_vm.getContentStatus('css')) ? _c('div', {
+    staticClass: "yh-edit-tab-content yh-edit-css clearfix",
+    slot: _vm.setContentSlot('css')
+  }, [(!_vm.elements || _vm.elements.length == 0) ? _c('div', {
+    staticClass: "yh-component-set"
+  }, _vm._l((_vm.css), function(one) {
+    return (one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.css,
+        "options": one,
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  })) : _c('div', {
+    staticClass: "yh-component-set"
+  }, [_c('yh-edit-uplist', {
+    attrs: {
+      "options": {
+        name: '外壳基本样式'
+      },
+      "status": true
+    }
+  }, _vm._l((_vm.css), function(one) {
+    return (one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.css,
+        "options": one,
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  })), _vm._v(" "), _c('p', {
+    staticClass: "child-split"
+  }, [_vm._v("子组件设置")]), _vm._v(" "), _vm._l((_vm.elements[0].props.css), function(one) {
+    return (one.type != 'none' && (!one.parentSetStatus || one.parentSetStatus == 'common')) ? _c(_vm.setModule(one), {
+      tag: "div",
+      attrs: {
+        "parent": _vm.elements[0].props.css,
+        "options": one,
+        "ischildset": "ischildset",
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  }), _vm._v(" "), _vm._l((_vm.elements), function(one, index) {
+    return _c('yh-edit-uplist', {
+      key: index,
+      attrs: {
+        "status": _vm.getChildCssStatus(index),
+        "options": {
+          name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
+        }
+      }
+    }, _vm._l((_vm.elements[index].props.css), function(one) {
+      return (one.type != 'none' && (one.parentSetStatus == 'child')) ? _c(_vm.setModule(one), {
+        tag: "div",
+        attrs: {
+          "parent": _vm.elements[index].props.css,
+          "options": one,
+          "eindex": index,
+          "ischildset": "ischildset",
+          "elem_id": _vm.elem_id,
+          "ischild": _vm.ischild,
+          "path": _vm.path
+        }
+      }) : _vm._e()
+    }))
+  })], 2)]) : _vm._e(), _vm._v(" "), (_vm.getContentStatus('h5css')) ? _c('div', {
+    staticClass: "yh-edit-tab-content yh-edit-deployh5 clearfix",
+    slot: _vm.setContentSlot('h5css')
+  }, [(!_vm.elements || _vm.elements.length == 0) ? _c('div', {
+    staticClass: "yh-component-set"
+  }, _vm._l((_vm.h5css), function(one) {
+    return (one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.h5css,
+        "options": one,
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  })) : _c('div', {
+    staticClass: "yh-component-set"
+  }, [_c('yh-edit-uplist', {
+    attrs: {
+      "options": {
+        name: '外壳基本样式'
+      },
+      "status": true
+    }
+  }, _vm._l((_vm.h5css), function(one) {
+    return (one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.h5css,
+        "options": one,
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  })), _vm._v(" "), _c('p', {
+    staticClass: "child-split"
+  }, [_vm._v("子组件设置")]), _vm._v(" "), _vm._l((_vm.elements[0].props.h5css), function(one) {
+    return (one.type != 'none' && (!one.parentSetStatus || one.parentSetStatus == 'common')) ? _c(_vm.setModule(one), {
+      tag: "div",
+      attrs: {
+        "parent": _vm.elements[0].props.h5css,
+        "options": one,
+        "ischildset": "ischildset",
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  }), _vm._v(" "), _vm._l((_vm.elements), function(one, index) {
+    return _c('yh-edit-uplist', {
+      key: index,
+      attrs: {
+        "status": _vm.getChildH5CssStatus(index),
+        "options": {
+          name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
+        }
+      }
+    }, _vm._l((_vm.elements[index].props.h5css), function(one) {
+      return (one.type != 'none' && (one.parentSetStatus == 'child')) ? _c(_vm.setModule(one), {
+        tag: "div",
+        attrs: {
+          "parent": _vm.elements[index].props.h5css,
+          "options": one,
+          "eindex": index,
+          "ischildset": "ischildset",
+          "elem_id": _vm.elem_id,
+          "ischild": _vm.ischild,
+          "path": _vm.path
+        }
+      }) : _vm._e()
+    }))
+  })], 2)]) : _vm._e(), _vm._v(" "), (_vm.getContentStatus('data')) ? _c('div', {
+    staticClass: "yh-edit-tab-content yh-edit-owndata clearfix",
+    slot: _vm.setContentSlot('data')
+  }, [(!_vm.elements || _vm.elements.length == 0) ? _c('div', {
+    staticClass: "yh-component-set"
+  }, _vm._l((_vm.owndata), function(one) {
+    return (one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: ((!one.condition || (one.condition && one.status)) && _vm.getChildSetStatus(one)),
+        expression: "(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.owndata,
+        "options": one,
+        "ischildset": "",
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path,
+        "parentmodule": _vm.parentmodule
+      }
+    }) : _vm._e()
+  })) : _c('div', {
+    staticClass: "yh-component-set"
+  }, [_c('yh-edit-uplist', {
+    attrs: {
+      "options": {
+        name: '外壳数据设置'
+      },
+      "status": true
+    }
+  }, _vm._l((_vm.owndata), function(one) {
+    return (one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (!one.condition || (one.condition && one.status)),
+        expression: "!one.condition || (one.condition && one.status)"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.owndata,
+        "options": one,
+        "ischildset": "",
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  })), _vm._v(" "), _vm._l((_vm.elements), function(one, index) {
+    return _c('yh-edit-uplist', {
+      key: index,
+      attrs: {
+        "options": {
+          name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
+        },
+        "status": true
+      }
+    }, _vm._l((_vm.elements[index].props.data), function(one) {
+      return (one.type != 'none') ? _c(_vm.setModule(one), {
+        tag: "div",
+        attrs: {
+          "parent": _vm.elements[index].props.data,
+          "options": one,
+          "eindex": index,
+          "ischildset": "ischildset",
+          "elem_id": _vm.elem_id,
+          "ischild": _vm.ischild,
+          "path": _vm.path
+        }
+      }) : _vm._e()
+    }))
+  })], 2)]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "yh-delete-undo"
+  }, [_c('div', {
+    staticClass: "yh-delete",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.removeElement($event)
+      }
+    }
+  }, [_vm._v("x")]), _vm._v(" "), _c('div', {
+    staticClass: "yh-undo",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.undoElement($event)
+      }
+    }
+  }, [_vm._v("√")])])], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-37523641", module.exports)
+  }
+}
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('yh-edit-uplist', {
+    attrs: {
+      "options": {
+        name: _vm.options.cn
+      }
+    }
+  }, _vm._l((_vm.options.value), function(one, index) {
+    return _c('yh-edit-uplist', {
+      key: index,
+      attrs: {
+        "options": {
+          name: _vm.options.value[index][_vm.options.name].value
+        }
+      }
+    }, _vm._l((_vm.options.value[index]), function(one) {
+      return (one.type != 'none') ? _c(_vm.setModule(one), {
+        directives: [{
+          name: "show",
+          rawName: "v-show",
+          value: (_vm.getChildSetStatus(one)),
+          expression: "getChildSetStatus(one)"
+        }],
+        tag: "div",
+        attrs: {
+          "parent": _vm.options.value[index],
+          "eindex": _vm.eindex,
+          "index": index,
+          "options": one,
+          "ischildset": _vm.ischildset,
+          "elem_id": _vm.elem_id,
+          "ischild": _vm.ischild,
+          "path": _vm.path
+        }
+      }) : _vm._e()
+    }))
+  }))
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-5c169c78", module.exports)
+  }
+}
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "yh-edit-request clearfix"
+  }, [_c('div', {
+    staticClass: "yh-edit-text"
+  }, [_vm._v(_vm._s(_vm.optionsData.name) + _vm._s(_vm.optionsData.name ? '：' : ''))]), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-value clearfix"
+  }, [_c('input', {
+    attrs: {
+      "type": _vm.optionsData.type
+    },
+    domProps: {
+      "value": _vm.optionsData.style[_vm.optionsData.stylename] ? _vm.getDesignValue : (_vm.optionsData.type == 'number' ? 0 : '')
+    }
+  }), _vm._v(" "), _c('span', {
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        _vm.requestEvent($event)
+      }
+    }
+  }, [_vm._v("获取")])]), _vm._v(" "), _vm._t("chooser")], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-5e76ac27", module.exports)
+  }
+}
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -5041,12 +5616,194 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-11888f89", module.exports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-64217a76", module.exports)
   }
 }
 
 /***/ }),
-/* 52 */
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('yh-edit-input', {
+    attrs: {
+      "options": _vm.optionsData,
+      "ischildset": _vm.ischildset,
+      "eindex": _vm.eindex,
+      "index": _vm.index
+    },
+    on: {
+      "setValue": _vm.setValue
+    }
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-6f45ea3e", module.exports)
+  }
+}
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "yh-edit-checkbox clearfix"
+  }, [_c('div', {
+    staticClass: "yh-edit-text"
+  }, [_vm._v(_vm._s(_vm.options.cn) + _vm._s(_vm.options.cn ? '：' : ''))]), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-value clearfix"
+  }, [_c('input', {
+    staticClass: "yh-edit-value-input-long",
+    attrs: {
+      "type": "checkbox",
+      "name": _vm.elem_id + '_' + _vm.options.en
+    },
+    domProps: {
+      "checked": _vm.parent[_vm.options.en] ? _vm.getDesignValue : false
+    },
+    on: {
+      "change": _vm.setValue
+    }
+  })])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-7a6bc34a", module.exports)
+  }
+}
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return (_vm.status) ? _c('div', {
+    staticClass: "yh-uplist-set"
+  }, [_c('div', {
+    staticClass: "yh-uplist-set-title",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        _vm.toggleUplistContent($event)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "icon"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "name"
+  }, [_vm._v(_vm._s(_vm.options.name))])]), _vm._v(" "), _c('div', {
+    staticClass: "yh-uplist-set-content hide"
+  }, [_vm._t("default")], 2)]) : _vm._e()
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-99191d5e", module.exports)
+  }
+}
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "yh-edit-yhtextarea clearfix"
+  }, [_c('div', {
+    staticClass: "yh-edit-text"
+  }, [_vm._v(_vm._s(_vm.optionsData.name) + _vm._s(_vm.optionsData.name ? '：' : ''))]), _vm._v(" "), _c('div', {
+    staticClass: "yh-edit-value clearfix"
+  }, [_c('textarea', {
+    class: {
+      'yh-edit-value-input-long': !_vm.optionsData.unit
+    },
+    domProps: {
+      "value": _vm.optionsData.style[_vm.optionsData.stylename] ? _vm.getDesignValue : (_vm.optionsData.type == 'number' ? 0 : '')
+    },
+    on: {
+      "input": _vm.setValue
+    }
+  }), _vm._v(" "), (_vm.optionsData.unit) ? _c('span', [_vm._v(_vm._s(_vm.optionsData.unit))]) : _vm._e()]), _vm._v(" "), _vm._t("chooser")], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-a3abb35c", module.exports)
+  }
+}
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('yh-edit-input', {
+    attrs: {
+      "options": _vm.optionsData,
+      "ischildset": _vm.ischildset,
+      "eindex": _vm.eindex,
+      "index": _vm.index,
+      "path": _vm.path
+    },
+    on: {
+      "setValue": _vm.setValue
+    }
+  }, [_c('div', {
+    staticClass: "yh-edit-chooser",
+    slot: "chooser"
+  }, [_c('input', {
+    staticClass: "yh-edit-vcolor",
+    attrs: {
+      "type": "color"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.setChangeStatus($event)
+      },
+      "change": function($event) {
+        $event.stopPropagation();
+        _vm.colorChange($event)
+      }
+    }
+  }), _vm._v(" "), _c('ul', {
+    ref: "yh-edit-list",
+    staticClass: "yh-edit-list clearfix"
+  }, _vm._l((_vm.list), function(one) {
+    return _c('li', {
+      class: one == 'transparent' ? 'transparent' : '',
+      style: ('background-color:' + one),
+      attrs: {
+        "value": one
+      },
+      on: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.setColor($event)
+        }
+      }
+    })
+  }))])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-b2f8020a", module.exports)
+  }
+}
+
+/***/ }),
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -5107,637 +5864,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-1cace23a", module.exports)
-  }
-}
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('yh-edit-input', {
-    attrs: {
-      "options": _vm.optionsData,
-      "ischildset": _vm.ischildset,
-      "eindex": _vm.eindex,
-      "index": _vm.index,
-      "path": _vm.path
-    },
-    on: {
-      "setValue": _vm.setValue
-    }
-  }, [_c('div', {
-    staticClass: "yh-edit-chooser",
-    slot: "chooser"
-  }, [_c('input', {
-    staticClass: "yh-edit-vcolor",
-    attrs: {
-      "type": "color"
-    },
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.setChangeStatus($event)
-      },
-      "change": function($event) {
-        $event.stopPropagation();
-        _vm.colorChange($event)
-      }
-    }
-  }), _vm._v(" "), _c('ul', {
-    ref: "yh-edit-list",
-    staticClass: "yh-edit-list clearfix"
-  }, _vm._l((_vm.list), function(one) {
-    return _c('li', {
-      class: one == 'transparent' ? 'transparent' : '',
-      style: ('background-color:' + one),
-      attrs: {
-        "value": one
-      },
-      on: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.setColor($event)
-        }
-      }
-    })
-  }))])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-2d014553", module.exports)
-  }
-}
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "yh-edit-request clearfix"
-  }, [_c('div', {
-    staticClass: "yh-edit-text"
-  }, [_vm._v(_vm._s(_vm.optionsData.name) + _vm._s(_vm.optionsData.name ? '：' : ''))]), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-value clearfix"
-  }, [_c('input', {
-    attrs: {
-      "type": _vm.optionsData.type
-    },
-    domProps: {
-      "value": _vm.optionsData.style[_vm.optionsData.stylename] ? _vm.getDesignValue : (_vm.optionsData.type == 'number' ? 0 : '')
-    }
-  }), _vm._v(" "), _c('span', {
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        $event.preventDefault();
-        _vm.requestEvent($event)
-      }
-    }
-  }, [_vm._v("获取")])]), _vm._v(" "), _vm._t("chooser")], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-3abbbc7f", module.exports)
-  }
-}
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    ref: "yh-edit-options",
-    staticClass: "yh-edit-options clearfix",
-    on: {
-      "mouseleave": _vm.hideEditList
-    }
-  }, [_c('div', {
-    staticClass: "yh-edit-text",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.showEditList($event)
-      }
-    }
-  }, [_vm._v(_vm._s(_vm.options.cn) + _vm._s(_vm.options.cn ? '：' : ''))]), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-value",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.showEditList($event)
-      }
-    }
-  }, [_vm._v(_vm._s(_vm.parent[_vm.options.en] ? _vm.getDesignValue : _vm.value) + _vm._s(_vm.options.unit ? _vm.options.unit : ''))]), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-arrow",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.showEditList($event)
-      }
-    }
-  }), _vm._v(" "), _c('div', {
-    ref: "yh-edit-list",
-    staticClass: "yh-edit-list"
-  }, [_c('ul', _vm._l((_vm.options.options), function(one, index) {
-    return _c('li', {
-      style: ((_vm.options.en == 'font-size' ? ('font-size:' + one.value + _vm.options.realunit) : '')),
-      attrs: {
-        "value": one.value,
-        "index": index
-      },
-      on: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.setValue($event)
-        }
-      }
-    }, [_vm._v("\n                    " + _vm._s(one.cn) + _vm._s(_vm.options.unit ? _vm.options.unit : '') + "\n            ")])
-  }))])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-3c469de4", module.exports)
-  }
-}
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    ref: _vm.elem_id + '-yh-edit-layer',
-    staticClass: "yh-edit-layer clearfix hide"
-  }, [_c('yh-edit-tab', {
-    attrs: {
-      "props": _vm.tabOptions
-    }
-  }, [(_vm.getContentStatus('css')) ? _c('div', {
-    staticClass: "yh-edit-tab-content yh-edit-css clearfix",
-    slot: _vm.setContentSlot('css')
-  }, [(!_vm.elements || _vm.elements.length == 0) ? _c('div', {
-    staticClass: "yh-component-set"
-  }, _vm._l((_vm.css), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
-      }],
-      tag: "div",
-      attrs: {
-        "parent": _vm.css,
-        "options": one,
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })) : _c('div', {
-    staticClass: "yh-component-set"
-  }, [_c('yh-edit-uplist', {
-    attrs: {
-      "options": {
-        name: '外壳基本样式'
-      }
-    }
-  }, _vm._l((_vm.css), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
-      }],
-      tag: "div",
-      attrs: {
-        "parent": _vm.css,
-        "options": one,
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })), _vm._v(" "), _vm._l((_vm.elements[0].props.css), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      tag: "div",
-      attrs: {
-        "parent": _vm.elements[0].props.css,
-        "options": one,
-        "ischildset": "ischildset",
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })], 2)]) : _vm._e(), _vm._v(" "), (_vm.getContentStatus('h5css')) ? _c('div', {
-    staticClass: "yh-edit-tab-content yh-edit-deployh5 clearfix",
-    slot: _vm.setContentSlot('h5css')
-  }, [(!_vm.elements || _vm.elements.length == 0) ? _c('div', {
-    staticClass: "yh-component-set"
-  }, _vm._l((_vm.h5css), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
-      }],
-      tag: "div",
-      attrs: {
-        "parent": _vm.h5css,
-        "options": one,
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })) : _c('div', {
-    staticClass: "yh-component-set"
-  }, [_c('yh-edit-uplist', {
-    attrs: {
-      "options": {
-        name: '外壳基本样式'
-      }
-    }
-  }, _vm._l((_vm.h5css), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
-      }],
-      tag: "div",
-      attrs: {
-        "parent": _vm.h5css,
-        "options": one,
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })), _vm._v(" "), _vm._l((_vm.elements[0].props.h5css), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      tag: "div",
-      attrs: {
-        "parent": _vm.elements[0].props.h5css,
-        "options": one,
-        "ischildset": "ischildset",
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })], 2)]) : _vm._e(), _vm._v(" "), (_vm.getContentStatus('data')) ? _c('div', {
-    staticClass: "yh-edit-tab-content yh-edit-owndata clearfix",
-    slot: _vm.setContentSlot('data')
-  }, [(!_vm.elements || _vm.elements.length == 0) ? _c('div', {
-    staticClass: "yh-component-set"
-  }, _vm._l((_vm.owndata), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: ((!one.condition || (one.condition && one.status)) && _vm.getChildSetStatus(one)),
-        expression: "(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
-      }],
-      tag: "div",
-      attrs: {
-        "parent": _vm.owndata,
-        "options": one,
-        "ischildset": "",
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path,
-        "parentmodule": _vm.parentmodule
-      }
-    }) : _vm._e()
-  })) : _c('div', {
-    staticClass: "yh-component-set"
-  }, [_c('yh-edit-uplist', {
-    attrs: {
-      "options": {
-        name: '外壳数据设置'
-      }
-    }
-  }, _vm._l((_vm.owndata), function(one) {
-    return (one.type != 'none') ? _c(_vm.setModule(one), {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
-      }],
-      tag: "div",
-      attrs: {
-        "parent": _vm.owndata,
-        "options": one,
-        "ischildset": "",
-        "elem_id": _vm.elem_id,
-        "ischild": _vm.ischild,
-        "path": _vm.path
-      }
-    }) : _vm._e()
-  })), _vm._v(" "), _vm._l((_vm.elements), function(one, index) {
-    return _c('yh-edit-uplist', {
-      key: index,
-      attrs: {
-        "options": {
-          name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
-        }
-      }
-    }, _vm._l((_vm.elements[index].props.data), function(one) {
-      return (one.type != 'none') ? _c(_vm.setModule(one), {
-        tag: "div",
-        attrs: {
-          "parent": _vm.elements[index].props.data,
-          "options": one,
-          "eindex": index,
-          "ischildset": "ischildset",
-          "elem_id": _vm.elem_id,
-          "ischild": _vm.ischild,
-          "path": _vm.path
-        }
-      }) : _vm._e()
-    }))
-  })], 2)]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "yh-delete-undo"
-  }, [_c('div', {
-    staticClass: "yh-delete",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.removeElement($event)
-      }
-    }
-  }, [_vm._v("x")]), _vm._v(" "), _c('div', {
-    staticClass: "yh-undo",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.undoElement($event)
-      }
-    }
-  }, [_vm._v("√")])])], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-4f675a99", module.exports)
-  }
-}
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "yh-edit-tab"
-  }, [_c('div', {
-    staticClass: "clearfix yh-edit-tabTitle"
-  }, _vm._l((_vm.props.base.tabs), function(tab, index) {
-    return _c('div', {
-      staticClass: "yh-tab-one",
-      class: _vm.active == index ? 'yh-tab-active' : '',
-      attrs: {
-        "index": index
-      },
-      on: {
-        "touchstart": function($event) {
-          $event.stopPropagation();
-          $event.preventDefault();
-          _vm.changeTab($event)
-        },
-        "mousedown": function($event) {
-          $event.stopPropagation();
-          $event.preventDefault();
-          _vm.changeTab($event)
-        }
-      }
-    }, [_vm._v(_vm._s(tab.title))])
-  })), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-tabContent"
-  }, _vm._l((_vm.props.base.tabs), function(tab, index) {
-    return _c('div', {
-      class: _vm.active == index ? 'yh-tab-active' : '',
-      attrs: {
-        "index": index
-      }
-    }, [_vm._t('content' + index)], 2)
-  }))])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-55dc7af6", module.exports)
-  }
-}
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "yh-edit-yhtextarea clearfix"
-  }, [_c('div', {
-    staticClass: "yh-edit-text"
-  }, [_vm._v(_vm._s(_vm.optionsData.name) + _vm._s(_vm.optionsData.name ? '：' : ''))]), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-value clearfix"
-  }, [_c('textarea', {
-    class: {
-      'yh-edit-value-input-long': !_vm.optionsData.unit
-    },
-    domProps: {
-      "value": _vm.optionsData.style[_vm.optionsData.stylename] ? _vm.getDesignValue : (_vm.optionsData.type == 'number' ? 0 : '')
-    },
-    on: {
-      "input": _vm.setValue
-    }
-  }), _vm._v(" "), (_vm.optionsData.unit) ? _c('span', [_vm._v(_vm._s(_vm.optionsData.unit))]) : _vm._e()]), _vm._v(" "), _vm._t("chooser")], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-5a8720fa", module.exports)
-  }
-}
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('yh-edit-input', {
-    attrs: {
-      "options": _vm.optionsData,
-      "ischildset": _vm.ischildset,
-      "eindex": _vm.eindex,
-      "index": _vm.index
-    },
-    on: {
-      "setValue": _vm.setValue
-    }
-  })
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-6bf85d26", module.exports)
-  }
-}
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "yh-edit-checkbox clearfix"
-  }, [_c('div', {
-    staticClass: "yh-edit-text"
-  }, [_vm._v(_vm._s(_vm.options.cn) + _vm._s(_vm.options.cn ? '：' : ''))]), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-value clearfix"
-  }, [_c('input', {
-    staticClass: "yh-edit-value-input-long",
-    attrs: {
-      "type": "checkbox",
-      "name": _vm.elem_id + '_' + _vm.options.en
-    },
-    domProps: {
-      "checked": _vm.parent[_vm.options.en] ? _vm.getDesignValue : false
-    },
-    on: {
-      "change": _vm.setValue
-    }
-  })])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-6f271903", module.exports)
-  }
-}
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('yh-edit-uplist', {
-    attrs: {
-      "options": {
-        name: _vm.options.cn
-      }
-    }
-  }, _vm._l((_vm.options.value), function(one, index) {
-    return _c('yh-edit-uplist', {
-      key: index,
-      attrs: {
-        "options": {
-          name: _vm.options.value[index][_vm.options.name].value
-        }
-      }
-    }, _vm._l((_vm.options.value[index]), function(one) {
-      return (one.type != 'none') ? _c(_vm.setModule(one), {
-        directives: [{
-          name: "show",
-          rawName: "v-show",
-          value: (_vm.getChildSetStatus(one)),
-          expression: "getChildSetStatus(one)"
-        }],
-        tag: "div",
-        attrs: {
-          "parent": _vm.options.value[index],
-          "eindex": _vm.eindex,
-          "index": index,
-          "options": one,
-          "ischildset": _vm.ischildset,
-          "elem_id": _vm.elem_id,
-          "ischild": _vm.ischild,
-          "path": _vm.path
-        }
-      }) : _vm._e()
-    }))
-  }))
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-a38c7bc8", module.exports)
-  }
-}
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "yh-edit-image clearfix"
-  }, [_c('div', {
-    staticClass: "yh-edit-text"
-  }, [_vm._v(_vm._s(_vm.options.cn) + "：")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.parent[_vm.options.en].value),
-      expression: "parent[options.en].value"
-    }],
-    staticClass: "yh-edit-value",
-    attrs: {
-      "type": "text"
-    },
-    domProps: {
-      "value": (_vm.parent[_vm.options.en].value)
-    },
-    on: {
-      "input": [function($event) {
-        if ($event.target.composing) { return; }
-        _vm.parent[_vm.options.en].value = $event.target.value
-      }, _vm.setValue]
-    }
-  }), _vm._v(" "), _c('div', {
-    staticClass: "yh-edit-image-local"
-  }, [_c('input', {
-    staticClass: "yh-edit-imagefile",
-    attrs: {
-      "type": "file",
-      "accept": "image/gif,image/jpeg,image/jpg,image/png,image/svg",
-      "stylename": _vm.options.en
-    },
-    on: {
-      "change": function($event) {
-        $event.stopPropagation();
-        _vm.uploadFile($event)
-      }
-    }
-  })])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-fad1f96a", module.exports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-d3a0c83c", module.exports)
   }
 }
 
@@ -5752,13 +5879,13 @@ var content = __webpack_require__(32);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("8f7e2702", content, false);
+var update = __webpack_require__(2)("721a21f7", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-06c2140e\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-uplist.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-06c2140e\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-uplist.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0597a0b6\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-options.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0597a0b6\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-options.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5778,13 +5905,13 @@ var content = __webpack_require__(33);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("6582a5a6", content, false);
+var update = __webpack_require__(2)("25adcd69", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-11888f89\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-number.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-11888f89\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-number.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-07cc861a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-07cc861a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5804,13 +5931,13 @@ var content = __webpack_require__(34);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("2474e314", content, false);
+var update = __webpack_require__(2)("a732bfd2", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cace23a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-input.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cace23a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-input.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-27c6c62d\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-tab.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-27c6c62d\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-tab.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5826,17 +5953,17 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(36);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("46530084", content, false);
+var update = __webpack_require__(2)("64282a07", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2d014553\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2d014553\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-37523641\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-complicated.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-37523641\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-complicated.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5856,13 +5983,13 @@ var content = __webpack_require__(37);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("a549f144", content, false);
+var update = __webpack_require__(2)("55d211a1", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abbbc7f\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-request.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abbbc7f\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-request.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5c169c78\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-mutiple.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5c169c78\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-mutiple.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5882,13 +6009,13 @@ var content = __webpack_require__(38);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("070de8dd", content, false);
+var update = __webpack_require__(2)("0a0d33d4", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3c469de4\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-options.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3c469de4\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-options.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5e76ac27\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-request.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5e76ac27\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-request.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5908,13 +6035,13 @@ var content = __webpack_require__(39);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("7590e776", content, false);
+var update = __webpack_require__(2)("4dc74a52", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4f675a99\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-complicated.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4f675a99\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-complicated.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-64217a76\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-text.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-64217a76\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-text.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5934,13 +6061,13 @@ var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("f092269a", content, false);
+var update = __webpack_require__(2)("06f8c9dd", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55dc7af6\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-tab.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55dc7af6\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-tab.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6f45ea3e\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-number.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6f45ea3e\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-number.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5960,13 +6087,13 @@ var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("9f54ce72", content, false);
+var update = __webpack_require__(2)("0a454bef", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a8720fa\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-textarea.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a8720fa\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-textarea.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7a6bc34a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-checkbox.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7a6bc34a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-checkbox.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -5986,13 +6113,13 @@ var content = __webpack_require__(42);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("6e0ecf87", content, false);
+var update = __webpack_require__(2)("b029133e", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6bf85d26\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-text.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6bf85d26\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-text.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-99191d5e\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-uplist.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-99191d5e\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-uplist.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -6012,13 +6139,13 @@ var content = __webpack_require__(43);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("7b549042", content, false);
+var update = __webpack_require__(2)("1821cc19", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6f271903\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-checkbox.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6f271903\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-checkbox.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a3abb35c\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-textarea.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a3abb35c\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-textarea.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -6038,13 +6165,13 @@ var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("3700efe0", content, false);
+var update = __webpack_require__(2)("4b87ecc1", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a38c7bc8\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-mutiple.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a38c7bc8\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-mutiple.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b2f8020a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b2f8020a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -6064,13 +6191,13 @@ var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("edc0fb0c", content, false);
+var update = __webpack_require__(2)("5d7e6268", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fad1f96a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fad1f96a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d3a0c83c\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-input.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d3a0c83c\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-input.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });

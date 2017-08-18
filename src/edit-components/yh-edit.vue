@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-    // edit-components
+    // components-edit
     import YHEditTab from './yh-edit-tab'
     import YHEditBase from './yh-edit-base'
     import YHEditEvent from './yh-edit-event'

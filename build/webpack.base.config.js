@@ -6,13 +6,13 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-function getBaseConfig(sysname){ // editorPC
+function getBaseConfig(sysname,item){ // editorPC
 	return {
 		devtool: isProd
 			? false
 			: '#cheap-module-source-map',
 		output: {
-			path: path.resolve(__dirname, '../dist/'+sysname+'/js-h5'),
+			path: path.resolve(__dirname, '../dist/'+sysname+'/'+(item == 'h5' ? 'js-h5' : 'js-pc')),
 			publicPath: '/dist/',
 			filename: '[name].[hash].js',
 			hashDigestLength:8
@@ -59,7 +59,7 @@ function getBaseConfig(sysname){ // editorPC
 					compress: { warnings: false }
 				}),
 				new ExtractTextPlugin({
-					filename: 'm_index.[hash].css'
+					filename: (item == 'h5' ? 'm_index' : 'index')+'.[hash].css'
 				})
 			]: [
 				new FriendlyErrorsPlugin()

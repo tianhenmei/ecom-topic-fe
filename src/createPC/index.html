@@ -32,9 +32,9 @@
                                 <div class="item-left">*专题标签</div>
                                 <div class="item-right">
                                     <select 
-                                        v-model="one.activityName" 
+                                        v-model="one.templateCategory" 
                                         @input.stop.prevent="checkNullOptionsEvent"
-                                        name="activityName"
+                                        name="templateCategory"
                                         cnname="专题标签">
                                         <option value="-------" selected="selected">-------</option>
                                         <option value="测试专题">测试专题</option>
@@ -51,7 +51,7 @@
                                         <option value="全民跳槽月">全民跳槽月</option>
                                     </select>
                                 </div>
-                                <span class="tips hide" ref="activityName-tips"></span>
+                                <span class="tips hide" ref="templateCategory-tips"></span>
                             </div>
                             <div class="item">
                                 <div class="item-left">*专题标题</div>
@@ -66,30 +66,30 @@
                             <div class="item">
                                 <div class="item-left">*专题URL</div>
                                 <div class="item-right">
-                                    <input ref="url" v-model="one.url" @blur.stop.prevent="checkurlEvent"
-                                        name="url"
+                                    <input ref="html" v-model="one.html" @blur.stop.prevent="checkurlEvent"
+                                        name="html"
                                         cnname="专题URL"
                                         placeholder="test.html（即该专题页面的访问链接）"/>
                                 </div>    
-                                <span class="tips hide" ref="url-tips"></span>
+                                <span class="tips hide" ref="html-tips"></span>
                             </div>
                             <div class="item">
                                 <div class="item-left">*活动开始日期</div>
                                 <div class="item-right short-right">
-                                    <input v-model="one.startTime" @input.stop.prevent="checkNullTimeEvent"
-                                        name="startTime"
+                                    <input v-model="one.activeTimeStart" @input.stop.prevent="checkNullTimeEvent"
+                                        name="activeTimeStart"
                                         cnname="活动开始日期" />
                                 </div>
-                                <span class="tips hide" ref="startTime-tips">* 活动开始日期不能为空</span>
+                                <span class="tips hide" ref="activeTimeStart-tips">* 活动开始日期不能为空</span>
                             </div>
                             <div class="item">
                                 <div class="item-left">*活动结束日期</div>
                                 <div class="item-right short-right">
-                                    <input v-model="one.endTime" @input.stop.prevent="checkNullTimeEvent"
-                                        name="endTime"
+                                    <input v-model="one.activeTimeEnd" @input.stop.prevent="checkNullTimeEvent"
+                                        name="activeTimeEnd"
                                         cnname="活动结束日期"/>
                                 </div>
-                                <span class="tips hide" ref="endTime-tips">* 活动结束日期不能为空</span>
+                                <span class="tips hide" ref="activeTimeEnd-tips">* 活动结束日期不能为空</span>
                             </div>
                             <div class="item">
                                 <div class="item-left">专题关键词</div>

@@ -14,6 +14,7 @@ var router = express.Router();
 var list_control = require('./list-control.js');
 var editorPC_control = require('./editorPC-control.js');
 var company_control = require('./company-control.js');
+var createPC_control = require('./createPC-control.js');
 
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -23,8 +24,11 @@ router.use('/dist',express.static('dist'));  // 指定挂载路径（虚拟）
 router.use('/yh',express.static('publish')); // 指定挂载路径（虚拟）
 router.use('/list',list_control);
 // router.use('/editor',editor_control);
-router.use('/v3/api/editorPC',editorPC_control);
-router.use('/v3/api/company',company_control);
+// router.use('/v3',createPC_control);
+router.use('/v3',[editorPC_control,company_control,createPC_control]);  // /v3/api/editorPC
+// router.use('/v3/static',express.static('public'));  // 指定挂载路径（虚拟）
+// router.use('/v3',company_control);  // /v3/api/company
+// router.use('/v3',createPC_control);
 
 router.get('/',function(req,res){
     var html = getFile(req,res);

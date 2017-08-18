@@ -223,7 +223,7 @@
                             </div>
                         </div>
                     </li>
-                    <li id="carousel_style1" class="carouselModule li_carousel" moduletype="carousel"><span class="yh-lib-icon"></span>轮播</li>
+                    <!--<li id="carousel_style1" class="carouselModule li_carousel" moduletype="carousel"><span class="yh-lib-icon"></span>轮播</li>-->
                     <!--<li id="rank_style1" class="rankModule" moduleType="rank"><span class="yh-lib-icon"></span>top榜</li>-->
                     <li class="li_time yh-lib-parent" @click.stop.prevent="toggleListEvent">
                         <span class="yh-lib-icon"></span> 时间轴

@@ -1,0 +1,47 @@
+/*reset style**/
+* {
+    margin:0;
+    padding:0;
+}
+img {
+    display:block;
+}
+ul,li,ol,dl,dd,dt {
+    list-style:none;
+}
+.clearfix:after {
+    content: ""; /* 020 */
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    overflow: hidden;
+}
+
+.clearfix {
+    zoom: 1;
+}
+body {
+    width:100%;
+    overflow-x:hidden;
+}
+
+[yh-editor-content]{
+    width:100%;
+    overflow-x:hidden;
+}
+
+
+
+
+
+
+
+.image-style1{width:100%;height:100px;margin:0 auto;position:relative}.image-style1 .yh-image-content{position:absolute;left:50%;top:0;margin:0 0 0 -50%}.image-style1 .yh-image-relative{position:relative;left:0;top:0;margin:0}
+
+
+
+
+
+
+

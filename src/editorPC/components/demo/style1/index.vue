@@ -32,7 +32,7 @@
         setChildData,
         recoveryChildElementsData
     } from '../../Base/Node.js'
-    import YHEditComplicated from '../../../edit-components/yh-edit-complicated.vue'
+    import YHEditComplicated from '../../../components-edit/yh-edit-complicated.vue'
 
     const baseData = {
         id:'',
@@ -67,6 +67,7 @@
                     // cn:'',   ／／ 选项中文
                     // value:'' // 选项真正的值
                 // }]
+                // parentSetStatus:'common',  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
                 // 只有当前组件是容器组件时，一般只有设置数据才有，才会有eindex和index
                 // 其中 eindex 指的是子组件在容器组件里面的位置
                 //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表

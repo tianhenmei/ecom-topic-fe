@@ -10,6 +10,6 @@ module.exports = {
     target: 'node',
     // 对 bundle renderer 提供 source map 支持
     devtool: 'source-map',
-    entry:'./server-renderer/editorPC/entry-server.js',
+    entry:'./server-renderer/editorPC/h5/entry-server.js',
 
 }

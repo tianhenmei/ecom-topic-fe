@@ -38,15 +38,15 @@ html,body {
 
 
 
+.image-style1{width:100%;height:100px;margin:0 auto;position:relative}.image-style1 .yh-image-content{position:absolute;left:50%;top:50%;margin:-50% 0 0 -50%}
+
+
+
+
+
+
+
 .list-style1{margin:0 auto;background:transparent no-repeat center top}.yh-list-content{margin:0 auto}
-
-
-
-
-
-
-
-.company-position-style1{width:926px;height:280px;margin:0 auto;padding:0 0 20px 0;border-radius:5px;overflow:hidden}.company-position-style1>.leftDiv{width:222px;height:280px;background:#00c99b;float:left}.company-position-style1>.leftDiv .title{padding:38px 0 20px 0}.company-position-style1>.leftDiv img{width:115px;height:115px;border-radius:3px;margin:0 auto 10px;display:block}.company-position-style1>.leftDiv a.nameTop{display:block;font-size:20px;color:#fff;text-align:center;text-decoration:none}.company-position-style1>.leftDiv a.nameTop p.name{width:100%;height:26px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.company-position-style1>.leftDiv div.infoWord{width:116px;margin:0 auto;background:#fff;border-radius:2px;overflow:hidden}.company-position-style1>.leftDiv a.more{width:116px;height:41px;display:block;background:#000;background-color:rgba(0,0,0,.08);filter:Alpha(opacity=8);position:static;*zoom:1;text-decoration:none}.company-position-style1>.leftDiv a.more span{height:38px;line-height:38px;font-size:16px;color:#00c99b;text-align:center;display:block;background:#fff}.company-position-style1>.leftDiv a.more:hover{text-decoration:none}.company-position-style1>.rightDiv{width:703px;height:278px;background:#f0f0f0;float:left;border:solid 1px #e9e9e9;border-left:none;border-radius:0 5px 5px 0;overflow:hidden}.company-position-style1>.rightDiv .slogan{height:50px;line-height:24px;padding:40px 65px 30px;background:#fff no-repeat center center;font-size:16px;color:#555;text-align:left;word-break:break-all}.company-position-style1>.rightDiv .positionList{padding:6px 32px 17px}.company-position-style1>.rightDiv .positionList li{float:left}.company-position-style1>.rightDiv .positionList li .positionUrl{width:252px;height:48px;line-height:48px;padding:0 27px 0 17px;margin:18px 12px 0 11px;display:block;color:#00c99b;font-size:16px;background:#fff no-repeat 270px -158px}.company-position-style1>.rightDiv .positionList li .positionUrl p,.company-position-style1>.rightDiv .positionList li .positionUrl span{text-align:left;float:left}.company-position-style1>.rightDiv .positionList li .positionUrl p.positionName,.company-position-style1>.rightDiv .positionList li .positionUrl span.positionName{width:160px;padding-right:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 
 
 
@@ -62,7 +62,7 @@ html,body {
 
 
 
-.image-style1{width:100%;height:100px;margin:0 auto;position:relative}.image-style1 .yh-image-content{position:absolute;left:50%;top:50%;margin:-50% 0 0 -50%}
+.slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://topic.lagou.com/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}
 
 
 
@@ -70,7 +70,7 @@ html,body {
 
 
 
-.block-style1{background-position:center top;position:relative}.block-style1 .yh-block-content{margin:0 auto}.block-style1 .yh-block-content.yh-block-absolute{position:absolute;left:50%;top:0}.block-style1.yh-block-fixed{position:fixed;left:50%;top:0;z-index:100}.block-style1.yh-block-fixed-bottom{position:fixed;left:50%;bottom:0;z-index:100}.block-style1.yh-block-fixed-left{position:fixed;left:0;top:0;z-index:100}.block-style1.yh-block-fixed-right{position:fixed;right:0;top:0;z-index:100}.block-style1.yh-block-fixed-bright{position:fixed;right:0;bottom:0;z-index:100}.block-style1.yh-block-absolute{position:absolute;left:50%;top:0}
+.company-position-style1{width:926px;height:280px;margin:0 auto;padding:0 0 20px 0;border-radius:5px;overflow:hidden}.company-position-style1>.leftDiv{width:222px;height:280px;background:#00c99b;float:left}.company-position-style1>.leftDiv .title{padding:38px 0 20px 0}.company-position-style1>.leftDiv img{width:115px;height:115px;border-radius:3px;margin:0 auto 10px;display:block}.company-position-style1>.leftDiv a.nameTop{display:block;font-size:20px;color:#fff;text-align:center;text-decoration:none}.company-position-style1>.leftDiv a.nameTop p.name{width:100%;height:26px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.company-position-style1>.leftDiv div.infoWord{width:116px;margin:0 auto;background:#fff;border-radius:2px;overflow:hidden}.company-position-style1>.leftDiv a.more{width:116px;height:41px;display:block;background:#000;background-color:rgba(0,0,0,.08);filter:Alpha(opacity=8);position:static;*zoom:1;text-decoration:none}.company-position-style1>.leftDiv a.more span{height:38px;line-height:38px;font-size:16px;color:#00c99b;text-align:center;display:block;background:#fff}.company-position-style1>.leftDiv a.more:hover{text-decoration:none}.company-position-style1>.rightDiv{width:703px;height:278px;background:#f0f0f0;float:left;border:solid 1px #e9e9e9;border-left:none;border-radius:0 5px 5px 0;overflow:hidden}.company-position-style1>.rightDiv .slogan{height:50px;line-height:24px;padding:40px 65px 30px;background:#fff no-repeat center center;font-size:16px;color:#555;text-align:left;word-break:break-all}.company-position-style1>.rightDiv .positionList{padding:6px 32px 17px}.company-position-style1>.rightDiv .positionList li{float:left}.company-position-style1>.rightDiv .positionList li .positionUrl{width:252px;height:48px;line-height:48px;padding:0 27px 0 17px;margin:18px 12px 0 11px;display:block;color:#00c99b;font-size:16px;background:#fff no-repeat 270px -158px}.company-position-style1>.rightDiv .positionList li .positionUrl p,.company-position-style1>.rightDiv .positionList li .positionUrl span{text-align:left;float:left}.company-position-style1>.rightDiv .positionList li .positionUrl p.positionName,.company-position-style1>.rightDiv .positionList li .positionUrl span.positionName{width:160px;padding-right:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 
 
 
@@ -78,23 +78,7 @@ html,body {
 
 
 
-.block-style2{background-position:center top;position:relative}.block-style2 .yh-block-content{margin:0 auto}.block-style2 .yh-block-content>div{float:left}.block-style2 .yh-block-content>.block-style1{width:auto;overflow:hidden}.block-style2 .yh-block-content.yh-block-absolute{position:absolute;left:50%;top:0}.block-style2.yh-block-fixed{position:fixed;left:50%;top:0;z-index:100}.block-style2.yh-block-fixed-bottom{position:fixed;left:50%;bottom:0;z-index:100}.block-style2.yh-block-fixed-left{position:fixed;left:0;top:0;z-index:100}.block-style2.yh-block-fixed-right{position:fixed;right:0;top:0;z-index:100}.block-style2.yh-block-fixed-bright{position:fixed;right:0;bottom:0;z-index:100}.block-style2.yh-block-absolute{position:absolute;left:50%;top:0}
-
-
-
-
-
-
-
-.block-style3{background-position:center top;position:relative}.block-style3 .yh-block-content{margin:0 auto}.block-style3 .yh-block-content>div{float:left}.block-style3 .yh-block-content>.block-style1{width:auto;overflow:hidden}.block-style3 .yh-block-content.yh-block-absolute{position:absolute;left:50%;top:0}.block-style3.yh-block-fixed{position:fixed;left:50%;top:0;z-index:100}.block-style3.yh-block-fixed-bottom{position:fixed;left:50%;bottom:0;z-index:100}.block-style3.yh-block-fixed-left{position:fixed;left:0;top:0;z-index:100}.block-style3.yh-block-fixed-right{position:fixed;right:0;top:0;z-index:100}.block-style3.yh-block-fixed-bright{position:fixed;right:0;bottom:0;z-index:100}.block-style3.yh-block-absolute{position:absolute;left:50%;top:0}
-
-
-
-
-
-
-
-.row-style2{background-position:center top}.row-style2 .row-style1{overflow:hidden}.row-style2 .yh-row-content{margin:0 auto}.row-style2 .yh-row-content>div{float:left}
+.block-style1{background-position:center top;position:relative;overflow:hidden}.block-style1 .yh-block-content{margin:0 auto}.block-style1 .yh-block-content.yh-block-absolute{position:absolute;left:50%;top:0}.block-style1.yh-block-fixed{position:fixed;left:50%;top:0;z-index:100}.block-style1.yh-block-fixed-bottom{position:fixed;left:50%;bottom:0;z-index:100}.block-style1.yh-block-fixed-left{position:fixed;left:0;top:0;z-index:100}.block-style1.yh-block-fixed-right{position:fixed;right:0;top:0;z-index:100}.block-style1.yh-block-fixed-bright{position:fixed;right:0;bottom:0;z-index:100}.block-style1.yh-block-absolute{position:absolute;left:50%;top:0}
 
 
 

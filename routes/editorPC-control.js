@@ -4,42 +4,38 @@
 var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
-var express = require('express');
+var express = require('express'),
+    router = express.Router(),
+    uglify = require('uglify-js')
+/****FILE UPLOAD */
 var multiparty = require('multiparty');
 var sizeOf = require('image-size');
-var child_process = require('child_process');
-var uglify = require('uglify-js');
-var serverRenderer = require('vue-server-renderer')
-var setupDevServer = require('../build/setup-dev-server.js')
-var { createBundleRenderer } = serverRenderer
-var router = express.Router(),
-    crypto = require('crypto');
-var isProd = process.env.NODE_ENV === 'production',
+/****FILE UPLOAD */
+/****DOCUMENT || PRODUCTION */
+var crypto = require('crypto'),  // 使用它生成时间的hash值
+    isProd = process.env.NODE_ENV === 'production',
+    // saveDir: 发布页面时保存的页面目录
     saveDir = isProd ? 'publish/' : 'publish/',
+    // getDataPath: 获取发布页面时保存的页面的数据目录
     getDataPath = isProd ? '../publish/' : '../publish/',
-    concatPath = isProd ? './dist/editorPC/publish/' : './dist/editorPC/publish/',
-    staticPath = isProd ? './public/files/' : './public/files/'
-
-var Vue = require('vue')
-
-/****NODE SERVER RENDERER */
-var LRU = require('lru-cache')
-// var createAppH5 = require('./server-app-h5.js')
-var resolve = file => path.resolve(__dirname, file)
-const templateH5 = fs.readFileSync(resolve('../server-renderer/editorPC/m_index.html'), 'utf-8')
-
-/****NODE SERVER RENDERER */
-
-
+    // staticPath: 上传文件存储的目录
+    staticPath = isProd ? './public/files/' : './public/files/' ,
+    // concatPath: 开发与生成应该属于同一个目录，所以不会改变
+    concatPath = isProd ? './dist/editorPC/publish/' : './dist/editorPC/publish/'
+ /****DOCUMENT || PRODUCTION */
+var writeHTML = require('../build/render-pc.js'),
+    writeHTMLH5 = require('../build/render-h5.js'),
+    child_process = require('child_process')
+ 
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
 router.use(bodyParser.urlencoded());
 
 // 保存数据
-router.post('/saveData',function(req,res){
+router.post('/api/editorPC/saveData',function(req,res){
     var page = req.body;
-    console.log('get save data')
+    console.log('Saving data...')
     // 创建文件及文件夹
     writeFile(saveDir+page.name+'/js/index.json',page.elemDatas)
     res.json({
@@ -49,18 +45,18 @@ router.post('/saveData',function(req,res){
     });
 });
 
-router.post('/savePage',function(req,res){
+router.post('/api/editorPC/savePage',function(req,res){
     var page = req.body;
-    console.log('get save page')
+    console.log('Saving page...')
     // 创建文件及文件夹
     setFile(page,res);
 });
 
-router.get('/getPageData',function(req,res){
-    var name = req.query.name ? req.query.name : 'text',
-        templateId = req.query.id,
-        dirpath = saveDir+req.query.name
-    if(!fs.existsSync(dirpath) && !templateId && req.query.name){
+router.post('/api/editorPC/getPageData',function(req,res){
+    var name = req.body.html ? req.body.html : 'text',
+        templateId = req.body.id,
+        dirpath = saveDir+req.body.html
+    if(!fs.existsSync(dirpath) && !templateId && req.body.html){
         let secret = new Date().getTime()+'',
             // hash = crypto.createHmac('md5', secret)
             //             .update('yh')
@@ -71,18 +67,24 @@ router.get('/getPageData',function(req,res){
                 pageInfo:{
                     templateId:hash,
                     templateType:'PC',
+                    name:'YH EDITOR PC',
                     templateCategory:'测试',
+                    title:'YH EDITOR PC',
                     createTime:new Date(),
                     createAuthor:'gaohui',
                     updateTime:'',
                     updateAuthor:'gaohui',
-                    html:req.body.name,
-                    title:'YH EDITOR PC',
+                    html:req.body.html,
                     description:'YH EDITOR PC TEST',
                     activeTimeStart:'',
                     activeTimeEnd:'',
+                    keywords:'',
+                    lgID:'',
+                    lgH5ID:'',
+                    scriptsJson:[],
                     share:{
                         status:false,
+                        url:'',
                         title:'',
                         desc:'',
                         pic:''
@@ -128,7 +130,7 @@ router.get('/getPageData',function(req,res){
     })
 });
 
-router.post('/upload',function(req,res){
+router.post('/api/editorPC/upload',function(req,res){
     //生成multiparty对象，并配置上传目标路径
     var form = new multiparty.Form({uploadDir: staticPath});
     //上传完成后处理
@@ -148,7 +150,7 @@ router.post('/upload',function(req,res){
                     state:200,
                     success:true,
                     content:{
-                        path:isProd ? uploadedPath : uploadedPath.replace('public/','static/'),
+                        path:isProd ? uploadedPath.replace('public/','static/') : uploadedPath.replace('public/','static/'),
                         width:dimensions.width,
                         height:dimensions.height,
                         size:inputFile.size   // b 为单位
@@ -177,7 +179,48 @@ router.post('/upload',function(req,res){
     });
 });
 
+function setResJSON(res,status,str){
+    if(str){
+        res.json({
+            state:200,
+            success:true,
+            message:str
+        })
+    }else{
+        res.json({
+            state:200,
+            success:true,
+            message:'保存成功'
+        })
+    }
+    // switch(status){
+    //     case 200:
+    //         res.json({
+    //             state:200,
+    //             success:true,
+    //             message:'保存成功'
+    //         })
+    //         break
+    //     case 404:
+    //         res.json({
+    //             state:200,
+    //             success:true,
+    //             message:'页面不存在'
+    //         })
+    //         break
+    //     default:
+    //         res.json({
+    //             state:200,
+    //             success:true,
+    //             message:'页面渲染失败'
+    //         })
+    //         break
+    // }
+}
+
 function setFile(page,res){
+    let saveStatus = 0,
+        str = ''
     mkdirsSync(saveDir+page.name+'/js','0777');
     mkdirsSync(saveDir+page.name+'/css','0777');
     if(!page.includes){
@@ -186,16 +229,38 @@ function setFile(page,res){
     writeCSS(page.includes,saveDir+page.name+'/css/index.css')
     writeJS(page.includes,saveDir+page.name+'/js/index.js');
     writeFile(saveDir+page.name+'/js/index.json',page.elemDatas)
-    writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/'),saveDir+page.name+'/index.html',{
+    // writeHTML(page.content.replace(/(http:\/\/localhost:9000\/)/g,'/'),saveDir+page.name+'/index.html',{
+    //     includes:page.includes,
+    //     count:page.count
+    // })
+    writeHTML(router,page.name,saveDir+page.name+'/index.html',{
         includes:page.includes,
         count:page.count
+    },page.elemDatas,res,function(status){
+        if(status != 200){
+            str += 'PC保存失败！'
+        }
+        if(saveStatus == 1){
+            setResJSON(res,status,str)
+        }else{
+            saveStatus++;
+        }
     })
     writeCSSH5(page.includes,saveDir+page.name+'/css/m_index.css')
     writeJSH5(page.includes,saveDir+page.name+'/js/m_index.js');
-    writeHTMLH5(page.name,saveDir+page.name+'/m_index.html',{
+    writeHTMLH5(router,page.name,saveDir+page.name+'/m_index.html',{
         includes:page.includes,
         count:page.count
-    },page.elemDatas,res)
+    },page.elemDatas,res,function(status){
+        if(status != 200){
+            str += '移动端保存失败！'
+        }
+        if(saveStatus == 1){
+            setResJSON(res,status,str)
+        }else{
+            saveStatus++;
+        }
+    })
 }
 
 function concat(fileIn,fileOut,data){
@@ -228,7 +293,14 @@ function concat(fileIn,fileOut,data){
 function writeJS(data,path){
     // uglify
     // child_process.exec(cmd, [options], callback)
-    let jsList = ['event']
+    let jsList = ['event'],
+        i = 0
+    for(i = 0; i < data.length; i++){
+        switch(data[i]){
+            case '':
+                break
+        }
+    }
     jsList = data.concat(jsList)
     jsList = ['global'].concat(jsList)
     console.log(jsList)
@@ -316,103 +388,6 @@ function writeCSSH5(data,fileOut){
     fs.writeFileSync(fileOut, finalCode, 'utf8');
 }
 
-function writeHTML(pageHTML,filePath,pagedata){
-    var elemdataStr = '#PAGEDATASTART#'+JSON.stringify(pagedata)+'#PAGEDATAEND#', 
-        app = new Vue({
-            template:'<div class="main">'+pageHTML.trim()+'</div>'
-        }),
-        renderer = serverRenderer.createRenderer({
-            template: fs.readFileSync(path.resolve(__dirname,'../server-renderer/editorPC/index.html'), 'utf-8')
-        }),
-        context = {
-            elemdata:elemdataStr
-        }
-    renderer.renderToString(app,context,function(err,html){
-        writeFile(filePath,html)
-    })
-}
-
-function createRenderer (bundle, options) {
-	return createBundleRenderer(bundle, Object.assign(options, {
-        template:templateH5,// （可选）页面模板
-        inject: false,
-		// for component caching
-		cache: LRU({
-			max: 1000,
-			maxAge: 1000 * 60 * 15
-		}),
-		// this is only needed when vue-server-renderer is npm-linked
-		basedir: resolve('./dist'),
-		// recommended for performance
-		runInNewContext: false
-	}))
-}
-function render (filename,filePath,pagedata,data,renderer,res) {
-	const s = Date.now()
-    console.log('Rendering '+filename)
-	const handleError = err => {
-		if(err.code === 404) {
-            writeFile(filePath,'404 | Page Not Found')
-            res.json({
-                state:404,
-                success:true,
-                message:'页面不存在'
-            });
-		} else {
-			// Render Error Page or Redirect
-            writeFile(filePath,'500 | Internal Server Error')
-            res.json({
-                state:200,
-                success:true,
-                message:'页面渲染失败'
-            });
-		}
-	}
-
-	renderer.renderToString({
-        filename,
-        pagedata,
-        data
-    }, (err, html) => {
-		if (err) {
-			return handleError(err)
-        }
-        writeFile(filePath,html.replace(/(http:\/\/localhost:9000\/)/g,'/'))
-        res.json({
-            state:200,
-            success:true,
-            message:'保存成功'
-        });
-		if (!isProd) {
-			console.log(`whole request: ${Date.now() - s}ms`)
-		}
-	})
-}
-function writeHTMLH5(filename,filePath,pagedata,data,res){
-    let renderer = null,
-        readyPromise
-    if(isProd){
-        // In production: create server renderer using built server bundle.
-        // The server bundle is generated by vue-ssr-webpack-plugin.
-        const bundle = require('./dist/editorPC/js-h5/vue-ssr-server-bundle.json')
-        // The client manifests are optional, but it allows the renderer
-        // to automatically infer preload/prefetch links and directly add <script>
-        // tags for any async chunks used during render, avoiding waterfall requests.
-        const clientManifest = require('./dist/editorPC/js-h5/vue-ssr-client-manifest.json')
-        renderer = createRenderer(bundle, {
-            clientManifest
-        })
-    } else {
-        readyPromise = setupDevServer(router, (bundle, options) => {
-            renderer = createRenderer(bundle, options)
-        })
-        console.log('Start writing HTML h5......')
-        readyPromise.then(() => {
-            render(filename,filePath,pagedata,JSON.parse(data),renderer,res)
-        })
-    }
-}
-
 function writeFile(path,string){
     fs.writeFile(path,string,function(err) {
         if(err) {
@@ -446,8 +421,9 @@ function mkdirsSync(dirpath, mode) {
 
 
 router.use(function(req,res,next){
-    console.log(req.url);
-    res.status(404).send('Sorry cant find that!');
+    // console.log(req.url);
+    // res.status(404).send('Sorry cant find that!');
+    next()
 });
 
 router.use(function(err,req,res,next){

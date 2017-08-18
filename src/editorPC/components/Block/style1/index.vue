@@ -46,7 +46,7 @@
         setChildData,
         recoveryChildElementsData
     } from '../../Base/Node.js'
-    import YHEditComplicated from '../../../edit-components/yh-edit-complicated.vue'
+    import YHEditComplicated from '../../../components-edit/yh-edit-complicated.vue'
 
     const baseData = {
         id:'',
@@ -62,7 +62,8 @@
                 value:'auto',
                 default:'auto',  // 默认值
                 ivalue:document.documentElement.clientWidth,   // 初始值
-                type:'number'
+                type:'number',
+                parentSetStatus:'common'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             background_height:{
                 cn:'高度',
@@ -71,6 +72,7 @@
                 default:'auto',
                 ivalue:100,
                 type:'number',
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             background_min_height:{
                 cn:'最小高度',
@@ -85,14 +87,16 @@
                 cn:'背景颜色',
                 en:'background_background_color',
                 value:'transparent',
-                type:'color'
+                type:'color',
+                parentSetStatus:'child'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             background_background_image:{
                 cn:'背景图片',
                 en:'background_background_image',
                 value:'none',
                 type:'image',
-                mold:'bg'
+                mold:'bg',
+                parentSetStatus:'child'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             background_background_repeat:{
                 cn:'背景重复',
@@ -111,7 +115,8 @@
                 },{
                     cn:'纵向重复',
                     value:'repeat-y'
-                }]
+                }],
+                parentSetStatus:'child'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             // 外层定位
             layer_position:{
@@ -142,7 +147,8 @@
                     value:'yh-block-absolute'
                 }],
                 parent:'css',
-                effect:['css.layer_margin_left','css.layer_left','css.layer_top','css.layer_right','css.layer_bottom']
+                effect:['css.layer_margin_left','css.layer_left','css.layer_top','css.layer_right','css.layer_bottom'],
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             layer_margin_left:{
                 cn:'左',
@@ -152,7 +158,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-fixed","yh-block-absolute","yh-block-fixed-bottom"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             layer_left:{
                 cn:'左',
@@ -162,7 +169,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-fixed-left"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             layer_top:{
                 cn:'上',
@@ -172,7 +180,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-fixed","yh-block-fixed-left","yh-block-absolute","yh-block-fixed-right"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             layer_right:{
                 cn:'右',
@@ -182,7 +191,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-fixed-right","yh-block-fixed-bright"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             layer_bottom:{
                 cn:'下',
@@ -192,7 +202,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-fixed-bottom","yh-block-fixed-bright"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             // 内容定位
             content_position:{
@@ -208,7 +219,8 @@
                     value:'yh-block-absolute'
                 }],
                 parent:'css',
-                effect:['css.content_margin_left','css.content_top']
+                effect:['css.content_margin_left','css.content_top'],
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             content_margin_left:{
                 cn:'左',
@@ -217,7 +229,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-absolute"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             },
             content_top:{
                 cn:'上',
@@ -226,7 +239,8 @@
                 type:'number',
                 parent:'css',
                 condition:["yh-block-absolute"],
-                status:false
+                status:false,
+                parentSetStatus:'save'  // 如果当前组件为子组件时，其设置的状态， common: 共同设置(默认)    save: 保留不设置   child: 单独设置
             }
         },
         h5css:{
@@ -271,7 +285,8 @@
                 en:'background_background_color',
                 value:'transparent',
                 type:'color',
-                parent:'h5css'
+                parent:'h5css',
+                parentSetStatus:'child'
             },
             background_background_image_h5:{
                 cn:'H5背景图片',
@@ -279,7 +294,8 @@
                 value:'none',
                 type:'image',
                 mold:'bg',
-                parent:'h5css'
+                parent:'h5css',
+                parentSetStatus:'child'
             },
             background_background_repeat:{
                 cn:'背景重复',
@@ -299,7 +315,8 @@
                 },{
                     cn:'纵向重复',
                     value:'repeat-y'
-                }]
+                }],
+                parentSetStatus:'child'
             },
             // 外层定位
             layer_position:{
@@ -330,7 +347,8 @@
                     value:'yh-block-absolute'
                 }],
                 parent:'h5css',
-                effect:['h5css.layer_margin_left','h5css.layer_left','h5css.layer_top','h5css.layer_right','h5css.layer_bottom']
+                effect:['h5css.layer_margin_left','h5css.layer_left','h5css.layer_top','h5css.layer_right','h5css.layer_bottom'],
+                parentSetStatus:'save'
             },
             layer_margin_left:{
                 cn:'左',
@@ -340,7 +358,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-fixed","yh-block-absolute","yh-block-fixed-bottom"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             },
             layer_left:{
                 cn:'左',
@@ -350,7 +369,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-fixed-left"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             },
             layer_top:{
                 cn:'上',
@@ -360,7 +380,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-fixed","yh-block-fixed-left","yh-block-absolute","yh-block-fixed-right"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             },
             layer_right:{
                 cn:'右',
@@ -370,7 +391,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-fixed-right","yh-block-fixed-bright"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             },
             layer_bottom:{
                 cn:'下',
@@ -380,7 +402,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-fixed-bottom","yh-block-fixed-bright"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             },
             // 内容定位
             content_position:{
@@ -396,7 +419,8 @@
                     value:'yh-block-absolute'
                 }],
                 parent:'h5css',
-                effect:['h5css.content_margin_left','h5css.content_top']
+                effect:['h5css.content_margin_left','h5css.content_top'],
+                parentSetStatus:'save'
             },
             content_margin_left:{
                 cn:'左',
@@ -405,7 +429,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-absolute"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             },
             content_top:{
                 cn:'上',
@@ -414,7 +439,8 @@
                 type:'number',
                 parent:'h5css',
                 condition:["yh-block-absolute"],
-                status:false
+                status:false,
+                parentSetStatus:'save'
             }
         },
         common:{

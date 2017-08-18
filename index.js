@@ -19,7 +19,7 @@ app.all('*', function(req, res, next) {
     }else{
         // console.log(req.url);
         res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        res.header("Access-Control-Allow-Headers", "Authorization,Origin,X-Requested-With,Content-Type, Accept");
         res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
         res.header("X-Powered-By",' 3.2.1')
         res.header("Content-Type", "application/json;charset=utf-8");
@@ -57,6 +57,6 @@ var server = app.listen(app.get('port'),function(){
     var host = 'http://0.0.0.0';server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s',host,port);
+    console.log('Example app listening at %s:%s',host,port);
 });
 

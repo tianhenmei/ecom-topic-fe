@@ -3,8 +3,8 @@ const merge = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 
-function getServerConfig(sysname){  // editorPC
-    var baseConfig = require('./webpack.base.config.js')(sysname)
+function getServerConfig(sysname,item){  // editorPC
+    var baseConfig = require('./webpack.base.config.js')(sysname,item)
     return merge(baseConfig, {
         // 这允许 webpack 以 Node 适用方式(Node-appropriate fashion)处理动态导入(dynamic import)，
         // 并且还会在编译 Vue 组件时，
@@ -13,7 +13,7 @@ function getServerConfig(sysname){  // editorPC
         // 对 bundle renderer 提供 source map 支持
         devtool: 'source-map',
         // 将 entry 指向应用程序的 server entry 文件
-        entry: './server-renderer/'+sysname+'/entry-server.js',
+        entry: './server-renderer/'+sysname+'/'+item+'/entry-server.js',
         // 此处告知 server bundle 使用 Node 风格导出模块(Node-style exports)
         output: {
             libraryTarget: 'commonjs2'

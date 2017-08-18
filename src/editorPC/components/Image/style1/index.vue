@@ -41,7 +41,7 @@
         setChildData,
         recoveryChildElementsData
     } from '../../Base/Node.js'
-    import YHEditComplicated from '../../../edit-components/yh-edit-complicated.vue'
+    import YHEditComplicated from '../../../components-edit/yh-edit-complicated.vue'
 
     const baseData = {
         id:'',

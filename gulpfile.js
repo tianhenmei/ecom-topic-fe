@@ -403,9 +403,8 @@ gulp.task('dev',['dev:watch','dev:client', 'dev:server']);
 
 gulp.task('dist:rimraf-h5',function(){
     let systemName = params.dist.sys
-    if(!systemName) return
-        
-    var clientConfig = require('./build/webpack.client.config')(systemName);
+    if(!systemName || systemName != "editorPC") return
+    var clientConfig = require('./build/webpack.client.config')(systemName,'h5');
     let fileDir = path.join(clientConfig.output.path)
     !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
         if (err) console.error(err)
@@ -416,9 +415,8 @@ gulp.task('dist:rimraf-h5',function(){
 })
 gulp.task('dist:client-h5',['dist:rimraf-h5'],function(){
     let systemName = params.dist.sys
-    if(!systemName) return
-    
-    let clientConfig = require('./build/webpack.client.config')(systemName);
+    if(!systemName || systemName != "editorPC") return
+    let clientConfig = require('./build/webpack.client.config')(systemName,'h5');
 
     webpack(clientConfig, function(err, stats) {
         process.stdout.write(stats.toString({
@@ -433,9 +431,8 @@ gulp.task('dist:client-h5',['dist:rimraf-h5'],function(){
 
 gulp.task('dist:server-h5',function(){
     var systemName = params.dist.sys
-    if(!systemName) return
-    
-    var serverConfig = require('./build/webpack.server.config.js')(systemName);
+    if(!systemName || systemName != "editorPC") return
+    var serverConfig = require('./build/webpack.server.config.js')(systemName,'h5');
     webpack(serverConfig, function(err, stats) {
         process.stdout.write(stats.toString({
             colors: true,
@@ -450,9 +447,8 @@ gulp.task('dist:server-h5',function(){
 gulp.task('dist:h5',['dist:client-h5'],function(){
     // dist:server-h5
     var systemName = params.dist.sys
-    if(!systemName) return
-    
-    var serverConfig = require('./build/webpack.server.config.js')(systemName);
+    if(!systemName || systemName != "editorPC") return
+    var serverConfig = require('./build/webpack.server.config.js')(systemName,'h5');
     let fileDir = path.join(serverConfig.output.path)
     !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
         if (err) console.error(err)
@@ -471,7 +467,57 @@ gulp.task('dist:h5',['dist:client-h5'],function(){
     })
 });
 
-gulp.task('dist:pc',function(){
+gulp.task('dist:rimraf-pc',function(){
+    let systemName = params.dist.sys
+    if(!systemName || systemName != "editorPC") return
+    var clientConfig = require('./build/webpack.client.config')(systemName,'pc');
+    let fileDir = path.join(clientConfig.output.path)
+    !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
+        if (err) console.error(err)
+    })
+    rimraf(fileDir,(err) => {
+        if (err) throw err;
+    })
+})
+gulp.task('dist:client-pc',['dist:rimraf-pc'],function(){
+    let systemName = params.dist.sys
+    if(!systemName || systemName != "editorPC") return
+    let clientConfig = require('./build/webpack.client.config')(systemName,'pc');
+
+    webpack(clientConfig, function(err, stats) {
+        process.stdout.write(stats.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+        }) + '\n\n');
+    });
+})
+gulp.task('dist:pc',['dist:client-pc'],function(){
+    // dist:server-pc
+    var systemName = params.dist.sys
+    if(!systemName || systemName != "editorPC") return
+    var serverConfig = require('./build/webpack.server.config.js')(systemName,'pc');
+    let fileDir = path.join(serverConfig.output.path)
+    !fs.existsSync(fileDir) && mkdirp(fileDir, function(err) {
+        if (err) console.error(err)
+    })
+    rimraf(fileDir+'/components-pc-js',(err) => {
+        if (err) throw err;
+        webpack(serverConfig, function(err, stats) {
+            process.stdout.write(stats.toString({
+                colors: true,
+                modules: false,
+                children: false,
+                chunks: false,
+                chunkModules: false
+            }) + '\n\n');
+        });
+    })
+});
+
+gulp.task('dist',['dist:pc','dist:h5'],function(){
     var systemName = params.dist.sys
     if(!systemName) return
     
@@ -505,9 +551,7 @@ gulp.task('dist:pc',function(){
             }) + '\n\n');
         });
     })
-})
-
-gulp.task('dist',['dist:pc','dist:h5']);
+});
 
 function uploadStatic(dir){
     return upload({
@@ -595,6 +639,8 @@ gulp.task('upload:server',function() {
         'server-renderer/**/*',
         'routes/**/*',
         'publish/**/*',
+        'dist/**/*',
+        'public/**/*',
         './index.js','./gulpfile.js','./package.json','./process.json'
     ])
     .pipe(uploadServe());

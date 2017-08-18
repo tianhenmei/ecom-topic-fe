@@ -3,11 +3,11 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
-function getClientConfig(sysname){  // editorPC
-	let base = require('./webpack.base.config')(sysname)
+function getClientConfig(sysname,item){  // editorPC
+	let base = require('./webpack.base.config')(sysname,item)
     return merge(base, {
 		entry: {
-			index: './server-renderer/'+sysname+'/entry-client.js'
+			index: './server-renderer/'+sysname+'/'+item+'/entry-client.js'
 		},
 		resolve: {
 			alias: {

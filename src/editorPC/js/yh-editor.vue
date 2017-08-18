@@ -61,8 +61,8 @@
         getParentsByAttr
     } from '../components/Base/Node.js'
     import YHLib from './yh-lib.vue'
-    import YHEditPrompt from '../edit-components/yh-edit-prompt.vue'
-    import YHEditAddCompanyPosition from '../edit-components/yh-edit-add-CompanyPosition.vue'
+    import YHEditPrompt from '../components-edit/yh-edit-prompt.vue'
+    import YHEditAddCompanyPosition from '../components-edit/yh-edit-add-CompanyPosition.vue'
     let components = {
         'yh-lib':YHLib,
         'yh-edit-add-companyposition':YHEditAddCompanyPosition,
@@ -97,18 +97,24 @@
                 pageInfo:{
                     templateId:'10001',
                     templateType:'PC',
-                    templateCategory:'测试',
+                    name:'YH EDITOR PC',
+                    templateCategory:'测试专题',
+                    title:'YH EDITOR PC',
                     createTime:'2017/06/19 15:26',
                     createAuthor:'gaohui',
                     updateTime:'',
                     updateAuthor:'gaohui',
                     html:'text',
-                    title:'YH EDITOR PC',
                     description:'YH EDITOR PC TEST',
                     activeTimeStart:'',
                     activeTimeEnd:'',
+                    keywords:'',
+                    lgID:'',
+                    lgH5ID:'',
+                    scriptsJson:[],
                     share:{
                         status:false,
+                        url:'',
                         title:'',
                         desc:'',
                         pic:''
@@ -185,16 +191,16 @@
             getPageData(){
                 let self = this,
                     templateId = getQueryString('templateId'),
-                    name = getQueryString('name')
-                if(!name){
+                    html = getQueryString('name')
+                if(!html){
                     self.$refs['yh-toast'].className += ' hide'
                     return
                 }
-                axios.get(this.connhost+'v3/api/editorPC/getPageData',{
-                    params:{
+                axios.post(this.connhost+'v3/api/editorPC/getPageData',{
+                    // params:{
                         id:templateId,
-                        name:name
-                    }
+                        html:html
+                    // }
                 }).then(response => {
                     let content = response.data.content,
                         i = '',j = ''
@@ -345,6 +351,11 @@
                                 ischild = 'ischild'
                             }
                             break
+                        case 'Slider_style1':
+                            status = false
+                            ignorestatus = 'ignorestatus',
+                            ischild = 'ischild'
+                            break;
                         case 'Block_style1':
                         case 'Block_style2':
                         case 'Block_style3':
@@ -428,9 +439,13 @@
                     this.includes.push(name)
                 }
                 switch(name){
+                    case 'Slider_style1':
                     case 'Block_style2':
                     case 'Block_style3':
                     case 'Block_style4':
+                        if(this.includes.indexOf("Block_style1") == -1){
+                            this.includes.push("Block_style1")
+                        }
                         this.loadComponentEvent('Block_style1','Block/style1','',function(){
                             self.loadComponentEvent(name,path,coltype,self.loadComponentCallBack)
                         })
@@ -473,7 +488,7 @@
             },
             saveData(e){
                 let elemDatas = this.copyElementsData(this.elements)
-                this.$http.post(this.connhost+'v3/api/editorPC/saveData',{
+                axios.post(this.connhost+'v3/api/editorPC/saveData',{
                     name:'text',
                     elemDatas:JSON.stringify({
                         pageInfo:this.pageInfo,
@@ -481,10 +496,11 @@
                         includes:this.includes,
                         count:this.count
                     })
-                },{
+                }/*,{
                     emulateJSON:true
-                }).then(response => {
-                    alert(response.body.message)
+                }*/).then(response => {
+                    alert(response.data.message)
+                    // alert(response.body.message)
                 },response =>{
                     console.log(response.body.message)
                 })
@@ -503,14 +519,15 @@
                     yhEditorContent[i].parentNode.removeChild(yhEditorContent[i])
                 }
                 
-                let content = yh_editor_content.innerHTML
-                let elemDatas = this.copyElementsData(this.elements)
+                // let content = yh_editor_content.innerHTML
+                let elemDatas = this.copyElementsData(this.elements),
+                    name = getQueryString('name')
 
                 this.pageInfo.updateTime = getNow()
                 this.$refs['yh-toast'].className = this.$refs['yh-toast'].className.replace(/( hide)/g,'')
                 this.$refs['yh-toast'].children[0].innerHTML = '正在发布页面，请稍后……'
-                this.$http.post(this.connhost+'v3/api/editorPC/savePage',{
-                    name:'text',
+                axios.post(this.connhost+'v3/api/editorPC/savePage',{
+                    name:name,
                     includes:this.includes,
                     count:this.count,
                     elemDatas:JSON.stringify({
@@ -519,15 +536,15 @@
                         includes:this.includes,
                         count:this.count
                     }),
-                    content:content
-                },{
+                    // content:content
+                }/*,{
                     emulateJSON:true
-                }).then(response => {
+                }*/).then(response => {
+                    self.$refs['yh-toast'].className += ' hide'
                     alert("发布成功!")
-                    self.$refs['yh-toast'].className += ' hide'
                 },response =>{
-                    alert(response.body.message)
                     self.$refs['yh-toast'].className += ' hide'
+                    alert(response.data.message)
                 })
             },
             clearHTML(e){
