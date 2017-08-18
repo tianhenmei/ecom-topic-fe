@@ -3,6 +3,8 @@
         <div class="yh-uplist-set-title" @click.stop.prevent="toggleUplistContent">
             <span class="icon"></span>
             <span class="name">{{options.name}}</span>
+            <span v-if="removeStatus" class="remove"
+                @click.stop.prevent="removeElement">x</span>
         </div>
         <div class="yh-uplist-set-content hide">
             <slot></slot>
@@ -14,7 +16,11 @@
     export default {
         props:[
             'options',
-            'status'  // 是否有子集
+            'status',  // 是否有子集
+            'removeStatus',    // 删除状态
+            'index',  //     当前所在父组件的索引
+            'parentID', // 父组件ID
+            'path' // 父组件路径
         ],
         data(){
             return {
@@ -59,6 +65,12 @@
                     content.className = content.className + ' hide'
                 }
                 
+            },
+            removeElement(e){
+                console.log(this.path+'.props.elements.'+this.index)
+                this.$store.commit('removeElement',{
+                    path:this.path+'.props.elements.'+this.index
+                })
             }
         }
     }
@@ -133,5 +145,19 @@
         font-size:14px;
         text-align:left;
     }
-    
+    .yh-uplist-set .yh-uplist-set-title .remove {
+        display: block;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        border: 1px solid #ff0084;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 12px;
+        color: #ff0084;
+        position: absolute;
+        right: 0;
+        top: 2.5px;
+        cursor:pointer;
+    }
 </style>

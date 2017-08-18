@@ -57,7 +57,11 @@
                     </div>
                     <yh-edit-uplist v-for="(one,index) in elements" :key="index"
                         :status="getChildCssStatus(index)"
-                        :options="{name:elements[index].props.data[elements[index].props.yh_data_name].value}">
+                        :options="{name:elements[index].props.data[elements[index].props.yh_data_name].value}"
+                        :removeStatus="true"
+                        :index="index"
+                        :parentID="elem_id"
+                        :path="path">
                         <div v-for="one in elements[index].props.css" :is="setModule(one)" 
                             v-if="one.type != 'none' && (one.parentSetStatus == 'child')"
                             :parent="elements[index].props.css"
@@ -108,7 +112,11 @@
                     </div>
                     <yh-edit-uplist v-for="(one,index) in elements" :key="index"
                         :status="getChildH5CssStatus(index)"
-                        :options="{name:elements[index].props.data[elements[index].props.yh_data_name].value}">
+                        :options="{name:elements[index].props.data[elements[index].props.yh_data_name].value}"
+                        :removeStatus="true"
+                        :index="index"
+                        :parentID="elem_id"
+                        :path="path">
                         <div v-for="one in elements[index].props.h5css" :is="setModule(one)" 
                             v-if="one.type != 'none' && (one.parentSetStatus == 'child')"
                             :parent="elements[index].props.h5css"
@@ -151,7 +159,11 @@
                     </yh-edit-uplist>
                     <yh-edit-uplist v-for="(one,index) in elements" :key="index"
                         :options="{name:elements[index].props.data[elements[index].props.yh_data_name].value}"
-                        :status="true">
+                        :status="true"
+                        :removeStatus="true"
+                        :index="index"
+                        :parentID="elem_id"
+                        :path="path">
                         <div v-for="one in elements[index].props.data" :is="setModule(one)" v-if="one.type != 'none'"
                             :parent="elements[index].props.data"
                             :options="one"
