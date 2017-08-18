@@ -96,6 +96,7 @@ Node.updateData = (data,baseData) =>{
         newdata = {}
     for( i in baseData){
         switch(i){
+            case 'sync':
             case 'data':
             case 'css':
             case 'h5css':

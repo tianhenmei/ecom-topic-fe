@@ -189,14 +189,20 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
-    data: function data() {},
+    data: function data() {
+        return {};
+    },
 
     computed: {
         setImage: function setImage() {
-            var src = this.props.css.background_background_image.value.trim();
+            var src = this.props.h5css.background_background_image_h5.value.trim();
             switch (src) {
                 case 'none':
                     return src;
@@ -205,14 +211,15 @@ exports.default = {
                 default:
                     return 'url(' + src + ')';
             }
-        },
-        getLeft: function getLeft() {
-            return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1;
         }
     },
     mounted: function mounted() {},
 
-    methods: {}
+    methods: {
+        getRemValue: function getRemValue(value) {
+            return (value / (750 / 16)).toFixed(2);
+        }
+    }
 };
 
 /***/ }),
@@ -320,6 +327,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "slider-style1",
+    style: ({
+      height: (_vm.props.h5css.height.value == 'auto' ? 'auto' : _vm.getRemValue(_vm.props.h5css.height.value) + 'rem'),
+      minHeight: (_vm.props.h5css.background_min_height.value == 'auto' ? 'auto' : _vm.getRemValue(_vm.props.h5css.background_min_height.value) + 'rem')
+    }),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Slider_style1",
@@ -330,11 +341,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "yh-slider-container clearfix",
     style: ({
-      height: _vm.props.css.background_height.value + (_vm.props.css.background_height.value == 'auto' ? '' : 'px'),
-      backgroundColor: _vm.props.css.background_background_color.value,
+      height: (_vm.props.h5css.height.value == 'auto' ? 'auto' : _vm.getRemValue(_vm.props.h5css.height.value) + 'rem'),
+      backgroundColor: _vm.props.h5css.background_background_color.value,
       backgroundImage: _vm.setImage,
-      backgroundRepeat: _vm.props.css.background_background_repeat.value,
-      minHeight: _vm.props.css.background_min_height.value + (_vm.props.css.background_min_height.value == 'auto' ? '' : 'px')
+      backgroundRepeat: _vm.props.h5css.background_background_repeat.value,
+      minHeight: (_vm.props.h5css.background_min_height.value == 'auto' ? 'auto' : _vm.props.h5css.background_min_height.value + 'rem')
     }),
     attrs: {
       "id": _vm.props.id + '-container'
@@ -342,7 +353,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "yh-slider-content clearfix",
     style: ({
-      left: _vm.getLeft + 'px',
+      left: 0,
       // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
     }),
     attrs: {

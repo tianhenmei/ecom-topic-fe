@@ -209,6 +209,7 @@ let store = new Vuex.Store({
                 if(length > 0){
                     switch(arr[0].parentmodule){
                         case 'List_style1':
+                        case 'Slider_style1':
                             arr[i].props.css = deepCopy(arr[i].props.css,elemData[0].props.css)
                             arr[i].props.h5css = deepCopy(arr[i].props.h5css,elemData[0].props.h5css)
                             break
@@ -505,6 +506,21 @@ let store = new Vuex.Store({
                                 })
                             }
                         }else if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                            if(elemData.props.sync){
+                                for(i in elemData.props.sync){
+                                    if(i == payload.stylename){
+                                        for(j = 0; j < elemData.props.sync[i].length; j++){
+                                            arr = elemData.props.sync[i][j].split('.')
+                                            temp = elemData.props
+                                            for(t = 0; t < arr.length; t++){
+                                                temp = temp[arr[t]]
+                                            }
+                                            temp.value = payload.actualValue
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                             for(i = 0; i < elemData.props.elements.length; i++){
                                 one = elemData.props.elements[i].props[payload.parent][payload.stylename]
                                 one.value = payload.actualValue

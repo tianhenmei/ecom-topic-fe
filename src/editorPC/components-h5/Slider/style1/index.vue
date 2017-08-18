@@ -3,18 +3,22 @@
         :ref="props.id"
         :autoplay="props.data.autoplay.value"
         :animation="props.data.animation.value"
+        :style="{
+            height:(props.h5css.height.value == 'auto' ? 'auto' : getRemValue(props.h5css.height.value)+'rem'),
+            minHeight:(props.h5css.background_min_height.value == 'auto' ? 'auto' : getRemValue(props.h5css.background_min_height.value)+'rem')
+        }"
         yh-vessel>
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
-                height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
-                backgroundColor:props.css.background_background_color.value,
+                height:(props.h5css.height.value == 'auto' ? 'auto' : getRemValue(props.h5css.height.value)+'rem'),
+                backgroundColor:props.h5css.background_background_color.value,
                 backgroundImage:setImage,
-                backgroundRepeat:props.css.background_background_repeat.value,
-                minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
+                backgroundRepeat:props.h5css.background_background_repeat.value,
+                minHeight:(props.h5css.background_min_height.value == 'auto' ? 'auto' : props.h5css.background_min_height.value+'rem')
             }">
             <div :id="props.id+'-content'" class="yh-slider-content clearfix"
                 :style="{
-                    left:getLeft+ 'px',
+                    left:0,
                     // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
                 }">
                 <div v-for="(element,index) in props.elements" 
@@ -33,11 +37,11 @@
     export default {
         props:['props','path','parentmodule'],
         data(){
-            
+            return {}
         },
         computed:{
             setImage(){
-                let src = this.props.css.background_background_image.value.trim()
+                let src = this.props.h5css.background_background_image_h5.value.trim()
                 switch(src){
                     case 'none':
                         return src
@@ -46,16 +50,15 @@
                     default:
                         return 'url('+src+')'
                 }
-            },
-            getLeft(){
-                return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1
             }
         },
         mounted(){
             
         },
         methods:{
-            
+            getRemValue(value){
+                return (value / (750 / 16)).toFixed(2)
+            }
         }
     }
 </script>

@@ -250,8 +250,9 @@
                 value:'auto',
                 default:'auto',  // 默认值
                 ivalue:750,   // 初始值
-                type:'none',
-                parent:'h5css'
+                type:'number',
+                parent:'h5css',
+                parentSetStatus:'common'
             },
             background_height:{
                 cn:'高度',

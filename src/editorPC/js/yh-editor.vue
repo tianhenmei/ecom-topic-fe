@@ -18,7 +18,8 @@
         <div yh-editor-content ref="yh-editor-content">
             <div v-for="(element,index) in elements" :is="element.module"
                 :props="element.props"
-                :path="element.path"></div>
+                :path="element.path"
+                @addChildComponent="addChildComponent"></div>
         </div>
         
         <div class="yh-toast" ref="yh-toast">
@@ -187,6 +188,13 @@
                     })
                 }
                 this.$store.commit('addChildElement',elemData)
+            },
+            addChildComponent(data){
+                data.module = components[data['yh-module']]
+                data.props = components[data['yh-module']].initCtor(
+                    data.props
+                )
+                this.$store.commit('addChildElement',data)
             },
             getPageData(){
                 let self = this,

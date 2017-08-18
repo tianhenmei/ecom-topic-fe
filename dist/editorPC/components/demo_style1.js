@@ -2719,6 +2719,12 @@ var baseData = {
     yh_data_name: 'name', // 当作为子级时放入uplist中的title取值
     path: '',
     parentmodule: '', // 父级模版
+    // sync : 只有当此组件为容器组件时才会有
+    // 用来当容器组件的子组件的某个属性（必须是公共属性）改变时，当前容器组件的某个属性也要跟着改变
+    // 可改变多个容器组件的属性，数组的形式
+    // sync:{
+    //     'background_width':['css.width']
+    // }
     css: {
         // background: 类名  background_color: css样式background-color
         background_background_color: {

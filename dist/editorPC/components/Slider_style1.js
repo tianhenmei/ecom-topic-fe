@@ -578,6 +578,7 @@ Node.updateData = function (data, baseData) {
         newdata = {};
     for (i in baseData) {
         switch (i) {
+            case 'sync':
             case 'data':
             case 'css':
             case 'h5css':
@@ -1416,446 +1417,6 @@ module.exports = Component.exports
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(71)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(19),
-  /* template */
-  __webpack_require__(58),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-checkbox.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-checkbox.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7a6bc34a", Component.options)
-  } else {
-    hotAPI.reload("data-v-7a6bc34a", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(74)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(20),
-  /* template */
-  __webpack_require__(61),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-color.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-color.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-b2f8020a", Component.options)
-  } else {
-    hotAPI.reload("data-v-b2f8020a", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(64)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(22),
-  /* template */
-  __webpack_require__(51),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-image.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-image.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-07cc861a", Component.options)
-  } else {
-    hotAPI.reload("data-v-07cc861a", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(67)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(24),
-  /* template */
-  __webpack_require__(54),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-mutiple.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-mutiple.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5c169c78", Component.options)
-  } else {
-    hotAPI.reload("data-v-5c169c78", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(70)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(25),
-  /* template */
-  __webpack_require__(57),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-number.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-number.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6f45ea3e", Component.options)
-  } else {
-    hotAPI.reload("data-v-6f45ea3e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(63)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(26),
-  /* template */
-  __webpack_require__(50),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-options.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-options.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0597a0b6", Component.options)
-  } else {
-    hotAPI.reload("data-v-0597a0b6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(68)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(27),
-  /* template */
-  __webpack_require__(55),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-request.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-request.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5e76ac27", Component.options)
-  } else {
-    hotAPI.reload("data-v-5e76ac27", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(69)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(29),
-  /* template */
-  __webpack_require__(56),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-text.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-text.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-64217a76", Component.options)
-  } else {
-    hotAPI.reload("data-v-64217a76", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(73)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(30),
-  /* template */
-  __webpack_require__(60),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-textarea.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-textarea.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a3abb35c", Component.options)
-  } else {
-    hotAPI.reload("data-v-a3abb35c", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(72)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(31),
-  /* template */
-  __webpack_require__(59),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-uplist.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] yh-edit-uplist.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-99191d5e", Component.options)
-  } else {
-    hotAPI.reload("data-v-99191d5e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2669,6 +2230,446 @@ var index_esm = {
 
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(71)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(19),
+  /* template */
+  __webpack_require__(58),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-checkbox.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-checkbox.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7a6bc34a", Component.options)
+  } else {
+    hotAPI.reload("data-v-7a6bc34a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(74)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(20),
+  /* template */
+  __webpack_require__(61),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-color.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-color.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b2f8020a", Component.options)
+  } else {
+    hotAPI.reload("data-v-b2f8020a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(64)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(22),
+  /* template */
+  __webpack_require__(51),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-image.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-image.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-07cc861a", Component.options)
+  } else {
+    hotAPI.reload("data-v-07cc861a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(67)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(24),
+  /* template */
+  __webpack_require__(54),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-mutiple.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-mutiple.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5c169c78", Component.options)
+  } else {
+    hotAPI.reload("data-v-5c169c78", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(70)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(25),
+  /* template */
+  __webpack_require__(57),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-number.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-number.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6f45ea3e", Component.options)
+  } else {
+    hotAPI.reload("data-v-6f45ea3e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(63)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(26),
+  /* template */
+  __webpack_require__(50),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-options.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-options.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0597a0b6", Component.options)
+  } else {
+    hotAPI.reload("data-v-0597a0b6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(68)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(27),
+  /* template */
+  __webpack_require__(55),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-request.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-request.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5e76ac27", Component.options)
+  } else {
+    hotAPI.reload("data-v-5e76ac27", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(69)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(29),
+  /* template */
+  __webpack_require__(56),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-text.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-text.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-64217a76", Component.options)
+  } else {
+    hotAPI.reload("data-v-64217a76", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(73)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(30),
+  /* template */
+  __webpack_require__(60),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-textarea.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-textarea.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a3abb35c", Component.options)
+  } else {
+    hotAPI.reload("data-v-a3abb35c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(72)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(31),
+  /* template */
+  __webpack_require__(59),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components-edit/yh-edit-uplist.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] yh-edit-uplist.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-99191d5e", Component.options)
+  } else {
+    hotAPI.reload("data-v-99191d5e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2679,6 +2680,72 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// import Swiper from '../../../../../public/js/lib/swiper.min.js'
+
+
+var _vuex = __webpack_require__(5);
+
 var _Node = __webpack_require__(3);
 
 var _yhEditComplicated = __webpack_require__(47);
@@ -2687,55 +2754,6 @@ var _yhEditComplicated2 = _interopRequireDefault(_yhEditComplicated);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 var baseData = {
     id: '',
     ignorestatus: '', // 是否为类似LIST的子集（如果是则会忽略样式设置） 为'ignorestatus' 时忽略
@@ -2743,6 +2761,9 @@ var baseData = {
     yh_data_name: 'anchorID', // 当作为子级时放入uplist中的title取值
     path: '',
     parentmodule: '', // 父级模版
+    sync: {
+        'background_width': ['css.width']
+    },
     css: {
         // background: 类名  background_color: css样式background-color
         background_background_color: {
@@ -2772,6 +2793,14 @@ var baseData = {
             // 只有当前组件是容器组件时，一般只有设置数据才有，才会有eindex和index
             // 其中 eindex 指的是子组件在容器组件里面的位置
             //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表
+        },
+        width: {
+            cn: '宽度',
+            en: 'width',
+            value: document.documentElement.clientWidth, //'auto',
+            default: 'auto', // 默认值
+            ivalue: document.documentElement.clientWidth, //100,   // 初始值
+            type: 'none'
         },
         background_height: {
             cn: '高度',
@@ -2818,6 +2847,24 @@ var baseData = {
         }
     },
     h5css: {
+        height: {
+            cn: '高度',
+            en: 'height',
+            value: 100, //'auto',
+            default: 'auto', // 默认值
+            ivalue: 100, //100,   // 初始值
+            type: 'number',
+            parent: 'h5css'
+        },
+        background_min_height: {
+            cn: '最小高度',
+            en: 'background_min_height',
+            value: 'auto',
+            default: 'auto',
+            ivalue: 100,
+            type: 'none',
+            parent: 'h5css'
+        },
         background_background_color: {
             cn: '背景颜色',
             en: 'background_background_color',
@@ -2920,10 +2967,16 @@ var baseData = {
                 cn: '从小到大',
                 value: 'zoomIn'
             }]
+        },
+        childmodule: {
+            cn: '子集模板',
+            en: 'childmodule',
+            value: 'Block_style1',
+            parent: 'data',
+            type: 'none'
         }
     }
 };
-// import Swiper from '../../../../../public/js/lib/swiper.min.js'
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
     components: {
@@ -2935,7 +2988,7 @@ exports.default = {
         };
     },
 
-    computed: {
+    computed: _extends({}, (0, _vuex.mapState)(['count']), {
         setImage: function setImage() {
             var src = this.props.css.background_background_image.value.trim();
             switch (src) {
@@ -2950,8 +3003,9 @@ exports.default = {
         getLeft: function getLeft() {
             return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1;
         }
-    },
+    }),
     mounted: function mounted() {
+        this.props.data.currentIndex.value = 0;
         // this.swiper = new Swiper('#'+this.props.id,{
         //     wrapperClass:'yh-slider-content',
         //     slideClass:'block-style1',
@@ -2966,8 +3020,10 @@ exports.default = {
         setAll: function setAll(e) {
             var id = (0, _Node.initSelected)(e);
             this.$refs[id].className += ' setting';
-            var yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id + '-yh-edit-layer'];
+            var yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id + '-yh-edit-layer'],
+                add = this.$refs['yh-slider-addone'];
             yh_edit_layer.className = yh_edit_layer.className.replace(/( hide)/g, '');
+            add.className = add.className.replace(/(hide)/g, '').replace(/  /g, ' ');
             (0, _Node.settingBox)(this.$refs[id], this.props.ischild);
         },
         recoveryModuleData: function recoveryModuleData(elem, baseData) {
@@ -2996,6 +3052,55 @@ exports.default = {
             if (this.props.data.currentIndex.value == length) {
                 this.props.data.currentIndex.value = 0;
             }
+        },
+        showAddLayer: function showAddLayer(e) {
+            var id = this.props.id,
+                list = this.$refs[id],
+                add = this.$refs['yh-slider-addone'];
+            if (/(setting)/g.test(list.className)) {
+                add.className = add.className.replace(/(hide)/g, '').replace(/  /g, ' ');
+            }
+        },
+        hideAddLayer: function hideAddLayer(e) {
+            var id = this.props.id,
+                list = this.$refs[id],
+                add = this.$refs['yh-slider-addone'];
+            if (/(setting)/g.test(list.className)) {
+                add.className += ' hide';
+            }
+        },
+        addElement: function addElement(e) {
+            // let childmodule = this.props.data.childmodule.value,
+            //     classify = childmodule.split(/_/g)[0],
+            //     addedit = document.getElementById('yh-edit-add-'+classify)
+            // addedit.className = addedit.className.replace(/(hide)/g,'').replace('  ',' ')
+            var newId = 'element' + this.count,
+                length = this.props.elements.length;
+            this.$emit('addChildComponent', {
+                id: newId,
+                'yh-module': 'Block_style1',
+                module: null,
+                parentPath: this.path,
+                path: 'props.elements.cindex',
+                parentmodule: 'Slider_style1',
+                props: {
+                    id: newId,
+                    ignorestatus: 'ignorestatus',
+                    ischild: 'ischild',
+                    yh_data_name: baseData.yh_data_name
+                }
+            });
+            this.$store.commit('changeCount');
+            this.$store.commit('setValue', {
+                parent: 'data',
+                eindex: -1,
+                index: -1,
+                ischildset: '',
+                stylename: 'currentIndex',
+                actualValue: length,
+                designValue: length,
+                path: this.path
+            });
         }
     },
     initCtor: function initCtor(options, self, components) {
@@ -3031,7 +3136,8 @@ exports.default = {
             elements: baseData.elements,
             attribute: baseData.attribute,
             data: baseData.data,
-            common: baseData.common
+            common: baseData.common,
+            sync: baseData.sync
         })), options, {
             elements: elements
         });
@@ -3050,7 +3156,8 @@ exports.default = {
             nonset: baseData.nonset,
             attribute: baseData.attribute,
             data: (0, _Node.setChildData)(elemData, baseData.data),
-            common: baseData.common
+            common: baseData.common,
+            sync: baseData.sync
         })), options);
         data.data.anchorID.value = options.id;
         return data;
@@ -3060,7 +3167,8 @@ exports.default = {
             yh_data_name: baseData.yh_data_name,
             path: path,
             nonset: baseData.nonset,
-            common: baseData.common
+            common: baseData.common,
+            sync: baseData.sync
         }, options);
         if (!data.data.anchorID.value) {
             data.data.anchorID.value = options.id;
@@ -3077,6 +3185,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "slider-style1",
+    style: ({
+      height: _vm.props.css.background_height.value + (_vm.props.css.background_height.value == 'auto' ? '' : 'px'),
+      minHeight: _vm.props.css.background_min_height.value + (_vm.props.css.background_min_height.value == 'auto' ? '' : 'px')
+    }),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Slider_style1",
@@ -3089,11 +3201,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": function($event) {
         $event.stopPropagation();
         _vm.setAll($event)
+      },
+      "mouseenter": function($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        _vm.showAddLayer($event)
+      },
+      "mouseleave": function($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        _vm.hideAddLayer($event)
       }
     }
   }, [_c('div', {
     staticClass: "yh-slider-container clearfix",
     style: ({
+      width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px'),
       height: _vm.props.css.background_height.value + (_vm.props.css.background_height.value == 'auto' ? '' : 'px'),
       backgroundColor: _vm.props.css.background_background_color.value,
       backgroundImage: _vm.setImage,
@@ -3145,7 +3268,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.rightEvent($event)
       }
     }
-  }), _vm._v(" "), _c('yh-edit-complicated', {
+  }), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.props.elements.length > 0),
+      expression: "props.elements.length > 0"
+    }],
+    ref: "yh-slider-addone",
+    staticClass: "yh-vessel-add yh-slider-addone hide",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.addElement($event)
+      }
+    }
+  }, [_vm._v("+")]), _vm._v(" "), _c('yh-edit-complicated', {
     ref: "yh-edit-complicated",
     attrs: {
       "css": _vm.props.css,
@@ -3418,43 +3556,43 @@ var _yhEditTab = __webpack_require__(48);
 
 var _yhEditTab2 = _interopRequireDefault(_yhEditTab);
 
-var _yhEditUplist = __webpack_require__(14);
+var _yhEditUplist = __webpack_require__(15);
 
 var _yhEditUplist2 = _interopRequireDefault(_yhEditUplist);
 
-var _yhEditColor = __webpack_require__(6);
+var _yhEditColor = __webpack_require__(7);
 
 var _yhEditColor2 = _interopRequireDefault(_yhEditColor);
 
-var _yhEditImage = __webpack_require__(7);
+var _yhEditImage = __webpack_require__(8);
 
 var _yhEditImage2 = _interopRequireDefault(_yhEditImage);
 
-var _yhEditNumber = __webpack_require__(9);
+var _yhEditNumber = __webpack_require__(10);
 
 var _yhEditNumber2 = _interopRequireDefault(_yhEditNumber);
 
-var _yhEditText = __webpack_require__(12);
+var _yhEditText = __webpack_require__(13);
 
 var _yhEditText2 = _interopRequireDefault(_yhEditText);
 
-var _yhEditCheckbox = __webpack_require__(5);
+var _yhEditCheckbox = __webpack_require__(6);
 
 var _yhEditCheckbox2 = _interopRequireDefault(_yhEditCheckbox);
 
-var _yhEditTextarea = __webpack_require__(13);
+var _yhEditTextarea = __webpack_require__(14);
 
 var _yhEditTextarea2 = _interopRequireDefault(_yhEditTextarea);
 
-var _yhEditOptions = __webpack_require__(10);
+var _yhEditOptions = __webpack_require__(11);
 
 var _yhEditOptions2 = _interopRequireDefault(_yhEditOptions);
 
-var _yhEditRequest = __webpack_require__(11);
+var _yhEditRequest = __webpack_require__(12);
 
 var _yhEditRequest2 = _interopRequireDefault(_yhEditRequest);
 
-var _yhEditMutiple = __webpack_require__(8);
+var _yhEditMutiple = __webpack_require__(9);
 
 var _yhEditMutiple2 = _interopRequireDefault(_yhEditMutiple);
 
@@ -4090,7 +4228,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 
-var _vuex = __webpack_require__(15);
+var _vuex = __webpack_require__(5);
 
 var _Node = __webpack_require__(3);
 
@@ -4253,43 +4391,43 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _yhEditUplist = __webpack_require__(14);
+var _yhEditUplist = __webpack_require__(15);
 
 var _yhEditUplist2 = _interopRequireDefault(_yhEditUplist);
 
-var _yhEditColor = __webpack_require__(6);
+var _yhEditColor = __webpack_require__(7);
 
 var _yhEditColor2 = _interopRequireDefault(_yhEditColor);
 
-var _yhEditImage = __webpack_require__(7);
+var _yhEditImage = __webpack_require__(8);
 
 var _yhEditImage2 = _interopRequireDefault(_yhEditImage);
 
-var _yhEditNumber = __webpack_require__(9);
+var _yhEditNumber = __webpack_require__(10);
 
 var _yhEditNumber2 = _interopRequireDefault(_yhEditNumber);
 
-var _yhEditText = __webpack_require__(12);
+var _yhEditText = __webpack_require__(13);
 
 var _yhEditText2 = _interopRequireDefault(_yhEditText);
 
-var _yhEditCheckbox = __webpack_require__(5);
+var _yhEditCheckbox = __webpack_require__(6);
 
 var _yhEditCheckbox2 = _interopRequireDefault(_yhEditCheckbox);
 
-var _yhEditTextarea = __webpack_require__(13);
+var _yhEditTextarea = __webpack_require__(14);
 
 var _yhEditTextarea2 = _interopRequireDefault(_yhEditTextarea);
 
-var _yhEditOptions = __webpack_require__(10);
+var _yhEditOptions = __webpack_require__(11);
 
 var _yhEditOptions2 = _interopRequireDefault(_yhEditOptions);
 
-var _yhEditRequest = __webpack_require__(11);
+var _yhEditRequest = __webpack_require__(12);
 
 var _yhEditRequest2 = _interopRequireDefault(_yhEditRequest);
 
-var _yhEditMutiple = __webpack_require__(8);
+var _yhEditMutiple = __webpack_require__(9);
 
 var _yhEditMutiple2 = _interopRequireDefault(_yhEditMutiple);
 
@@ -4539,7 +4677,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _vuex = __webpack_require__(15);
+var _vuex = __webpack_require__(5);
 
 exports.default = {
     props: ['eindex', 'index', 'parent', 'options', 'elem_id', // 当前被选中元素的ID
@@ -5032,7 +5170,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 exports.i(__webpack_require__(46), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* @import '../../../../../public/css/lib/swiper.min.css';*/\n.yh-module-selected > .yh-slider-container > .yh-slider-content{\n    top:20px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* @import '../../../../../public/css/lib/swiper.min.css';*/\n.yh-module-selected > .yh-slider-container > .yh-slider-content{\n    top:20px;\n}\n.yh-slider-addone {\n    width: 100%;\n    height: 50px;\n    line-height: 50px;\n    margin: 0;\n    border: 1px solid #ccc;\n    font-size: 40px;\n    text-align: center;\n    background-color: #fff;\n    color: #666;\n    cursor: pointer;\n    box-sizing: border-box;\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    z-index: 1000;\n}\n", ""]);
 
 // exports
 
@@ -5186,7 +5324,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".slider-style1{width:100%;overflow:hidden}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .slider-style1 .arrow-left,.slider-style1 .slider-style1 .arrow-right{width:80px;height:80px;background:url(http://topic.lagou.com/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .slider-style1 .arrow-left{left:40px}.slider-style1 .slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .slider-style1 .arrow-right:hover{background-position:0 -80px}", ""]);
+exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:absolute;left:50%;top:0;margin:0 0 0 -960px}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://topic.lagou.com/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}", ""]);
 
 // exports
 

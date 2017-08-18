@@ -1,7 +1,18 @@
+@function rem($n){
+    @return $n / (750 / 16) + rem;
+}
 /*slider-style1**************************************************************************/
 .slider-style1 {
     width:100%;
     overflow:hidden;
+    position: relative;
+    .yh-slider-container {
+        width:rem(750);
+        position: absolute;
+        left: 50%;
+        top:0;
+        margin:0 0 0 rem(-375);
+    }
     .yh-slider-content {
         width:90000px;
         position: absolute;
@@ -9,7 +20,12 @@
         top:0;
     }
     .yh-slider-content > .block-style1 {
+        // width: 100%;
+        // height: 100%;
         float:left;
+        > .yh-block-content {
+            margin:0;
+        }
     }
     .arrow-left,
     .arrow-right {

@@ -53,7 +53,8 @@
                     backgroundImage:this.setImage,
                     backgroundRepeat:this.props.h5css.background_background_repeat.value,
                     minWidth:this.getRemValue(this.props.h5css.background_min_width.value)+'rem',
-                    minHeight:this.getRemValue(this.props.h5css.background_min_height.value)+'rem'
+                    minHeight:this.getRemValue(this.props.h5css.background_min_height.value)+'rem',
+                    width:(this.props.h5css.background_width.value == 'auto' ? 'auto' : this.getRemValue(this.props.h5css.background_width.value)+'rem'),
                 }
                 switch(this.props.h5css.layer_position.value){
                     case 'yh-block-fixed':

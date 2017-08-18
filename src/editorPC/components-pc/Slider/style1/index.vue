@@ -4,9 +4,14 @@
         :yh-path="path"
         :autoplay="props.data.autoplay.value"
         :animation="props.data.animation.value"
+        :style="{
+            height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
+            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
+        }"
         yh-vessel>
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
+                width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px'),
                 height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
                 backgroundColor:props.css.background_background_color.value,
                 backgroundImage:setImage,
@@ -15,7 +20,7 @@
             }">
             <div :id="props.id+'-content'" class="yh-slider-content clearfix"
                 :style="{
-                    left:getLeft+ 'px',
+                    left:0,
                     // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
                 }">
                 <div v-for="(element,index) in props.elements" 

@@ -5,9 +5,16 @@
         @click.stop="setAll"
         :autoplay="props.data.autoplay.value"
         :animation="props.data.animation.value"
+        :style="{
+            height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
+            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
+        }"
+        @mouseenter.stop.prevent="showAddLayer"
+        @mouseleave.stop.prevent="hideAddLayer"
         yh-vessel>
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
+                width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px'),
                 height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
                 backgroundColor:props.css.background_background_color.value,
                 backgroundImage:setImage,
@@ -30,6 +37,11 @@
             @click.stop.prevent="leftEvent"></a>
         <a class="arrow-right" href="javascript:void(0);"
             @click.stop.prevent="rightEvent"></a>
+        <div 
+            v-show="props.elements.length > 0" 
+            class="yh-vessel-add yh-slider-addone hide"
+            @click.prevent="addElement"
+            ref="yh-slider-addone">+</div>
         <!-- yh-edit 组件设置 -->
         <yh-edit-complicated
             ref="yh-edit-complicated"
@@ -47,6 +59,7 @@
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex'
     import {
         recoveryData,
         getDataID,
@@ -66,6 +79,9 @@
         yh_data_name:'anchorID',  // 当作为子级时放入uplist中的title取值
         path:'',
         parentmodule:'',  // 父级模版
+        sync:{
+            'background_width':['css.width']
+        },
         css:{
             // background: 类名  background_color: css样式background-color
             background_background_color:{
@@ -95,6 +111,14 @@
                 // 只有当前组件是容器组件时，一般只有设置数据才有，才会有eindex和index
                 // 其中 eindex 指的是子组件在容器组件里面的位置
                 //     index 指的是子组件的某个属性值value=数组，index表示在其中的位置，如公司组件的职位列表
+            },
+            width:{
+                cn:'宽度',
+                en:'width',
+                value:document.documentElement.clientWidth,//'auto',
+                default:'auto',  // 默认值
+                ivalue:document.documentElement.clientWidth,//100,   // 初始值
+                type:'none'
             },
             background_height:{
                 cn:'高度',
@@ -149,6 +173,24 @@
             // },
         },
         h5css:{
+            height:{
+                cn:'高度',
+                en:'height',
+                value:100,//'auto',
+                default:'auto',  // 默认值
+                ivalue:100,//100,   // 初始值
+                type:'number',
+                parent:'h5css'
+            },
+            background_min_height:{
+                cn:'最小高度',
+                en:'background_min_height',
+                value:'auto',
+                default:'auto',
+                ivalue:100,
+                type:'none',
+                parent:'h5css'
+            },
             background_background_color:{
                 cn:'背景颜色',
                 en:'background_background_color',
@@ -256,6 +298,13 @@
                     value:'zoomIn'
                 }],
             },
+            childmodule:{
+                cn:'子集模板',
+                en:'childmodule',
+                value:'Block_style1',
+                parent:'data',
+                type:'none'
+            }
         }
     }
     export default {
@@ -269,6 +318,9 @@
             }
         },
         computed:{
+            ...mapState([
+                'count',
+            ]),
             setImage(){
                 let src = this.props.css.background_background_image.value.trim()
                 switch(src){
@@ -285,6 +337,7 @@
             }
         },
         mounted(){
+            this.props.data.currentIndex.value = 0;
             // this.swiper = new Swiper('#'+this.props.id,{
             //     wrapperClass:'yh-slider-content',
             //     slideClass:'block-style1',
@@ -298,8 +351,10 @@
             setAll(e){
                 let id = initSelected(e)
                 this.$refs[id].className += ' setting'
-                let yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id+'-yh-edit-layer']
+                let yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id+'-yh-edit-layer'],
+                    add = this.$refs['yh-slider-addone']
                 yh_edit_layer.className = yh_edit_layer.className.replace(/( hide)/g,'')
+                add.className = add.className.replace(/(hide)/g,'').replace(/  /g,' ')
                 settingBox(this.$refs[id],this.props.ischild)
             },
             recoveryModuleData(elem,baseData){
@@ -329,7 +384,56 @@
                 if(this.props.data.currentIndex.value == length){
                     this.props.data.currentIndex.value = 0
                 }
-            }
+            },
+            showAddLayer(e){
+                let id = this.props.id,
+                    list = this.$refs[id],
+                    add = this.$refs['yh-slider-addone']
+                if(/(setting)/g.test(list.className)){
+                    add.className = add.className.replace(/(hide)/g,'').replace(/  /g,' ')
+                }
+            },
+            hideAddLayer(e){
+                let id = this.props.id,
+                    list = this.$refs[id],
+                    add = this.$refs['yh-slider-addone']
+                if(/(setting)/g.test(list.className)){
+                    add.className += ' hide'
+                }
+            },
+            addElement(e){
+                // let childmodule = this.props.data.childmodule.value,
+                //     classify = childmodule.split(/_/g)[0],
+                //     addedit = document.getElementById('yh-edit-add-'+classify)
+                // addedit.className = addedit.className.replace(/(hide)/g,'').replace('  ',' ')
+                let newId = 'element'+this.count,
+                    length = this.props.elements.length
+                this.$emit('addChildComponent',{
+                    id:newId,
+                    'yh-module':'Block_style1',
+                    module:null,
+                    parentPath:this.path,
+                    path:'props.elements.cindex',
+                    parentmodule:'Slider_style1',
+                    props:{
+                        id:newId,
+                        ignorestatus:'ignorestatus',
+                        ischild:'ischild',
+                        yh_data_name:baseData.yh_data_name
+                    }
+                })
+                this.$store.commit('changeCount')
+                this.$store.commit('setValue',{
+                    parent:'data',
+                    eindex:-1,
+                    index:-1,
+                    ischildset:'',
+                    stylename:'currentIndex',
+                    actualValue:length,
+                    designValue:length,
+                    path:this.path
+                })
+            },
         },
         initCtor(options,self,components){
             let newID = '',
@@ -366,7 +470,8 @@
                     elements:baseData.elements,
                     attribute:baseData.attribute,
                     data:baseData.data,
-                    common:baseData.common
+                    common:baseData.common,
+                    sync:baseData.sync
                 })),
                 options,{
                     elements:elements
@@ -389,7 +494,8 @@
                     nonset:baseData.nonset,
                     attribute:baseData.attribute,
                     data:setChildData(elemData,baseData.data),
-                    common:baseData.common
+                    common:baseData.common,
+                    sync:baseData.sync
                 })),
                 options
             )
@@ -406,7 +512,8 @@
                     yh_data_name:baseData.yh_data_name,
                     path:path,
                     nonset:baseData.nonset,
-                    common:baseData.common
+                    common:baseData.common,
+                    sync:baseData.sync
                 },
                 options
             )
@@ -422,5 +529,22 @@
     @import './index.css';
     .yh-module-selected > .yh-slider-container > .yh-slider-content{
         top:20px;
+    }
+    .yh-slider-addone {
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        margin: 0;
+        border: 1px solid #ccc;
+        font-size: 40px;
+        text-align: center;
+        background-color: #fff;
+        color: #666;
+        cursor: pointer;
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 1000;
     }
 </style>
