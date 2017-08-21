@@ -62,6 +62,9 @@ function importComponents(includes,callback){
             });
         })(includes[i],path)
     }
+    if(i == 0){
+        callback()
+    }
 }
 
 export default (context) => {

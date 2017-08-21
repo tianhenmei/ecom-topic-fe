@@ -19,9 +19,9 @@ var createPC_control = require('./createPC-control.js');
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //router.use(express.static('public'));  //多次调用 express.static 中间件
-router.use('/static',express.static('public'));  // 指定挂载路径（虚拟）
-router.use('/dist',express.static('dist'));  // 指定挂载路径（虚拟）
-router.use('/yh',express.static('publish')); // 指定挂载路径（虚拟）
+router.use('/v3/static',express.static('public'));  // 指定挂载路径（虚拟）
+router.use('/v3/dist',express.static('dist'));  // 指定挂载路径（虚拟）
+router.use('/v3/yh',express.static('publish')); // 指定挂载路径（虚拟）
 router.use('/list',list_control);
 // router.use('/editor',editor_control);
 // router.use('/v3',createPC_control);

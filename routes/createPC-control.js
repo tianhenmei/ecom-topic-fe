@@ -10,9 +10,9 @@ var express = require('express'),
 var crypto = require('crypto'),  // 使用它生成时间的hash值
     isProd = process.env.NODE_ENV === 'production',
     // saveDir: 发布页面时保存的页面目录
-    saveDir = isProd ? 'publish/' : 'publish/',
+    saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/',
     // getDataPath: 获取发布页面时保存的页面的数据目录
-    getDataPath = isProd ? '../publish/' : '../publish/'
+    getDataPath = isProd ? '/data/data/topic-publish/topic/v3/' : '../publish/'
 /****DOCUMENT || PRODUCTION */
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));

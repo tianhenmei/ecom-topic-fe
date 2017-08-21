@@ -13,7 +13,8 @@ var uglify = require('uglify-js');
 var mysql = require("./mysql.js");
 // var test = require("../public/dist/demo/js/test-main.js");
 
-var router = express.Router();
+var router = express.Router(),
+saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/'
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded());
@@ -166,15 +167,15 @@ router.post('/upload',function(req,res){
 });
 
 function setFile(page){
-    mkdirsSync('publish/'+page.name+'/js','0777');
-    mkdirsSync('publish/'+page.name+'/css','0777');
+    mkdirsSync(saveDir+page.name+'/js','0777');
+    mkdirsSync(saveDir+page.name+'/css','0777');
     if(page.js){
-        writeJS(JSON.parse(page.js),'publish/'+page.name+'/js/index.js');
+        writeJS(JSON.parse(page.js),saveDir+page.name+'/js/index.js');
     }
-    // writeFile('publish/'+page.name+'/js/index.js',page.js ? writeJS(JSON.parse(page.js)) : '')
-    writeFile('publish/'+page.name+'/css/index.css',page.style ? page.style.replace(/(http:\/\/localhost:9000\/)/g,'/') : '')
-    writeFile('publish/'+page.name+'/index.json',page.json ? page.json : '')
-    writeFile('publish/'+page.name+'/index.html',writeHTML(page.html.replace(/(http:\/\/localhost:9000\/)/g,'/')))
+    // writeFile(saveDir+page.name+'/js/index.js',page.js ? writeJS(JSON.parse(page.js)) : '')
+    writeFile(saveDir+page.name+'/css/index.css',page.style ? page.style.replace(/(http:\/\/localhost:9000\/)/g,'/') : '')
+    writeFile(saveDir+page.name+'/index.json',page.json ? page.json : '')
+    writeFile(saveDir+page.name+'/index.html',writeHTML(page.html.replace(/(http:\/\/localhost:9000\/)/g,'/')))
 }
 
 function concat(fileIn,fileOut,data){

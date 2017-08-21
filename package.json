@@ -4,6 +4,7 @@
   "description": "topic 3.0",
   "main": "index.js",
   "scripts": {
+    "start-test":"NODE_ENV=production node --inspect index.js",
     "start": "NODE_ENV=production pm2 start process.json",
     "start --log": "pm2 start process.json --log-date-format",
     "monit": "pm2 monit process.json",

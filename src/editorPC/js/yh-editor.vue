@@ -495,9 +495,10 @@
                 return data
             },
             saveData(e){
-                let elemDatas = this.copyElementsData(this.elements)
+                let elemDatas = this.copyElementsData(this.elements),
+                    name = getQueryString('name')
                 axios.post(this.connhost+'v3/api/editorPC/saveData',{
-                    name:'text',
+                    name:name,
                     elemDatas:JSON.stringify({
                         pageInfo:this.pageInfo,
                         elements:elemDatas,

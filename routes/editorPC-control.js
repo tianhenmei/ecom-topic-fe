@@ -15,9 +15,9 @@ var sizeOf = require('image-size');
 var crypto = require('crypto'),  // 使用它生成时间的hash值
     isProd = process.env.NODE_ENV === 'production',
     // saveDir: 发布页面时保存的页面目录
-    saveDir = isProd ? 'publish/' : 'publish/',
+    saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/',
     // getDataPath: 获取发布页面时保存的页面的数据目录
-    getDataPath = isProd ? '../publish/' : '../publish/',
+    getDataPath = isProd ? '/data/data/topic-publish/topic/v3/' : '../publish/',
     // staticPath: 上传文件存储的目录
     staticPath = isProd ? './public/files/' : './public/files/' ,
     // concatPath: 开发与生成应该属于同一个目录，所以不会改变
@@ -36,6 +36,7 @@ router.use(bodyParser.urlencoded());
 router.post('/api/editorPC/saveData',function(req,res){
     var page = req.body;
     console.log('Saving data...')
+    mkdirsSync(saveDir+page.name+'/js','0777');
     // 创建文件及文件夹
     writeFile(saveDir+page.name+'/js/index.json',page.elemDatas)
     res.json({
@@ -400,7 +401,8 @@ function writeFile(path,string){
 //创建多层文件夹 同步
 function mkdirsSync(dirpath, mode) { 
     if (!fs.existsSync(dirpath)) {
-        var pathtmp;
+        var pathtmp,
+            i = 0;
         dirpath.split(path.sep).forEach(function(dirname) {
             if(dirname){
                 if (pathtmp) {
@@ -413,6 +415,9 @@ function mkdirsSync(dirpath, mode) {
                         return false;
                     }
                 }
+            }else if(i == 0 && !dirname){
+                pathtmp = '/'
+                i++;
             }
         });
     }

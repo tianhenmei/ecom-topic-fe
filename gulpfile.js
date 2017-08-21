@@ -646,4 +646,4 @@ gulp.task('upload:server',function() {
     .pipe(uploadServe());
 })
 /** 推送线上单台 */
-gulp.task('upload-test', ['upload:client','upload:server'])
+gulp.task('upload-test', ['upload:server'])

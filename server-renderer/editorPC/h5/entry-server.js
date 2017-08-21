@@ -63,6 +63,9 @@ function importComponents(includes,callback){
             });
         })(includes[i],path)
     }
+    if(i == 0){
+        callback()
+    }
 }
 
 // 此处的 context 由 renderer.renderToString的第一个参数传递过来
