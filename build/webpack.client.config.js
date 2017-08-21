@@ -1,6 +1,7 @@
 const glob = require('glob')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
+// const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 function getClientConfig(sysname,item){  // editorPC
@@ -33,6 +34,9 @@ function getClientConfig(sysname,item){  // editorPC
 				)
 				}
 			}),
+			// new ExtractTextPlugin({
+			// 	filename: (item == 'h5' ? 'm_index' : 'index')+'.css'
+			// }),
 		// // extract webpack runtime & manifest to avoid vendor chunk hash changing
 		// // on every build.
 			new webpack.optimize.CommonsChunkPlugin({
