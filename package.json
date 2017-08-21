@@ -15,6 +15,7 @@
     "create": "gulp create",
     "dev": "gulp dev",
     "dist": "cross-env NODE_ENV=production gulp dist",
+    "release": "cross-env NODE_ENV=production gulp dist --production",
     "upload": "gulp upload",
     "upload-test": "gulp upload-test"
   },
