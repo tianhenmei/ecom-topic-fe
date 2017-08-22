@@ -35,7 +35,8 @@ var cleanCSS = require('gulp-clean-css');
 // gulp-sass gulp 监听scss文件，输出css文件
 var scss = require('gulp-sass');
 var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer');
+var autoprefixer = require('autoprefixer'),
+    child_process = require('child_process');
 
 // 创建一个express实例
 var app = express();
@@ -575,6 +576,147 @@ function uploadStatic(dir){
     })
 }
 
+//创建多层文件夹 同步
+function mkdirsSync(dirpath, mode) { 
+    if (!fs.existsSync(dirpath)) {
+        var pathtmp,
+            i = 0;
+        dirpath.split(path.sep).forEach(function(dirname) {
+            if(dirname){
+                if (pathtmp) {
+                    pathtmp = path.join(pathtmp, dirname);
+                }else {
+                    pathtmp = dirname;
+                }
+                if (!fs.existsSync(pathtmp)) {
+                    if (!fs.mkdirSync(pathtmp, mode)) {
+                        return false;
+                    }
+                }
+            }else if(i == 0 && !dirname){
+                pathtmp = '/'
+                i++;
+            }
+        });
+    }
+    return true; 
+}
+
+function deepCopy(dir, callback, finish) {
+    fs.readdir(dir,function (err, files) {
+        (function next(i) {
+            if(i < files.length) {
+                var pathname = path.join(dir, files[i]);
+    
+                fs.stat(pathname,function (err, stats) {
+                    if(stats.isDirectory()) {
+                        deepCopy(pathname, callback,function () {
+                            next(i + 1);
+                        });
+                    }else {
+                        callback(pathname,files[i],function () {
+                            next(i + 1);
+                        });
+                    }
+                });
+            }else {
+                finish && finish();
+            }
+        }(0));
+    });
+}
+  
+
+gulp.task('start',function(){
+    var isProd = process.env.NODE_ENV === 'production',
+        str = isProd ? 'NODE_ENV=production ' : '',
+        dist = '/data/data/topic-publish/topic/v3/static/',
+        temp = '';
+    if(isProd){
+        deepCopy('./public',function(filePath,filename,callback){
+            // 拷贝文件
+            // console.log(path+' , '+filename)
+            if(/(.DS_Store)/.test(filename)){
+                callback()
+            }else{
+                temp = path.join(dist,filePath.replace(/(public\/)/g,'/'));
+                mkdirsSync(path.dirname(temp),'0777');
+                var readStream = fs.createReadStream(filePath);
+                var writeStream = fs.createWriteStream(temp);
+                
+                readStream.on('data', function(chunk) { // 当有数据流出时，写入数据
+                    writeStream.write(chunk);
+                });
+                
+                readStream.on('end', function() { // 当没有数据时，关闭数据流
+                    writeStream.end();
+                    callback();
+
+                });
+                // fs.createReadStream(filePath)
+                //     .pipe(fs.createWriteStream(temp))
+                //     .end(callback);
+            }
+        },function(){
+            console.log('Copy finished!\n')
+            // child_process.exec(str+'pm2 start process.json',function(){
+            //     console.log('Node server is started...')
+            // })
+        })
+    }else{
+        // child_process.exec(str+'pm2 start process.json',function(){
+        //     console.log('Node server is started...')
+        // })
+    }
+})
+
+gulp.task('restart',function(){
+    var isProd = process.env.NODE_ENV === 'production',
+    str = isProd ? 'NODE_ENV=production ' : '',
+    dist = '/data/data/topic-publish/topic/v3/static/',
+    temp = '';
+
+    if(isProd){
+        console.log('Starting coping static files...')
+        deepCopy('./public',function(filePath,filename,callback){
+            // 拷贝文件
+            // console.log(path+' , '+filename)
+            if(/(.DS_Store)/.test(filename)){
+                callback()
+            }else{
+                temp = path.join(dist,filePath.replace(/(public\/)/g,'/'));
+                mkdirsSync(path.dirname(temp),'0777');
+                var readStream = fs.createReadStream(filePath);
+                var writeStream = fs.createWriteStream(temp);
+                
+                readStream.on('data', function(chunk) { // 当有数据流出时，写入数据
+                    writeStream.write(chunk);
+                });
+                
+                readStream.on('end', function() { // 当没有数据时，关闭数据流
+                    writeStream.end();
+                    callback();
+
+                });
+                // fs.createReadStream(filePath)
+                //     .pipe(fs.createWriteStream(temp))
+                //     .pipe(end(callback));
+            }
+        },function(){
+            console.log('Copy finished!\n')
+            console.log(str+'pm2 restart process.json')
+            // child_process.exec(str+'pm2 restart process.json',function(){
+            //     console.log('Node server is restarted...')
+            // })
+        })
+    }else{
+        // child_process.exec(str+'pm2 restart process.json',function(){
+        //     console.log('Node server is restarted...')
+        // })
+    }
+})
+
+
 gulp.task('upload:dist', function() {
     let dirPath = 'dist/'
     if(params.upload && params.upload.sys){
@@ -638,7 +780,7 @@ gulp.task('upload:server',function() {
         'build/**/*',
         'server-renderer/**/*',
         'routes/**/*',
-        'publish/**/*',
+        // 'publish/**/*',
         'dist/**/*',
         'public/**/*',
         './index.js','./gulpfile.js','./package.json','./process.json'

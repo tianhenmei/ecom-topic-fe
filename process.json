@@ -9,7 +9,7 @@
 			"NODE_ENV":"development"
 		},
 		"env_production":{
-			"PORT":80,
+			"PORT":9000,
 			"NODE_ENV":"production"
 		},
 		"instances" : 1,

@@ -13,7 +13,7 @@ let store = new Vuex.Store({
         elements:[],
         includes:[],
         count:0,
-        host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/',
+        host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/v3/',  // https://activity.lagou.com/topic/v3/
         connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         triggerId:'',
