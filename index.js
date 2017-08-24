@@ -121,7 +121,7 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     // if ( process.env.NODE_ENV === 'production' ) {
         fileLogger.error(err);
     // }
-    console.error(pe.render(err));
+    console.error(err);
 
     res.status(err.status || 500);
     res.send('Server Error');
