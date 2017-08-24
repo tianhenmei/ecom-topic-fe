@@ -6,7 +6,7 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var querystring = require('querystring');
-var bodyParser = require('body-parser');
+// var bodyParser = require('body-parser');
 //var babel = require('babel-core/register');
 
 var router = express.Router();
@@ -16,8 +16,8 @@ var editorPC_control = require('./editorPC-control.js');
 var company_control = require('./company-control.js');
 var createPC_control = require('./createPC-control.js');
 
-router.use(bodyParser.json({limit: '50mb'}));
-router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+// router.use(bodyParser.json({limit: '50mb'}));
+// router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //router.use(express.static('public'));  //多次调用 express.static 中间件
 router.use('/v3/static',express.static('public'));  // 指定挂载路径（虚拟）
 router.use('/v3/dist',express.static('dist'));  // 指定挂载路径（虚拟）
@@ -69,12 +69,14 @@ function getFile(req,res){
 
 
 router.use(function(req,res,next){
-    res.status(404).send('Sorry cant find that!');
+    // res.status(404).send('Sorry cant find that!');
+    next(next)
 });
 
 router.use(function(err,req,res,next){
-    console.log(err.stack);
-    res.status(500).send('Something broke!');
+    // console.log(err.stack);
+    // res.status(500).send('Something broke!');
+    next(err)
 });
 
 module.exports = router;
