@@ -45,7 +45,7 @@ function mkdirsSync(dirpath, mode) {
     return true; 
 }
 
-let logDirectory = 'logs';
+let logDirectory = '/data/logs/plat-topic-tomcat_fed/';
 // ensure log directory exists
 fs.existsSync(logDirectory) || mkdirsSync(logDirectory,'0777');
 if ( process.env.NODE_ENV === 'production' ) {

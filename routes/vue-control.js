@@ -30,39 +30,39 @@ router.use('/v3',[editorPC_control,company_control,createPC_control]);  // /v3/a
 // router.use('/v3',company_control);  // /v3/api/company
 // router.use('/v3',createPC_control);
 
-router.get('/',function(req,res){
-    var html = getFile(req,res);
-    res.send(html);
-});
+// router.get('/',function(req,res){
+//     var html = getFile(req,res);
+//     res.send(html);
+// });
 
-function getFile(req,res){
-    var root = __dirname.split('/').slice(0,-1).join('/'),
-        data = {
-            filename:'',
-            root:root+(req.url.indexOf('/yh/')!= -1 ? '' : '/template/vue'),
-            options:{
-                encoding:'utf-8',
-                // headers:{
-                //     'x-timestamp':Date.now(),
-                //     'x-sent':true
-                // }
-            }
-        },
-        html = '';
+// function getFile(req,res){
+//     var root = __dirname.split('/').slice(0,-1).join('/'),
+//         data = {
+//             filename:'',
+//             root:root+(req.url.indexOf('/yh/')!= -1 ? '' : '/template/vue'),
+//             options:{
+//                 encoding:'utf-8',
+//                 // headers:{
+//                 //     'x-timestamp':Date.now(),
+//                 //     'x-sent':true
+//                 // }
+//             }
+//         },
+//         html = '';
     
-    switch(req.url){
-        case '/':
-            data.filename = data.root+'/main.html';
-            break;
-        default:
-            data.filename = data.root+req.url.replace('/yh/','/publish/');
-            break;
-    }
+//     switch(req.url){
+//         case '/':
+//             data.filename = data.root+'/main.html';
+//             break;
+//         default:
+//             data.filename = data.root+req.url.replace('/yh/','/publish/');
+//             break;
+//     }
     
-    console.log(data.filename);
-    html = fs.readFileSync(data.filename,data.options);
-    return html;
-}
+//     console.log(data.filename);
+//     html = fs.readFileSync(data.filename,data.options);
+//     return html;
+// }
 
 
 
