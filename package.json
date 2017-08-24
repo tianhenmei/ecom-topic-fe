@@ -6,6 +6,8 @@
   "scripts": {
     "start-test": "NODE_ENV=production node --inspect index.js",
     "start": "cross-env NODE_ENV=production gulp start && pm2 start process.json --env production",
+    "gulp-start":"cross-env NODE_ENV=production gulp start",
+    "pm2-start":"pm2 start process.json --env production",
     "start --log": "pm2 start process.json --log-date-format",
     "monit": "pm2 monit process.json",
     "stop": "pm2 stop process.json",
