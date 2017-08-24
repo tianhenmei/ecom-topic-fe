@@ -70,7 +70,7 @@ router.use('/v3',[editorPC_control,company_control,createPC_control]);  // /v3/a
 
 router.use(function(req,res,next){
     // res.status(404).send('Sorry cant find that!');
-    next(next)
+    next()
 });
 
 router.use(function(err,req,res,next){

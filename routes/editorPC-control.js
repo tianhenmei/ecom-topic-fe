@@ -438,7 +438,7 @@ function mkdirsSync(dirpath, mode) {
 router.use(function(req,res,next){
     // console.log(req.url);
     // res.status(404).send('Sorry cant find that!');
-    next(next)
+    next()
 });
 
 router.use(function(err,req,res,next){
