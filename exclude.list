@@ -1,4 +1,5 @@
 package-lock.json
+./publish
 README.md
 src
 yarn-error.log
