@@ -8,3 +8,4 @@ jspm_packages
 *.psd
 *.map
 .sass-cache
+/publish
