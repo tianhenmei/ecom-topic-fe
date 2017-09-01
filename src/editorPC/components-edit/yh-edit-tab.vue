@@ -43,6 +43,9 @@
                     index = parseInt(target.getAttribute('index'))
                 if(index != this.active){
                     this.active = index
+                    if(this.props.backstatus){
+                        this.$emit('changeTab',this.active)
+                    }
                 }
             }
         }
@@ -50,13 +53,15 @@
 </script>
 <style>
 .yh-edit-tab {
-    width:242px;
+    width:250px;
     height:520px;
     box-shadow:0px 0px 6px #ccc;
     background:#fff;
     position:fixed;
     right:0;
     top:77px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 .yh-edit-tab .yh-edit-tabTitle{
     width:100%;

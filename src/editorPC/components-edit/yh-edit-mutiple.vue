@@ -1,10 +1,13 @@
 <template>
     <yh-edit-uplist 
-        :options="{name:options.cn}">
-        <yh-edit-uplist  v-for="(one,index) in options.value" :key="index"
-            :options="{name:options.value[index][options.name].value}">
+        :options="{name:options.cn}"
+        :status="options.value">
+        <yh-edit-uplist v-if="getObjectStatus"  v-for="(one,index) in options.value" :key="index"
+            :options="{name:options.value[index][options.name].value}"
+            :status="options.value[index]"
+            :removeStatus="one.removeStatus">
             <div v-for="one in options.value[index]" :is="setModule(one)" v-if="one.type != 'none'"
-                v-show="getChildSetStatus(one)"
+                v-show="getChildSetStatus(one) && (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey)))))"
                 :parent="options.value[index]"
                 :eindex="eindex"
                 :index="index"
@@ -15,9 +18,24 @@
                 :path="path">
             </div>
         </yh-edit-uplist>
+        <div v-for="one in options.value" :is="setModule(one)" 
+            v-if="!getObjectStatus && one.type != 'none'"
+            v-show="getChildSetStatus(one) && (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey)))))"
+            :parent="options.value"
+            :eindex="eindex"
+            :options="one"
+            :ischildset="ischildset"
+            :elem_id="elem_id"
+            :ischild="ischild"
+            :path="path">
+        </div>
     </yh-edit-uplist>
 </template>
 <script>
+    import {
+        isArray,
+        isObject
+    } from '../components/Base/Node.js'
     import YHEditUplist from './yh-edit-uplist.vue'
     import YHEditColor from './yh-edit-color'
     import YHEditImage from './yh-edit-image'
@@ -75,6 +93,11 @@
                     backstatus:true
                 },
                 changeStatus:false
+            }
+        },
+        computed:{
+            getObjectStatus(){
+                return isArray(this.options.value)
             }
         },
         mounted(){

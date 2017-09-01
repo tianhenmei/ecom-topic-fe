@@ -1,2 +1,6 @@
-$host:'http://topic.lagou.com/v3/';
-// $host:'http://localhost:9000/';
+// $host:'http://topic.lagou.com/v3/';
+$host:'http://localhost:9000/v3/';
+
+@function rem($n){
+    @return $n / (750 / 16) + rem;
+}

@@ -171,6 +171,7 @@
                 type:'uplist',
                 name:'positionName',
                 parent:'data',
+                removeStatus:true,
                 value:[{
                     dynamic_type:{
                         cn:'职位类别',

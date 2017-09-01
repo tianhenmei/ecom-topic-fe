@@ -1,8 +1,8 @@
 <template>
-    <div class="yh-edit-prompt hide" id="yh-edit-prompt" ref="yh-edit-prompt">
-        <div class="title">请输入您当前点击的组件要生成几列</div>
+    <div class="yh-edit-prompt hide" :id="id" ref="yh-edit-prompt">
+        <div class="title">{{title}}</div>
         <div class="yh-edit-prompt-content clearfix">
-            <span class="yh-edit-prompt-text">列：</span>
+            <span class="yh-edit-prompt-text">{{text}}</span>
             <input type="number" placeholder="1" class="yh-edit-prompt-value" ref="yh-edit-prompt-value" />
         </div>
         <div class="choose clearfix">
@@ -13,6 +13,7 @@
 </template>
 <script>
     export default {
+        props:['id','title','text'],
         data(){
             return {
 

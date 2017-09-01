@@ -1167,9 +1167,43 @@ Node.dealStringLine = function (textSize, one, line, value, status) {
         return isClip;
     } else {
         // 闭合标签
-        str = Dialog.closeHTML(str);
+        str = Node.closeHTML(str);
         return str;
     }
+};
+Node.closeHTML = function (str) {
+    var styleArray = str.match(/\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/g),
+        current,
+        next,
+        i = 0,
+        not = [];
+    if (styleArray) {
+        for (i = 0; i < styleArray.length; i++) {
+            if (styleArray[i].indexOf('<br') != 0) {
+                current = styleArray[i].split(/[\<(\s*)]/)[1]; //current   当前标签名
+                if (i + 1 < styleArray.length) {
+                    next = styleArray[i + 1].split(/[\<(\s*)]/)[1];
+                } else {
+                    next = '';
+                }
+
+                if (current[0] == '/') {
+                    if (current.slice(1) == not[not.length - 1]) {
+                        not.splice(not.length - 1, 1);
+                    }
+                } else if (current != next.slice(1)) {
+                    // 此标签不是闭合标签
+                    not.push(current);
+                } else {
+                    i++;
+                }
+            }
+        }
+        for (i = not.length - 1; i >= 0; i--) {
+            str += (not[i].indexOf('<') >= 0 ? '' : '<') + (not[i].indexOf('/') >= 0 ? '' : '/') + not[i] + (not[i].indexOf('>') >= 0 ? '' : '>');
+        }
+    }
+    return str;
 };
 
 Node.getRequestData = function (store, id, type) {
@@ -2908,403 +2942,95 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
-var baseData = {
-    id: '',
-    ignorestatus: '', // 是否为类似LIST的子集（如果是则会忽略样式设置）为'ignorestatus' 时忽略
-    ischild: '',
-    yh_data_name: 'name', // 当作为子级时放入uplist中的title取值
-    path: '',
-    css: {
-        background_background_color: {
-            cn: '背景颜色',
-            en: 'background_background_color',
-            value: '#00c99b'
-        },
-        name_color: {
-            cn: '名称颜色',
-            en: 'name_color',
-            value: '#ffffff'
-        },
-        all_color: {
-            cn: '详情颜色',
-            en: 'all_color',
-            value: '#555555'
-        },
-        positionName_color: {
-            cn: '职位颜色',
-            en: 'positionName_color',
-            value: '#00c99b'
-        },
-        salary_color: {
-            cn: '薪资颜色',
-            en: 'salary_color',
-            value: '#00c99b'
-        },
-        button_color: {
-            cn: '按钮文字色',
-            en: 'button_color',
-            value: '#00c99b'
-        },
-        button_background_color: {
-            cn: '按钮背景色',
-            en: 'button_background_color',
-            value: '#ffffff'
-        }
-    },
-    common: {},
-    attribute: {
-        // ischild:{
-        //     cn:'是否为子元素',
-        //     en:'ischild',
-        //     value:'',  // ''   'ischild'
-        //     parent:'nonset'
-        // }
-    },
-    data: {
-        toH5: {
-            cn: '适配移动端',
-            en: 'toH5',
-            value: 1,
-            type: 'checkbox',
-            parent: 'data'
-        },
-        toPC: {
-            cn: '适配到PC',
-            en: 'toPC',
-            value: 1,
-            type: 'checkbox',
-            parent: 'data'
-        },
-        anchorID: {
-            cn: '锚点ID',
-            en: 'anchorID',
-            value: '',
-            type: 'text',
-            parent: 'data'
-        },
-        companyId: {
-            cn: '公司ID',
-            en: 'companyId',
-            value: 147,
-            type: 'request',
-            parent: 'data'
-        },
-        name: {
-            cn: '公司名称',
-            en: 'name',
-            value: '拉勾网',
-            type: 'text',
-            parent: 'data'
-        },
-        logo: {
-            cn: '公司LOGO',
-            en: 'logo',
-            value: 'https://www.lgstatic.com/thumbnail_200x200/i/image/M00/00/1F/Cgp3O1YtkIuAXCPUAAA28p_G-ck324.png',
-            type: 'image',
-            mold: 'src',
-            parent: 'data'
-        },
-        // city:{
-        //     cn:'所在城市',
-        //     en:'city',
-        //     value:'北京',
-        //     type:'text',
-        //     parent:'data'
-        // },
-        // companySize:{
-        //     cn:'公司规模',
-        //     en:'companySize',
-        //     value:'150-500人',
-        //     type:'text',
-        //     parent:'data'
-        // },
-        // financestage:{
-        //     cn:'融资阶段',
-        //     en:'financestage',
-        //     value:'C轮',
-        //     type:'text',
-        //     parent:'data'
-        // },
-        industryfield: {
-            cn: '所属领域',
-            en: 'industryfield',
-            value: '企业服务,招聘',
-            type: 'none',
-            parent: 'data'
-        },
-        slogan: {
-            cn: 'slogan',
-            en: 'slogan',
-            value: '帮用户找到满意的工作',
-            type: 'text',
-            parent: 'data'
-        },
-        // description:{
-        //     cn:'公司介绍',
-        //     en:'description',
-        //     value:'<p>拉勾是一家专注于为职场人提供职业成长机会，为中小型企业提供优质的人力资源服务的公司。成长三年、四轮巨额融资、服务千万用户，拉勾已成为互联网垂直招聘行业的佼佼者。</p>↵<p><br /></p>↵<p>拉勾人相信并恪守：无论如何，用户价值都是第一位的；我们绝不因为利益的获取而放下我们一直引以为傲的德行；我们要用最快的方式去践行质感与创新；我们坚信合作是1+1&gt;2；追求主动学习与承担，也就是为了成为我们自己。</p>↵<p><br /></p>↵<p>未来，拉勾人将继续专注于用户体验，精心耕耘两个业务（招聘业务、自由职业者业务）和一个平台（拉勾云平台），不忘初心，专心做好产品，帮助每一位互联网人获得更多更好的职业成长机会、帮助更多的互联网企业获得更轻便更专业的产品服务。</p>',
-        //     type:'textarea',
-        //     parent:'data'
-        // },
-        position: {
-            cn: '职位设置',
-            en: 'position',
-            type: 'uplist',
-            name: 'positionName',
-            parent: 'data',
-            removeStatus: true,
-            value: [{
-                dynamic_type: {
-                    cn: '职位类别',
-                    en: 'dynamic_type',
-                    value: '设计',
-                    type: 'none',
-                    parent: 'data.position.value'
-                },
-                positionId: {
-                    cn: '职位ID',
-                    en: 'positionId',
-                    value: '1777398',
-                    type: 'request',
-                    parent: 'data.position.value'
-                },
-                positionName: {
-                    cn: '职位名称',
-                    en: 'positionName',
-                    value: 'UI设计师',
-                    type: 'text',
-                    parent: 'data.position.value'
-                },
-                salary: {
-                    cn: '职位薪资',
-                    en: 'salary',
-                    value: '7k-12k',
-                    type: 'text',
-                    parent: 'data.position.value'
-                }
-            }, {
-                dynamic_type: {
-                    cn: '职位类别',
-                    en: 'dynamic_type',
-                    value: '设计',
-                    type: 'none',
-                    parent: 'data.position.value'
-                },
-                positionId: {
-                    cn: '职位ID',
-                    en: 'positionId',
-                    value: '1777398',
-                    type: 'request',
-                    parent: 'data.position.value'
-                },
-                positionName: {
-                    cn: '职位名称',
-                    en: 'positionName',
-                    value: 'UI设计师',
-                    type: 'text',
-                    parent: 'data.position.value'
-                },
-                salary: {
-                    cn: '职位薪资',
-                    en: 'salary',
-                    value: '7k-12k',
-                    type: 'text',
-                    parent: 'data.position.value'
-                }
-            }, {
-                dynamic_type: {
-                    cn: '职位类别',
-                    en: 'dynamic_type',
-                    value: '设计',
-                    type: 'none',
-                    parent: 'data.position.value'
-                },
-                positionId: {
-                    cn: '职位ID',
-                    en: 'positionId',
-                    value: '1777398',
-                    type: 'request',
-                    parent: 'data.position.value'
-                },
-                positionName: {
-                    cn: '职位名称',
-                    en: 'positionName',
-                    value: 'UI设计师',
-                    type: 'text',
-                    parent: 'data.position.value'
-                },
-                salary: {
-                    cn: '职位薪资',
-                    en: 'salary',
-                    value: '7k-12k',
-                    type: 'text',
-                    parent: 'data.position.value'
-                }
-            }, {
-                dynamic_type: {
-                    cn: '职位类别',
-                    en: 'dynamic_type',
-                    value: '设计',
-                    type: 'none',
-                    parent: 'data.position.value'
-                },
-                positionId: {
-                    cn: '职位ID',
-                    en: 'positionId',
-                    value: '1777398',
-                    type: 'request',
-                    parent: 'data.position.value'
-                },
-                positionName: {
-                    cn: '职位名称',
-                    en: 'positionName',
-                    value: 'UI设计师',
-                    type: 'text',
-                    parent: 'data.position.value'
-                },
-                salary: {
-                    cn: '职位薪资',
-                    en: 'salary',
-                    value: '7k-12k',
-                    type: 'text',
-                    parent: 'data.position.value'
-                }
-            }]
-        }
-    },
-    positionData: {
-        dynamic_type: {
-            cn: '职位类别',
-            en: 'dynamic_type',
-            value: '设计',
-            type: 'none',
-            parent: 'data.position.value'
-        },
-        positionId: {
-            cn: '职位ID',
-            en: 'positionId',
-            value: '1777398',
-            type: 'request',
-            parent: 'data.position.value'
-        },
-        positionName: {
-            cn: '职位名称',
-            en: 'positionName',
-            value: 'UI设计师',
-            type: 'text',
-            parent: 'data.position.value'
-        },
-        salary: {
-            cn: '职位薪资',
-            en: 'salary',
-            value: '7k-12k',
-            type: 'text',
-            parent: 'data.position.value'
-        }
-    }
-};
+var baseData = { "id": "", "ignorestatus": "", "ischild": "", "yh_data_name": "name", "path": "", "parentmodule": "", "css": { "yhcustom_background": { "en": "background", "cn": "背景设置", "parent": "css", "type": "uplist", "value": { "background_type": { "cn": "背景类型", "en": "background_type", "value": "gradient-top-bottom", "cnvalue": "上下渐变", "type": "options", "parent": "css.yhcustom_background.value", "options": [{ "cn": "纯背景色", "value": "background-color" }, { "cn": "背景图", "value": "background-image" }, { "cn": "上下渐变", "value": "gradient-top-bottom" }, { "cn": "左右渐变", "value": "gradient-left-right" }], "effect": ["css.yhcustom_background.value.background_color", "css.yhcustom_background.value.background_image", "css.yhcustom_background.value.background_repeat", "css.yhcustom_background.value.gradient_color_top", "css.yhcustom_background.value.gradient_color_bottom", "css.yhcustom_background.value.gradient_color_left", "css.yhcustom_background.value.gradient_color_right"] }, "background_color": { "cn": "背景颜色", "en": "background_color", "value": "#ffffff", "type": "color", "parent": "css.yhcustom_background.value", "condition": ["background-color", "background-image"], "status": false }, "background_image": { "cn": "背景图", "en": "background_image", "value": "none", "type": "image", "mold": "bg", "parent": "css.yhcustom_background.value", "condition": ["background-image"], "status": false }, "background_repeat": { "cn": "背景重复", "en": "background_repeat", "value": "no-repeat", "cnvalue": "不重复", "type": "options", "options": [{ "cn": "不重复", "value": "no-repeat" }, { "cn": "重复", "value": "repeat" }, { "cn": "横向重复", "value": "repeat-x" }, { "cn": "纵向重复", "value": "repeat-y" }], "parent": "css.yhcustom_background.value", "condition": ["background-image"], "status": false }, "gradient_color_top": { "cn": "背景-上", "en": "gradient_color_top", "value": "#ffffff", "type": "color", "parent": "css.yhcustom_background.value", "condition": ["gradient-top-bottom"], "status": true }, "gradient_color_bottom": { "cn": "背景-下", "en": "gradient_color_bottom", "value": "#ffffff", "type": "color", "parent": "css.yhcustom_background.value", "condition": ["gradient-top-bottom"], "status": true }, "gradient_color_left": { "cn": "背景-左", "en": "gradient_color_left", "value": "#ffffff", "type": "color", "parent": "css.yhcustom_background.value", "condition": ["gradient-left-right"], "status": false }, "gradient_color_right": { "cn": "背景-右", "en": "gradient_color_right", "value": "#ffffff", "type": "color", "parent": "css.yhcustom_background.value", "condition": ["gradient-left-right"], "status": false } } }, "name_color": { "cn": "公司名称", "en": "name_color", "value": "#FFFFFF", "type": "color", "parent": "css" }, "slogan_color": { "cn": "slogan", "en": "slogan_color", "value": "#EFEFEF", "type": "color", "parent": "css" }, "position": { "cn": "职位样式设置", "en": "position", "type": "uplist", "name": "cn", "parent": "css", "value": { "positionName_color": { "cn": "职位颜色", "en": "positionName_color", "value": "#FF00FF", "type": "color", "parent": "css.position.value" }, "salary_color": { "cn": "薪资颜色", "en": "salary_color", "value": "#FF0000", "type": "color", "parent": "css.position.value" }, "position_background_type": { "cn": "背景类型", "en": "position_background_type", "value": "gradient-top-bottom", "cnvalue": "上下渐变", "type": "options", "parent": "css.position.value", "options": [{ "cn": "纯背景色", "value": "background-color" }, { "cn": "背景图", "value": "background-image" }, { "cn": "上下渐变", "value": "gradient-top-bottom" }, { "cn": "左右渐变", "value": "gradient-left-right" }], "effect": ["css.position.value.position_background_color", "css.position.value.position_background_image", "css.position.value.position_background_repeat", "css.position.value.position_gradient_color_top", "css.position.value.position_gradient_color_bottom", "css.position.value.position_gradient_color_left", "css.position.value.position_gradient_color_right"] }, "position_background_color": { "cn": "背景色", "en": "position_background_color", "value": "#ffffff", "type": "color", "parent": "css.position.value", "condition": ["background-color", "background-image"], "status": false }, "position_background_image": { "cn": "背景图", "en": "position_background_image", "value": "none", "type": "image", "mold": "bg", "parent": "css.position.value", "condition": ["background-image"], "status": false }, "position_background_repeat": { "cn": "背景重复", "en": "position_background_repeat", "value": "no-repeat", "cnvalue": "不重复", "type": "options", "parent": "css.position.value", "condition": ["background-image"], "status": false, "options": [{ "cn": "不重复", "value": "no-repeat" }, { "cn": "重复", "value": "repeat" }, { "cn": "横向重复", "value": "repeat-x" }, { "cn": "纵向重复", "value": "repeat-y" }] }, "position_gradient_color_top": { "cn": "背景-上", "en": "position_gradient_color_top", "value": "#FFFF00", "type": "color", "parent": "css.position.value", "condition": ["gradient-top-bottom"], "status": true }, "position_gradient_color_bottom": { "cn": "背景-下", "en": "position_gradient_color_bottom", "value": "#00FFFF", "type": "color", "parent": "css.position.value", "condition": ["gradient-top-bottom"], "status": true }, "position_gradient_color_left": { "cn": "背景-左", "en": "position_gradient_color_left", "value": "#ffffff", "type": "color", "parent": "css.position.value", "condition": ["gradient-left-right"], "status": false }, "position_gradient_color_right": { "cn": "背景-右", "en": "position_gradient_color_right", "value": "#ffffff", "type": "color", "parent": "css.position.value", "condition": ["gradient-left-right"], "status": false } } }, "more_button": { "cn": "更多按钮设置", "en": "more_button", "type": "uplist", "name": "cn", "parent": "css", "value": { "more_background_type": { "cn": "背景类型", "en": "more_background_type", "value": "gradient-top-bottom", "cnvalue": "上下渐变", "type": "options", "parent": "css.more_button.value", "options": [{ "cn": "纯背景色", "value": "background-color" }, { "cn": "背景图", "value": "background-image" }, { "cn": "上下渐变", "value": "gradient-top-bottom" }, { "cn": "左右渐变", "value": "gradient-left-right" }], "effect": ["css.more_button.value.more_background_color", "css.more_button.value.more_background_image", "css.more_button.value.more_background_repeat", "css.more_button.value.more_gradient_color_top", "css.more_button.value.more_gradient_color_bottom", "css.more_button.value.more_gradient_color_left", "css.more_button.value.more_gradient_color_right"] }, "more_background_color": { "cn": "背景色", "en": "more_background_color", "value": "#ff0084", "type": "color", "parent": "css.more_button.value", "condition": ["background-color", "background-image"], "status": false }, "more_background_image": { "cn": "背景图", "en": "more_background_image", "value": "none", "type": "image", "mold": "bg", "parent": "css.more_button.value", "condition": ["background-image"], "status": false }, "more_background_repeat": { "cn": "背景重复", "en": "more_background_repeat", "value": "no-repeat", "cnvalue": "不重复", "type": "options", "parent": "css.more_button.value", "condition": ["background-image"], "status": false, "options": [{ "cn": "不重复", "value": "no-repeat" }, { "cn": "重复", "value": "repeat" }, { "cn": "横向重复", "value": "repeat-x" }, { "cn": "纵向重复", "value": "repeat-y" }] }, "more_gradient_color_top": { "cn": "背景-上", "en": "more_gradient_color_top", "value": "#FFFF00", "type": "color", "parent": "css.more_button.value", "condition": ["gradient-top-bottom"], "status": true }, "more_gradient_color_bottom": { "cn": "背景-下", "en": "more_gradient_color_bottom", "value": "#00FFFF", "type": "color", "parent": "css.more_button.value", "condition": ["gradient-top-bottom"], "status": true }, "more_gradient_color_left": { "cn": "背景-左", "en": "more_gradient_color_left", "value": "#ffffff", "type": "color", "parent": "css.more_button.value", "condition": ["gradient-left-right"], "status": false }, "more_gradient_color_right": { "cn": "背景-右", "en": "more_gradient_color_right", "value": "#ffffff", "type": "color", "parent": "css.more_button.value", "condition": ["gradient-left-right"], "status": false }, "more_color": { "cn": "文字色", "en": "more_color", "value": "#FF00FF", "type": "color", "parent": "css.more_button.value" } } } }, "h5css": {}, "common": {}, "attribute": {}, "data": { "toH5": { "cn": "适配移动端", "en": "toH5", "value": 1, "type": "checkbox", "parent": "data" }, "toPC": { "cn": "适配到PC", "en": "toPC", "value": 1, "type": "checkbox", "parent": "data" }, "anchorID": { "cn": "锚点ID", "en": "anchorID", "value": "", "type": "text", "parent": "data" }, "companyId": { "cn": "公司ID", "en": "companyId", "value": 147, "type": "request", "parent": "data" }, "logo": { "cn": "公司logo", "en": "logo", "value": "https://www.lagou.com/topic/static/img/newEdit/topImg.png", "type": "image", "mold": "src", "parent": "data" }, "name": { "cn": "公司名称", "en": "name", "value": "公司名称", "type": "text", "parent": "data" }, "slogan": { "cn": "slogan", "en": "slogan", "value": "我是文字，我是文字，我是文字～～～", "type": "textarea", "parent": "data" }, "position": { "cn": "职位设置", "en": "position", "type": "uplist", "name": "positionName", "parent": "data", "removeStatus": true, "value": [{ "dynamic_type": { "cn": "职位类别", "en": "dynamic_type", "value": "设计", "type": "none", "parent": "data.position.value" }, "positionId": { "cn": "职位ID", "en": "positionId", "value": "1777398", "type": "request", "parent": "data.position.value" }, "positionName": { "cn": "职位名称", "en": "positionName", "value": "web前端开发", "type": "text", "parent": "data.position.value" }, "salary": { "cn": "职位薪资", "en": "salary", "value": "10k-20k", "type": "text", "parent": "data.position.value" } }, { "dynamic_type": { "cn": "职位类别", "en": "dynamic_type", "value": "设计", "type": "none", "parent": "data.position.value" }, "positionId": { "cn": "职位ID", "en": "positionId", "value": "1777398", "type": "request", "parent": "data.position.value" }, "positionName": { "cn": "职位名称", "en": "positionName", "value": "UI设计师", "type": "text", "parent": "data.position.value" }, "salary": { "cn": "职位薪资", "en": "salary", "value": "7k-12k", "type": "text", "parent": "data.position.value" } }, { "dynamic_type": { "cn": "职位类别", "en": "dynamic_type", "value": "设计", "type": "none", "parent": "data.position.value" }, "positionId": { "cn": "职位ID", "en": "positionId", "value": "1777398", "type": "request", "parent": "data.position.value" }, "positionName": { "cn": "职位名称", "en": "positionName", "value": "UI设计师", "type": "text", "parent": "data.position.value" }, "salary": { "cn": "职位薪资", "en": "salary", "value": "7k-12k", "type": "text", "parent": "data.position.value" } }] }, "more_button_text": { "cn": "更多文字", "en": "more_button_text", "value": "查看更多职位", "type": "text", "parent": "data", "parentSetStatus": "common" } }, "positionData": { "dynamic_type": { "cn": "职位类别", "en": "dynamic_type", "value": "设计", "type": "none", "parent": "data.position.value" }, "positionId": { "cn": "职位ID", "en": "positionId", "value": "1777398", "type": "request", "parent": "data.position.value" }, "positionName": { "cn": "职位名称", "en": "positionName", "value": "UI设计师", "type": "text", "parent": "data.position.value" }, "salary": { "cn": "职位薪资", "en": "salary", "value": "7k-12k", "type": "text", "parent": "data.position.value" } } };
 exports.default = {
-    props: ['props', 'path', 'parentmodule'],
+    props: ["props", "path", "parentmodule"],
     components: {
-        'yh-edit-complicated': _yhEditComplicated2.default
+        "yh-edit-complicated": _yhEditComplicated2.default
     },
     data: function data() {
-        return {
-            // baseData:JSON.parse(JSON.stringify({
-            //     id:baseData.id,
-            //     ignorestatus:baseData.ignorestatus,  // 是否为类似LIST的子集（如果是则会忽略样式设置）
-            //     ischild:baseData.ischild,
-            //     yh_data_name:baseData.yh_data_name,
-            //     path:baseData.path,
-            //     css:baseData.css,
-            //     common:baseData.common,
-            //     attribute:baseData.attribute,
-            //     data:baseData.data
-            // }))
-        };
-    },
-    create: function create() {
-        console.log(this);
+        return {};
     },
     mounted: function mounted() {},
 
+    computed: {
+        setCustomBackgroundStyle: function setCustomBackgroundStyle() {
+            var style = '';
+            switch (this.props.css.yhcustom_background.value.background_type.value) {
+                case 'background-color':
+                    style += 'background:' + this.props.css.yhcustom_background.value.background_color.value + '; ';
+                    break;
+                case 'background-image':
+                    style += 'background:' + this.props.css.yhcustom_background.value.background_color.value + ' ' + (this.props.css.yhcustom_background.value.background_image.value == 'none' || this.props.css.yhcustom_background.value.background_image.value == 'undefined' ? 'none' : 'url(' + this.props.css.yhcustom_background.value.background_image.value + ')') + ' ' + this.props.css.yhcustom_background.value.background_repeat.value + '; ';
+                    break;
+                case 'gradient-top-bottom':
+                    style += '' + 'background:' + this.props.css.yhcustom_background.value.gradient_color_top.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_top.value + ',endcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_bottom.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_top.value + ',endcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_bottom.value + ',gradientType=0);' + 'background:-moz-linear-gradient(top, ' + this.props.css.yhcustom_background.value.gradient_color_top.value + '), ' + this.props.css.yhcustom_background.value.gradient_color_bottom.value + '); ' + 'background:-o-linear-gradient(top, ' + this.props.css.yhcustom_background.value.gradient_color_top.value + '), ' + this.props.css.yhcustom_background.value.gradient_color_bottom.value + '); ' + 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,' + this.props.css.yhcustom_background.value.gradient_color_top.value + '),color-stop(100%,' + this.props.css.yhcustom_background.value.gradient_color_bottom.value + '));' + '';
+                    break;
+                case 'gradient-left-right':
+                    style += '' + 'background:' + this.props.css.yhcustom_background.value.gradient_color_left.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_left.value + ',endcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_right.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_left.value + ',endcolorstr=' + this.props.css.yhcustom_background.value.gradient_color_right.value + ',gradientType=0);' + 'background:-moz-linear-gradient(left, ' + this.props.css.yhcustom_background.value.gradient_color_left.value + '), ' + this.props.css.yhcustom_background.value.gradient_color_right.value + '); ' + 'background:-o-linear-gradient(left, ' + this.props.css.yhcustom_background.value.gradient_color_left.value + '), ' + this.props.css.yhcustom_background.value.gradient_color_right.value + '); ' + 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,' + this.props.css.yhcustom_background.value.gradient_color_left.value + '),color-stop(100%,' + this.props.css.yhcustom_background.value.gradient_color_right.value + '));' + '';
+                    break;
+            }
+            return style;
+        },
+        setPositionStyle: function setPositionStyle() {
+            var style = '';
+            switch (this.props.css.position.value.position_background_type.value) {
+                case 'background-color':
+                    style += 'background:' + this.props.css.position.value.position_background_color.value + '; ';
+                    break;
+                case 'background-image':
+                    style += 'background:' + this.props.css.position.value.position_background_color.value + ' ' + (this.props.css.position.value.position_background_image.value == 'none' || this.props.css.position.value.position_background_image.value == 'undefined' ? 'none' : 'url(' + this.props.css.position.value.position_background_image.value + ')') + ' ' + this.props.css.position.value.position_background_repeat.value + '; ';
+                    break;
+                case 'gradient-top-bottom':
+                    style += '' + 'background:' + this.props.css.position.value.position_gradient_color_top.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_top.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_bottom.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_top.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_bottom.value + ',gradientType=0);' + 'background:-moz-linear-gradient(top, ' + this.props.css.position.value.position_gradient_color_top.value + '), ' + this.props.css.position.value.position_gradient_color_bottom.value + '); ' + 'background:-o-linear-gradient(top, ' + this.props.css.position.value.position_gradient_color_top.value + '), ' + this.props.css.position.value.position_gradient_color_bottom.value + '); ' + 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,' + this.props.css.position.value.position_gradient_color_top.value + '),color-stop(100%,' + this.props.css.position.value.position_gradient_color_bottom.value + '));' + '';
+                    break;
+                case 'gradient-left-right':
+                    style += '' + 'background:' + this.props.css.position.value.position_gradient_color_left.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_left.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_right.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_left.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_right.value + ',gradientType=0);' + 'background:-moz-linear-gradient(left, ' + this.props.css.position.value.position_gradient_color_left.value + '), ' + this.props.css.position.value.position_gradient_color_right.value + '); ' + 'background:-o-linear-gradient(left, ' + this.props.css.position.value.position_gradient_color_left.value + '), ' + this.props.css.position.value.position_gradient_color_right.value + '); ' + 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,' + this.props.css.position.value.position_gradient_color_left.value + '),color-stop(100%,' + this.props.css.position.value.position_gradient_color_right.value + '));' + '';
+                    break;
+            }
+            return style;
+        },
+        setmoreButtonStyle: function setmoreButtonStyle() {
+            var style = '' + 'color:' + this.props.css.more_button.value.more_color.value + '; ';
+            switch (this.props.css.more_button.value.more_background_type.value) {
+                case 'background-color':
+                    style += 'background:' + this.props.css.more_button.value.more_background_color.value + '; ';
+                    break;
+                case 'background-image':
+                    style += 'background:' + this.props.css.more_button.value.more_background_color.value + ' ' + (this.props.css.more_button.value.more_background_image.value == 'none' || this.props.css.more_button.value.more_background_image.value == 'undefined' ? 'none' : 'url(' + this.props.css.more_button.value.more_background_image.value + ')') + ' ' + this.props.css.more_button.value.more_background_repeat.value + '; ';
+                    break;
+                case 'gradient-top-bottom':
+                    style += '' + 'background:' + this.props.css.more_button.value.more_gradient_color_top.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_top.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_bottom.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_top.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_bottom.value + ',gradientType=0);' + 'background:-moz-linear-gradient(top, ' + this.props.css.more_button.value.more_gradient_color_top.value + '), ' + this.props.css.more_button.value.more_gradient_color_bottom.value + '); ' + 'background:-o-linear-gradient(top, ' + this.props.css.more_button.value.more_gradient_color_top.value + '), ' + this.props.css.more_button.value.more_gradient_color_bottom.value + '); ' + 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,' + this.props.css.more_button.value.more_gradient_color_top.value + '),color-stop(100%,' + this.props.css.more_button.value.more_gradient_color_bottom.value + '));' + '';
+                    break;
+                case 'gradient-left-right':
+                    style += '' + 'background:' + this.props.css.more_button.value.more_gradient_color_left.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_left.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_right.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_left.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_right.value + ',gradientType=0);' + 'background:-moz-linear-gradient(left, ' + this.props.css.more_button.value.more_gradient_color_left.value + '), ' + this.props.css.more_button.value.more_gradient_color_right.value + '); ' + 'background:-o-linear-gradient(left, ' + this.props.css.more_button.value.more_gradient_color_left.value + '), ' + this.props.css.more_button.value.more_gradient_color_right.value + '); ' + 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,' + this.props.css.more_button.value.more_gradient_color_left.value + '),color-stop(100%,' + this.props.css.more_button.value.more_gradient_color_right.value + '));' + '';
+                    break;
+            }
+            return style;
+        }
+    },
     methods: {
+        dealStringLine: _Node.dealStringLine,
         resetData: function resetData(data) {
             return (0, _Node.updateData)(data, baseData);
         },
         setAll: function setAll(e) {
             var id = (0, _Node.initSelected)(e);
-            this.$refs[id].className += ' setting';
-            var yh_edit_layer = this.$refs['yh-edit-complicated'].$refs[id + '-yh-edit-layer'];
-            yh_edit_layer.className = yh_edit_layer.className.replace(/( hide)/g, '');
+            this.$refs[id].className += " setting";
+            var yh_edit_layer = this.$refs["yh-edit-complicated"].$refs[id + "-yh-edit-layer"];
+            yh_edit_layer.className = yh_edit_layer.className.replace(/( hide)/g, "");
             (0, _Node.settingBox)(this.$refs[id], this.props.ischild);
         },
         recoveryModuleData: function recoveryModuleData(elem, baseData) {
             var data = {},
-                attr = '',
+                attr = "",
                 current = null,
                 currentChild = null,
                 i = 0,
-                curr = '',
+                curr = "",
                 childdata = {};
-            data = JSON.parse(JSON.stringify(baseData.data));
-            for (attr in baseData.data) {
-                switch (attr) {
-                    case 'companyId':
-                        current = elem.find('.companyLink');
-                        data[attr].value = (0, _Node.getDataID)(current.attr('href'), 29);
-                        break;
-                    case 'position':
-                        current = elem.find('.' + attr).children();
-                        data[attr].value = [];
-                        for (i = 0; i < current.length; i++) {
-                            childdata = JSON.parse(JSON.stringify(baseData.positionData));
-                            for (curr in baseData.positionData) {
-                                switch (curr) {
-                                    case 'dynamic_type':
-                                        childdata[curr].value = current.eq(i).attr(curr) ? current.eq(i).attr(curr) : baseData.positionData[curr];
-                                        break;
-                                    case 'positionId':
-                                        currentChild = current.eq(i).find('.positionLink');
-                                        childdata[curr].value = (0, _Node.getDataID)(currentChild.attr('href'), 27);
-                                        break;
-                                    case 'positionName':
-                                    case 'salary':
-                                        currentChild = current.eq(i).find('.' + curr);
-                                        childdata[curr].value = currentChild.length > 0 ? currentChild.html() : baseData.positionData[curr];
-                                        break;
-                                }
-                            }
-                            data[attr].value.push(JSON.parse(JSON.stringify(childdata)));
-                        }
-                        break;
-                    case 'logo':
-                        current = elem.find('.' + attr);
-                        data[attr].value = current.length > 0 ? current.attr('src').split('https://www.lgstatic.com/thumbnail_200x200/')[1] : baseData.data[attr].value;
-                        break;
-                    case 'industryfield':
-                        data[attr].value = elem.attr(attr);
-                        break;
-                    case 'name':
-                    case 'city':
-                    case 'companySize':
-                    case 'financestage':
-                    case 'slogan':
-                    case 'description':
-                    default:
-                        current = elem.find('.' + attr);
-                        data[attr].value = current.length > 0 ? current.html() : baseData.data[attr].value;
-                        break;
-                }
-            }
+            for (attr in baseData.data) {}
             return {
                 data: data
             };
@@ -3315,7 +3041,10 @@ exports.default = {
             ignorestatus: baseData.ignorestatus,
             ischild: baseData.ischild,
             yh_data_name: baseData.yh_data_name,
+            nonset: baseData.nonset,
             css: baseData.css,
+            h5css: baseData.h5css,
+            elements: baseData.elements,
             attribute: baseData.attribute,
             data: baseData.data,
             common: baseData.common
@@ -3328,8 +3057,11 @@ exports.default = {
             ignorestatus: baseData.ignorestatus,
             ischild: baseData.ischild,
             yh_data_name: baseData.yh_data_name,
-            path: baseData.path,
+            path: path,
             css: baseData.css,
+            h5css: baseData.h5css,
+            elements: baseData.elements,
+            nonset: baseData.nonset,
             attribute: baseData.attribute,
             data: (0, _Node.setChildData)(elemData, baseData.data),
             common: baseData.common
@@ -3337,11 +3069,12 @@ exports.default = {
         data.data.anchorID.value = options.id;
         return data;
     },
-    recoveryCtor: function recoveryCtor(elem, options) {
-        var data = Object.assign({}, (0, _Node.recoveryData)(elem, baseData), this.methods.recoveryModuleData(elem, baseData), {
-            common: baseData.common,
+    recoveryCtor: function recoveryCtor(elem, options, components) {
+        var data = Object.assign({}, (0, _Node.recoveryData)(elem, baseData), this.methods.recoveryModuleData(elem, baseData), (0, _Node.recoveryChildElementsData)(elem, baseData, components, "ignorestatus"), {
             yh_data_name: baseData.yh_data_name,
-            path: baseData.path
+            path: path,
+            nonset: baseData.nonset,
+            common: baseData.common
         }, options);
         if (!data.data.anchorID.value) {
             data.data.anchorID.value = options.id;
@@ -3357,11 +3090,11 @@ exports.default = {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     ref: _vm.props.id,
-    staticClass: "company-position-style1",
+    staticClass: "custom-style1 yh-custom-base-element00",
+    style: (_vm.setCustomBackgroundStyle),
     attrs: {
       "id": _vm.props.id,
-      "yh-module": "CompanyPosition_style1",
-      "industryfield": _vm.props.data.industryfield.value
+      "yh-module": "Custom_style1"
     },
     on: {
       "click": function($event) {
@@ -3370,96 +3103,146 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   }, [_c('div', {
-    staticClass: "leftDiv background",
-    style: ({
-      'background-color': _vm.props.css.background_background_color.value
-    })
-  }, [_c('h3', {
-    staticClass: "title"
-  }, [_c('a', {
-    staticClass: "nameTop companyLink",
+    staticClass: "yh-custom-base-element0",
     attrs: {
-      "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
-      "data-link": "1",
-      "data-lg-tj-id": "",
-      "data-lg-tj-no": "",
-      "data-lg-tj-cid": _vm.props.data.companyId.value,
-      "target": "_blank"
+      "id": "custom0",
+      "path": "elements.0",
+      "draggable": "false",
+      "yh-custom-image": "yh-custom-image"
     }
+  }, [_c('div', {
+    staticClass: "yh-custom-image-content"
   }, [_c('img', {
-    staticClass: "logo",
+    staticClass: "yh-custom-image yh-custom-base-element1 yh-custom-image-img logo",
     attrs: {
       "src": _vm.props.data.logo.value
     }
-  }), _vm._v(" "), _c('p', {
-    staticClass: "name",
-    style: ({
-      'color': _vm.props.css.name_color.value
-    })
-  }, [_vm._v(_vm._s(_vm.props.data.name.value))])])]), _vm._v(" "), _c('div', {
-    staticClass: "infoWord button",
-    style: ({
-      'color': _vm.props.css.button_color.value,
-      'background-color': _vm.props.css.button_background_color.value
-    })
-  }, [_c('a', {
-    staticClass: "more",
+  }), _vm._v(" "), _c('a', {
+    staticClass: "yh-custom-base-element2 yh-custom-image-href yh-custom-href logo-href",
     attrs: {
-      "href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html',
-      "data-link": "1",
-      "data-lg-tj-id": "",
-      "data-lg-tj-no": "",
-      "data-lg-tj-cid": _vm.props.data.companyId.value,
-      "target": "_blank"
+      "lagou-href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
+      "target": "_blank",
+      "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html'
     }
-  }, [_c('span', {
-    staticClass: "background-color button",
-    style: ({
-      'background-color': _vm.props.css.button_background_color.value,
-      'color': _vm.props.css.button_color.value
-    })
-  }, [_vm._v("更多职位 >")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "rightDiv"
+  })])]), _c('div', {
+    staticClass: "yh-custom-base-element3",
+    attrs: {
+      "id": "custom1",
+      "path": "elements.1",
+      "draggable": "false",
+      "yh-custom-text": "yh-custom-text"
+    }
   }, [_c('div', {
-    staticClass: "slogan all",
+    staticClass: "yh-custom-text-content"
+  }, [_c('div', {
+    staticClass: "yh-custom-text yh-custom-base-element4 yh-custom-text-text",
     style: ({
-      'color': _vm.props.css.all_color.value
-    })
-  }, [_vm._v(_vm._s(_vm.props.data.slogan.value))]), _vm._v(" "), _c('ul', {
-    staticClass: "position positionList clearfix"
+      color: _vm.props.css.name_color.value,
+    }),
+    domProps: {
+      "innerHTML": _vm._s(_vm.props.data.name.value)
+    }
+  }), _vm._v(" "), _c('a', {
+    staticClass: "yh-custom-base-element5 yh-custom-text-href yh-custom-href name-href",
+    attrs: {
+      "lagou-href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
+      "target": "_blank",
+      "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html'
+    }
+  })])]), _c('div', {
+    staticClass: "yh-custom-base-element6",
+    attrs: {
+      "id": "custom2",
+      "path": "elements.2",
+      "draggable": "false",
+      "yh-custom-text": "yh-custom-text"
+    }
+  }, [_c('div', {
+    staticClass: "yh-custom-text-content"
+  }, [_c('div', {
+    staticClass: "yh-custom-text yh-custom-base-element7 yh-custom-text-text",
+    style: ({
+      color: _vm.props.css.slogan_color.value,
+    }),
+    domProps: {
+      "innerHTML": _vm._s(_vm.dealStringLine(100, 30, 3, _vm.props.data.slogan.value, false))
+    }
+  })])]), _c('div', {
+    staticClass: "yh-custom-base-element8 yh-position",
+    attrs: {
+      "id": "custom3",
+      "path": "elements.3",
+      "draggable": "false",
+      "yh-custom-position": "yh-custom-position"
+    }
+  }, [_c('div', {
+    staticClass: "yh-custom-position-content position positionList clearfix",
+    staticStyle: {
+      "width": "250px",
+      "height": "150px",
+      "overflow": "hidden"
+    }
   }, _vm._l((_vm.props.data.position.value), function(one) {
-    return _c('li', {
+    return _c('div', {
+      staticClass: "yh-custom-position-one",
+      staticStyle: {
+        "padding-right": "0px",
+        "padding-bottom": "10px",
+        "float": "left"
+      },
       attrs: {
         "dynamic_type": one.dynamic_type.value
       }
     }, [_c('a', {
-      staticClass: "positionUrl positionLink clearfix",
+      staticClass: "yh-custom-base-element9 yh-custom-position-href yh-custom-href position-href",
       attrs: {
-        "href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html',
         "lagou-href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html?source=pl&i=pl-0',
         "target": "_blank",
-        "data-link": "1",
-        "data-lg-tj-id": "",
-        "data-lg-tj-no": "",
-        "data-lg-tj-cid": one.positionId.value
+        "href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html'
       }
-    }, [_c('p', {
-      staticClass: "positionName",
+    }, [_c('div', {
+      staticClass: "yh-custom-position yh-custom-base-element10 yh-custom-position-position clearfix",
+      style: (_vm.setPositionStyle)
+    }, [_c('div', {
+      staticClass: "yh-custom-base-element11 yh-custom-position-name position",
       style: ({
-        'color': _vm.props.css.positionName_color.value
+        color: _vm.props.css.position.value.positionName_color.value,
       })
-    }, [_vm._v(_vm._s(one.positionName.value))]), _vm._v(" "), _c('p', {
-      staticClass: "salary",
+    }, [_vm._v("\n" + _vm._s(one.positionName.value) + "\n")]), _vm._v(" "), _c('div', {
+      staticClass: "yh-custom-base-element12 yh-custom-position-salary salary",
       style: ({
-        'color': _vm.props.css.salary_color.value
+        color: _vm.props.css.position.value.salary_color.value,
       })
-    }, [_vm._v(_vm._s(one.salary.value))])])])
-  }))]), _vm._v(" "), _c('yh-edit-complicated', {
+    }, [_vm._v("\n" + _vm._s(one.salary.value) + "\n")])])])])
+  }))]), _c('div', {
+    staticClass: "yh-custom-base-element21",
+    attrs: {
+      "id": "custom4",
+      "path": "elements.4",
+      "draggable": "false",
+      "yh-custom-button": "yh-custom-button"
+    }
+  }, [_c('div', {
+    staticClass: "yh-custom-button-content"
+  }, [_c('div', {
+    staticClass: "yh-custom-button yh-custom-base-element22 yh-custom-button-btn",
+    style: (_vm.setmoreButtonStyle)
+  }, [_vm._v(_vm._s(_vm.props.data.more_button_text.value) + "\n")]), _vm._v(" "), _c('a', {
+    staticClass: "yh-custom-base-element23 yh-custom-button-href yh-custom-href",
+    attrs: {
+      "lagou-href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html',
+      "target": "_blank",
+      "href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html'
+    }
+  })])]), _vm._v(" "), _c('yh-edit-complicated', {
     ref: "yh-edit-complicated",
     attrs: {
       "css": _vm.props.css,
+      "h5css": _vm.props.h5css,
       "elem_id": _vm.props.id,
       "common": _vm.props.common,
+      "nature": _vm.props.attribute,
+      "elements": _vm.props.elements,
       "ignorestatus": _vm.props.ignorestatus,
       "ischild": _vm.props.ischild,
       "owndata": _vm.props.data,
@@ -3472,7 +3255,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-d03f9b60", module.exports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-75f0f4ad", module.exports)
   }
 }
 
@@ -3483,17 +3266,17 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(44);
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("a6f1f08c", content, false);
+var update = __webpack_require__(2)("17010771", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d03f9b60\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d03f9b60\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-75f0f4ad\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-75f0f4ad\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -4616,6 +4399,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _Node = __webpack_require__(3);
+
 var _yhEditUplist = __webpack_require__(14);
 
 var _yhEditUplist2 = _interopRequireDefault(_yhEditUplist);
@@ -4657,29 +4442,6 @@ var _yhEditMutiple = __webpack_require__(8);
 var _yhEditMutiple2 = _interopRequireDefault(_yhEditMutiple);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 exports.default = {
     components: {
@@ -4723,6 +4485,12 @@ exports.default = {
             },
             changeStatus: false
         };
+    },
+
+    computed: {
+        getObjectStatus: function getObjectStatus() {
+            return (0, _Node.isArray)(this.options.value);
+        }
     },
     mounted: function mounted() {},
 
@@ -4781,7 +4549,39 @@ exports.default = {
             }
         }
     }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 25 */
@@ -5415,7 +5215,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-tab {\n    width:242px;\n    height:520px;\n    box-shadow:0px 0px 6px #ccc;\n    background:#fff;\n    position:fixed;\n    right:0;\n    top:77px;\n}\n.yh-edit-tab .yh-edit-tabTitle{\n    width:100%;\n}\n.yh-edit-tab .yh-edit-tabTitle > div {\n    padding: 0 10px;\n    line-height: 26px;\n    float:left;\n    text-align:center;\n    font-size:14px;\n    color:#666;\n    background:#efefef;\n    cursor:pointer;\n}\n.yh-edit-tab .yh-edit-tabTitle > div:hover,\n.yh-edit-tab .yh-edit-tabTitle > div.yh-tab-active{\n    background:#ff0084;\n    color:#fff;\n}\n.yh-edit-tab .yh-edit-tabContent > div{\n    position: relative;\n    display:none;\n}\n.yh-edit-tab .yh-edit-tabContent > div.yh-tab-active{\n    display:block;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-tab {\n    width:246px;\n    height:520px;\n    box-shadow:0px 0px 6px #ccc;\n    background:#fff;\n    position:fixed;\n    right:0;\n    top:77px;\n    overflow-x: hidden;\n    overflow-y: scroll;\n}\n.yh-edit-tab .yh-edit-tabTitle{\n    width:100%;\n}\n.yh-edit-tab .yh-edit-tabTitle > div {\n    padding: 0 10px;\n    line-height: 26px;\n    float:left;\n    text-align:center;\n    font-size:14px;\n    color:#666;\n    background:#efefef;\n    cursor:pointer;\n}\n.yh-edit-tab .yh-edit-tabTitle > div:hover,\n.yh-edit-tab .yh-edit-tabTitle > div.yh-tab-active{\n    background:#ff0084;\n    color:#fff;\n}\n.yh-edit-tab .yh-edit-tabContent > div{\n    position: relative;\n    display:none;\n}\n.yh-edit-tab .yh-edit-tabContent > div.yh-tab-active{\n    display:block;\n}\n", ""]);
 
 // exports
 
@@ -5496,10 +5296,10 @@ exports.push([module.i, "\n.yh-edit-number {\n    width: 100%;\n    padding: 0 0
 
 exports = module.exports = __webpack_require__(0)(undefined);
 // imports
-
+exports.i(__webpack_require__(46), "");
 
 // module
-exports.push([module.i, "\n.yh-edit-checkbox {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-checkbox .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-checkbox .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-checkbox .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-checkbox .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n", ""]);
 
 // exports
 
@@ -5513,7 +5313,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n.yh-uplist-set .yh-uplist-set-title .remove {\n    display: block;\n    width: 14px;\n    height: 14px;\n    line-height: 14px;\n    border: 1px solid #ff0084;\n    border-radius: 50%;\n    text-align: center;\n    font-size: 12px;\n    color: #ff0084;\n    position: absolute;\n    right: 0;\n    top: 2.5px;\n    cursor:pointer;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-checkbox {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-checkbox .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-checkbox .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-checkbox .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-checkbox .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-checkbox .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
 
 // exports
 
@@ -5527,7 +5327,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-yhtextarea {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtextarea .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-yhtextarea .yh-edit-value{\n    width: 145px;\n    height: 60px;\n    float:left;\n}\n.yh-edit-yhtextarea .yh-edit-value textarea{\n    /*width: 113px;*/\n    height: 60px;\n    outline: none;\n    resize: none;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n.yh-uplist-set .yh-uplist-set-title .remove {\n    display: block;\n    width: 14px;\n    height: 14px;\n    line-height: 14px;\n    border: 1px solid #ff0084;\n    border-radius: 50%;\n    text-align: center;\n    font-size: 12px;\n    color: #ff0084;\n    position: absolute;\n    right: 0;\n    top: 2.5px;\n    cursor:pointer;\n}\n", ""]);
 
 // exports
 
@@ -5541,7 +5341,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-chooser {\n  width: 25px;\n  height: 25px;\n  float: left;\n  position: relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n  width: 25px;\n  height: 25px;\n  border: none;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.yh-edit-chooser .yh-edit-list {\n  width: 176px;\n  position: absolute;\n  right: 0;\n  top: 100%;\n  background: #fff;\n  padding: 2px 0 0 2px;\n  box-shadow: 0 0 10px #ccc;\n  display: none;\n  z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n  width: 18px;\n  height: 18px;\n  margin: 0 2px 2px 0;\n  border: 1px solid #efefef;\n  cursor: pointer;\n  float: left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent {\n  background: url(\"http://localhost:9000/v3/static/images/icons.png\") no-repeat 0 -1700px;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-yhtextarea {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position:relative;\n}\n.yh-edit-yhtextarea .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-yhtextarea .yh-edit-value{\n    width: 145px;\n    height: 60px;\n    float:left;\n}\n.yh-edit-yhtextarea .yh-edit-value textarea{\n    /*width: 113px;*/\n    height: 60px;\n    outline: none;\n    resize: none;\n}\n", ""]);
 
 // exports
 
@@ -5552,10 +5352,10 @@ exports.push([module.i, "\n.yh-edit-chooser {\n  width: 25px;\n  height: 25px;\n
 
 exports = module.exports = __webpack_require__(0)(undefined);
 // imports
-exports.i(__webpack_require__(46), "");
+
 
 // module
-exports.push([module.i, "\n/* @import 'http://localhost:9000/dist/editorPC/components/CompanyPosition_style1.css';\n*/\n", ""]);
+exports.push([module.i, "\n.yh-edit-chooser {\n  width: 25px;\n  height: 25px;\n  float: left;\n  position: relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n  width: 25px;\n  height: 25px;\n  border: none;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.yh-edit-chooser .yh-edit-list {\n  width: 176px;\n  position: absolute;\n  right: 0;\n  top: 100%;\n  background: #fff;\n  padding: 2px 0 0 2px;\n  box-shadow: 0 0 10px #ccc;\n  display: none;\n  z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n  width: 18px;\n  height: 18px;\n  margin: 0 2px 2px 0;\n  border: 1px solid #efefef;\n  cursor: pointer;\n  float: left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent {\n  background: url(\"http://localhost:9000/v3/static/images/icons.png\") no-repeat 0 -1700px;\n}\n", ""]);
 
 // exports
 
@@ -5583,7 +5383,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".company-position-style1{width:926px;height:280px;margin:0 auto;padding:0 0 20px 0;border-radius:5px;overflow:hidden}.company-position-style1>.leftDiv{width:222px;height:280px;background:#00c99b;float:left}.company-position-style1>.leftDiv .title{padding:38px 0 20px 0}.company-position-style1>.leftDiv img{width:115px;height:115px;border-radius:3px;margin:0 auto 10px;display:block}.company-position-style1>.leftDiv a.nameTop{display:block;font-size:20px;color:#fff;text-align:center;text-decoration:none}.company-position-style1>.leftDiv a.nameTop p.name{width:100%;height:26px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.company-position-style1>.leftDiv div.infoWord{width:116px;margin:0 auto;background:#fff;border-radius:2px;overflow:hidden}.company-position-style1>.leftDiv a.more{width:116px;height:41px;display:block;background:#000;background-color:rgba(0,0,0,.08);filter:Alpha(opacity=8);position:static;*zoom:1;text-decoration:none}.company-position-style1>.leftDiv a.more span{height:38px;line-height:38px;font-size:16px;color:#00c99b;text-align:center;display:block;background:#fff}.company-position-style1>.leftDiv a.more:hover{text-decoration:none}.company-position-style1>.rightDiv{width:703px;height:278px;background:#f0f0f0;float:left;border:solid 1px #e9e9e9;border-left:none;border-radius:0 5px 5px 0;overflow:hidden}.company-position-style1>.rightDiv .slogan{height:50px;line-height:24px;padding:40px 65px 30px;background:#fff no-repeat center center;font-size:16px;color:#555;text-align:left;word-break:break-all}.company-position-style1>.rightDiv .positionList{padding:6px 32px 17px}.company-position-style1>.rightDiv .positionList li{float:left}.company-position-style1>.rightDiv .positionList li .positionUrl{width:252px;height:48px;line-height:48px;padding:0 27px 0 17px;margin:18px 12px 0 11px;display:block;color:#00c99b;font-size:16px;background:#fff no-repeat 270px -158px}.company-position-style1>.rightDiv .positionList li .positionUrl p,.company-position-style1>.rightDiv .positionList li .positionUrl span{text-align:left;float:left}.company-position-style1>.rightDiv .positionList li .positionUrl p.positionName,.company-position-style1>.rightDiv .positionList li .positionUrl span.positionName{width:160px;padding-right:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}", ""]);
+exports.push([module.i, ".yh-custom-base-element00 { margin:0 auto; width: 300px; height: 365px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 6px; box-shadow: rgb(255, 255, 255) 0px 0px 0px; position: relative; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(0, 255, 0)), to(rgb(255, 255, 0)));}.yh-custom-base-element0{left: 25px; top: 25px; position: absolute;}.yh-custom-base-element1{width: 100px; height: 100px; background-color: rgb(255, 255, 255); border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 6px; box-shadow: rgb(255, 255, 255) 0px 0px 0px;}.yh-custom-base-element2{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}.yh-custom-base-element3{left: 145px; top: 25px; position: absolute;}.yh-custom-base-element4{width: 150px; height: 40px; line-height: 40px; font-size: 18px; color: rgb(255, 255, 255); text-align: left; font-style: normal; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element5{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}.yh-custom-base-element6{left: 145px; top: 65px; position: absolute;}.yh-custom-base-element7{width: 150px; height: 66px; line-height: 22px; font-size: 14px; color: rgb(239, 239, 239); text-align: left; font-style: normal; overflow: hidden;}.yh-custom-base-element8{left: 25px; top: 150px; position: absolute;}.yh-custom-base-element9{display: block;}.yh-custom-base-element10{width: 250px; height: 40px; border-radius: 6px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; box-shadow: rgb(255, 255, 255) 0px 0px 0px; overflow: hidden; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 255)));}.yh-custom-base-element11{width: 120px; height: 40px; line-height: 40px; padding-left: 20px; font-size: 14px; color: rgb(255, 0, 255); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element12{width: 80px; height: 40px; line-height: 40px; padding-left: 10px; padding-right: 20px; font-size: 14px; color: rgb(255, 0, 0); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element13{display: block;}.yh-custom-base-element14{width: 250px; height: 40px; border-radius: 6px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; box-shadow: rgb(255, 255, 255) 0px 0px 0px; overflow: hidden; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 255)));}.yh-custom-base-element15{width: 120px; height: 40px; line-height: 40px; padding-left: 20px; font-size: 14px; color: rgb(255, 0, 255); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element16{width: 80px; height: 40px; line-height: 40px; padding-left: 10px; padding-right: 20px; font-size: 14px; color: rgb(255, 0, 0); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element17{display: block;}.yh-custom-base-element18{width: 250px; height: 40px; border-radius: 6px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; box-shadow: rgb(255, 255, 255) 0px 0px 0px; overflow: hidden; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 255)));}.yh-custom-base-element19{width: 120px; height: 40px; line-height: 40px; padding-left: 20px; font-size: 14px; color: rgb(255, 0, 255); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element20{width: 80px; height: 40px; line-height: 40px; padding-left: 10px; padding-right: 20px; font-size: 14px; color: rgb(255, 0, 0); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element21{left: 25px; top: 300px; position: absolute;}.yh-custom-base-element22{width: 250px; height: 40px; line-height: 40px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 8px; box-shadow: rgb(255, 255, 255) 0px 0px 0px; font-size: 16px; color: rgb(255, 0, 255); text-align: center; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 255)));}.yh-custom-base-element23{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}", ""]);
 
 // exports
 
@@ -5697,7 +5497,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components/CompanyPosition/style1/index.vue"
+Component.options.__file = "/Users/dagou/Documents/workspace/20161117work/ecom-topic-fe/src/editorPC/components/Custom/style1/index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -5708,9 +5508,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d03f9b60", Component.options)
+    hotAPI.createRecord("data-v-75f0f4ad", Component.options)
   } else {
-    hotAPI.reload("data-v-d03f9b60", Component.options)
+    hotAPI.reload("data-v-75f0f4ad", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -6206,8 +6006,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       "status": _vm.options.value
     }
-  }, _vm._l((_vm.options.value), function(one, index) {
-    return _c('yh-edit-uplist', {
+  }, [_vm._l((_vm.options.value), function(one, index) {
+    return (_vm.getObjectStatus) ? _c('yh-edit-uplist', {
       key: index,
       attrs: {
         "options": {
@@ -6221,8 +6021,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         directives: [{
           name: "show",
           rawName: "v-show",
-          value: (_vm.getChildSetStatus(one)),
-          expression: "getChildSetStatus(one)"
+          value: (_vm.getChildSetStatus(one) && (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey)))))),
+          expression: "getChildSetStatus(one) && (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey)))))"
         }],
         tag: "div",
         attrs: {
@@ -6236,8 +6036,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           "path": _vm.path
         }
       }) : _vm._e()
-    }))
-  }))
+    })) : _vm._e()
+  }), _vm._v(" "), _vm._l((_vm.options.value), function(one) {
+    return (!_vm.getObjectStatus && one.type != 'none') ? _c(_vm.setModule(one), {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (_vm.getChildSetStatus(one) && (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey)))))),
+        expression: "getChildSetStatus(one) && (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey)))))"
+      }],
+      tag: "div",
+      attrs: {
+        "parent": _vm.options.value,
+        "eindex": _vm.eindex,
+        "options": one,
+        "ischildset": _vm.ischildset,
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  })], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -6781,7 +6600,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -6807,7 +6626,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(41);
+var content = __webpack_require__(42);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -6833,7 +6652,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(42);
+var content = __webpack_require__(43);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -6859,7 +6678,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(43);
+var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM

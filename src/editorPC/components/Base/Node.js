@@ -39,6 +39,7 @@ Node.isEmptyObject = (e) => {
 /********************************************
  * isObject: 判断一个对象是否为对象
  * e: 对象
+ * Object.prototype.toString.call(e)
  *******************************************/
 Node.isObject = (e) => {
     return e instanceof Object
@@ -507,8 +508,219 @@ Node.dealRGBOpacityColor = function(color){
         return color;
     }
 };
+/****
+ * dealStringLine(): 截取字符串, 并且保证最多只有多少行
+ * textSize : 总字数
+ * one ： 一行的字数
+ * line ：多少行
+ * value ：字符串
+ * status ： 状态（是否截断字符串），true：返回true or false
+ * */
+Node.dealStringLine = function(textSize,one,line,value,status){
+    var tagReg = /\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/g,
+        valueArray = value.split(/\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/),
+        styleArray = value.match(/\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/g),
+        // clearValue = value.replace(/[\t\n\r\s]/g, ""),  //\s*\t\n\r
+        clearValue = value.replace(/(>( )*<)/g,'><')
+                          .replace(/(<( )*)/g,'<')
+                          .replace(/(( )*>)/g,'>')
+                          .replace(/(<\/( )*)/g,'</')
+                          .replace(/(<br( )*)/g,'<br')
+                          .replace(/(( )*\/>)/g,'/>')
+                          .replace(/(<( )*\/)/g,'</')
+                          .replace(/[\n\r]/g, ''),
+        i = 0,
+        re=/([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g,   // 匹配中文
+        styleIndex = 0,
+        tempIndex = 0,
+        already = 0,
+        str = '',
+        tempStr = '',
+        tempOne = 0,
+        tempLength = 0,
+        temp,
+        isClip = false,
+        lastLength = 0,
+        resultTag = [],
+        rt = 0,
+        rt_first = false;
+    if(valueArray){
+        for( i = 0; i < valueArray.length; i++ ){
+            if(!valueArray[i].trim()){
+                valueArray.splice(i,1);
+                i--;
+            }
+        }
+    }
+    if(styleArray){
+        for( i = 0; i < styleArray.length; i++ ){
+            if(!styleArray[i].trim()){
+                styleArray.splice(i,1);
+                i--;
+            }
+        }
+    }
+    for( i = 0,styleIndex = 0; i < valueArray.length; i++ ){
+        if(styleArray){
+            for(tempIndex = styleIndex; tempIndex < styleArray.length; tempIndex++){
+                temp = str + styleArray[tempIndex];
+                if(clearValue.indexOf(temp) == 0){
+                    if(already < line){
+                        str += styleArray[tempIndex];
+                        if(styleArray[tempIndex].indexOf('<br') == 0){
+                            already++;
+                        }
+                    }
+                }else{
+                    styleIndex = tempIndex;
+                    break;
+                }
+            }
+        }else if(i > 0){
+            str += '<br/>';
+        }
+        tempOne = Math.ceil(valueArray[i].replace(re,"çç").length / one);
+        if(already < line){
+            if((already+tempOne) == line){
+                lastLength = one*(line-already) - (one - (one * line - textSize));
+                tempStr = valueArray[i].replace(re,"çç").slice(0,lastLength);
+                if(/çç/g.test(tempStr)){
+                    tempLength = tempStr.replace(/(çç)/g,"一").length;//tempStr.match(/çç/g).length;
+                }
+                if(tempLength < valueArray[i].length){
+                    str += valueArray[i].slice(0,tempLength) + '...';
+                    isClip = true;
+                }else{
+                    str += valueArray[i];
+                    isClip = false;
+                }
+                already = line;
+            }else if((already+tempOne) > line){
+                lastLength = one*(line-already) - (one - (one * line - textSize));
+                tempStr = valueArray[i].replace(re,"çç").slice(0,lastLength);
+                if(/çç/g.test(tempStr)){
+                    tempLength = tempStr.replace(/(çç)/g,"一").length;//tempStr.match(/çç/g).length;
+                }
+                str += valueArray[i].slice(0,tempLength) + '...';
+                already = line;
+                isClip = true;
+            }else{
+                already = already+tempOne;
+                str += valueArray[i];
+                if(i == (valueArray.length - 1)){
+                    isClip = false;
+                }
+            }
+            if(styleArray){
+                for(tempIndex = styleIndex; tempIndex < styleArray.length; tempIndex++){
+                    if(styleArray[tempIndex].indexOf('</') == 0 || styleArray[tempIndex].indexOf('<br') == 0){
+                        if(styleArray[tempIndex].indexOf('<br') == 0){
+                            if(already < line){
+                                if(already == line){
+                                    isClip = false;
+                                }
+                                temp = str + styleArray[tempIndex];
+                                if(clearValue.indexOf(temp) == 0){
+                                    resultTag = str.match(tagReg);
+                                    str += styleArray[tempIndex];
+                                    if(resultTag){
+                                        for(rt = resultTag.length - 1; rt > -1; rt--){
+                                            if(resultTag[rt].indexOf('<br') == -1){   // 最后一个不是换行符
+                                                if(resultTag[rt].indexOf('</') == 0 && resultTag[rt].indexOf('</span') == -1){  // 如果最后一个标签能让str换行
+                                                    already++;
+                                                    break;
+                                                }
+                                            }else if(rt == resultTag.length - 1 && resultTag[rt].indexOf('<br') == 0){  // 如果最后一个是换行符
+                                                already++;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    styleIndex = tempIndex;
+                                    break;
+                                }
+                            }else{
+                                styleIndex = tempIndex;
+                                break;
+                            }
+                        }else{
+                            temp = str + styleArray[tempIndex];
+                            if(clearValue.indexOf(temp) == 0){
+                                str += styleArray[tempIndex];
+                            }else{
+                                styleIndex = tempIndex;
+                                break;
+                            }
+                        }
+                    }else{
+                        if(already == line){
+                            break;
+                        }
+                        styleIndex = tempIndex;
+                        break;
+                    }
+                }
+            }
+            if(already == line){
+                if(status){
+                    return isClip;
+                }else{
+                    break;
+                }
+            }
+        }/*else {
+            if(i == (valueArray.length - 1)){
+                isClip = false;
+            }else{
+                isClip = true;
+                if(str.slice(str.length - 4).indexOf('...') == -1){
+                    str += '...'
+                }
+            }
+            break;
+        }*/
+    }
+    if(status){
+        return isClip;
+    }else{
+        // 闭合标签
+        str = Node.closeHTML(str);
+        return str;
+    }
+}
+Node.closeHTML = (str) => {
+    var styleArray = str.match(/\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/g),
+        current, next,
+        i = 0,
+        not = [];
+    if(styleArray){
+        for( i = 0; i < styleArray.length; i++ ){
+            if(styleArray[i].indexOf('<br') != 0){
+                current = styleArray[i].split(/[\<(\s*)]/)[1];  //current   当前标签名
+                if((i+1) < styleArray.length){
+                    next = styleArray[i+1].split(/[\<(\s*)]/)[1];
+                }else{
+                    next = '';
+                }
 
-
+                if(current[0] == '/'){
+                    if(current.slice(1) == not[not.length-1]){
+                        not.splice(not.length - 1,1);
+                    }
+                }else if(current != next.slice(1)) {  // 此标签不是闭合标签
+                    not.push(current);
+                }else{
+                    i++;
+                }
+            }
+        }
+        for( i = not.length - 1; i >= 0; i--){
+            str += (not[i].indexOf('<') >= 0 ? '' : '<')+(not[i].indexOf('/') >= 0 ? '' : '/')+not[i]+(not[i].indexOf('>') >= 0 ? '' : '>');
+        }
+    }
+    return str;
+}
 
 
 Node.getRequestData = (store,id,type) =>{

@@ -41,7 +41,10 @@
                     eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                     ischildset = this.ischildset ? this.ischildset : '',
-                    imgAtrr = ''
+                    imgAtrr = '',
+                    type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'MultipleValue')
+                        : 'setMultipleValue'
                 // 默认为background_image
                 if(classname.length > 2){
                     name = classname[0]+'_'
@@ -69,10 +72,11 @@
                         })
                     }
                 }
-                this.$store.commit('setMultipleValue',{
+                this.$store.commit(edittype,{
                     ischildset:ischildset,
                     path:this.path,
-                    list:list
+                    list:list,
+                    store:this.$store
                 })
             },
             setSrcValue(src,data){
@@ -85,7 +89,10 @@
                     eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                     ischildset = this.ischildset ? this.ischildset : '',
-                    imgAtrr = ''
+                    imgAtrr = '',
+                    type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'MultipleValue')
+                        : 'setMultipleValue'
                 list = [{
                     parent:parentName,
                     eindex:eindex,
@@ -108,10 +115,11 @@
                         })
                     }
                 }
-                this.$store.commit('setMultipleValue',{
+                this.$store.commit(edittype,{
                     ischildset:ischildset,
                     path:this.path,
-                    list:list
+                    list:list,
+                    store:this.$store
                 })
             },
             setValue(e){
@@ -237,7 +245,8 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
+    @import '../css/index.scss';
     .yh-edit-image {
         width: 100%;
         padding: 0 0 5px 0;
@@ -265,7 +274,7 @@
     .yh-edit-image .yh-edit-image-local {
         width: 20px;
         height: 20px;
-        background: url(http://localhost:9000/static/images/icons.png) no-repeat -2px -194px;
+        background: url($host+'static/images/icons.png') no-repeat -2px -194px;
         position:absolute;
         left:200px;
         top:3px;

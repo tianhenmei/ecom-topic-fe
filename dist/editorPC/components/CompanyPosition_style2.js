@@ -518,6 +518,7 @@ Node.isEmptyObject = function (e) {
 /********************************************
  * isObject: 判断一个对象是否为对象
  * e: 对象
+ * Object.prototype.toString.call(e)
  *******************************************/
 Node.isObject = function (e) {
     return e instanceof Object;
@@ -578,6 +579,7 @@ Node.updateData = function (data, baseData) {
         newdata = {};
     for (i in baseData) {
         switch (i) {
+            case 'sync':
             case 'data':
             case 'css':
             case 'h5css':
@@ -988,6 +990,185 @@ Node.dealRGBOpacityColor = function (color) {
         return lastColor;
     } else {
         return color;
+    }
+};
+/****
+ * dealStringLine(): 截取字符串, 并且保证最多只有多少行
+ * textSize : 总字数
+ * one ： 一行的字数
+ * line ：多少行
+ * value ：字符串
+ * status ： 状态（是否截断字符串），true：返回true or false
+ * */
+Node.dealStringLine = function (textSize, one, line, value, status) {
+    var tagReg = /\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/g,
+        valueArray = value.split(/\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/),
+        styleArray = value.match(/\<[(p)|(\/p)|(li)|(\/li)|(ul)|(\/ul)|(span)|(\/span)|(h1)|(\/h1)|(h2)|(\/h2)|(h3)|(\/h3)|(h4)|(\/h4)|(h5)|(\/h5)|(h6)|(\/h6)|(font)|(\/font)|(b)|(\/b)|(u)|(\/u)|(i)|(\/i)|(div)|(\/div)]*[^>]*>/g),
+
+    // clearValue = value.replace(/[\t\n\r\s]/g, ""),  //\s*\t\n\r
+    clearValue = value.replace(/(>( )*<)/g, '><').replace(/(<( )*)/g, '<').replace(/(( )*>)/g, '>').replace(/(<\/( )*)/g, '</').replace(/(<br( )*)/g, '<br').replace(/(( )*\/>)/g, '/>').replace(/(<( )*\/)/g, '</').replace(/[\n\r]/g, ''),
+        i = 0,
+        re = /([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g,
+        // 匹配中文
+    styleIndex = 0,
+        tempIndex = 0,
+        already = 0,
+        str = '',
+        tempStr = '',
+        tempOne = 0,
+        tempLength = 0,
+        temp,
+        isClip = false,
+        lastLength = 0,
+        resultTag = [],
+        rt = 0,
+        rt_first = false;
+    if (valueArray) {
+        for (i = 0; i < valueArray.length; i++) {
+            if (!valueArray[i].trim()) {
+                valueArray.splice(i, 1);
+                i--;
+            }
+        }
+    }
+    if (styleArray) {
+        for (i = 0; i < styleArray.length; i++) {
+            if (!styleArray[i].trim()) {
+                styleArray.splice(i, 1);
+                i--;
+            }
+        }
+    }
+    for (i = 0, styleIndex = 0; i < valueArray.length; i++) {
+        if (styleArray) {
+            for (tempIndex = styleIndex; tempIndex < styleArray.length; tempIndex++) {
+                temp = str + styleArray[tempIndex];
+                if (clearValue.indexOf(temp) == 0) {
+                    if (already < line) {
+                        str += styleArray[tempIndex];
+                        if (styleArray[tempIndex].indexOf('<br') == 0) {
+                            already++;
+                        }
+                    }
+                } else {
+                    styleIndex = tempIndex;
+                    break;
+                }
+            }
+        } else if (i > 0) {
+            str += '<br/>';
+        }
+        tempOne = Math.ceil(valueArray[i].replace(re, "çç").length / one);
+        if (already < line) {
+            if (already + tempOne == line) {
+                lastLength = one * (line - already) - (one - (one * line - textSize));
+                tempStr = valueArray[i].replace(re, "çç").slice(0, lastLength);
+                if (/çç/g.test(tempStr)) {
+                    tempLength = tempStr.replace(/(çç)/g, "一").length; //tempStr.match(/çç/g).length;
+                }
+                if (tempLength < valueArray[i].length) {
+                    str += valueArray[i].slice(0, tempLength) + '...';
+                    isClip = true;
+                } else {
+                    str += valueArray[i];
+                    isClip = false;
+                }
+                already = line;
+            } else if (already + tempOne > line) {
+                lastLength = one * (line - already) - (one - (one * line - textSize));
+                tempStr = valueArray[i].replace(re, "çç").slice(0, lastLength);
+                if (/çç/g.test(tempStr)) {
+                    tempLength = tempStr.replace(/(çç)/g, "一").length; //tempStr.match(/çç/g).length;
+                }
+                str += valueArray[i].slice(0, tempLength) + '...';
+                already = line;
+                isClip = true;
+            } else {
+                already = already + tempOne;
+                str += valueArray[i];
+                if (i == valueArray.length - 1) {
+                    isClip = false;
+                }
+            }
+            if (styleArray) {
+                for (tempIndex = styleIndex; tempIndex < styleArray.length; tempIndex++) {
+                    if (styleArray[tempIndex].indexOf('</') == 0 || styleArray[tempIndex].indexOf('<br') == 0) {
+                        if (styleArray[tempIndex].indexOf('<br') == 0) {
+                            if (already < line) {
+                                if (already == line) {
+                                    isClip = false;
+                                }
+                                temp = str + styleArray[tempIndex];
+                                if (clearValue.indexOf(temp) == 0) {
+                                    resultTag = str.match(tagReg);
+                                    str += styleArray[tempIndex];
+                                    if (resultTag) {
+                                        for (rt = resultTag.length - 1; rt > -1; rt--) {
+                                            if (resultTag[rt].indexOf('<br') == -1) {
+                                                // 最后一个不是换行符
+                                                if (resultTag[rt].indexOf('</') == 0 && resultTag[rt].indexOf('</span') == -1) {
+                                                    // 如果最后一个标签能让str换行
+                                                    already++;
+                                                    break;
+                                                }
+                                            } else if (rt == resultTag.length - 1 && resultTag[rt].indexOf('<br') == 0) {
+                                                // 如果最后一个是换行符
+                                                already++;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    styleIndex = tempIndex;
+                                    break;
+                                }
+                            } else {
+                                styleIndex = tempIndex;
+                                break;
+                            }
+                        } else {
+                            temp = str + styleArray[tempIndex];
+                            if (clearValue.indexOf(temp) == 0) {
+                                str += styleArray[tempIndex];
+                            } else {
+                                styleIndex = tempIndex;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (already == line) {
+                            break;
+                        }
+                        styleIndex = tempIndex;
+                        break;
+                    }
+                }
+            }
+            if (already == line) {
+                if (status) {
+                    return isClip;
+                } else {
+                    break;
+                }
+            }
+        } /*else {
+             if(i == (valueArray.length - 1)){
+                 isClip = false;
+             }else{
+                 isClip = true;
+                 if(str.slice(str.length - 4).indexOf('...') == -1){
+                     str += '...'
+                 }
+             }
+             break;
+          }*/
+    }
+    if (status) {
+        return isClip;
+    } else {
+        // 闭合标签
+        str = Dialog.closeHTML(str);
+        return str;
     }
 };
 
@@ -2846,6 +3027,7 @@ var baseData = {
             type: 'uplist',
             name: 'positionName',
             parent: 'data',
+            removeStatus: true,
             value: [{
                 dynamic_type: {
                     cn: '职位类别',
@@ -3444,10 +3626,12 @@ exports.default = {
             }
         },
         setValue: function setValue(name, actualValue, value) {
+            var type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue';
             if (this.options.backstatus) {
                 this.$emit('setValue', name, value, value);
             } else {
-                this.$store.commit('setValue', {
+                this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
                     eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -3455,7 +3639,8 @@ exports.default = {
                     stylename: name,
                     actualValue: value,
                     designValue: value,
-                    path: this.path
+                    path: this.path,
+                    store: this.$store
                 });
             }
         },
@@ -3738,6 +3923,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     components: {
@@ -3807,6 +4015,11 @@ exports.default = {
 
     computed: {},
     methods: {
+        getConditionValue: function getConditionValue(key) {
+            var temp = key.split('.'),
+                t = temp[0] == 'data' ? 'owndata' : temp[0];
+            return this[t][temp[1]].status;
+        },
         getChildCssStatus: function getChildCssStatus(index) {
             var css = this.elements[index].props.css,
                 status = false,
@@ -3825,6 +4038,18 @@ exports.default = {
                 i = 0;
             for (i in css) {
                 if (css[i].parentSetStatus == 'child') {
+                    status = true;
+                    break;
+                }
+            }
+            return status;
+        },
+        getChildDataStatus: function getChildDataStatus(index) {
+            var data = this.elements[index].props.data,
+                status = false,
+                i = 0;
+            for (i in data) {
+                if (!data[i].parentSetStatus || data[i].parentSetStatus == 'child') {
                     status = true;
                     break;
                 }
@@ -3948,7 +4173,9 @@ exports.default = {
                 eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                 index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                 ischildset = this.ischildset ? this.ischildset : '',
-                imgAtrr = '';
+                imgAtrr = '',
+                type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'MultipleValue' : 'setMultipleValue';
             // 默认为background_image
             if (classname.length > 2) {
                 name = classname[0] + '_';
@@ -3976,10 +4203,11 @@ exports.default = {
                     });
                 }
             }
-            this.$store.commit('setMultipleValue', {
+            this.$store.commit(edittype, {
                 ischildset: ischildset,
                 path: this.path,
-                list: list
+                list: list,
+                store: this.$store
             });
         },
         setSrcValue: function setSrcValue(src, data) {
@@ -3993,7 +4221,9 @@ exports.default = {
                 eindex = !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                 index = !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                 ischildset = this.ischildset ? this.ischildset : '',
-                imgAtrr = '';
+                imgAtrr = '',
+                type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'MultipleValue' : 'setMultipleValue';
             list = [{
                 parent: parentName,
                 eindex: eindex,
@@ -4016,10 +4246,11 @@ exports.default = {
                     });
                 }
             }
-            this.$store.commit('setMultipleValue', {
+            this.$store.commit(edittype, {
                 ischildset: ischildset,
                 path: this.path,
-                list: list
+                list: list,
+                store: this.$store
             });
         },
         setValue: function setValue(e) {
@@ -4210,10 +4441,14 @@ exports.default = {
             return !!this.options.default && this.options.default != false && this.options.default != 0;
         },
         setClassname: function setClassname() {
+            var str = '';
             if (this.options.classname) {
-                return 'yh-edit-' + this.options.classname;
+                str += 'yh-edit-' + this.options.classname;
             }
-            return '';
+            if (!this.options.name) {
+                str += ' yh-eidt-combine';
+            }
+            return str;
         },
         getDesignValue: function getDesignValue() {
             var actualValue = this.options.style[this.options.stylename].value;
@@ -4261,20 +4496,22 @@ exports.default = {
         setChoice: function setChoice(e) {
             var choice = this.$refs['yh-edit-choice'],
                 value = parseInt(e.target.getAttribute('value')),
-                number = value || value == 0 ? value : e.target.getAttribute('value'); /*,
-                                                                                       elem = document.getElementsByClassName('setting')[0],
-                                                                                       width = elem.style.width,
-                                                                                       height = elem.style.height,//getComputedValue(elem,'height'),
-                                                                                       paddingVerticle = getPointValue(elem,'padding-top') + getPointValue(elem,'padding-bottom'),
-                                                                                       paddingHorizontal= getPointValue(elem,'padding-left') + getPointValue(elem,'padding-right'),
-                                                                                       nheight = elem.clientHeight - paddingVerticle,
-                                                                                       nwidth = elem.clientWidth - paddingHorizontal*/
+                number = value || value == 0 ? value : e.target.getAttribute('value'),
+                type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue'; /*,
+                                                                                                                         elem = document.getElementsByClassName('setting')[0],
+                                                                                                                         width = elem.style.width,
+                                                                                                                         height = elem.style.height,//getComputedValue(elem,'height'),
+                                                                                                                         paddingVerticle = getPointValue(elem,'padding-top') + getPointValue(elem,'padding-bottom'),
+                                                                                                                         paddingHorizontal= getPointValue(elem,'padding-left') + getPointValue(elem,'padding-right'),
+                                                                                                                         nheight = elem.clientHeight - paddingVerticle,
+                                                                                                                         nwidth = elem.clientWidth - paddingHorizontal*/
 
             choice.className += ' hide';
             if (this.options.backstatus) {
                 this.$emit('setValue', this.options.stylename, number, number); // this.options.def
             } else {
-                this.$store.commit('setValue', {
+                this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
                     eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -4319,7 +4556,9 @@ exports.default = {
             unit = this.options.unit ? this.options.unit : '',
                 realunit = this.options.realunit ? this.options.realunit : '',
                 stylename = this.options.stylename,
-                actualValue = value; // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
+                actualValue = value,
+                type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue'; // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
 
             // actualValue : 实际上使用的值
             // value : 展示用的值 （designValue）
@@ -4330,7 +4569,7 @@ exports.default = {
                 if (this.options.backstatus) {
                     this.$emit('setValue', stylename, actualValue, value);
                 } else {
-                    this.$store.commit('setValue', {
+                    this.$store.commit(edittype, {
                         parent: this.options.parent ? this.options.parent : 'css',
                         eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                         index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -4399,6 +4638,9 @@ var _yhEditMutiple2 = _interopRequireDefault(_yhEditMutiple);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
 //
 //
 //
@@ -4572,8 +4814,8 @@ exports.default = {
             optionsData: {
                 name: this.options.cn,
                 stylename: this.options.en,
-                unit: 'px',
-                realunit: 'px',
+                unit: this.options.nounit ? '' : 'px',
+                realunit: this.options.nounit ? '' : 'px',
                 type: type,
                 classname: 'number',
                 style: this.parent,
@@ -4606,10 +4848,12 @@ exports.default = {
             }
         },
         setValue: function setValue(name, actualValue, value) {
+            var type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue';
             if (this.options.backstatus) {
                 this.$emit('setValue', name, value, value);
             } else {
-                this.$store.commit('setValue', {
+                this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
                     eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -4617,7 +4861,8 @@ exports.default = {
                     stylename: name,
                     actualValue: value,
                     designValue: value,
-                    path: this.path
+                    path: this.path,
+                    store: this.$store
                 });
                 // 非实时
                 switch (name) {
@@ -4685,13 +4930,15 @@ exports.default = {
                 svalue = this.options.options[index].value,
                 // 展示出来的字体大小（针对750的宽）
             cnvalue = this.options.options[index].cn,
-                list = this.$refs['yh-edit-list'];
+                list = this.$refs['yh-edit-list'],
+                type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue';
             list.style.display = 'none';
 
             if (this.options.backstatus) {
                 this.$emit('setValue', this.options.en, value + (this.options.realunit ? this.options.realunit : ''), svalue + (this.options.unit ? this.options.unit : ''));
             } else {
-                this.$store.commit('setValue', {
+                this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
                     eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -4700,7 +4947,8 @@ exports.default = {
                     actualValue: value + (this.options.realunit ? this.options.realunit : ''),
                     designValue: svalue + (this.options.unit ? this.options.unit : ''),
                     cnvalue: cnvalue,
-                    path: this.path
+                    path: this.path,
+                    store: this.$store
                 });
             }
         }
@@ -4887,7 +5135,7 @@ exports.default = {
     props: ['eindex', 'index', // index
     'parent', 'options', 'elem_id', // 当前被选中元素的ID
     'ischildset', // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-    'ischild'],
+    'ischild', 'path'],
     data: function data() {
         return {
             optionsData: {
@@ -4898,6 +5146,7 @@ exports.default = {
                 type: 'text',
                 classname: 'yhtext',
                 style: this.parent,
+                edittype: this.options.edittype,
                 backstatus: true
             },
             changeStatus: false
@@ -4906,23 +5155,29 @@ exports.default = {
     mounted: function mounted() {},
 
     methods: {
+        // yh-edit-text
         setValue: function setValue(name, actualValue, value) {
+            var type = this.options.edittype,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue';
             if (this.options.backstatus) {
                 this.$emit('setValue', name, value, value);
             } else {
-                this.$store.commit('setValue', {
+                this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
                     eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                     ischildset: this.ischildset ? this.ischildset : '',
                     stylename: name,
                     actualValue: value,
-                    designValue: value
+                    designValue: value,
+                    path: this.path,
+                    store: this.$store
                 });
             }
         }
     }
 }; //
+//
 //
 //
 //
@@ -4960,7 +5215,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     props: ['eindex', 'index', 'parent', 'options', 'elem_id', // 当前被选中元素的ID
     'ischildset', // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-    'ischild'],
+    'ischild', 'path'],
     data: function data() {
         return {
             optionsData: {
@@ -4998,18 +5253,25 @@ exports.default = {
         }
     },
     methods: {
-        setValue: function setValue(name, actualValue, value) {
-            if (this.optionsData.backstatus) {
+        setValue: function setValue(e) {
+            var target = e.target,
+                value = target.value,
+                type = this.options.edittype,
+                name = this.options.en,
+                edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue';
+            if (this.options.backstatus) {
                 this.$emit('setValue', name, value, value);
             } else {
-                this.$store.commit('setValue', {
-                    parent: this.parent ? this.parent : 'css',
+                this.$store.commit(edittype, {
+                    parent: this.options.parent ? this.options.parent : 'css',
                     eindex: !(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                     ischildset: this.ischildset ? this.ischildset : '',
                     stylename: name,
                     actualValue: value,
-                    designValue: value
+                    designValue: value,
+                    path: this.path,
+                    store: this.$store
                 });
             }
         }
@@ -5030,7 +5292,11 @@ Object.defineProperty(exports, "__esModule", {
 var _Node = __webpack_require__(3);
 
 exports.default = {
-    props: ['options', 'status' // 是否有子集
+    props: ['options', 'status', // 是否有子集
+    'removeStatus', // 删除状态
+    'index', //     当前所在父组件的索引
+    'parentID', // 父组件ID
+    'path' // 父组件路径
     ],
     data: function data() {
         return {};
@@ -5071,9 +5337,16 @@ exports.default = {
                 icon.className = icon.className.replace('listshow', '').replace('  ', ' ');
                 content.className = content.className + ' hide';
             }
+        },
+        removeElement: function removeElement(e) {
+            this.$store.commit('removeElement', {
+                path: this.path + '.props.elements.' + this.index
+            });
         }
     }
 }; //
+//
+//
 //
 //
 //
@@ -5108,7 +5381,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-image {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-image .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-image .yh-edit-value {\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    float:left;\n}\n.yh-edit-image .yh-edit-image-local {\n    width: 20px;\n    height: 20px;\n    background: url(http://localhost:9000/static/images/icons.png) no-repeat -2px -194px;\n    position:absolute;\n    left:200px;\n    top:3px;\n}\n.yh-edit-image .yh-edit-imagefile{\n    width: 20px;\n    height: 20px;\n    border: none;\n    opacity:0;\n    display: block;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-image {\n  width: 100%;\n  padding: 0 0 5px 0;\n  position: relative;\n}\n.yh-edit-image .yh-edit-text {\n  width: 80px;\n  height: 25px;\n  line-height: 25px;\n  text-align: right;\n  font-size: 12px;\n  color: #666;\n  float: left;\n}\n.yh-edit-image .yh-edit-value {\n  width: 113px;\n  height: 23px;\n  line-height: 23px;\n  border: 1px solid #ccc;\n  font-size: 12px;\n  color: #666;\n  background: transparent;\n  float: left;\n}\n.yh-edit-image .yh-edit-image-local {\n  width: 20px;\n  height: 20px;\n  background: url(\"http://localhost:9000/v3/static/images/icons.png\") no-repeat -2px -194px;\n  position: absolute;\n  left: 200px;\n  top: 3px;\n}\n.yh-edit-image .yh-edit-imagefile {\n  width: 20px;\n  height: 20px;\n  border: none;\n  opacity: 0;\n  display: block;\n}\n", ""]);
 
 // exports
 
@@ -5234,7 +5507,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n.yh-uplist-set .yh-uplist-set-title .remove {\n    display: block;\n    width: 14px;\n    height: 14px;\n    line-height: 14px;\n    border: 1px solid #ff0084;\n    border-radius: 50%;\n    text-align: center;\n    font-size: 12px;\n    color: #ff0084;\n    position: absolute;\n    right: 0;\n    top: 2.5px;\n    cursor:pointer;\n}\n", ""]);
 
 // exports
 
@@ -5262,7 +5535,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-chooser {\n    width:25px;\n    height:25px;\n    float:left;\n    position:relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n    width:25px;\n    height:25px;\n    border:none;\n    position:absolute;\n    left:0;\n    top:0;\n}\n.yh-edit-chooser .yh-edit-list {\n    width:176px;\n    position: absolute;\n    right: 0;\n    top: 100%;\n    background: #fff;\n    padding:2px 0 0 2px;\n    box-shadow: 0 0 10px #ccc;\n    display:none;\n    z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n    width:18px;\n    height:18px;\n    margin:0 2px 2px 0;\n    border:1px solid #efefef;\n    cursor:pointer;\n    float:left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent{\n    background:url('http://localhost:9000/static/images/icons.png') no-repeat 0 -1700px;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-chooser {\n  width: 25px;\n  height: 25px;\n  float: left;\n  position: relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n  width: 25px;\n  height: 25px;\n  border: none;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.yh-edit-chooser .yh-edit-list {\n  width: 176px;\n  position: absolute;\n  right: 0;\n  top: 100%;\n  background: #fff;\n  padding: 2px 0 0 2px;\n  box-shadow: 0 0 10px #ccc;\n  display: none;\n  z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n  width: 18px;\n  height: 18px;\n  margin: 0 2px 2px 0;\n  border: 1px solid #efefef;\n  cursor: pointer;\n  float: left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent {\n  background: url(\"http://localhost:9000/v3/static/images/icons.png\") no-repeat 0 -1700px;\n}\n", ""]);
 
 // exports
 
@@ -5276,7 +5549,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-input {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-input .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-input .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-input .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-input .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-input .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-input .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-input {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-input .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-input .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-input .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-input .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-input .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-input .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n.yh-eidt-combine.yh-edit-input {\n    width:82px;\n}\n.yh-eidt-combine.yh-edit-input .yh-edit-value{\n    width:82px;\n}\n.yh-eidt-combine.yh-edit-input .yh-edit-value input {\n    width:60px;\n}\n.yh-eidt-combine.yh-edit-color {\n    width:92px;\n}\n.yh-eidt-combine.yh-edit-color .yh-edit-value {\n    width:62px;\n}\n", ""]);
 
 // exports
 
@@ -5613,8 +5886,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
+        value: (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey))))),
+        expression: "!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
       }],
       tag: "div",
       attrs: {
@@ -5639,8 +5912,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
+        value: (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey))))),
+        expression: "!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
       }],
       tag: "div",
       attrs: {
@@ -5672,7 +5945,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "status": _vm.getChildCssStatus(index),
         "options": {
           name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
-        }
+        },
+        "removeStatus": true,
+        "index": index,
+        "parentID": _vm.elem_id,
+        "path": _vm.path
       }
     }, _vm._l((_vm.elements[index].props.css), function(one) {
       return (one.type != 'none' && (one.parentSetStatus == 'child')) ? _c(_vm.setModule(one), {
@@ -5698,8 +5975,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
+        value: (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey))))),
+        expression: "!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
       }],
       tag: "div",
       attrs: {
@@ -5724,8 +6001,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
+        value: (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey))))),
+        expression: "!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
       }],
       tag: "div",
       attrs: {
@@ -5757,7 +6034,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "status": _vm.getChildH5CssStatus(index),
         "options": {
           name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
-        }
+        },
+        "removeStatus": true,
+        "index": index,
+        "parentID": _vm.elem_id,
+        "path": _vm.path
       }
     }, _vm._l((_vm.elements[index].props.h5css), function(one) {
       return (one.type != 'none' && (one.parentSetStatus == 'child')) ? _c(_vm.setModule(one), {
@@ -5783,8 +6064,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: ((!one.condition || (one.condition && one.status)) && _vm.getChildSetStatus(one)),
-        expression: "(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
+        value: ((!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey))))) && _vm.getChildSetStatus(one)),
+        expression: "(!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))) && getChildSetStatus(one)"
       }],
       tag: "div",
       attrs: {
@@ -5811,8 +6092,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "show",
         rawName: "v-show",
-        value: (!one.condition || (one.condition && one.status)),
-        expression: "!one.condition || (one.condition && one.status)"
+        value: (!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && _vm.getConditionValue(one.conditionKey))))),
+        expression: "!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
       }],
       tag: "div",
       attrs: {
@@ -5824,17 +6105,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "path": _vm.path
       }
     }) : _vm._e()
-  })), _vm._v(" "), _vm._l((_vm.elements), function(one, index) {
+  })), _vm._v(" "), _c('p', {
+    staticClass: "child-split"
+  }, [_vm._v("子组件设置")]), _vm._v(" "), _vm._l((_vm.elements[0].props.owndata), function(one) {
+    return (one.type != 'none' && (one.parentSetStatus && one.parentSetStatus == 'common')) ? _c(_vm.setModule(one), {
+      tag: "div",
+      attrs: {
+        "parent": _vm.elements[0].props.owndata,
+        "options": one,
+        "ischildset": "ischildset",
+        "elem_id": _vm.elem_id,
+        "ischild": _vm.ischild,
+        "path": _vm.path
+      }
+    }) : _vm._e()
+  }), _vm._v(" "), _vm._l((_vm.elements), function(one, index) {
     return _c('yh-edit-uplist', {
       key: index,
       attrs: {
         "options": {
           name: _vm.elements[index].props.data[_vm.elements[index].props.yh_data_name].value
         },
-        "status": true
+        "status": _vm.getChildDataStatus(index),
+        "removeStatus": true,
+        "index": index,
+        "parentID": _vm.elem_id,
+        "path": _vm.path
       }
     }, _vm._l((_vm.elements[index].props.data), function(one) {
-      return (one.type != 'none') ? _c(_vm.setModule(one), {
+      return (one.type != 'none' && (!one.parentSetStatus || one.parentSetStatus == 'child')) ? _c(_vm.setModule(one), {
         tag: "div",
         attrs: {
           "parent": _vm.elements[index].props.data,
@@ -5884,7 +6183,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "options": {
         name: _vm.options.cn
-      }
+      },
+      "status": _vm.options.value
     }
   }, _vm._l((_vm.options.value), function(one, index) {
     return _c('yh-edit-uplist', {
@@ -5892,7 +6192,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "options": {
           name: _vm.options.value[index][_vm.options.name].value
-        }
+        },
+        "status": _vm.options.value[index],
+        "removeStatus": one.removeStatus
       }
     }, _vm._l((_vm.options.value[index]), function(one) {
       return (one.type != 'none') ? _c(_vm.setModule(one), {
@@ -5971,7 +6273,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "options": _vm.optionsData,
       "ischildset": _vm.ischildset,
       "eindex": _vm.eindex,
-      "index": _vm.index
+      "index": _vm.index,
+      "path": _vm.path
     },
     on: {
       "setValue": _vm.setValue
@@ -6064,7 +6367,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "icon"
   }), _vm._v(" "), _c('span', {
     staticClass: "name"
-  }, [_vm._v(_vm._s(_vm.options.name))])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.options.name))]), _vm._v(" "), (_vm.removeStatus) ? _c('span', {
+    staticClass: "remove",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        _vm.removeElement($event)
+      }
+    }
+  }, [_vm._v("x")]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "yh-uplist-set-content hide"
   }, [_vm._t("default")], 2)]) : _vm._e()
 },staticRenderFns: []}
@@ -6188,9 +6500,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.hideChoice($event)
       }
     }
-  }, [_c('div', {
+  }, [(_vm.options.name) ? _c('div', {
     staticClass: "yh-edit-text"
-  }, [_vm._v(_vm._s(_vm.options.name) + _vm._s(_vm.options.name ? '：' : ''))]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.options.name) + _vm._s(_vm.options.name ? '：' : ''))]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "yh-edit-value clearfix"
   }, [_c('input', {
     class: {
@@ -6271,13 +6583,13 @@ var content = __webpack_require__(33);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("25adcd69", content, false);
+var update = __webpack_require__(2)("7140fc22", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-07cc861a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-07cc861a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-07cc861a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-07cc861a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-image.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -6531,13 +6843,13 @@ var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("4b87ecc1", content, false);
+var update = __webpack_require__(2)("e7d93d72", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b2f8020a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b2f8020a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b2f8020a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b2f8020a\",\"scoped\":false,\"hasInlineConfig\":false}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./yh-edit-color.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });

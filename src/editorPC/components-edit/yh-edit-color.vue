@@ -81,10 +81,13 @@
                 }
             },
             setValue(name,actualValue,value){
+                let type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
+                        : 'setValue'
                 if(this.options.backstatus){
                     this.$emit('setValue',name,value,value)
                 }else{
-                    this.$store.commit('setValue',{
+                    this.$store.commit(edittype,{
                         parent:this.options.parent ? this.options.parent : 'css',
                         eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -92,7 +95,8 @@
                         stylename:name,
                         actualValue:value,
                         designValue:value,
-                        path:this.path
+                        path:this.path,
+                        store:this.$store
                     })
                 }
             },
@@ -119,7 +123,8 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
+    @import '../css/index.scss';
     .yh-edit-chooser {
         width:25px;
         height:25px;
@@ -154,6 +159,6 @@
         float:left;
     }
     .yh-edit-chooser .yh-edit-list li.transparent{
-        background:url('http://localhost:9000/static/images/icons.png') no-repeat 0 -1700px;
+        background:url($host+'static/images/icons.png') no-repeat 0 -1700px;
     }
 </style>

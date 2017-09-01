@@ -4,7 +4,8 @@
         :options="optionsData"
         :ischildset="ischildset"
         :eindex="eindex"
-        :index="index" >
+        :index="index"
+        :path="path" >
     </yh-edit-input>
 </template>
 <script>
@@ -20,7 +21,8 @@
             'options',
             'elem_id',   // 当前被选中元素的ID
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            'ischild'
+            'ischild',
+            'path'
         ],
         data(){
             return {
@@ -32,6 +34,7 @@
                     type:'text',
                     classname:'yhtext',
                     style:this.parent,
+                    edittype:this.options.edittype,
                     backstatus:true
                 },
                 changeStatus:false
@@ -41,18 +44,24 @@
             
         },
         methods:{
+            // yh-edit-text
             setValue(name,actualValue,value){
+                let type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
+                        : 'setValue'
                 if(this.options.backstatus){
                     this.$emit('setValue',name,value,value)
                 }else{
-                    this.$store.commit('setValue',{
+                    this.$store.commit(edittype,{
                         parent:this.options.parent ? this.options.parent : 'css',
                         eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                         ischildset:this.ischildset ? this.ischildset : '',
                         stylename:name,
                         actualValue:value,
-                        designValue:value
+                        designValue:value,
+                        path:this.path,
+                        store:this.$store
                     })
                 }
             }

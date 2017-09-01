@@ -78,7 +78,10 @@
                     index = parseInt(target.attributes['index'].value),
                     svalue = this.options.options[index].value,  // 展示出来的字体大小（针对750的宽）
                     cnvalue = this.options.options[index].cn,
-                    list = this.$refs['yh-edit-list']
+                    list = this.$refs['yh-edit-list'],
+                    type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
+                        : 'setValue'
                 list.style.display = 'none'
                 
                 if(this.options.backstatus){
@@ -87,7 +90,7 @@
                         value+(this.options.realunit ? this.options.realunit : ''),
                         svalue+(this.options.unit ? this.options.unit : ''))
                 }else{
-                    this.$store.commit('setValue',{
+                    this.$store.commit(edittype,{
                         parent:this.options.parent ? this.options.parent : 'css',
                         eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -96,7 +99,8 @@
                         actualValue:value+(this.options.realunit ? this.options.realunit : ''),
                         designValue:svalue+(this.options.unit ? this.options.unit : ''),
                         cnvalue:cnvalue,
-                        path:this.path
+                        path:this.path,
+                        store:this.$store
                     })
                 }
             }

@@ -44,8 +44,14 @@
             <p></p>
         </div>
         <!--添加框-->
-        <yh-edit-prompt @setListCol="setListCol"></yh-edit-prompt>
+        <yh-edit-prompt
+            id="yh-edit-prompt"
+            title="请输入您当前点击的组件要生成几列"
+            text="列："
+            @setListCol="setListCol"></yh-edit-prompt>
         <yh-edit-add-companyposition @addChildData="addChildData"></yh-edit-add-companyposition>
+
+        <yh-custom ></yh-custom>
     </div>
 </template>
 <script>
@@ -64,10 +70,12 @@
     import YHLib from './yh-lib.vue'
     import YHEditPrompt from '../components-edit/yh-edit-prompt.vue'
     import YHEditAddCompanyPosition from '../components-edit/yh-edit-add-CompanyPosition.vue'
+    import YHCustom from './yh-custom.vue'
     let components = {
         'yh-lib':YHLib,
         'yh-edit-add-companyposition':YHEditAddCompanyPosition,
-        'yh-edit-prompt':YHEditPrompt
+        'yh-edit-prompt':YHEditPrompt,
+        'yh-custom':YHCustom
     }
 
     export default {
@@ -81,7 +89,8 @@
             'selected',
             'triggerId',
             'childClassify',
-            'parentmodule'
+            'parentmodule',
+            'customStatus'
         ]),
         data() {
             return {
@@ -135,6 +144,7 @@
         },
         mounted(){
             this.getPageData()
+            this.getCustomData()
         },
         methods:{
             recoveryData,
@@ -195,6 +205,19 @@
                     data.props
                 )
                 this.$store.commit('addChildElement',data)
+            },
+            getCustomData(){
+                let self = this
+                axios.get(this.connhost+'v3/api/editorPC/getCustomData')
+                .then(response => {
+                    let content = response.data.content
+                    
+                    self.$store.commit('initCustom',{
+                        content:content
+                    })
+                },response => {
+                    console.log(response.body.message)
+                })
             },
             getPageData(){
                 let self = this,
@@ -282,7 +305,7 @@
                 }
                 return data
             },
-            bindElement(html){
+            /*bindElement(html){
                 let children = $(html).children(),
                     elements = [],
                     current = {},
@@ -325,7 +348,7 @@
                 }
                 this.$store.commit('addElement',elements)
                 this.initStatus = true
-            },
+            },*/
             loadComponentEvent(name,path,coltype,callback){
                 import(/* webpackChunkName:name */'../components/'+path+'/index.vue')
                 // import(/* webpackChunkName:name */'http://localhost:9000/dist/editorPC/components/'+name+'.js')
@@ -566,6 +589,7 @@
     }
 </script>
 <style lang="scss">
+    @import '../../../public/css/init.css';
     @import '../css/index.scss';
     /**页面样式**/
     [yh-editor]{

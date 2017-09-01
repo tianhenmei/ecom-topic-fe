@@ -1,6 +1,6 @@
 ##安装步骤##
 
-1.  全局安装node(v6.11.0 及以上)、npm(v3.10.10 及以上)
+1.  全局安装node(v7.1.0 及以上)、npm(v3.10.10 及以上)
 2.  进入根目录(即package.json所在目录), 运行 npm install, 它会安装开发及编译环境, 比如gulp、webpack、vue等组件
 
 

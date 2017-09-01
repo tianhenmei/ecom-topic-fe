@@ -13,7 +13,7 @@
     <div class="yh-edit-input clearfix" :class="setClassname"
         @mouseenter.stop.prevent="showChoice"
         @mouseleave.stop.prevent="hideChoice">
-        <div class="yh-edit-text">{{options.name}}{{options.name ? '：' : ''}}</div>
+        <div class="yh-edit-text" v-if="options.name">{{options.name}}{{options.name ? '：' : ''}}</div>
         <div class="yh-edit-value clearfix">
             <input
                 :class="{'yh-edit-value-input-long': !options.unit}"
@@ -51,10 +51,14 @@
                 return (!!this.options.default) && this.options.default != false && this.options.default != 0
             },
             setClassname(){
+                let str = ''
                 if(this.options.classname){
-                    return 'yh-edit-'+this.options.classname
+                    str += 'yh-edit-'+this.options.classname
                 }
-                return ''
+                if(!this.options.name){
+                    str += ' yh-eidt-combine'
+                }
+                return str
             },
             getDesignValue(){
                 let actualValue = this.options.style[this.options.stylename].value
@@ -107,7 +111,10 @@
             setChoice(e){
                 let choice = this.$refs['yh-edit-choice'],
                     value = parseInt(e.target.getAttribute('value')),
-                    number = (value || value == 0) ? value : e.target.getAttribute('value')/*,
+                    number = (value || value == 0) ? value : e.target.getAttribute('value'),
+                    type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
+                        : 'setValue'/*,
                     elem = document.getElementsByClassName('setting')[0],
                     width = elem.style.width,
                     height = elem.style.height,//getComputedValue(elem,'height'),
@@ -120,7 +127,7 @@
                 if(this.options.backstatus){
                     this.$emit('setValue',this.options.stylename,number,number)   // this.options.def
                 }else{
-                    this.$store.commit('setValue',{
+                    this.$store.commit(edittype,{
                         parent:this.options.parent ? this.options.parent : 'css',
                         eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -164,7 +171,10 @@
                     unit = this.options.unit ? this.options.unit : '',
                     realunit = this.options.realunit ? this.options.realunit : '',
                     stylename = this.options.stylename,
-                    actualValue = value // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
+                    actualValue = value,
+                    type = this.options.edittype,
+                    edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
+                        : 'setValue' // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
                 
                 // actualValue : 实际上使用的值
                 // value : 展示用的值 （designValue）
@@ -179,7 +189,7 @@
                     if(this.options.backstatus){
                         this.$emit('setValue',stylename,actualValue,value)
                     }else{
-                        this.$store.commit('setValue',{
+                        this.$store.commit(edittype,{
                             parent:this.options.parent ? this.options.parent : 'css',
                             eindex:!(this.eindex == -1 || this.eindex == undefined || typeof this.eindex == 'string') ? this.eindex : -1,
                             index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
@@ -251,5 +261,20 @@
         background-color: #fff;
         z-index: 2;
         color: #666;
+    }
+    .yh-eidt-combine.yh-edit-input {
+        width:82px;
+    }
+    .yh-eidt-combine.yh-edit-input .yh-edit-value{
+        width:82px;
+    }
+    .yh-eidt-combine.yh-edit-input .yh-edit-value input {
+        width:60px;
+    }
+    .yh-eidt-combine.yh-edit-color {
+        width:92px;
+    }
+    .yh-eidt-combine.yh-edit-color .yh-edit-value {
+        width:62px;
     }
 </style>

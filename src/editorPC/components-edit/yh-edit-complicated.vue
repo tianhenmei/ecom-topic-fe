@@ -23,7 +23,7 @@
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
                     <div v-for="one in css" :is="setModule(one)" 
                         v-if="one.type != 'none'" 
-                        v-show="!one.condition || (one.condition && one.status)"
+                        v-show="!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
                         :parent="css"
                         :options="one"
                         :elem_id="elem_id"
@@ -37,7 +37,7 @@
                         :status="true">
                         <div v-for="one in css" :is="setModule(one)" 
                             v-if="one.type != 'none'" 
-                            v-show="!one.condition || (one.condition && one.status)"
+                            v-show="!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
                             :parent="css"
                             :options="one"
                             :elem_id="elem_id"
@@ -78,7 +78,7 @@
             <div v-if="getContentStatus('h5css')" :slot="setContentSlot('h5css')" class="yh-edit-tab-content yh-edit-deployh5 clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
                     <div v-for="one in h5css" :is="setModule(one)" v-if="one.type != 'none'" 
-                        v-show="!one.condition || (one.condition && one.status)"
+                        v-show="!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
                         :parent="h5css"
                         :options="one"
                         :elem_id="elem_id"
@@ -92,7 +92,7 @@
                         :status="true">
                         <div v-for="one in h5css" :is="setModule(one)" 
                             v-if="one.type != 'none'" 
-                            v-show="!one.condition || (one.condition && one.status)"
+                            v-show="!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
                             :parent="h5css"
                             :options="one"
                             :elem_id="elem_id"
@@ -133,7 +133,7 @@
             <div v-if="getContentStatus('data')" :slot="setContentSlot('data')" class="yh-edit-tab-content yh-edit-owndata clearfix">
                 <div v-if="!elements || elements.length == 0" class="yh-component-set">
                     <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" 
-                        v-show="(!one.condition || (one.condition && one.status)) && getChildSetStatus(one)"
+                        v-show="(!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))) && getChildSetStatus(one)"
                         :parent="owndata"
                         :options="one"
                         ischildset=""
@@ -148,7 +148,7 @@
                         :options="{name:'外壳数据设置'}"
                         :status="true">
                         <div v-for="one in owndata" :is="setModule(one)" v-if="one.type != 'none'" 
-                            v-show="!one.condition || (one.condition && one.status)"
+                            v-show="!one.condition || (one.condition && one.status && (!one.conditionKey || (one.conditionKey && getConditionValue(one.conditionKey))))"
                             :parent="owndata"
                             :options="one"
                             ischildset=""
@@ -157,14 +157,25 @@
                             :path="path">
                         </div>
                     </yh-edit-uplist>
+                    <p class="child-split">子组件设置</p>
+                    <div v-for="one in elements[0].props.owndata" :is="setModule(one)" 
+                        v-if="one.type != 'none' && (one.parentSetStatus && one.parentSetStatus == 'common')"
+                        :parent="elements[0].props.owndata"
+                        :options="one"
+                        ischildset="ischildset"
+                        :elem_id="elem_id"
+                        :ischild="ischild"
+                        :path="path">
+                    </div>
                     <yh-edit-uplist v-for="(one,index) in elements" :key="index"
                         :options="{name:elements[index].props.data[elements[index].props.yh_data_name].value}"
-                        :status="true"
+                        :status="getChildDataStatus(index)"
                         :removeStatus="true"
                         :index="index"
                         :parentID="elem_id"
                         :path="path">
-                        <div v-for="one in elements[index].props.data" :is="setModule(one)" v-if="one.type != 'none'"
+                        <div v-for="one in elements[index].props.data" :is="setModule(one)"
+                            v-if="one.type != 'none' && (!one.parentSetStatus || one.parentSetStatus == 'child')"
                             :parent="elements[index].props.data"
                             :options="one"
                             :eindex="index"
@@ -273,6 +284,11 @@
             
         },
         methods:{
+            getConditionValue(key){
+                let temp = key.split('.'),
+                    t = temp[0] == 'data' ? 'owndata' : temp[0]
+                return this[t][temp[1]].status
+            },
             getChildCssStatus(index){
                 let css = this.elements[index].props.css,
                     status = false,
@@ -291,6 +307,18 @@
                     i = 0
                 for(i in css){
                     if(css[i].parentSetStatus == 'child'){
+                        status = true
+                        break
+                    }
+                }
+                return status
+            },
+            getChildDataStatus(index){
+                let data = this.elements[index].props.data,
+                    status = false,
+                    i = 0
+                for(i in data){
+                    if(!data[i].parentSetStatus || data[i].parentSetStatus == 'child'){
                         status = true
                         break
                     }

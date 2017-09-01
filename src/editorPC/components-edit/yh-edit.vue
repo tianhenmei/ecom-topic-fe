@@ -16,7 +16,7 @@
         without：当前不需要那些设置，不需要为true，没有可不传
 -->
 <template>
-    <div class="yh-edit-layer clearfix">
+    <div class="yh-edit-layer clearfix" :ref="elem_id+'-yh-edit-layer'">
         <yh-edit-tab :props="editOptions">
             <div class="yh-edit-tab-content yh-edit-basic clearfix" slot="content0">
                 <yh-edit-base 
@@ -55,7 +55,9 @@
             'yh-edit-event':YHEditEvent,
             'yh-edit-state':YHEditState
         },
-        props:['props','mold','states','event','basewith','stateswith','no'],
+        props:[
+            'elem_id',  // 组件ID
+            'props','mold','states','event','basewith','stateswith','no'],
         data(){
             let self = this,
                 tab = [],

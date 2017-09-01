@@ -64,6 +64,27 @@
         <ul class="yh-lib-element clearfix">
             <li class="content">
                 <ul class="clearfix">
+                    <li class="li_custom yh-lib-parent" @click.stop.prevent="toggleListEvent">
+                        <span class="yh-lib-icon"></span> 自定义
+                        <div class="yh-lib-components hide">
+                            <div class="cpElement clearfix">
+                                <p class="title twoToOneTitle"></p>
+                                <ul class="yh-lib-subcomponents">
+                                    <li yh-module-name="Custom style1" @click.stop.prevent="setCustomComponents" >
+                                        添加
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cpElement clearfix" v-if="yh_custom && yh_custom.length > 0">
+                                <p class="title twoToOneTitle">自定义</p>
+                                <ul class="yh-lib-subcomponents">
+                                    <li v-for="(one,index) in yh_custom" :yh-module-name="'Custom '+one" @click.stop.prevent="addComponents" >
+                                        样式 {{index+1}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
                     <li class="li_image yh-lib-parent" @click.stop.prevent="toggleListEvent">
                         <span class="yh-lib-icon"></span> 图片
                         <div class="yh-lib-components hide">
@@ -393,6 +414,8 @@
     export default {
         computed:mapState([
             'host',
+            'customStatus',
+            'yh_custom'
         ]),
         data(){
             return {
@@ -623,6 +646,10 @@
                 }
             },
             addComponents(e){
+                this.hideLib(e)
+                this.$emit('addComponents',e)
+            },
+            hideLib(e){
                 let parent = getParentByClassName(e.target,'yh-lib-parent'),
                     child = getChildrenByClassName(parent,'yh-lib-components')
                 if(child && child.length > 0){
@@ -630,7 +657,10 @@
                         child[0].className += ' hide'
                     }
                 }
-                this.$emit('addComponents',e)
+            },
+            setCustomComponents(e){
+                this.hideLib(e)
+                this.$store.commit('setCustomStatus')
             }
         }
     }

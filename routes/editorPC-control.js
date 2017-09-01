@@ -26,7 +26,7 @@ var crypto = require('crypto'),  // 使用它生成时间的hash值
 var writeHTML = require('../build/render-pc.js'),
     writeHTMLH5 = require('../build/render-h5.js'),
     child_process = require('child_process')
- 
+    
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
@@ -178,6 +178,50 @@ router.post('/api/editorPC/upload',function(req,res){
             // });
         }
     });
+});
+
+router.post('/api/editorPC/saveComponent',function(req,res){
+    var page = req.body;
+    console.log('Saving component...')
+    // 创建文件及文件夹
+    mkdirsSync('src/editorPC/components/Custom/style1','0777');
+    mkdirsSync('src/editorPC/components-pc/Custom/style1','0777');
+    mkdirsSync('src/editorPC/components-h5/Custom/style1','0777');
+    writeFileSync('src/editorPC/components/Custom/style1/index.vue',page.html)
+    writeFileSync('src/editorPC/components/Custom/style1/index.css',page.css)
+    writeFileSync('src/editorPC/components-pc/Custom/style1/index.vue',page.PC)
+    writeFileSync('src/editorPC/components-pc/Custom/style1/index.css',page.css)
+    writeFileSync('src/editorPC/components-h5/Custom/style1/index.vue',page.H5)
+    writeFileSync('src/editorPC/components-h5/Custom/style1/index.css',page.h5css)
+    res.json({
+        state:200,
+        success:true,
+        message:"保存成功"
+    })
+});
+
+router.get('/api/editorPC/getCustomData',function(req,res){
+    fs.readdir('src/editorPC/components/Custom/', function(err, files) {
+        if (err) {  
+            console.log('read dir error');
+            res.json({
+                state:200,
+                success:false,
+                message:"Something wrong"
+            })
+            next(err)
+        }else{
+            let content = []
+            files.forEach(function(item){
+                content.push(item)
+            })
+            res.json({
+                state:200,
+                success:true,
+                content:content
+            })
+        }
+    })
 });
 
 function setResJSON(res,status,str){
@@ -396,6 +440,10 @@ function writeFile(path,string){
         }
         console.log('update: '+path);
     });
+}
+
+function writeFileSync(path,string){
+    fs.writeFileSync(path,string,'utf8');
 }
 
 //创建多层文件夹 同步
