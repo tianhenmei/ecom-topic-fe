@@ -4,6 +4,7 @@
 		"script"    : "./index.js",
 		"watch":true,
 		"ignore_watch":["node_modules"],
+		"max_memory_restart": "1G",
 		"env":{
 			"PORT": 9000,
 			"NODE_ENV":"development"

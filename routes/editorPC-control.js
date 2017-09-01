@@ -3,7 +3,7 @@
  */
 var fs = require('fs');
 var path = require('path');
-var bodyParser = require('body-parser');
+// var bodyParser = require('body-parser');
 var express = require('express'),
     router = express.Router(),
     uglify = require('uglify-js')
@@ -26,13 +26,29 @@ var crypto = require('crypto'),  // 使用它生成时间的hash值
 var writeHTML = require('../build/render-pc.js'),
     writeHTMLH5 = require('../build/render-h5.js'),
     child_process = require('child_process')
+<<<<<<< HEAD
     
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+=======
+ 
+// router.use(bodyParser.json({limit: '50mb'}));
+// router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+>>>>>>> f60365add4ea40b2a2e00cf6fa5cd284920c05df
 // router.use(bodyParser.json());
-router.use(bodyParser.urlencoded());
+// router.use(bodyParser.urlencoded());
 
 // 保存数据
+router.get('/api/editorPC/testError',function(req,res){
+    throw new Error('test error')
+});
+router.get('/api/editorPC/testRight',function(req,res){
+    res.json({
+        state:200,
+        success:true,
+        message:'测试成功'
+    })
+});
 router.post('/api/editorPC/saveData',function(req,res){
     var page = req.body;
     console.log('Saving data...')
@@ -53,7 +69,7 @@ router.post('/api/editorPC/savePage',function(req,res){
     setFile(page,res);
 });
 
-router.post('/api/editorPC/getPageData',function(req,res){
+router.post('/api/editorPC/getPageData',function(req,res,next){
     var name = req.body.html ? req.body.html : 'text',
         templateId = req.body.id,
         dirpath = saveDir+req.body.html
@@ -131,7 +147,7 @@ router.post('/api/editorPC/getPageData',function(req,res){
     })
 });
 
-router.post('/api/editorPC/upload',function(req,res){
+router.post('/api/editorPC/upload',function(req,res,next){
     //生成multiparty对象，并配置上传目标路径
     var form = new multiparty.Form({uploadDir: staticPath});
     //上传完成后处理
@@ -480,8 +496,9 @@ router.use(function(req,res,next){
 });
 
 router.use(function(err,req,res,next){
-    console.log(err.stack);
-    res.status(500).send('Something broke!');
+    // console.log(err.stack);
+    // res.status(500).send('Something broke!');
+    next(err);
 });
 
 module.exports = router;

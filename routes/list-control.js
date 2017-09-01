@@ -76,13 +76,15 @@ router.post('/getListData',function(req,res){
 
 
 router.use(function(req,res,next){
-    console.log(req.url);
-    res.status(404).send('Sorry cant find that!');
+    // console.log(req.url);
+    // res.status(404).send('Sorry cant find that!');
+    next();
 });
 
 router.use(function(err,req,res,next){
-    console.log(err.stack);
-    res.status(500).send('Something broke!');
+    // console.log(err.stack);
+    // res.status(500).send('Something broke!');
+    next(err);
 });
 
 module.exports = router;
