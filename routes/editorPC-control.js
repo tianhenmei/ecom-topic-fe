@@ -26,15 +26,8 @@ var crypto = require('crypto'),  // 使用它生成时间的hash值
 var writeHTML = require('../build/render-pc.js'),
     writeHTMLH5 = require('../build/render-h5.js'),
     child_process = require('child_process')
-<<<<<<< HEAD
-    
-router.use(bodyParser.json({limit: '50mb'}));
-router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-=======
- 
 // router.use(bodyParser.json({limit: '50mb'}));
 // router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
->>>>>>> f60365add4ea40b2a2e00cf6fa5cd284920c05df
 // router.use(bodyParser.json());
 // router.use(bodyParser.urlencoded());
 
