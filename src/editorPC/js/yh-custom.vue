@@ -39,7 +39,7 @@
                 </yh-edit-custom>
             </div>
             <div class="yh-custom-content"
-                v-show="custom.activeStatus == 'pc'"
+                :class="{'yh-custom-hide': custom.activeStatus != 'pc'}"
                 ref="yh-custom-content"
                 :style="setCustomStyle">
                 <div v-for="(element,index) in custom.elements" :is="element.module"
@@ -65,15 +65,15 @@
                     <p></p>
                 </div>
             </div>
-            <div class="yh-custom-content-h5"
-                v-show="custom.activeStatus == 'h5'"
+            <yh-custom-h5 ref="yh-custom-content-h5"></yh-custom-h5>
+            <!-- <div class="yh-custom-content-h5"
+                :class="{'yh-custom-hide': custom.activeStatus != 'h5'}"
                 ref="yh-custom-content-h5"
                 :style="setCustomStyleH5">
                 <div v-for="(element,index) in custom.elements_h" :is="element.module"
                     :props="element.props"
                     :path="element.path"
                     :eindex="index"></div>
-                <!-- 选中框 -->
                 <div class="yh-custom-selectTop yh-custom-selection" :class="{'hide':!custom.selectStatusH5}" ref="yh-custom-select0-h5">
                     <p class="center"></p>
                     <p class="rotate"></p>
@@ -91,7 +91,7 @@
                     <p class="center"></p>
                     <p></p>
                 </div>
-            </div>
+            </div>-->
         </div>
         <yh-edit-prompt
             id="yh-custom-edit-prompt"
@@ -113,6 +113,7 @@
     import YHButton from '../components/Base/yh-button.vue'
     import YHText from '../components/Base/yh-text.vue'
     import YHPosition from '../components/Base/yh-position.vue'
+    import YHCustomH5 from './yh-custom-h5.vue'
     import YHImageH5 from '../components/Base/yh-image-h5.vue'
     import YHButtonH5 from '../components/Base/yh-button-h5.vue'
     import YHTextH5 from '../components/Base/yh-text-h5.vue'
@@ -126,6 +127,7 @@
             'yh-button':YHButton,
             'yh-text':YHText,
             'yh-position':YHPosition,
+            'yh-custom-h5':YHCustomH5,
             'yh-image-h5':YHImageH5,
             'yh-button-h5':YHButtonH5,
             'yh-text-h5':YHTextH5,
@@ -189,50 +191,50 @@
                 }
                 return style
             },
-            setCustomStyleH5(){
-                let style = 'width:'+this.custom.h5css.width.value+'px; '+
-                    'height:'+this.custom.h5css.height.value+'px; '+
-                    // 'backgroundColor:'+this.custom.h5css.background_color.value+'; '+
-                    // 'backgroundImage:'+this.custom.h5css.background_image.value+'; '+
-                    // 'backgroundRepeat:'+this.custom.h5css.background_repeat.value+'; '+
-                    'borderColor:'+this.custom.h5css.border_color.value+'; '+
-                    'borderWidth:'+this.custom.h5css.border_width.value+'px; '+
-                    'borderStyle:'+this.custom.h5css.border_style.value+'; '+
-                    'borderRadius:'+this.custom.h5css.border_radius.value+'px; '+
-                    'boxShadow:'+this.setBoxShadow+'; '+
-                    'position:relative; '
-                switch(this.custom.h5css.background_type.value){
-                    case 'background-color':
-                        style += 'background-color:'+this.custom.h5css.background_color.value+'; '
-                        break
-                    case 'background-image':
-                        style += 'background-color:'+this.custom.h5css.background_color.value+'; '+
-                               'background-image:'+(this.custom.h5css.background_image.value == 'none' || this.custom.h5css.background_image.value == 'undefined' ? 'none' : 'url('+this.custom.h5css.background_image.value+')')+'; '+
-                               'background-repeat:'+this.custom.h5css.background_repeat.value+'; '
-                        break
-                    case 'gradient-top-bottom':
-                        style += ''+
-                            'background:'+this.custom.h5css.gradient_color_top.value+';'+
-                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_top.value+',endcolorstr='+this.custom.h5css.gradient_color_bottom.value+',gradientType=0);'+
-                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_top.value+',endcolorstr='+this.custom.h5css.gradient_color_bottom.value+',gradientType=0);'+
-                            'background:-moz-linear-gradient(top, '+this.custom.h5css.gradient_color_top.value+'), '+this.custom.h5css.gradient_color_bottom.value+'); '+
-                            'background:-o-linear-gradient(top, '+this.custom.h5css.gradient_color_top.value+'), '+this.custom.h5css.gradient_color_bottom.value+'); '+
-                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.custom.h5css.gradient_color_top.value+'),color-stop(100%,'+this.custom.h5css.gradient_color_bottom.value+'));'+       
-                        ''
-                        break
-                    case 'gradient-left-right':
-                        style += ''+
-                            'background:'+this.custom.h5css.gradient_color_left.value+';'+
-                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_left.value+',endcolorstr='+this.custom.h5css.gradient_color_right.value+',gradientType=0);'+
-                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_left.value+',endcolorstr='+this.custom.h5css.gradient_color_right.value+',gradientType=0);'+
-                            'background:-moz-linear-gradient(left, '+this.custom.h5css.gradient_color_left.value+'), '+this.custom.h5css.gradient_color_right.value+'); '+
-                            'background:-o-linear-gradient(left, '+this.custom.h5css.gradient_color_left.value+'), '+this.custom.h5css.gradient_color_right.value+'); '+
-                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.custom.h5css.gradient_color_left.value+'),color-stop(100%,'+this.custom.h5css.gradient_color_right.value+'));'+       
-                        ''
-                        break
-                }
-                return style
-            }
+            // setCustomStyleH5(){
+            //     let style = 'width:'+this.custom.h5css.width.value+'px; '+
+            //         'height:'+this.custom.h5css.height.value+'px; '+
+            //         // 'backgroundColor:'+this.custom.h5css.background_color.value+'; '+
+            //         // 'backgroundImage:'+this.custom.h5css.background_image.value+'; '+
+            //         // 'backgroundRepeat:'+this.custom.h5css.background_repeat.value+'; '+
+            //         'borderColor:'+this.custom.h5css.border_color.value+'; '+
+            //         'borderWidth:'+this.custom.h5css.border_width.value+'px; '+
+            //         'borderStyle:'+this.custom.h5css.border_style.value+'; '+
+            //         'borderRadius:'+this.custom.h5css.border_radius.value+'px; '+
+            //         'boxShadow:'+this.setBoxShadow+'; '+
+            //         'position:relative; '
+            //     switch(this.custom.h5css.background_type.value){
+            //         case 'background-color':
+            //             style += 'background-color:'+this.custom.h5css.background_color.value+'; '
+            //             break
+            //         case 'background-image':
+            //             style += 'background-color:'+this.custom.h5css.background_color.value+'; '+
+            //                    'background-image:'+(this.custom.h5css.background_image.value == 'none' || this.custom.h5css.background_image.value == 'undefined' ? 'none' : 'url('+this.custom.h5css.background_image.value+')')+'; '+
+            //                    'background-repeat:'+this.custom.h5css.background_repeat.value+'; '
+            //             break
+            //         case 'gradient-top-bottom':
+            //             style += ''+
+            //                 'background:'+this.custom.h5css.gradient_color_top.value+';'+
+            //                 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_top.value+',endcolorstr='+this.custom.h5css.gradient_color_bottom.value+',gradientType=0);'+
+            //                 '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_top.value+',endcolorstr='+this.custom.h5css.gradient_color_bottom.value+',gradientType=0);'+
+            //                 'background:-moz-linear-gradient(top, '+this.custom.h5css.gradient_color_top.value+'), '+this.custom.h5css.gradient_color_bottom.value+'); '+
+            //                 'background:-o-linear-gradient(top, '+this.custom.h5css.gradient_color_top.value+'), '+this.custom.h5css.gradient_color_bottom.value+'); '+
+            //                 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.custom.h5css.gradient_color_top.value+'),color-stop(100%,'+this.custom.h5css.gradient_color_bottom.value+'));'+       
+            //             ''
+            //             break
+            //         case 'gradient-left-right':
+            //             style += ''+
+            //                 'background:'+this.custom.h5css.gradient_color_left.value+';'+
+            //                 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_left.value+',endcolorstr='+this.custom.h5css.gradient_color_right.value+',gradientType=0);'+
+            //                 '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.custom.h5css.gradient_color_left.value+',endcolorstr='+this.custom.h5css.gradient_color_right.value+',gradientType=0);'+
+            //                 'background:-moz-linear-gradient(left, '+this.custom.h5css.gradient_color_left.value+'), '+this.custom.h5css.gradient_color_right.value+'); '+
+            //                 'background:-o-linear-gradient(left, '+this.custom.h5css.gradient_color_left.value+'), '+this.custom.h5css.gradient_color_right.value+'); '+
+            //                 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.custom.h5css.gradient_color_left.value+'),color-stop(100%,'+this.custom.h5css.gradient_color_right.value+'));'+       
+            //             ''
+            //             break
+            //     }
+            //     return style
+            // }
         },
         data(){
             return {
@@ -258,15 +260,33 @@
         },
         methods:{
             undoSelected(e){
-                let i = 0,j = 0,
+                let current = null,
+                    i = 0,j = 0,t = 0,
                     status = false
                 if(this.custom.selectID){
                     for(i = 0; i < this.$children.length; i++){
-                        for(j in this.$children[i].$refs){
-                            if(j == this.custom.selectID){
-                                this.$children[i].$data.editLayerStatus = false
-                                status = true
-                                break
+                        current = this.$children[i]
+                        if(/(yh-custom-content-h5)/g.test(current.$el.className)){
+                            current = current.$children
+                            for(t = 0; t < current.length; t++){
+                                for(j in current[t].$refs){
+                                    if(j == this.custom.selectID){
+                                        current[t].$data.editLayerStatus = false
+                                        status = true
+                                        break
+                                    }
+                                }
+                                if(status){
+                                    break
+                                }
+                            }
+                        }else{
+                            for(j in current.$refs){
+                                if(j == this.custom.selectID){
+                                    current.$data.editLayerStatus = false
+                                    status = true
+                                    break
+                                }
                             }
                         }
                         if(status){
@@ -318,7 +338,10 @@
                                     '        >\n',
                     customElemEnd = '    </div>\n'+
                             '</template>\n'+
-                            '<script>\n',
+                            '<script>\n'+
+                            '    import {\n'+
+                            '        dealStringLine\n'+
+                            '    } from "../../../components/Base/Node.js"\n',
                     jsstart_h5 = 
                             '    export default {\n'+
                             '        props:["props","path","parentmodule"],\n'+
@@ -332,10 +355,11 @@
                     jscontent =     '',
                     jsend = '        },\n'+
                             '        methods:{\n'+
+                            '            dealStringLine\n'+
                             '        },\n'+
                             '    }\n'+
                         '<\/script>',
-                    elem = this.$refs['yh-custom-content-h5'].cloneNode(true),
+                    elem = this.$refs['yh-custom-content-h5'].$refs['yh-custom-content-h5'].cloneNode(true),
                     selection = getChildrenByClassName(elem,'yh-custom-selection'),
                     editLayer = elem.getElementsByClassName('yh-base-edit-layer'),
                     styleElem = elem.getElementsByClassName('yh-custom-style'),
@@ -345,7 +369,124 @@
                     addPositionSetStatus = false,
                     setPositionListStatus = false,
                     baseData = {
-                        h5css:{},
+                        h5css:{
+                            yhcustom_background:{
+                                en:'background',
+                                cn:'背景设置',
+                                parent:'h5css',
+                                type:'uplist',
+                                value:{
+                                    background_type:{
+                                        cn:'背景类型',
+                                        en:'background_type',
+                                        value:this.custom.css.background_type.value,
+                                        cnvalue:this.custom.css.background_type.cnvalue,
+                                        type:'options',
+                                        parent:'h5css.yhcustom_background.value',
+                                        options:[{  // 选项的类容
+                                            cn:'纯背景色',   // 选项中文
+                                            value:'background-color' // 选项真正的值
+                                        },{  // 选项的类容
+                                            cn:'背景图',   // 选项中文
+                                            value:'background-image' // 选项真正的值
+                                        },{
+                                            cn:'上下渐变',
+                                            value:'gradient-top-bottom'
+                                        },{
+                                            cn:'左右渐变',
+                                            value:'gradient-left-right'
+                                        }],
+                                        effect:[
+                                            'h5css.yhcustom_background.value.background_color',
+                                            'h5css.yhcustom_background.value.background_image',
+                                            'h5css.yhcustom_background.value.background_repeat',
+                                            'h5css.yhcustom_background.value.gradient_color_top',
+                                            'h5css.yhcustom_background.value.gradient_color_bottom',
+                                            'h5css.yhcustom_background.value.gradient_color_left',
+                                            'h5css.yhcustom_background.value.gradient_color_right'
+                                        ]
+                                    },
+                                    background_color:{
+                                        cn:'背景颜色',
+                                        en:'background_color',
+                                        value:this.custom.css.background_color.value,
+                                        type:'color',
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['background-color','background-image'],
+                                        status:this.custom.css.background_type.value == 'background-color' || this.custom.css.background_type.value == 'background-image'
+                                    },
+                                    background_image:{
+                                        cn:'背景图',
+                                        en:'background_image',
+                                        value:this.custom.css.background_image.value,
+                                        type:'image',
+                                        mold:'bg',
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['background-image'],
+                                        status:this.custom.css.background_type.value == 'background-image'
+                                    },
+                                    background_repeat:{
+                                        cn:'背景重复',
+                                        en:'background_repeat',
+                                        value:this.custom.css.background_repeat.value,
+                                        cnvalue:'不重复',
+                                        type:'options',
+                                        options:[{
+                                            cn:'不重复',
+                                            value:'no-repeat'
+                                        },{
+                                            cn:'重复',
+                                            value:'repeat'
+                                        },{
+                                            cn:'横向重复',
+                                            value:'repeat-x'
+                                        },{
+                                            cn:'纵向重复',
+                                            value:'repeat-y'
+                                        }],
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['background-image'],
+                                        status:this.custom.css.background_type.value == 'background-image'
+                                    },
+                                    gradient_color_top:{
+                                        cn:'背景-上',
+                                        en:'gradient_color_top',
+                                        value:this.custom.css.gradient_color_top.value,
+                                        type:'color',
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['gradient-top-bottom'],
+                                        status:this.custom.css.background_type.value == 'gradient-top-bottom'
+                                    },
+                                    gradient_color_bottom:{
+                                        cn:'背景-下',
+                                        en:'gradient_color_bottom',
+                                        value:this.custom.css.gradient_color_bottom.value,
+                                        type:'color',
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['gradient-top-bottom'],
+                                        status:this.custom.css.background_type.value == 'gradient-top-bottom'
+                                    },
+                                    gradient_color_left:{
+                                        cn:'背景-左',
+                                        en:'gradient_color_left',
+                                        value:this.custom.css.gradient_color_left.value,
+                                        type:'color',
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['gradient-left-right'],
+                                        status:this.custom.css.background_type.value == 'gradient-left-right'
+                                    },
+                                    gradient_color_right:{
+                                        cn:'背景-右',
+                                        en:'gradient_color_right',
+                                        value:this.custom.css.gradient_color_right.value,
+                                        type:'color',
+                                        parent:'h5css.yhcustom_background.value',
+                                        condition:['gradient-left-right'],
+                                        status:this.custom.css.background_type.value == 'gradient-left-right'
+                                    }
+                                }
+                            }
+                        },
                         data:{}
                     },
                     length = 0,
@@ -467,7 +608,7 @@
                         }
                         if(!hasSetPositionStyleStatus){
                             hasSetPositionStyleStatus = true
-                            jscontent += getPositionStyleFunc(elemData,'h5')
+                            jscontent += this.getPositionStyleFunc(elemData,'h5')
                         }
                         styleElem[i].setAttribute(':style',"setPositionStyle")
                     }else if(/(yh-custom-position-name)/g.test(styleElem[i].className)){
@@ -530,10 +671,10 @@
                 customStyle = this.getCustomStyleFunc('h5')
                 // 设置数据
                 // baseData.h5css baseData.data
-                for(i = 0; i < this.custom.elements.length; i++){
-                    elemData = this.custom.elements[i]
+                for(i = 0; i < this.custom.elements_h.length; i++){
+                    elemData = this.custom.elements_h[i]
                     switch(elemData['yh-module']){
-                        case 'yh-image':
+                        case 'yh-image-h5':
                             switch(elemData.props.data.imagetype.value){
                                 case 'logo':  // 公司logo
                                     break
@@ -544,7 +685,7 @@
                                     baseData.h5css[elemData.props.data.imageen.value+'_src'] = {
                                         cn:elemData.props.data.imagecn.value,
                                         en:elemData.props.data.imageen.value+'_src',
-                                        value:elemData.props.h5css.src.value,
+                                        value:elemData.props.css.src.value,
                                         type:'image',
                                         mold:'src',
                                         parent:'h5css'
@@ -552,7 +693,7 @@
                                     break
                             }
                             break
-                        case 'yh-button':
+                        case 'yh-button-h5':
                             name = elemData.props.data.buttoncn.value
                             enname = elemData.props.data.buttonen.value
                             baseData.h5css[enname+'_button'] = {
@@ -737,7 +878,7 @@
                                 }
                             }
                             break
-                        case 'yh-text':
+                        case 'yh-text-h5':
                             name = elemData.props.data.text_type.value == 'other' ? elemData.props.data.textcn.value+'文案' : elemData.props.data.text_type.cnvalue
                             enname = elemData.props.data.text_type.value == 'other' ? elemData.props.data.texten.value : elemData.props.data.text_type.value
                             baseData.h5css[enname+'_color'] = {
@@ -767,7 +908,7 @@
                                 }
                             }
                             break
-                        case 'yh-position':
+                        case 'yh-position-h5':
                             if(!addPositionSetStatus){
                                 addPositionSetStatus = true
                                 baseData.h5css.position = {
@@ -1428,7 +1569,7 @@
                         }
                         if(!hasSetPositionStyleStatus){
                             hasSetPositionStyleStatus = true
-                            jscontent += getPositionStyleFunc(elemData)
+                            jscontent += this.getPositionStyleFunc(elemData)
                         }
                         styleElem[i].setAttribute(':style',"setPositionStyle")
                     }else if(/(yh-custom-position-name)/g.test(styleElem[i].className)){
@@ -1974,14 +2115,23 @@
                 }
                 let h5data = this.saveComponentH5(baseData)
                 baseData.h5css = h5data.data.h5css
-                if(h5data.data.data.hasOwnProperty(yh_h5data)){
+                if(h5data.data.data.hasOwnProperty('yh_h5data')){
                     baseData.data.yh_h5data = h5data.data.data.yh_h5data
                 }
                 
                 axios.post(this.connhost+'v3/api/editorPC/saveComponent',{
                     html:start+customElemStart+customElemEnd+'\n'+elem.innerHTML+'\n'+end+'\nconst baseData = '+JSON.stringify(baseData)+'\n'+jsstart+customStyle+jscontent+jsend,
                     css:style,
-                    PC:start+customElemStart+'>\n'+elem.innerHTML+'\n    </div>\n</template>\n<script>\n'+jsstart_pc+customStyle+jscontent+'        },\n        methods:{\n},\n    }\n<\/script>',
+                    PC:start+customElemStart+
+                        '    >\n'+
+                        elem.innerHTML+'\n    </div>\n</template>\n<script>\n'+
+                        '    import {\n'+
+                        '        dealStringLine\n'+
+                        '    } from "../../../components/Base/Node.js"\n'+
+                        jsstart_pc+customStyle+jscontent+'        },\n'+
+                        '        methods:{\n'+
+                        '            dealStringLine,\n'+
+                        '},\n    }\n<\/script>',
                     H5:h5data.html,
                     h5css:h5data.css
                 }).then(response => {
@@ -1995,43 +2145,43 @@
                 })
                 console.log(baseData)
             },
-            getPositionStyleFunc(elemData){
+            getPositionStyleFunc(elemData,type = ''){
                 let jscontent = ""+
                     "            setPositionStyle(){\n"+
                     "                let style = ''\n"
                 if(elemData.props.css.border_width.value && elemData.props.css.border_style.value != 'none'){
-                    jscontent += "                    +'border-color:'+this.props.css.position.value.position_border_color.value+'; '\n"
+                    jscontent += "                    +'border-color:'+this.props."+type+"css.position.value.position_border_color.value+'; '\n"
                 }
                 if(elemData.props.css.box_shadow_x.value || elemData.props.css.box_shadow_y.value || elemData.props.css.box_shadow_blur.value){
-                    jscontent += "                    +'box-shadow:'"+elemData.props.css.box_shadow_x.value+"'px '"+elemData.props.css.box_shadow_y.value+"'px '"+elemData.props.css.box_shadow_blur.value+"'px '+this.props.css.position.value.position_box_shadow_color.value'; '\n"
+                    jscontent += "                    +'box-shadow:'"+elemData.props.css.box_shadow_x.value+"'px '"+elemData.props.css.box_shadow_y.value+"'px '"+elemData.props.css.box_shadow_blur.value+"'px '+this.props."+type+"css.position.value.position_box_shadow_color.value'; '\n"
                 }
-                jscontent += "                switch(this.props.css.position.value.position_background_type.value){\n"+
+                jscontent += "                switch(this.props."+type+"css.position.value.position_background_type.value){\n"+
                     "                    case 'background-color':\n"+
-                    "                        style += 'background:'+this.props.css.position.value.position_background_color.value+'; '\n"+
+                    "                        style += 'background:'+this.props."+type+"css.position.value.position_background_color.value+'; '\n"+
                     "                    break;\n"+
                     "                    case 'background-image':\n"+
-                    "                        style += 'background:'+this.props.css.position.value.position_background_color.value+' '+\n"+
-                    "                            (this.props.css.position.value.position_background_image.value == \'none\' || this.props.css.position.value.position_background_image.value == \'undefined\' ? \'none\' : 'url('+this.props.css.position.value.position_background_image.value+')')+' '+\n"+
-                    "                            this.props.css.position.value.position_background_repeat.value+'; '\n"+
+                    "                        style += 'background:'+this.props."+type+"css.position.value.position_background_color.value+' '+\n"+
+                    "                            (this.props."+type+"css.position.value.position_background_image.value == \'none\' || this.props."+type+"css.position.value.position_background_image.value == \'undefined\' ? \'none\' : 'url('+this.props."+type+"css.position.value.position_background_image.value+')')+' '+\n"+
+                    "                            this.props."+type+"css.position.value.position_background_repeat.value+'; '\n"+
                     "                    break;\n"+
                     "                    case 'gradient-top-bottom':\n"+
                     "                        style += ''+\n"+
-                    "                            'background:'+this.props.css.position.value.position_gradient_color_top.value+';'+\n"+
-                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.position.value.position_gradient_color_top.value+',endcolorstr='+this.props.css.position.value.position_gradient_color_bottom.value+',gradientType=0);'+\n"+
-                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.position.value.position_gradient_color_top.value+',endcolorstr='+this.props.css.position.value.position_gradient_color_bottom.value+',gradientType=0);'+\n"+
-                    "                            'background:-moz-linear-gradient(top, '+this.props.css.position.value.position_gradient_color_top.value+'), '+this.props.css.position.value.position_gradient_color_bottom.value+'); '+\n"+
-                    "                            'background:-o-linear-gradient(top, '+this.props.css.position.value.position_gradient_color_top.value+'), '+this.props.css.position.value.position_gradient_color_bottom.value+'); '+\n"+
-                    "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props.css.position.value.position_gradient_color_top.value+'),color-stop(100%,'+this.props.css.position.value.position_gradient_color_bottom.value+'));'+ \n"+
+                    "                            'background:'+this.props."+type+"css.position.value.position_gradient_color_top.value+';'+\n"+
+                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.position.value.position_gradient_color_top.value+',endcolorstr='+this.props."+type+"css.position.value.position_gradient_color_bottom.value+',gradientType=0);'+\n"+
+                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.position.value.position_gradient_color_top.value+',endcolorstr='+this.props."+type+"css.position.value.position_gradient_color_bottom.value+',gradientType=0);'+\n"+
+                    "                            'background:-moz-linear-gradient(top, '+this.props."+type+"css.position.value.position_gradient_color_top.value+'), '+this.props."+type+"css.position.value.position_gradient_color_bottom.value+'); '+\n"+
+                    "                            'background:-o-linear-gradient(top, '+this.props."+type+"css.position.value.position_gradient_color_top.value+'), '+this.props."+type+"css.position.value.position_gradient_color_bottom.value+'); '+\n"+
+                    "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props.css.position.value.position_gradient_color_top.value+'),color-stop(100%,'+this.props."+type+"css.position.value.position_gradient_color_bottom.value+'));'+ \n"+
                     "                            ''\n"+
                     "                    break;\n"+
                     "                    case 'gradient-left-right':\n"+
                     "                        style += ''+\n"+
-                    "                            'background:'+this.props.css.position.value.position_gradient_color_left.value+';'+\n"+
-                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.position.value.position_gradient_color_left.value+',endcolorstr='+this.props.css.position.value.position_gradient_color_right.value+',gradientType=0);'+\n"+
-                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.position.value.position_gradient_color_left.value+',endcolorstr='+this.props.css.position.value.position_gradient_color_right.value+',gradientType=0);'+\n"+
-                    "                            'background:-moz-linear-gradient(left, '+this.props.css.position.value.position_gradient_color_left.value+'), '+this.props.css.position.value.position_gradient_color_right.value+'); '+\n"+
-                    "                            'background:-o-linear-gradient(left, '+this.props.css.position.value.position_gradient_color_left.value+'), '+this.props.css.position.value.position_gradient_color_right.value+'); '+\n"+
-                    "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props.css.position.value.position_gradient_color_left.value+'),color-stop(100%,'+this.props.css.position.value.position_gradient_color_right.value+'));'+\n"+ 
+                    "                            'background:'+this.props."+type+"css.position.value.position_gradient_color_left.value+';'+\n"+
+                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.position.value.position_gradient_color_left.value+',endcolorstr='+this.props."+type+"css.position.value.position_gradient_color_right.value+',gradientType=0);'+\n"+
+                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.position.value.position_gradient_color_left.value+',endcolorstr='+this.props."+type+"css.position.value.position_gradient_color_right.value+',gradientType=0);'+\n"+
+                    "                            'background:-moz-linear-gradient(left, '+this.props."+type+"css.position.value.position_gradient_color_left.value+'), '+this.props."+type+"css.position.value.position_gradient_color_right.value+'); '+\n"+
+                    "                            'background:-o-linear-gradient(left, '+this.props."+type+"css.position.value.position_gradient_color_left.value+'), '+this.props."+type+"css.position.value.position_gradient_color_right.value+'); '+\n"+
+                    "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props."+type+"css.position.value.position_gradient_color_left.value+'),color-stop(100%,'+this.props."+type+"css.position.value.position_gradient_color_right.value+'));'+\n"+ 
                     "                            ''\n"+
                     "                    break;\n"+
                     "                }\n"+
@@ -2039,64 +2189,64 @@
                     "            },\n"
                 return jscontent
             },
-            getButtonStyleFunc(elemData,enname){
+            getButtonStyleFunc(elemData,enname,type = ''){
                 let jscontent = ""+
                         "            set"+enname+"ButtonStyle(){\n"+
                         "                let style = ''+\n"+
                         // "                    'color:'+this.props.css."+enname+"_color.value+'; '\n"
-                        "                    'color:'+this.props.css."+enname+"_button.value."+enname+"_color.value+'; '\n"
+                        "                    'color:'+this.props."+type+"css."+enname+"_button.value."+enname+"_color.value+'; '\n"
                 if(elemData.props.css.border_width.value && elemData.props.css.border_style.value != 'none'){
                     // jscontent += "                    +'border-color:'+this.props.css."+enname+"_border_color.value+'; '\n"
-                    jscontent += "                    +'border-color:'+this.props.css."+enname+"_button.value."+enname+"_border_color.value+'; '\n"
+                    jscontent += "                    +'border-color:'+this.props."+type+"css."+enname+"_button.value."+enname+"_border_color.value+'; '\n"
                 }
                 if(elemData.props.css.box_shadow_x.value || elemData.props.css.box_shadow_y.value || elemData.props.css.box_shadow_blur.value){
                     // jscontent += "                    +'box-shadow:'"+elemData.props.css.box_shadow_x.value+"'px '"+elemData.props.css.box_shadow_y.value+"'px '"+elemData.props.css.box_shadow_blur.value+"'px '+this.props.css."+enname+"_box_shadow_color.value'; '\n"
-                    jscontent += "                    +'box-shadow:'"+elemData.props.css.box_shadow_x.value+"'px '"+elemData.props.css.box_shadow_y.value+"'px '"+elemData.props.css.box_shadow_blur.value+"'px '+this.props.css."+enname+"_button.value."+enname+"_box_shadow_color.value'; '\n"
+                    jscontent += "                    +'box-shadow:'"+elemData.props.css.box_shadow_x.value+"'px '"+elemData.props.css.box_shadow_y.value+"'px '"+elemData.props.css.box_shadow_blur.value+"'px '+this.props."+type+"css."+enname+"_button.value."+enname+"_box_shadow_color.value'; '\n"
                 }
                 // jscontent += "                switch(this.props.css."+enname+"_background_type.value){\n"+
-                jscontent += "                switch(this.props.css."+enname+"_button.value."+enname+"_background_type.value){\n"+
+                jscontent += "                switch(this.props."+type+"css."+enname+"_button.value."+enname+"_background_type.value){\n"+
                     "                    case 'background-color':\n"+
                     // "                        style += 'background:'+this.props.css."+enname+"_background_color.value+'; '\n"+
-                    "                        style += 'background:'+this.props.css."+enname+"_button.value."+enname+"_background_color.value+'; '\n"+
+                    "                        style += 'background:'+this.props."+type+"css."+enname+"_button.value."+enname+"_background_color.value+'; '\n"+
                     "                    break;\n"+
                     "                    case 'background-image':\n"+
                     // "                        style += 'background:'+this.props.css."+enname+"_background_color.value+' '+\n"+
-                    "                        style += 'background:'+this.props.css."+enname+"_button.value."+enname+"_background_color.value+' '+\n"+
+                    "                        style += 'background:'+this.props."+type+"css."+enname+"_button.value."+enname+"_background_color.value+' '+\n"+
                     // "                            (this.props.css."+enname+"_background_image.value == 'none' || this.props.css."+enname+"_background_image.value == 'undefined' ? 'none' : 'url('+this.props.css."+enname+"_background_image.value+')')+' '+\n"+
-                    "                            (this.props.css."+enname+"_button.value."+enname+"_background_image.value == 'none' || this.props.css."+enname+"_button.value."+enname+"_background_image.value == 'undefined' ? 'none' : 'url('+this.props.css."+enname+"_button.value."+enname+"_background_image.value+')')+' '+\n"+
+                    "                            (this.props."+type+"css."+enname+"_button.value."+enname+"_background_image.value == 'none' || this.props."+type+"css."+enname+"_button.value."+enname+"_background_image.value == 'undefined' ? 'none' : 'url('+this.props."+type+"css."+enname+"_button.value."+enname+"_background_image.value+')')+' '+\n"+
                     // "                            this.props.css."+enname+"_background_repeat.value+'; '\n"+
-                    "                            this.props.css."+enname+"_button.value."+enname+"_background_repeat.value+'; '\n"+
+                    "                            this.props."+type+"css."+enname+"_button.value."+enname+"_background_repeat.value+'; '\n"+
                     "                    break;\n"+
                     "                    case 'gradient-top-bottom':\n"+
                     "                        style += ''+\n"+
                     // "                            'background:'+this.props.css."+enname+"_gradient_color_top.value+';'+\n"+
-                    "                            'background:'+this.props.css."+enname+"_button.value."+enname+"_gradient_color_top.value+';'+\n"+
+                    "                            'background:'+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_top.value+';'+\n"+
                     // "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_gradient_color_top.value+',endcolorstr='+this.props.css."+enname+"_gradient_color_bottom.value+',gradientType=0);'+\n"+
-                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_top.value+',endcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+',gradientType=0);'+\n"+
+                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_top.value+',endcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+',gradientType=0);'+\n"+
                     // "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_gradient_color_top.value+',endcolorstr='+this.props.css."+enname+"_gradient_color_bottom.value+',gradientType=0);'+\n"+
-                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_top.value+',endcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+',gradientType=0);'+\n"+
+                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_top.value+',endcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+',gradientType=0);'+\n"+
                     // "                            'background:-moz-linear-gradient(top, '+this.props.css."+enname+"_gradient_color_top.value+'), '+this.props.css."+enname+"_gradient_color_bottom.value+'); '+\n"+
-                    "                            'background:-moz-linear-gradient(top, '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_top.value+'), '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+'); '+\n"+
+                    "                            'background:-moz-linear-gradient(top, '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_top.value+'), '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+'); '+\n"+
                     // "                            'background:-o-linear-gradient(top, '+this.props.css."+enname+"_gradient_color_top.value+'), '+this.props.css."+enname+"_gradient_color_bottom.value+'); '+\n"+
-                    "                            'background:-o-linear-gradient(top, '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_top.value+'), '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+'); '+\n"+
+                    "                            'background:-o-linear-gradient(top, '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_top.value+'), '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+'); '+\n"+
                     // "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props.css."+enname+"_gradient_color_top.value+'),color-stop(100%,'+this.props.css."+enname+"_gradient_color_bottom.value+'));'+ \n"+
-                    "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props.css."+enname+"_button.value."+enname+"_gradient_color_top.value+'),color-stop(100%,'+this.props.css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+'));'+ \n"+
+                    "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_top.value+'),color-stop(100%,'+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_bottom.value+'));'+ \n"+
                     "                            ''\n"+
                     "                    break;\n"+
                     "                    case 'gradient-left-right':\n"+
                     "                        style += ''+\n"+
                     // "                            'background:'+this.props.css."+enname+"_gradient_color_left.value+';'+\n"+
-                    "                            'background:'+this.props.css."+enname+"_button.value."+enname+"_gradient_color_left.value+';'+\n"+
+                    "                            'background:'+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_left.value+';'+\n"+
                     // "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_gradient_color_left.value+',endcolorstr='+this.props.css."+enname+"_gradient_color_right.value+',gradientType=0);'+\n"+
-                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_left.value+',endcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_right.value+',gradientType=0);'+\n"+
+                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_left.value+',endcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_right.value+',gradientType=0);'+\n"+
                     // "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_gradient_color_left.value+',endcolorstr='+this.props.css."+enname+"_gradient_color_right.value+',gradientType=0);'+\n"+
-                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_left.value+',endcolorstr='+this.props.css."+enname+"_button.value."+enname+"_gradient_color_right.value+',gradientType=0);'+\n"+
+                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_left.value+',endcolorstr='+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_right.value+',gradientType=0);'+\n"+
                     // "                            'background:-moz-linear-gradient(left, '+this.props.css."+enname+"_gradient_color_left.value+'), '+this.props.css."+enname+"_gradient_color_right.value+'); '+\n"+
-                    "                            'background:-moz-linear-gradient(left, '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_left.value+'), '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_right.value+'); '+\n"+
+                    "                            'background:-moz-linear-gradient(left, '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_left.value+'), '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_right.value+'); '+\n"+
                     // "                            'background:-o-linear-gradient(left, '+this.props.css."+enname+"_gradient_color_left.value+'), '+this.props.css."+enname+"_gradient_color_right.value+'); '+\n"+
-                    "                            'background:-o-linear-gradient(left, '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_left.value+'), '+this.props.css."+enname+"_button.value."+enname+"_gradient_color_right.value+'); '+\n"+
+                    "                            'background:-o-linear-gradient(left, '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_left.value+'), '+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_right.value+'); '+\n"+
                     // "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props.css."+enname+"_gradient_color_left.value+'),color-stop(100%,'+this.props.css."+enname+"_gradient_color_right.value+'));'+\n"+ 
-                    "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props.css."+enname+"_button.value."+enname+"_gradient_color_left.value+'),color-stop(100%,'+this.props.css."+enname+"_button.value."+enname+"_gradient_color_right.value+'));'+\n"+ 
+                    "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_left.value+'),color-stop(100%,'+this.props."+type+"css."+enname+"_button.value."+enname+"_gradient_color_right.value+'));'+\n"+ 
                     "                        ''\n"+
                     "                    break;\n"+
                     "                }\n"+
@@ -2104,7 +2254,7 @@
                     "            },\n"
                 return jscontent
             },
-            getCustomStyleFunc(){
+            getCustomStyleFunc(type = ""){
                 // 获取最终得到的组件的设置项
                 let customStyle = ""+
                         "            setCustomBackgroundStyle(){\n"+
@@ -2117,7 +2267,7 @@
                         type:'color',
                         parent:'css'
                     }
-                    customStyle += "                    +'border-color:'+this.props.css.border_color.value+'; '\n"
+                    customStyle += "                    +'border-color:'+this.props."+type+"css.border_color.value+'; '\n"
                     // customElemStart += 'borderColor:props.css.border_color.value,'
                 }
                 if(this.custom.css.box_shadow_x.value || this.custom.css.box_shadow_y.value || this.custom.css.box_shadow_blur.value){
@@ -2128,36 +2278,36 @@
                         type:'color',
                         parent:'css'
                     }
-                    customStyle += "                    +'box-shadow:'"+this.custom.css.box_shadow_x.value+"'px '"+this.custom.css.box_shadow_y.value+"'px '"+this.custom.css.box_shadow_blur.value+"'px '+this.props.css.box_shadow_color.value'; '\n"
+                    customStyle += "                    +'box-shadow:'"+this.custom.css.box_shadow_x.value+"'px '"+this.custom.css.box_shadow_y.value+"'px '"+this.custom.css.box_shadow_blur.value+"'px '+this.props."+type+"css.box_shadow_color.value'; '\n"
                     // customElemStart += 'boxShadow:'+this.custom.css.box_shadow_x.value+'px '+ this.custom.css.box_shadow_y.value+'px '+this.custom.css.box_shadow_blur.value+'px props.css.box_shadow_color.value,'
                 }
-                customStyle += "                switch(this.props.css.yhcustom_background.value.background_type.value){\n"+
+                customStyle += "                switch(this.props."+type+"css.yhcustom_background.value.background_type.value){\n"+
                     "                    case 'background-color':\n"+
-                    "                        style += 'background:'+this.props.css.yhcustom_background.value.background_color.value+'; '\n"+
+                    "                        style += 'background:'+this.props."+type+"css.yhcustom_background.value.background_color.value+'; '\n"+
                     "                    break;\n"+
                     "                    case 'background-image':\n"+
-                    "                        style += 'background:'+this.props.css.yhcustom_background.value.background_color.value+' '+\n"+
-                    "                            (this.props.css.yhcustom_background.value.background_image.value == \'none\' || this.props.css.yhcustom_background.value.background_image.value == \'undefined\' ? \'none\' : 'url('+this.props.css.yhcustom_background.value.background_image.value+')')+' '+\n"+
-                    "                            this.props.css.yhcustom_background.value.background_repeat.value+'; '\n"+
+                    "                        style += 'background:'+this.props"+type+".css.yhcustom_background.value.background_color.value+' '+\n"+
+                    "                            (this.props."+type+"css.yhcustom_background.value.background_image.value == \'none\' || this.props."+type+"css.yhcustom_background.value.background_image.value == \'undefined\' ? \'none\' : 'url('+this.props."+type+"css.yhcustom_background.value.background_image.value+')')+' '+\n"+
+                    "                            this.props."+type+"css.yhcustom_background.value.background_repeat.value+'; '\n"+
                     "                    break;\n"+
                     "                    case 'gradient-top-bottom':\n"+
                     "                        style += ''+\n"+
-                    "                            'background:'+this.props.css.yhcustom_background.value.gradient_color_top.value+';'+\n"+
-                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.yhcustom_background.value.gradient_color_top.value+',endcolorstr='+this.props.css.yhcustom_background.value.gradient_color_bottom.value+',gradientType=0);'+\n"+
-                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.yhcustom_background.value.gradient_color_top.value+',endcolorstr='+this.props.css.yhcustom_background.value.gradient_color_bottom.value+',gradientType=0);'+\n"+
-                    "                            'background:-moz-linear-gradient(top, '+this.props.css.yhcustom_background.value.gradient_color_top.value+'), '+this.props.css.yhcustom_background.value.gradient_color_bottom.value+'); '+\n"+
-                    "                            'background:-o-linear-gradient(top, '+this.props.css.yhcustom_background.value.gradient_color_top.value+'), '+this.props.css.yhcustom_background.value.gradient_color_bottom.value+'); '+\n"+
-                    "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props.css.yhcustom_background.value.gradient_color_top.value+'),color-stop(100%,'+this.props.css.yhcustom_background.value.gradient_color_bottom.value+'));'+ \n"+
+                    "                            'background:'+this.props."+type+"css.yhcustom_background.value.gradient_color_top.value+';'+\n"+
+                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_top.value+',endcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_bottom.value+',gradientType=0);'+\n"+
+                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_top.value+',endcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_bottom.value+',gradientType=0);'+\n"+
+                    "                            'background:-moz-linear-gradient(top, '+this.props."+type+"css.yhcustom_background.value.gradient_color_top.value+'), '+this.props."+type+"css.yhcustom_background.value.gradient_color_bottom.value+'); '+\n"+
+                    "                            'background:-o-linear-gradient(top, '+this.props."+type+"css.yhcustom_background.value.gradient_color_top.value+'), '+this.props."+type+"css.yhcustom_background.value.gradient_color_bottom.value+'); '+\n"+
+                    "                            'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,'+this.props."+type+"css.yhcustom_background.value.gradient_color_top.value+'),color-stop(100%,'+this.props."+type+"css.yhcustom_background.value.gradient_color_bottom.value+'));'+ \n"+
                     "                            ''\n"+
                     "                    break;\n"+
                     "                    case 'gradient-left-right':\n"+
                     "                        style += ''+\n"+
-                    "                            'background:'+this.props.css.yhcustom_background.value.gradient_color_left.value+';'+\n"+
-                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.yhcustom_background.value.gradient_color_left.value+',endcolorstr='+this.props.css.yhcustom_background.value.gradient_color_right.value+',gradientType=0);'+\n"+
-                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props.css.yhcustom_background.value.gradient_color_left.value+',endcolorstr='+this.props.css.yhcustom_background.value.gradient_color_right.value+',gradientType=0);'+\n"+
-                    "                            'background:-moz-linear-gradient(left, '+this.props.css.yhcustom_background.value.gradient_color_left.value+'), '+this.props.css.yhcustom_background.value.gradient_color_right.value+'); '+\n"+
-                    "                            'background:-o-linear-gradient(left, '+this.props.css.yhcustom_background.value.gradient_color_left.value+'), '+this.props.css.yhcustom_background.value.gradient_color_right.value+'); '+\n"+
-                    "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props.css.yhcustom_background.value.gradient_color_left.value+'),color-stop(100%,'+this.props.css.yhcustom_background.value.gradient_color_right.value+'));'+\n"+ 
+                    "                            'background:'+this.props."+type+"css.yhcustom_background.value.gradient_color_left.value+';'+\n"+
+                    "                            'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_left.value+',endcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_right.value+',gradientType=0);'+\n"+
+                    "                            '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_left.value+',endcolorstr='+this.props."+type+"css.yhcustom_background.value.gradient_color_right.value+',gradientType=0);'+\n"+
+                    "                            'background:-moz-linear-gradient(left, '+this.props."+type+"css.yhcustom_background.value.gradient_color_left.value+'), '+this.props."+type+"css.yhcustom_background.value.gradient_color_right.value+'); '+\n"+
+                    "                            'background:-o-linear-gradient(left, '+this.props."+type+"css.yhcustom_background.value.gradient_color_left.value+'), '+this.props."+type+"css.yhcustom_background.value.gradient_color_right.value+'); '+\n"+
+                    "                            'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,'+this.props."+type+"css.yhcustom_background.value.gradient_color_left.value+'),color-stop(100%,'+this.props."+type+"css.yhcustom_background.value.gradient_color_right.value+'));'+\n"+ 
                     "                            ''\n"+
                     "                    break;\n"+
                     "                }\n"+
@@ -2166,7 +2316,7 @@
                 return customStyle
             },
             setListCol(col){
-                let isH5 = /(-h5)/g.test(type),
+                let isH5 = this.custom.activeStatus == 'h5' ? true : false,
                     suffix = isH5 ? '_h' : '',
                     countname = 'count'+suffix,
                     newID = 'custom'+suffix+this.custom['count'+suffix]
@@ -2215,6 +2365,9 @@
     top: 46px;
     margin: 0 0 0 -500px;
     background: #232323;
+}
+.yh-custom-hide {
+    display:none;
 }
 .yh-custom-top {
     margin:0 0 10px 0;
