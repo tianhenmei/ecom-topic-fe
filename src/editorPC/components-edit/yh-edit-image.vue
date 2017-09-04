@@ -14,6 +14,7 @@
     </div>
 </template>
 <script>
+    import axios from 'axios'
     export default {
         props:[
             'eindex',
@@ -164,62 +165,59 @@
                 let that = e.target,
                     file = that.files[0],
                     fileData = new FormData(),
+                    requestdata = this.$store.state.ajaxUrl.File,
                     self = this
                 fileData.append('files',file,file.name);
                 (function(self,that){
-                    $.ajax({
-                        type:'post',
-                        url:self.$store.state.connhost+'v3/api/editorPC/upload',
-                        data:fileData,
-                        dataType: 'JSON',  
-                        cache: false,  
-                        processData: false,  
-                        contentType: false,
-                        success(data){
-                            let name = self.options.mold,
-                                stylename = '',
-                                value = ''
-                            if(self.type){
-                                switch(name){
-                                    case 'src':
-                                        stylename = 'yh-src'
-                                        value = self.$store.state.host+data.content.path
-                                        break
-                                    case 'bg':
-                                        stylename = 'background-image'
-                                        value = self.$store.state.host+data.content.path
-                                        break
-                                }
-                                self.$store.commit('setValue',{
-                                    parent:self.parent,
-                                    index:self.index,
-                                    ischildset:self.ischildset ? self.ischildset : '',
-                                    stylename:stylename,
-                                    actualValue:value,
-                                    designValue:value
-                                })
-                            }else{
-                                switch(name){
-                                    case 'src':
-                                        self.imageChange(self,data.content)
-                                        break
-                                    case 'audiosrc':
-                                        self.otherChange(self,data.content)
-                                        break    
-                                    case 'bg':
-                                        self.setBackgroundImage(self,data.content)
-                                        break
-                                }
+                    //self.$store.state.connhost+'v3/api/editorPC/upload'
+                    axios({
+                        url:requestdata.url,
+                        method:requestdata.type,
+                        data:fileData
+                    }).then(response => {
+                        let data = response.data,
+                            name = self.options.mold,
+                            stylename = '',
+                            value = ''
+                        if(self.type){
+                            switch(name){
+                                case 'src':
+                                    stylename = 'yh-src'
+                                    value = self.$store.state.fileHost+data.filename
+                                    break
+                                case 'bg':
+                                    stylename = 'background-image'
+                                    value = self.$store.state.fileHost+data.filename
+                                    break
                             }
-                        },
-                        error(error){
-                            console.log(error.message);
+                            self.$store.commit('setValue',{
+                                parent:self.parent,
+                                index:self.index,
+                                ischildset:self.ischildset ? self.ischildset : '',
+                                stylename:stylename,
+                                actualValue:value,
+                                designValue:value
+                            })
+                        }else{
+                            switch(name){
+                                case 'src':
+                                    self.imageChange(self,data)
+                                    break
+                                case 'audiosrc':
+                                    self.otherChange(self,data)
+                                    break    
+                                case 'bg':
+                                    self.setBackgroundImage(self,data)
+                                    break
+                            }
                         }
-                    });
+                    },response => {
+                        console.log(response.body.message)
+                    })
                 })(self,that)
             },
             otherChange(self,data){
-                let src = self.$store.state.host+data.path
+                let src = self.$store.state.fileHost+data.filename
                 self.$store.commit('setMultipleValue',{
                     ischildset:self.ischildset ? self.ischildset : '',
                     path:self.path,
@@ -235,11 +233,11 @@
                 })
             },
             imageChange(self,data){
-                let src = self.$store.state.host+data.path
+                let src = self.$store.state.fileHost+data.filename
                 self.setSrcValue(src,data)
             },
             setBackgroundImage(self,data){
-                let url = self.$store.state.host+data.path
+                let url = self.$store.state.fileHost+data.filename
                 self.setBackgroundImageValue(url,data)
             },
         }

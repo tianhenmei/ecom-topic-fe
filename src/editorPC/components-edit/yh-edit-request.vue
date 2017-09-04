@@ -12,6 +12,7 @@
     </div>
 </template>
 <script>
+    import axios from 'axios'
     import {getRequestData} from '../components/Base/Node.js'
     export default {
         props:[
@@ -21,7 +22,8 @@
             'options',
             'elem_id',   // 当前被选中元素的ID
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
-            'ischild'
+            'ischild',
+            'path'
         ],
         data(){
             return {
@@ -48,10 +50,53 @@
             
         },
         methods:{
-            getRequestData,
             requestEvent(e){
-                let id = this.optionsData.style[this.optionsData.stylename].value
-                this.getRequestData(this.$store,id,this.options.en)
+                let id = this.optionsData.style[this.optionsData.stylename].value,
+                    src = this.$store.state.ajaxUrl.CompanyPosition.url,//this.$store.state.companyHost,
+                    method = this.$store.state.ajaxUrl.CompanyPosition.type,//'post',
+                    commitname = 'setCompanyData',
+                    self = this
+                switch(this.options.en){
+                    case 'companyId':
+                        src += id
+                        break
+                    case 'positionId':
+                        src = this.$store.state.ajaxUrl.Position.url + id
+                        method = this.$store.state.ajaxUrl.Position.type//'get'
+                        commitname = 'setPositionData'
+                        break
+                }
+                // this.connhost+'v3/api/editorPC/getPageData'
+                axios({
+                    method: method,
+                    url: src,
+                    // data: {
+                    // }
+                }).then(response => {
+                    let result = response.data.result
+                    if(result.hasOwnProperty('logo')){
+                        if(result.logo.indexOf('http') == -1 ){
+                            if(result.logo.indexOf('i/image/') != -1 || result.logo.indexOf('image1/') != -1 || result.logo.indexOf('image2/') != -1){
+                                result.logo = 'https://www.lgstatic.com/thumbnail_200x200/'+result.logo;
+                            }else{
+                                result.logo = 'https://www.lgstatic.com/'+result.logo;
+                            }
+                        }else{
+                            result.logo = ''+result.logo;
+                        }
+                    }
+                    self.$store.commit(commitname,{
+                        parent:self.options.parent ? self.options.parent : 'data',
+                        eindex:!(self.eindex == -1 || self.eindex == undefined || typeof self.eindex == 'string') ? self.eindex : -1,
+                        index:!(self.index == -1 || self.index == undefined || typeof self.index == 'string') ? self.index : -1,
+                        ischildset:self.ischildset ? self.ischildset : '',
+                        path:self.path,
+                        result:result
+                    })
+                },response => {
+                    console.log(response.body.message)
+                })
+                // getRequestData(this.$store,id,this.options.en)
             }
         }
     }

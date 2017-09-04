@@ -64,7 +64,7 @@
         <ul class="yh-lib-element clearfix">
             <li class="content">
                 <ul class="clearfix">
-                    <li class="li_custom yh-lib-parent" @click.stop.prevent="toggleListEvent">
+                    <li v-if="!ENV_STATUS" class="li_custom yh-lib-parent" @click.stop.prevent="toggleListEvent">
                         <span class="yh-lib-icon"></span> 自定义
                         <div class="yh-lib-components hide">
                             <div class="cpElement clearfix">
@@ -415,7 +415,8 @@
         computed:mapState([
             'host',
             'customStatus',
-            'yh_custom'
+            'yh_custom',
+            'ENV_STATUS'
         ]),
         data(){
             return {

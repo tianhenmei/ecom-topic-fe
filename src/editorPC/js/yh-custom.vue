@@ -13,8 +13,9 @@
                     <div class="yh-custom-button" yh-custom-type="button" @click.stop.prevent="addCustomComponent">按钮</div>
                     <div class="yh-custom-text" yh-custom-type="text" @click.stop.prevent="addCustomComponent">文字</div>
                     <div class="yh-custom-position" v-if="!positionStatus" yh-custom-type="position" @click.stop.prevent="addCustomComponent">职位</div>
-                    <div class="yh-custom-undo" @click.stop.prevent="clearAddCustom">清空</div>
+                    <div class="yh-custom-clear" @click.stop.prevent="clearAddCustom">清空</div>
                     <div class="yh-custom-undo" @click.stop.prevent="undoAddCustom">取消</div>
+                    <div class="yh-custom-close" @click.stop.prevent="closeCustomSet">关闭</div>
                     <div class="yh-custom-save" @click.stop.prevent="saveComponent">保存</div>
                 </div>
                 <div class="yh-custom-components-h5 clearfix"
@@ -26,6 +27,7 @@
                     <div class="yh-custom-position" v-if="!positionStatusH5" yh-custom-type="position-h5" @click.stop.prevent="addCustomComponent">职位</div>
                     <div class="yh-custom-undo" @click.stop.prevent="clearAddCustom">清空</div>
                     <div class="yh-custom-undo" @click.stop.prevent="undoAddCustom">取消</div>
+                    <div class="yh-custom-close" @click.stop.prevent="closeCustomSet">关闭</div>
                     <div class="yh-custom-save" @click.stop.prevent="saveComponent">保存</div>
                 </div>
                 <!-- yh-edit 组件设置 -->
@@ -137,7 +139,8 @@
             ...mapState([
                 'custom',
                 'customStatus',
-                'connhost'
+                'connhost',
+                'yh_custom_status'
             ]),
             setBoxShadow(){
                 let str = 
@@ -2119,6 +2122,7 @@
                     baseData.data.yh_h5data = h5data.data.data.yh_h5data
                 }
                 
+                let self = this
                 axios.post(this.connhost+'v3/api/editorPC/saveComponent',{
                     html:start+customElemStart+customElemEnd+'\n'+elem.innerHTML+'\n'+end+'\nconst baseData = '+JSON.stringify(baseData)+'\n'+jsstart+customStyle+jscontent+jsend,
                     css:style,
@@ -2133,8 +2137,19 @@
                         '            dealStringLine,\n'+
                         '},\n    }\n<\/script>',
                     H5:h5data.html,
-                    h5css:h5data.css
+                    h5css:h5data.css,
+                    name:this.yh_custom_status
                 }).then(response => {
+                    let content = response.data.content
+                    // yh_custom_status
+                    if(!self.yh_custom_status || self.yh_custom_status != content.name){
+                        self.$store.commit('setYHCustomStatus',{
+                            content:content.name
+                        })
+                        self.$store.commit('addCustom',{
+                            content:content.name
+                        })
+                    }
                     alert(response.data.message)
                     // self.$store.commit('initData',{
                     //     includes:content.includes,
@@ -2336,7 +2351,16 @@
             clearAddCustom(e){
                 this.$store.commit('clearCustomElements')
             },
+            closeCustomSet(e){
+                self.$store.commit('setYHCustomStatus',{
+                    content:''
+                })
+                this.$store.commit('setCustomStatus')
+            },
             undoAddCustom(e){
+                self.$store.commit('setYHCustomStatus',{
+                    content:''
+                })
                 this.$store.commit('setCustomStatus')
             }
         }

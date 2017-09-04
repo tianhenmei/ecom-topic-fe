@@ -15,28 +15,38 @@ let store = new Vuex.Store({
         elements:[],
         includes:[],
         count:0,
+        ENV_STATUS:__isProd__,
         host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/v3/',  // https://activity.lagou.com/topic/v3/
         connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
+        // uploadFile:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://localhost:9000/v3/api/editorPC/upload',
+        fileHost:__isProd__ ? 'https://www.lgstatic.com/' : 'http://localhost:9000/v3/',
+        // companyHost:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://localhost:9000/v3/api/editorPC/company/speed_checkCompany/',
+        // positionHost:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://localhost:9000/v3/api/editorPC/job/speed_checkPosition/',        
         triggerId:'',
         triggerClassify:'',
         childClassify:'',
         parentmodule:'',
         yh_custom:[],   // 自定义组件
+        yh_custom_status:'',
         ajaxUrl:{
             CompanyPositions:{
-                url:'v3/api/company/getCompanyandPosition',
+                url:__isProd__ ? 'http://topic.lagou.com/company/getCompanyandPosition' : 'http://localhost:9000/v3/api/company/getCompanyandPosition',
                 type:'GET',
                 param:'comAndPosi'
             },
             CompanyPosition:{
-                url:'v3/api/company/speed_checkCompany/$id$',
+                url:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://localhost:9000/v3/api/editorPC/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
                 type:'POST'
             },
             Position:{
-                url:'v3/api/job/speed_checkPosition/$id$',
+                url:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://localhost:9000/v3/api/editorPC/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
                 type:'GET'
-            }
+            },
+            File:{
+                url:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://localhost:9000/v3/api/editorPC/upload',
+                type:'POST'
+            },
         },
         // 临时与页面无关数据
         defaultPage:{
@@ -80,6 +90,12 @@ let store = new Vuex.Store({
         },
         initCustom:(state,payload) => {
             state.yh_custom = payload.content
+        },
+        addCustom:(state,payload) => {
+            state.yh_custom.push(payload.content)
+        },
+        setYHCustomStatus:(state,payload) => {
+            state.yh_custom_status = payload.content
         },
         clearPage:(state) => {
             state.elements = []
@@ -944,6 +960,189 @@ let store = new Vuex.Store({
             }
             state.data.elemData.props.states.push(one)
             store.commit('reinitData')
+        },
+        /*****
+         * setCompanyData: 拿到一个公司的数据，修改页面组件的数据
+         * parent： 组件的数据父级，通常是data
+         * eindex： 组件在整个页面所在的索引值
+         * index： 组件在数据数组中的索引值
+         * ischildset： 当前是否子组件的设置
+         * path： 被设置的组件的路径
+         * result： 公司的数据
+         */
+        setCompanyData:(state,payload) => {
+            let i = 0,
+                path = payload.path.split(/[.]/g),
+                elemData = state,
+                value = '',
+                result = payload.result,
+                data = {}
+            if(state.data.path == payload.path && state.data.elemData){
+                elemData = state.data.elemData
+            }else{
+                for(i = 0; i < path.length; i++){
+                    value = path[i]
+                    if(value){
+                        if(/[0-9]/g.test(path[i])){
+                            value = parseInt(path[i])
+                        }
+                        elemData = elemData[value]
+                    }
+                }
+            }
+            switch(payload.ischildset){
+                case 'ischildset':
+                    data = elemData.props.elements[payload.eindex].props
+                    parent = payload.parent.split(/[.]/g)
+                    for(i = 0 ; i < parent.length; i++){
+                        if(parent[i].trim()){
+                            data = data[parent[i]]
+                        }
+                    }
+                    if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                        for(i in result){
+                            if(data.hasOwnProperty(i)){
+                                data[i].value = result[i]
+                            }
+                        }
+                    }else{
+                        for(i in result){
+                            if(data[payload.index].hasOwnProperty(i)){
+                                data[payload.index][i].value = result[i]
+                            }
+                        }
+                    }
+                    break
+                default:
+                    if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                        data = elemData.props
+                        parent = payload.parent.split(/[.]/g)
+                        for(i = 0 ; i < parent.length; i++){
+                            if(parent[i].trim()){
+                                data = data[parent[i]]
+                            }
+                        }
+                        for(i in result){
+                            if(data.hasOwnProperty(i)){
+                                data[i].value = result[i]
+                            }
+                        }
+                    }else{
+                        data = elemData.props
+                        parent = payload.parent.split(/[.]/g)
+                        for(i = 0 ; i < parent.length; i++){
+                            if(parent[i].trim()){
+                                data = data[parent[i]]
+                            }
+                        }
+                        for(i in result){
+                            if(data[payload.index].hasOwnProperty(i)){
+                                data[payload.index][i].value = result[i]
+                            }
+                        }
+                    }
+                    break
+            }
+        },
+        setPositionData:(state,payload) => {
+            let positionTag = {
+                    '技术':'technique',
+                    '产品':'product',
+                    '设计':'design',
+                    '运营':'operation',
+                    '市场与销售':'market-sale',
+                    '职能':'function',
+                    '金融':'finance'
+                },
+                positionTag2 = {
+                    'technique':'技术',
+                    'product':'产品',
+                    'design':'设计',
+                    'operation':'运营',
+                    'market-sale':'市场与销售',
+                    'function':'职能',
+                    'finance':'金融'
+                },
+                i = 0,
+                path = payload.path.split(/[.]/g),
+                elemData = state,
+                value = '',
+                result = payload.result,
+                data = null
+            if(state.data.path == payload.path && state.data.elemData){
+                elemData = state.data.elemData
+            }else{
+                for(i = 0; i < path.length; i++){
+                    value = path[i]
+                    if(value){
+                        if(/[0-9]/g.test(path[i])){
+                            value = parseInt(path[i])
+                        }
+                        elemData = elemData[value]
+                    }
+                }
+            }
+            switch(payload.ischildset){
+                case 'ischildset':
+                    data = elemData.props.elements[payload.eindex].props
+                    parent = payload.parent.split(/[.]/g)
+                    for(i = 0 ; i < parent.length; i++){
+                        if(parent[i].trim()){
+                            data = data[parent[i]]
+                        }
+                    }
+                    if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                        for(i in result){
+                            if(data.hasOwnProperty(i)){
+                                data[i].value = result[i]
+                            }else if(i == 'positionFirstType'){  // 职位类别
+                                data['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
+                            }
+                        }
+                    }else{
+                        for(i in result){
+                            if(data[payload.index].hasOwnProperty(i)){
+                                data[payload.index][i].value = result[i]
+                            }else if(i == 'positionFirstType'){  // 职位类别
+                                data[payload.index]['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
+                            }
+                        }
+                    }
+                    break
+                default:
+                    if(payload.index == -1 || payload.index == undefined || typeof payload.index == 'string'){
+                        data = elemData.props
+                        parent = payload.parent.split(/[.]/g)
+                        for(i = 0 ; i < parent.length; i++){
+                            if(parent[i].trim()){
+                                data = data[parent[i]]
+                            }
+                        }
+                        for(i in result){
+                            if(data.hasOwnProperty(i)){
+                                data[i].value = result[i]
+                            }else if(i == 'positionFirstType'){  // 职位类别
+                                data['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
+                            }
+                        }
+                    }else{
+                        data = elemData.props
+                        parent = payload.parent.split(/[.]/g)
+                        for(i = 0 ; i < parent.length; i++){
+                            if(parent[i].trim()){
+                                data = data[parent[i]]
+                            }
+                        }
+                        for(i in result){
+                            if(data[payload.index].hasOwnProperty(i)){
+                                data[payload.index][i].value = result[i]
+                            }else if(i == 'positionFirstType'){  // 职位类别
+                                data[payload.index]['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
+                            }
+                        }
+                    }
+                    break
+            }
         },
         removeElementState:(state,index) => {
             store.commit('getData')

@@ -187,38 +187,20 @@ exports.default = {
             }
             return style;
         },
-        setPositionStyle: function setPositionStyle() {
-            var style = '';
-            switch (this.props.css.position.value.position_background_type.value) {
+        setbuttonButtonStyle: function setbuttonButtonStyle() {
+            var style = '' + 'color:' + this.props.css.button_button.value.button_color.value + '; ';
+            switch (this.props.css.button_button.value.button_background_type.value) {
                 case 'background-color':
-                    style += 'background:' + this.props.css.position.value.position_background_color.value + '; ';
+                    style += 'background:' + this.props.css.button_button.value.button_background_color.value + '; ';
                     break;
                 case 'background-image':
-                    style += 'background:' + this.props.css.position.value.position_background_color.value + ' ' + (this.props.css.position.value.position_background_image.value == 'none' || this.props.css.position.value.position_background_image.value == 'undefined' ? 'none' : 'url(' + this.props.css.position.value.position_background_image.value + ')') + ' ' + this.props.css.position.value.position_background_repeat.value + '; ';
+                    style += 'background:' + this.props.css.button_button.value.button_background_color.value + ' ' + (this.props.css.button_button.value.button_background_image.value == 'none' || this.props.css.button_button.value.button_background_image.value == 'undefined' ? 'none' : 'url(' + this.props.css.button_button.value.button_background_image.value + ')') + ' ' + this.props.css.button_button.value.button_background_repeat.value + '; ';
                     break;
                 case 'gradient-top-bottom':
-                    style += '' + 'background:' + this.props.css.position.value.position_gradient_color_top.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_top.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_bottom.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_top.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_bottom.value + ',gradientType=0);' + 'background:-moz-linear-gradient(top, ' + this.props.css.position.value.position_gradient_color_top.value + '), ' + this.props.css.position.value.position_gradient_color_bottom.value + '); ' + 'background:-o-linear-gradient(top, ' + this.props.css.position.value.position_gradient_color_top.value + '), ' + this.props.css.position.value.position_gradient_color_bottom.value + '); ' + 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,' + this.props.css.position.value.position_gradient_color_top.value + '),color-stop(100%,' + this.props.css.position.value.position_gradient_color_bottom.value + '));' + '';
+                    style += '' + 'background:' + this.props.css.button_button.value.button_gradient_color_top.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.button_button.value.button_gradient_color_top.value + ',endcolorstr=' + this.props.css.button_button.value.button_gradient_color_bottom.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.button_button.value.button_gradient_color_top.value + ',endcolorstr=' + this.props.css.button_button.value.button_gradient_color_bottom.value + ',gradientType=0);' + 'background:-moz-linear-gradient(top, ' + this.props.css.button_button.value.button_gradient_color_top.value + '), ' + this.props.css.button_button.value.button_gradient_color_bottom.value + '); ' + 'background:-o-linear-gradient(top, ' + this.props.css.button_button.value.button_gradient_color_top.value + '), ' + this.props.css.button_button.value.button_gradient_color_bottom.value + '); ' + 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,' + this.props.css.button_button.value.button_gradient_color_top.value + '),color-stop(100%,' + this.props.css.button_button.value.button_gradient_color_bottom.value + '));' + '';
                     break;
                 case 'gradient-left-right':
-                    style += '' + 'background:' + this.props.css.position.value.position_gradient_color_left.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_left.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_right.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.position.value.position_gradient_color_left.value + ',endcolorstr=' + this.props.css.position.value.position_gradient_color_right.value + ',gradientType=0);' + 'background:-moz-linear-gradient(left, ' + this.props.css.position.value.position_gradient_color_left.value + '), ' + this.props.css.position.value.position_gradient_color_right.value + '); ' + 'background:-o-linear-gradient(left, ' + this.props.css.position.value.position_gradient_color_left.value + '), ' + this.props.css.position.value.position_gradient_color_right.value + '); ' + 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,' + this.props.css.position.value.position_gradient_color_left.value + '),color-stop(100%,' + this.props.css.position.value.position_gradient_color_right.value + '));' + '';
-                    break;
-            }
-            return style;
-        },
-        setmoreButtonStyle: function setmoreButtonStyle() {
-            var style = '' + 'color:' + this.props.css.more_button.value.more_color.value + '; ';
-            switch (this.props.css.more_button.value.more_background_type.value) {
-                case 'background-color':
-                    style += 'background:' + this.props.css.more_button.value.more_background_color.value + '; ';
-                    break;
-                case 'background-image':
-                    style += 'background:' + this.props.css.more_button.value.more_background_color.value + ' ' + (this.props.css.more_button.value.more_background_image.value == 'none' || this.props.css.more_button.value.more_background_image.value == 'undefined' ? 'none' : 'url(' + this.props.css.more_button.value.more_background_image.value + ')') + ' ' + this.props.css.more_button.value.more_background_repeat.value + '; ';
-                    break;
-                case 'gradient-top-bottom':
-                    style += '' + 'background:' + this.props.css.more_button.value.more_gradient_color_top.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_top.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_bottom.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_top.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_bottom.value + ',gradientType=0);' + 'background:-moz-linear-gradient(top, ' + this.props.css.more_button.value.more_gradient_color_top.value + '), ' + this.props.css.more_button.value.more_gradient_color_bottom.value + '); ' + 'background:-o-linear-gradient(top, ' + this.props.css.more_button.value.more_gradient_color_top.value + '), ' + this.props.css.more_button.value.more_gradient_color_bottom.value + '); ' + 'background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,' + this.props.css.more_button.value.more_gradient_color_top.value + '),color-stop(100%,' + this.props.css.more_button.value.more_gradient_color_bottom.value + '));' + '';
-                    break;
-                case 'gradient-left-right':
-                    style += '' + 'background:' + this.props.css.more_button.value.more_gradient_color_left.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_left.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_right.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.more_button.value.more_gradient_color_left.value + ',endcolorstr=' + this.props.css.more_button.value.more_gradient_color_right.value + ',gradientType=0);' + 'background:-moz-linear-gradient(left, ' + this.props.css.more_button.value.more_gradient_color_left.value + '), ' + this.props.css.more_button.value.more_gradient_color_right.value + '); ' + 'background:-o-linear-gradient(left, ' + this.props.css.more_button.value.more_gradient_color_left.value + '), ' + this.props.css.more_button.value.more_gradient_color_right.value + '); ' + 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,' + this.props.css.more_button.value.more_gradient_color_left.value + '),color-stop(100%,' + this.props.css.more_button.value.more_gradient_color_right.value + '));' + '';
+                    style += '' + 'background:' + this.props.css.button_button.value.button_gradient_color_left.value + ';' + 'filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.button_button.value.button_gradient_color_left.value + ',endcolorstr=' + this.props.css.button_button.value.button_gradient_color_right.value + ',gradientType=0);' + '-ms-filter:alpha(opacity=100 finishopacity=100 style=1 startx=0,starty=0,finishx=150,finishy=0) progid:DXImageTransform.Microsoft.gradient(startcolorstr=' + this.props.css.button_button.value.button_gradient_color_left.value + ',endcolorstr=' + this.props.css.button_button.value.button_gradient_color_right.value + ',gradientType=0);' + 'background:-moz-linear-gradient(left, ' + this.props.css.button_button.value.button_gradient_color_left.value + '), ' + this.props.css.button_button.value.button_gradient_color_right.value + '); ' + 'background:-o-linear-gradient(left, ' + this.props.css.button_button.value.button_gradient_color_left.value + '), ' + this.props.css.button_button.value.button_gradient_color_right.value + '); ' + 'background:-webkit-gradient(linear,0 0,100% 0,color-stop(0%,' + this.props.css.button_button.value.button_gradient_color_left.value + '),color-stop(100%,' + this.props.css.button_button.value.button_gradient_color_right.value + '));' + '';
                     break;
             }
             return style;
@@ -228,16 +210,6 @@ exports.default = {
         dealStringLine: _Node.dealStringLine
     }
 }; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -415,84 +387,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": "custom2",
       "path": "elements.2",
       "draggable": "false",
-      "yh-custom-text": "yh-custom-text"
-    }
-  }, [_c('div', {
-    staticClass: "yh-custom-text-content"
-  }, [_c('div', {
-    staticClass: "yh-custom-text yh-custom-base-element7 yh-custom-text-text",
-    style: ({
-      color: _vm.props.css.slogan_color.value,
-    }),
-    domProps: {
-      "innerHTML": _vm._s(_vm.dealStringLine(100, 30, 3, _vm.props.data.slogan.value, false))
-    }
-  })])]), _c('div', {
-    staticClass: "yh-custom-base-element8 yh-position",
-    attrs: {
-      "id": "custom3",
-      "path": "elements.3",
-      "draggable": "false",
-      "yh-custom-position": "yh-custom-position"
-    }
-  }, [_c('div', {
-    staticClass: "yh-custom-position-content position positionList clearfix",
-    staticStyle: {
-      "width": "250px",
-      "height": "150px",
-      "overflow": "hidden"
-    }
-  }, _vm._l((_vm.props.data.position.value), function(one) {
-    return _c('div', {
-      staticClass: "yh-custom-position-one",
-      staticStyle: {
-        "padding-right": "0px",
-        "padding-bottom": "10px",
-        "float": "left"
-      },
-      attrs: {
-        "dynamic_type": one.dynamic_type.value
-      }
-    }, [_c('a', {
-      staticClass: "yh-custom-base-element9 yh-custom-position-href yh-custom-href position-href",
-      attrs: {
-        "lagou-href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html?source=pl&i=pl-0',
-        "target": "_blank",
-        "href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html'
-      }
-    }, [_c('div', {
-      staticClass: "yh-custom-position yh-custom-base-element10 yh-custom-position-position clearfix",
-      style: (_vm.setPositionStyle)
-    }, [_c('div', {
-      staticClass: "yh-custom-base-element11 yh-custom-position-name position",
-      style: ({
-        color: _vm.props.css.position.value.positionName_color.value,
-      })
-    }, [_vm._v("\n" + _vm._s(one.positionName.value) + "\n")]), _vm._v(" "), _c('div', {
-      staticClass: "yh-custom-base-element12 yh-custom-position-salary salary",
-      style: ({
-        color: _vm.props.css.position.value.salary_color.value,
-      })
-    }, [_vm._v("\n" + _vm._s(one.salary.value) + "\n")])])])])
-  }))]), _c('div', {
-    staticClass: "yh-custom-base-element21",
-    attrs: {
-      "id": "custom4",
-      "path": "elements.4",
-      "draggable": "false",
       "yh-custom-button": "yh-custom-button"
     }
   }, [_c('div', {
     staticClass: "yh-custom-button-content"
   }, [_c('div', {
-    staticClass: "yh-custom-button yh-custom-base-element22 yh-custom-button-btn",
-    style: (_vm.setmoreButtonStyle)
-  }, [_vm._v(_vm._s(_vm.props.data.more_button_text.value) + "\n")]), _vm._v(" "), _c('a', {
-    staticClass: "yh-custom-base-element23 yh-custom-button-href yh-custom-href",
+    staticClass: "yh-custom-button yh-custom-base-element7 yh-custom-button-btn",
+    style: (_vm.setbuttonButtonStyle)
+  }, [_vm._v(_vm._s(_vm.props.data.button_button_text.value) + "\n")]), _vm._v(" "), _c('a', {
+    staticClass: "yh-custom-base-element8 yh-custom-button-href yh-custom-href",
     attrs: {
-      "lagou-href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html',
+      "lagou-href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
       "target": "_blank",
-      "href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html'
+      "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html'
     }
   })])])])
 },staticRenderFns: []}
@@ -1672,7 +1579,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".yh-custom-base-element00 { margin:0 auto; width: 300px; height: 365px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 6px; box-shadow: rgb(255, 255, 255) 0px 0px 0px; position: relative; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(0, 255, 0)), to(rgb(255, 255, 0)));}.yh-custom-base-element0{left: 25px; top: 25px; position: absolute;}.yh-custom-base-element1{width: 100px; height: 100px; background-color: rgb(255, 255, 255); border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 6px; box-shadow: rgb(255, 255, 255) 0px 0px 0px;}.yh-custom-base-element2{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}.yh-custom-base-element3{left: 145px; top: 25px; position: absolute;}.yh-custom-base-element4{width: 150px; height: 40px; line-height: 40px; font-size: 18px; color: rgb(255, 255, 255); text-align: left; font-style: normal; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element5{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}.yh-custom-base-element6{left: 145px; top: 65px; position: absolute;}.yh-custom-base-element7{width: 150px; height: 66px; line-height: 22px; font-size: 14px; color: rgb(255, 255, 255); text-align: left; font-style: normal; overflow: hidden;}.yh-custom-base-element8{left: 25px; top: 150px; position: absolute;}.yh-custom-base-element9{display: block;}.yh-custom-base-element10{width: 250px; height: 40px; border-radius: 6px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; box-shadow: rgb(255, 255, 255) 0px 0px 0px; overflow: hidden; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 0)));}.yh-custom-base-element11{width: 120px; height: 40px; line-height: 40px; padding-left: 20px; font-size: 14px; color: rgb(255, 0, 255); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element12{width: 80px; height: 40px; line-height: 40px; padding-left: 10px; padding-right: 20px; font-size: 14px; color: rgb(255, 0, 0); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element13{display: block;}.yh-custom-base-element14{width: 250px; height: 40px; border-radius: 6px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; box-shadow: rgb(255, 255, 255) 0px 0px 0px; overflow: hidden; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 0)));}.yh-custom-base-element15{width: 120px; height: 40px; line-height: 40px; padding-left: 20px; font-size: 14px; color: rgb(255, 0, 255); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element16{width: 80px; height: 40px; line-height: 40px; padding-left: 10px; padding-right: 20px; font-size: 14px; color: rgb(255, 0, 0); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element17{display: block;}.yh-custom-base-element18{width: 250px; height: 40px; border-radius: 6px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; box-shadow: rgb(255, 255, 255) 0px 0px 0px; overflow: hidden; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 0)));}.yh-custom-base-element19{width: 120px; height: 40px; line-height: 40px; padding-left: 20px; font-size: 14px; color: rgb(255, 0, 255); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element20{width: 80px; height: 40px; line-height: 40px; padding-left: 10px; padding-right: 20px; font-size: 14px; color: rgb(255, 0, 0); text-align: left; font-style: normal; float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element21{left: 25px; top: 300px; position: absolute;}.yh-custom-base-element22{width: 250px; height: 40px; line-height: 40px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 8px; box-shadow: rgb(255, 255, 255) 0px 0px 0px; font-size: 16px; color: rgb(255, 0, 255); text-align: center; background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 255, 0)), to(rgb(0, 255, 0)));}.yh-custom-base-element23{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}", ""]);
+exports.push([module.i, ".yh-custom-base-element00 { margin:0 auto; width: 150px; height: 205px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 6px; box-shadow: rgb(255, 255, 255) 0px 0px 0px; position: relative; background-color: rgb(255, 255, 255);}.yh-custom-base-element0{left: 25px; top: 15px; position: absolute;}.yh-custom-base-element1{width: 100px; height: 100px; background-color: rgb(255, 255, 255); border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 6px; box-shadow: rgb(255, 255, 255) 0px 0px 0px;}.yh-custom-base-element2{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}.yh-custom-base-element3{left: 25px; top: 120px; position: absolute;}.yh-custom-base-element4{width: 100px; height: 40px; line-height: 40px; font-size: 14px; color: rgb(102, 102, 102); text-align: center; font-style: normal; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}.yh-custom-base-element5{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}.yh-custom-base-element6{left: 15px; top: 160px; position: absolute;}.yh-custom-base-element7{width: 120px; height: 30px; line-height: 30px; border-color: rgb(255, 255, 255); border-width: 0px; border-style: none; border-radius: 8px; box-shadow: rgb(255, 255, 255) 0px 0px 0px; font-size: 14px; color: rgb(255, 255, 255); text-align: center; background-color: rgb(255, 0, 132);}.yh-custom-base-element8{width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; display: block;}", ""]);
 
 // exports
 

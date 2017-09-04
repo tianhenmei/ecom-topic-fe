@@ -9,6 +9,7 @@
     </div>
 </template>
 <script>
+    import axios from 'axios'
     import {mapState} from 'vuex'
     import {
         setCompanyData,
@@ -98,9 +99,10 @@
                 data[this.ajaxUrl[name].param] = JSON.stringify(json).replace(/"/g,'');
 
                 (function(self,companyPlain){
-                    self.$http.get(self.topic+self.ajaxUrl[name].url,data)
+                    //self.topic+self.ajaxUrl[name].url
+                    axios.get(self.ajaxUrl[name].url,data)
                         .then(response => {
-                            let result = response.body.result
+                            let result = response.data.result
                             self['set'+self.triggerClassify+'Data'](result,companyPlain)
                         },response => {
                             console.log(response.body.message)
