@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start-test": "NODE_ENV=production node --inspect index.js",
+    "start-error": "cross-env NODE_ENV=production gulp start && node index.js",
     "start": "cross-env NODE_ENV=production gulp start && pm2 start process.json --env production",
     "gulp-start":"cross-env NODE_ENV=production gulp start",
     "pm2-start":"pm2 start process.json --env production",

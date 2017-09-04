@@ -32,17 +32,17 @@ var writeHTML = require('../build/render-pc.js'),
 // router.use(bodyParser.urlencoded());
 
 // 保存数据
-router.get('/api/editorPC/testError',function(req,res){
+router.get('/api/editorPC/testError',function(req,res,next){
     throw new Error('test error')
 });
-router.get('/api/editorPC/testRight',function(req,res){
+router.get('/api/editorPC/testRight',function(req,res,next){
     res.json({
         state:200,
         success:true,
         message:'测试成功'
     })
 });
-router.post('/api/editorPC/saveData',function(req,res){
+router.post('/api/editorPC/saveData',function(req,res,next){
     var page = req.body;
     console.log('Saving data...')
     mkdirsSync(saveDir+page.name+'/js','0777');
@@ -55,7 +55,7 @@ router.post('/api/editorPC/saveData',function(req,res){
     });
 });
 
-router.post('/api/editorPC/savePage',function(req,res){
+router.post('/api/editorPC/savePage',function(req,res,next){
     var page = req.body;
     console.log('Saving page...')
     // 创建文件及文件夹
@@ -185,7 +185,7 @@ router.post('/api/editorPC/upload',function(req,res,next){
     });
 });
 
-router.post('/api/editorPC/saveComponent',function(req,res){
+router.post('/api/editorPC/saveComponent',function(req,res,next){
     var page = req.body;
     console.log('Saving component...')
     fs.readdir('src/editorPC/components/Custom/', function(err, files) {
@@ -237,7 +237,7 @@ router.post('/api/editorPC/saveComponent',function(req,res){
     })
 });
 
-router.get('/api/editorPC/getCustomData',function(req,res){
+router.get('/api/editorPC/getCustomData',function(req,res,next){
     fs.readdir('src/editorPC/components/Custom/', function(err, files) {
         if (err) {  
             console.log('read dir error');
@@ -266,7 +266,7 @@ router.use('/api/editorPC/company/speed_checkCompany/:id', function (req, res, n
     console.log('Request Type:', req.method);
     next();
 });
-router.post('/api/editorPC/company/speed_checkCompany/:id', function(req, res){
+router.post('/api/editorPC/company/speed_checkCompany/:id', function(req, res,next){
     let result = {
         city:"北京",
         companyId:req.params.id,//"44",
@@ -299,7 +299,7 @@ router.use('/api/editorPC/job/speed_checkPosition/:id', function (req, res, next
     console.log('Request Type:', req.method);
     next();
 });
-router.get('/api/editorPC/job/speed_checkPosition/:id', function(req, res){
+router.get('/api/editorPC/job/speed_checkPosition/:id', function(req, res,next){
     let result = {
         city:"上海",
         companyId:25592,
