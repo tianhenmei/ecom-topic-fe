@@ -90,7 +90,8 @@
             'triggerId',
             'childClassify',
             'parentmodule',
-            'customStatus'
+            'customStatus',
+            'ENV_STATUS'
         ]),
         data() {
             return {
@@ -144,7 +145,9 @@
         },
         mounted(){
             this.getPageData()
-            this.getCustomData()
+            if(!this.ENV_STATUS){
+                this.getCustomData()
+            }
         },
         methods:{
             recoveryData,
