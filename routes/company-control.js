@@ -8,7 +8,9 @@ var express = require('express');
 
 var router = express.Router();
  /****Node request */
-var axios = require('axios')
+var axios = require('axios'),
+    createFetch = require('./createFetch.js'),
+    fetch = require('isomorphic-fetch')
 axios.defaults.withCredentials = true
 // router.use(bodyParser.json({limit: '50mb'}));
 // router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -276,14 +278,30 @@ router.use('/api/company/speed_checkCompany_online/:id', function (req, res, nex
     next();
 });
 router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next){
-    // req.params.id
-    console.log(req.headers.cookie)
-    axios.post('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id,{
-        withCredentials:true,
-        cookie:req.headers.cookie
-    })
-    .then(function (response) {
-        // console.log(response.data);
+    let defaults = {
+            method: 'GET',
+            mode: 'same-origin',
+            credentials:'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                ...(req.headers.cookie ? {
+                    Cookie: req.headers.cookie
+                } : null)
+            }
+        },
+        options = {
+            method: 'POST'
+        }
+    fetch('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id,{
+        ...defaults,
+        ...options,
+        headers: {
+            ...defaults.headers,
+            ...(options && options.headers),
+        }
+    }).then(function (response) {
+            // console.log(response.data);
         res.json({
             state:200,
             success:true,
@@ -299,6 +317,38 @@ router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next
         // console.log(error);
         next(error)
     })
+    
+    
+    // createFetch({
+    //     baseUrl: config.api.serverUrl,
+    //     cookie: req.headers.cookie
+    // })
+
+
+
+    // req.params.id
+    // console.log(req.headers.cookie)
+    // axios.post('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id,{
+    //     withCredentials:true,
+    //     headers:req.headers
+    // })
+    // .then(function (response) {
+    //     // console.log(response.data);
+    //     res.json({
+    //         state:200,
+    //         success:true,
+    //         result:response.data.result
+    //     })
+    // })
+    // .catch(function (error) {
+    //     res.json({
+    //         state:500,
+    //         message:'获取失败！',
+    //         success:false
+    //     })
+    //     // console.log(error);
+    //     next(error)
+    // })
 });
 
 
