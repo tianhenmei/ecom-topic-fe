@@ -71,6 +71,7 @@
     import YHEditPrompt from '../components-edit/yh-edit-prompt.vue'
     import YHEditAddCompanyPosition from '../components-edit/yh-edit-add-CompanyPosition.vue'
     import YHCustom from './yh-custom.vue'
+    axios.defaults.withCredentials = true
     let components = {
         'yh-lib':YHLib,
         'yh-edit-add-companyposition':YHEditAddCompanyPosition,

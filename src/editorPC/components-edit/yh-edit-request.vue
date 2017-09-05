@@ -3,6 +3,7 @@
         <div class="yh-edit-text">{{options.cn}}{{options.cn ? '：' : ''}}</div>
         <div class="yh-edit-value clearfix">
             <input
+                ref="yh-edit-request-input"
                 :type="optionsData.type"
                 :value="parent[options.en] ? getDesignValue : (optionsData.type == 'number' ? 0 : '')"
             />
@@ -51,7 +52,7 @@
         },
         methods:{
             requestEvent(e){
-                let id = this.parent[this.options.en].value,
+                let id = this.$refs['yh-edit-request-input'].value,//this.parent[this.options.en].value,
                     src = this.$store.state.ajaxUrl.CompanyPosition.url,//this.$store.state.companyHost,
                     method = this.$store.state.ajaxUrl.CompanyPosition.type,//'post',
                     commitname = 'setCompanyData',

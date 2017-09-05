@@ -187,7 +187,7 @@ router.post('/api/editorPC/upload',function(req,res,next){
     });
 });
 
-router.post('/api/editorPC/upload-online',function(req,res,next){
+router.post('/api/editorPC/upload_online',function(req,res,next){
     axios.post('http://topic.lagou.com/file/upload',req.body)//{media:data,type:"image"})
     .then(function (response) {
         // console.log(response.data);

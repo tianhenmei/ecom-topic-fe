@@ -8,8 +8,8 @@ var express = require('express');
 
 var router = express.Router();
  /****Node request */
- var axios = require('axios')
-
+var axios = require('axios')
+axios.defaults.withCredentials = true
 // router.use(bodyParser.json({limit: '50mb'}));
 // router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
@@ -213,7 +213,7 @@ router.get('/api/company/getCompanyandPosition',function(req,res){
     });
 });
 
-router.get('/api/company/getCompanyandPosition-online',function(req,res){
+router.get('/api/company/getCompanyandPosition_online',function(req,res){
     axios.get('http://topic.lagou.com/company/getCompanyandPosition',{
         comAndPosi:req.body.comAndPosi
     })
@@ -272,10 +272,10 @@ router.post('/api/company/speed_checkCompany/:id', function(req, res,next){
 });
 
 // 单公司：online
-router.use('/api/company/speed_checkCompany-online/:id', function (req, res, next) {
+router.use('/api/company/speed_checkCompany_online/:id', function (req, res, next) {
     next();
 });
-router.post('/api/company/speed_checkCompany-online/:id', function(req, res,next){
+router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next){
     // req.params.id
     axios.post('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id)
     .then(function (response) {
@@ -332,10 +332,10 @@ router.get('/api/job/speed_checkPosition/:id', function(req, res,next){
     })
 });
 // 单职位：online
-router.use('/api/job/speed_checkPosition-online/:id', function (req, res, next) {
+router.use('/api/job/speed_checkPosition_online/:id', function (req, res, next) {
     next();
 });
-router.get('/api/job/speed_checkPosition-online/:id', function(req, res,next){
+router.get('/api/job/speed_checkPosition_online/:id', function(req, res,next){
     console.log(req.params.id)
     // req.params.id
     axios.get('http://topic.lagou.com/job/speed_checkPosition/'+req.params.id)
