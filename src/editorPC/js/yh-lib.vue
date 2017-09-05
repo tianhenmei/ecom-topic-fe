@@ -64,10 +64,10 @@
         <ul class="yh-lib-element clearfix">
             <li class="content">
                 <ul class="clearfix">
-                    <li v-if="!ENV_STATUS" class="li_custom yh-lib-parent" @click.stop.prevent="toggleListEvent">
+                    <li class="li_custom yh-lib-parent" @click.stop.prevent="toggleListEvent">
                         <span class="yh-lib-icon"></span> 自定义
                         <div class="yh-lib-components hide">
-                            <div class="cpElement clearfix">
+                            <div class="cpElement clearfix" v-if="!ENV_STATUS">
                                 <p class="title twoToOneTitle"></p>
                                 <ul class="yh-lib-subcomponents">
                                     <li yh-module-name="Custom style1" @click.stop.prevent="setCustomComponents" >

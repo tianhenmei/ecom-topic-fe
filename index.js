@@ -124,7 +124,7 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     console.error(err);
 
     res.status(err.status || 500);
-    res.send('Server Error');
+    res.end('Server Error');
 });
 // app.use(function(err,req,res,next){
 //     console.error(err.stack);

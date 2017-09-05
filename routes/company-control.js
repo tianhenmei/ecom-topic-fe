@@ -313,7 +313,7 @@ router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next
         res.json({
             state:200,
             success:true,
-            result:response.data
+            result:response.data.result
         })
     })
     .catch(function (error) {
