@@ -14,10 +14,10 @@ var crypto = require('crypto'),  // 使用它生成时间的hash值
     // getDataPath: 获取发布页面时保存的页面的数据目录
     getDataPath = isProd ? '/data/data/topic-publish/topic/v3/' : '../publish/'
 /****DOCUMENT || PRODUCTION */
-router.use(bodyParser.json({limit: '50mb'}));
-router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+// router.use(bodyParser.json({limit: '50mb'}));
+// router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
-router.use(bodyParser.urlencoded());
+// router.use(bodyParser.urlencoded());
 
 router.post('/api/createPC/create',function(req,res){
     let data = req.body || {},

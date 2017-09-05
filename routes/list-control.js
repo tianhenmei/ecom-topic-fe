@@ -17,10 +17,10 @@ var mysql = require("./mysql.js");
 
 var router = express.Router();
 
-router.use(bodyParser.json({limit: '50mb'}));
-router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+// router.use(bodyParser.json({limit: '50mb'}));
+// router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
-router.use(bodyParser.urlencoded());
+// router.use(bodyParser.urlencoded());
 
 router.get('/publish',function(req,res){
     var templateId = req.body.templateId;

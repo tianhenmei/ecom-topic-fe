@@ -16,8 +16,8 @@ var mysql = require("./mysql.js");
 var router = express.Router(),
 saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/'
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded());
+// router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded());
 
 router.post('/save',function(req,res){
     var page = req.body,

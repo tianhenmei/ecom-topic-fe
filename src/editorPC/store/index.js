@@ -31,20 +31,24 @@ let store = new Vuex.Store({
         yh_custom_status:'',
         ajaxUrl:{
             CompanyPositions:{
-                url:__isProd__ ? 'http://topic.lagou.com/company/getCompanyandPosition' : 'http://localhost:9000/v3/api/company/getCompanyandPosition',
+                // http://topic.lagou.com/company/getCompanyandPosition
+                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/getCompanyandPosition-online' : 'http://localhost:9000/v3/api/company/getCompanyandPosition',
                 type:'GET',
                 param:'comAndPosi'
             },
             CompanyPosition:{
-                url:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://localhost:9000/v3/api/editorPC/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
+                // http://topic.lagou.com/company/speed_checkCompany/
+                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/speed_checkCompany/-online' : 'http://localhost:9000/v3/api/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
                 type:'POST'
             },
             Position:{
-                url:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://localhost:9000/v3/api/editorPC/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
+                //http://topic.lagou.com/job/speed_checkPosition/
+                url:__isProd__ ? 'http://topic.lagou.com/v3/api/job/speed_checkPosition-online/' : 'http://localhost:9000/v3/api/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
                 type:'GET'
             },
             File:{
-                url:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://localhost:9000/v3/api/editorPC/upload',
+                // online: http://topic.lagou.com/file/upload
+                url:__isProd__ ? 'http://topic.lagou.com/v3/api/editorPC/upload-online' : 'http://localhost:9000/v3/api/editorPC/upload',
                 type:'POST'
             },
         },

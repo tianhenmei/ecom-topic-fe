@@ -7,11 +7,13 @@ var bodyParser = require('body-parser');
 var express = require('express');
 
 var router = express.Router();
+ /****Node request */
+ var axios = require('axios')
 
-router.use(bodyParser.json({limit: '50mb'}));
-router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+// router.use(bodyParser.json({limit: '50mb'}));
+// router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // router.use(bodyParser.json());
-router.use(bodyParser.urlencoded());
+// router.use(bodyParser.urlencoded());
 
 
 router.get('/api/company/getCompanyandPosition',function(req,res){
@@ -211,6 +213,148 @@ router.get('/api/company/getCompanyandPosition',function(req,res){
     });
 });
 
+router.get('/api/company/getCompanyandPosition-online',function(req,res){
+    axios.get('http://topic.lagou.com/company/getCompanyandPosition',{
+        comAndPosi:req.body.comAndPosi
+    })
+    .then(function (response) {
+        // console.log(response.data);
+        res.json({
+            state:200,
+            success:true,
+            code:null,
+            msg:"查询成功",
+            result:response.data.result
+        })
+    })
+    .catch(function (error) {
+        res.json({
+            state:500,
+            msg:'获取失败！',
+            success:false
+        })
+        // console.log(error);
+        next(error)
+    })
+});
+
+// 挂载至 /user/:id 的中间件，任何指向 /user/:id 的请求都会执行它
+router.use('/api/company/speed_checkCompany/:id', function (req, res, next) {
+    console.log('Request Type:', req.method);
+    next();
+});
+router.post('/api/company/speed_checkCompany/:id', function(req, res,next){
+    let result = {
+        city:"北京",
+        companyId:req.params.id,//"44",
+        companyLeader:null,
+        companySize:"15-50人",
+        description:"北京鼎天投资管理有限公司是一家集资产管理、投资于一身的集团化企业，总部设在北京CBD核心区。在香港和上海有分支机构。主营业务为股权投资及证券投资，对冲基金及衍生产品投资等。公司将秉承开放、创新、诚信、共荣的原则，以信息及人才为优势，立足长远，建设成为具备一流规模和影响力的资产管理公司。现诚邀行业精英加盟，共享广阔前景。",
+        financestage:"未融资",
+        id:null,
+        index:0,
+        industryfield:"金融",
+        jobIds:null,
+        jobs:null,
+        logo:"image1/M00/00/01/CgYXBlTUV_OAItuDAABYAZ6vqlw992.jpg",
+        name:"北京鼎天",
+        otherlabel:"五险一金,电话费补助,每年度体检,年假,文体活动,扁平化管理,管理规范",
+        slogan:"北京鼎天主营业务为股权投资及证券投资，对冲基金及衍生产品投资等。",
+        title:null,
+        voteId:null
+    }
+    // req.params.id
+    res.json({
+        state:200,
+        success:true,
+        result:result
+    })
+});
+
+// 单公司：online
+router.use('/api/company/speed_checkCompany-online/:id', function (req, res, next) {
+    next();
+});
+router.post('/api/company/speed_checkCompany-online/:id', function(req, res,next){
+    // req.params.id
+    axios.post('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id)
+    .then(function (response) {
+        // console.log(response.data);
+        res.json({
+            state:200,
+            success:true,
+            result:response.data.result
+        })
+    })
+    .catch(function (error) {
+        res.json({
+            state:500,
+            message:'获取失败！',
+            success:false
+        })
+        // console.log(error);
+        next(error)
+    })
+});
+
+
+// 挂载至 /user/:id 的中间件，任何指向 /user/:id 的请求都会执行它
+router.use('/api/job/speed_checkPosition/:id', function (req, res, next) {
+    console.log('Request Type:', req.method);
+    next();
+});
+router.get('/api/job/speed_checkPosition/:id', function(req, res,next){
+    let result = {
+        city:"上海",
+        companyId:25592,
+        createTime:1374289295000,
+        education:"本科",
+        jobNature:"全职",
+        offlineTime:1395849600000,
+        positionAdvantage:"员工福利好",
+        positionFirstType:"运营",
+        positionId:req.params.id,//22,
+        positionName:"网站运营专员",
+        positionStatus:"EXPIRED",
+        publishTime:1374289295000,
+        publishUserId:1,
+        receiveEmail:"justin@3wcoffee.com",
+        salary:"2k-20k",
+        salaryMax:20,
+        salaryMin:2,
+        workYear:"1-3年"
+    }
+    // req.params.id
+    res.json({
+        state:200,
+        success:true,
+        result:result
+    })
+});
+// 单职位：online
+router.use('/api/job/speed_checkPosition-online/:id', function (req, res, next) {
+    next();
+});
+router.get('/api/job/speed_checkPosition-online/:id', function(req, res,next){
+    // req.params.id
+    axios.get('http://topic.lagou.com/job/speed_checkPosition/'+req.params.id)
+    .then(function (response) {
+        // console.log(response.data);
+        res.json({
+            state:200,
+            success:true,
+            result:response.data.result
+        })
+    })
+    .catch(function (error) {
+        res.json({
+            state:500,
+            message:'获取失败！',
+            success:false
+        })
+        next(error)
+    })
+});
 
 router.use(function(req,res,next){
     // console.log(req.url);
