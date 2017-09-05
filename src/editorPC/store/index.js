@@ -44,9 +44,10 @@ let store = new Vuex.Store({
                 type:'POST'
             },
             Position:{
-                //http://topic.lagou.com/job/speed_checkPosition/
+                // http://topic.lagou.com/job/speed_checkPosition/
                 // http://localhost:9000/v3/api/job/speed_checkPosition/
-                url:__isProd__ ? 'http://topic.lagou.com/v3/api/job/speed_checkPosition_online/' : 'http://localhost:9000/v3/api/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
+                // http://topic.lagou.com/v3/api/job/speed_checkPosition_online/
+                url:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://localhost:9000/v3/api/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
                 type:'GET'
             },
             File:{
