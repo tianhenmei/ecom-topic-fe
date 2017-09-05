@@ -9,8 +9,8 @@ var express = require('express');
 var router = express.Router();
  /****Node request */
 var axios = require('axios'),
-    createFetch = require('./createFetch.js'),
-    fetch = require('isomorphic-fetch')
+    createFetch = require('./createFetch.js')//,
+    // fetch = require('isomorphic-fetch')
 axios.defaults.withCredentials = true
 // router.use(bodyParser.json({limit: '50mb'}));
 // router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -278,28 +278,36 @@ router.use('/api/company/speed_checkCompany_online/:id', function (req, res, nex
     next();
 });
 router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next){
-    let defaults = {
-            method: 'GET',
-            mode: 'same-origin',
-            credentials:'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                ...(req.headers.cookie ? {
-                    Cookie: req.headers.cookie
-                } : null)
-            }
-        },
-        options = {
-            method: 'POST'
-        }
+    // let defaults = {
+    //         method: 'GET',
+    //         mode: 'same-origin',
+    //         credentials:'same-origin',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             ...(req.headers.cookie ? {
+    //                 Cookie: req.headers.cookie
+    //             } : null)
+    //         }
+    //     },
+    //     options = {
+    //         method: 'POST'
+    //     }
     fetch('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id,{
-        ...defaults,
-        ...options,
+        method: 'POST',
+        mode: 'same-origin',
+        credentials:'same-origin',
         headers: {
-            ...defaults.headers,
-            ...(options && options.headers),
-        }
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Cookie: req.headers.cookie
+        },
+        // ...defaults,
+        // ...options,
+        // headers: {
+            // ...defaults.headers,
+            // ...(options && options.headers),
+        // }
     }).then(function (response) {
             // console.log(response.data);
         res.json({
