@@ -336,6 +336,7 @@ router.use('/api/job/speed_checkPosition-online/:id', function (req, res, next) 
     next();
 });
 router.get('/api/job/speed_checkPosition-online/:id', function(req, res,next){
+    console.log(req.params.id)
     // req.params.id
     axios.get('http://topic.lagou.com/job/speed_checkPosition/'+req.params.id)
     .then(function (response) {

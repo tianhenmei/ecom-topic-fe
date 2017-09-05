@@ -1,10 +1,10 @@
 <template>
     <div class="yh-edit-request clearfix">
-        <div class="yh-edit-text">{{optionsData.name}}{{optionsData.name ? '：' : ''}}</div>
+        <div class="yh-edit-text">{{options.cn}}{{options.cn ? '：' : ''}}</div>
         <div class="yh-edit-value clearfix">
             <input
                 :type="optionsData.type"
-                :value="optionsData.style[optionsData.stylename] ? getDesignValue : (optionsData.type == 'number' ? 0 : '')"
+                :value="parent[options.en] ? getDesignValue : (optionsData.type == 'number' ? 0 : '')"
             />
             <span @click.stop.prevent="requestEvent">获取</span>
         </div>
@@ -51,7 +51,7 @@
         },
         methods:{
             requestEvent(e){
-                let id = this.optionsData.style[this.optionsData.stylename].value,
+                let id = this.parent[this.options.en].value,
                     src = this.$store.state.ajaxUrl.CompanyPosition.url,//this.$store.state.companyHost,
                     method = this.$store.state.ajaxUrl.CompanyPosition.type,//'post',
                     commitname = 'setCompanyData',

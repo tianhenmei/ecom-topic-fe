@@ -38,7 +38,7 @@ let store = new Vuex.Store({
             },
             CompanyPosition:{
                 // http://topic.lagou.com/company/speed_checkCompany/
-                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/speed_checkCompany/-online' : 'http://localhost:9000/v3/api/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
+                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/speed_checkCompany/-online/' : 'http://localhost:9000/v3/api/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
                 type:'POST'
             },
             Position:{
