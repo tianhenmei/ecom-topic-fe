@@ -71,7 +71,7 @@
     import YHEditPrompt from '../components-edit/yh-edit-prompt.vue'
     import YHEditAddCompanyPosition from '../components-edit/yh-edit-add-CompanyPosition.vue'
     import YHCustom from './yh-custom.vue'
-    axios.defaults.withCredentials = true
+    // axios.defaults.withCredentials = true
     let components = {
         'yh-lib':YHLib,
         'yh-edit-add-companyposition':YHEditAddCompanyPosition,
@@ -212,7 +212,9 @@
             },
             getCustomData(){
                 let self = this
-                axios.get(this.connhost+'v3/api/editorPC/getCustomData')
+                axios.get(this.connhost+'v3/api/editorPC/getCustomData',{
+                    withCredentials:false   // 如果为true，就不能跨域了，但是如果为false就不能发送cookie
+                })
                 .then(response => {
                     let content = response.data.content
                     
@@ -236,6 +238,8 @@
                         id:templateId,
                         html:html
                     // }
+                },{
+                    withCredentials:false     // 如果为true，就不能跨域了，但是如果为false就不能发送cookie
                 }).then(response => {
                     let content = response.data.content,
                         i = '',j = ''

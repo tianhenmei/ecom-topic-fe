@@ -277,7 +277,11 @@ router.use('/api/company/speed_checkCompany_online/:id', function (req, res, nex
 });
 router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next){
     // req.params.id
-    axios.post('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id)
+    console.log(req.headers.cookie)
+    axios.post('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id,{
+        withCredentials:true,
+        cookie:req.headers.cookie
+    })
     .then(function (response) {
         // console.log(response.data);
         res.json({
