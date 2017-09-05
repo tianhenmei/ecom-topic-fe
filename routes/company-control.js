@@ -309,11 +309,11 @@ router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next
             // ...(options && options.headers),
         // }
     }).then(function (response) {
-            // console.log(response.data);
+        console.log(response.data);
         res.json({
             state:200,
             success:true,
-            result:response.data.result
+            result:response.data
         })
     })
     .catch(function (error) {
