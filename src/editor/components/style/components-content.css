@@ -1,0 +1,164 @@
+@font-face{
+    /* font-family: FontAwesome; */
+    /* src:url('../../../../public/font/FontAwesome.otf'); */
+}
+[components-content] {
+    width:100%;
+    height:100%;
+    margin:0 auto;
+}
+[components-content] .yh-components-content{
+    width:300px;
+    height:482px;
+    margin:0 auto;
+    padding:15px;
+    border:1px dashed #666;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin:-241px 0 0 -150px;
+}
+[components-content] .yh-content-center{
+    width:300px;
+    height:482px;
+    background:#fff;
+    position:relative;
+} 
+[components-content] .yh-components-content .yh-page-edit{
+    position:absolute;
+    right: -26px;
+    top: 12px;
+}
+[components-content] .yh-page-edit > ul > li{
+    width:24px;
+    height:24px;
+    background:url(http://localhost:9000/v3/static/images/icons.png) no-repeat 0 -192px;
+}
+[components-content] .yh-page-edit > ul > li > input {
+    width:24px;
+    height:24px;
+    display:block;
+    border:none;
+    opacity:0;
+}
+
+
+
+
+
+
+[components-content] .yh-content-center .page {
+    width:100%;
+    height:100%;
+}
+/*移动框********************************************/
+[components-content] #yh-move-box{
+    position:absolute;
+    left:100%;
+    top:0;
+    background:#000;
+    opacity:0.5;
+    z-index:9999;
+}
+/*选中框********************************************/
+.yh-selection {display: none; position:absolute; z-index: 999;}
+.yh-selection p { 
+    width:10px; 
+    height:10px;  
+    background:#ff0084; 
+    position:absolute;
+    cursor:ne-resize;
+}
+.yh-selectTop p { 
+    left:0; top:0; 
+    margin:-5px 0 0 -5px; 
+    cursor:nw-resize;
+}
+.yh-selectRight p { left:0; top:0; margin:-5px 0 0 -5px; }
+.yh-selectBottom p { 
+    left:100%; 
+    top:0; 
+    margin:-5px 0 0 -5px; 
+    cursor:se-resize;
+}
+.yh-selectLeft p { 
+    left:0; top:100%; margin:-5px 0 0 -5px; 
+    cursor:sw-resize;
+}
+
+.yh-selectTop p.center,.yh-selectBottom p.center {
+    left:50%;
+    top:50%;
+    margin:-5px 0 0 -5px;
+}
+.yh-selectTop p.rotate {
+    border-radius:10px;
+    left:50%;
+    top:-24px;
+    margin:0 0 0 -5px;
+    cursor:pointer;
+}
+.yh-selectTop p.rotate:after {
+    width: 2px;
+    height: 20px;
+    content: "";
+    background: #ff0084;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    margin: 0 0 0 -1px;
+}
+.yh-selectLeft p.center,.yh-selectRight p.center {
+    left:50%;
+    top:50%;
+    margin:-5px 0 0 -5px;
+}
+.yh-selectLeft p.center {
+    cursor:w-resize;
+}
+.yh-selectRight p.center {
+    cursor:e-resize;
+}
+.yh-selectTop p.center{
+    cursor:n-resize;
+}
+.yh-selectBottom p.center {
+    cursor:s-resize;
+}
+.yh-selectTop,.yh-selectBottom {border-top: 2px dashed #ff0084; }
+.yh-selectLeft,.yh-selectRight {border-left: 2px dashed #ff0084; }
+
+
+
+
+
+/*文本********************************************/
+[kitty-text]{
+    position: absolute;
+    left:0;
+    top:0;
+}
+
+/*图片********************************************/
+[kitty-image]{
+    position: absolute;
+    left:0;
+    top:0;
+}
+
+/*音乐********************************************/
+[kitty-audio]{
+    position: absolute;
+    left:0;
+    top:0;
+}
+[kitty-audio] .yh-audio-open{
+    width:100%;
+    height:100%;
+}
+[kitty-audio] .yh-audio{
+    position: absolute;
+    left:0;
+    top:0;
+    display:none;
+}

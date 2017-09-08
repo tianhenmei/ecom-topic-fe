@@ -10,11 +10,13 @@ var querystring = require('querystring');
 //var babel = require('babel-core/register');
 
 var router = express.Router();
-// var editor_control = require('./editor-control.js');
+var editor_control = require('./editor-control.js');
 var list_control = require('./list-control.js');
 var editorPC_control = require('./editorPC-control.js');
 var company_control = require('./company-control.js');
 var createPC_control = require('./createPC-control.js');
+
+var fetch = require('isomorphic-fetch');
 
 // router.use(bodyParser.json({limit: '50mb'}));
 // router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -25,7 +27,7 @@ router.use('/v3',express.static('publish')); // 指定挂载路径（虚拟）
 router.use('/list',list_control);
 // router.use('/editor',editor_control);
 // router.use('/v3',createPC_control);
-router.use('/v3',[editorPC_control,company_control,createPC_control]);  // /v3/api/editorPC
+router.use('/v3',[editorPC_control,company_control,createPC_control,editor_control]);  // /v3/api/editorPC
 // router.use('/v3/static',express.static('public'));  // 指定挂载路径（虚拟）
 // router.use('/v3',company_control);  // /v3/api/company
 // router.use('/v3',createPC_control);
@@ -64,8 +66,28 @@ router.use('/v3',[editorPC_control,company_control,createPC_control]);  // /v3/a
 //     return html;
 // }
 
-
-
+// router.get('*',(req, res, next) => {
+//     //req.params.id
+//     fetch('http://local.lagou.com:8080/job/speed_checkPosition/55',{
+//         method: 'GET'
+//     })
+//     .then(function (response) {
+//         console.log(response.data);
+//         res.json({
+//             state:200,
+//             success:true,
+//             result:response.data
+//         })
+//     })
+//     .catch(function (error) {
+//         res.json({
+//             state:500,
+//             message:'获取失败！',
+//             success:false
+//         })
+//         next(error)
+//     })
+// })
 
 
 router.use(function(req,res,next){

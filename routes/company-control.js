@@ -9,8 +9,8 @@ var express = require('express');
 var router = express.Router();
  /****Node request */
 var axios = require('axios'),
-    createFetch = require('./createFetch.js')//,
-    // fetch = require('isomorphic-fetch')
+    createFetch = require('./createFetch.js'),//,
+    fetch = require('isomorphic-fetch')
 axios.defaults.withCredentials = true
 // router.use(bodyParser.json({limit: '50mb'}));
 // router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -293,6 +293,8 @@ router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next
     //     options = {
     //         method: 'POST'
     //     }
+    // http://local.lagou.com:8080/company/speed_checkCompany/
+    // http://topic.lagou.com/company/speed_checkCompany/
     fetch('http://topic.lagou.com/company/speed_checkCompany/'+req.params.id,{
         method: 'POST',
         mode: 'same-origin',
@@ -309,7 +311,7 @@ router.post('/api/company/speed_checkCompany_online/:id', function(req, res,next
             // ...(options && options.headers),
         // }
     }).then(function (response) {
-        console.log(response.data);
+        console.log(response);
         res.json({
             state:200,
             success:true,
@@ -398,16 +400,55 @@ router.use('/api/job/speed_checkPosition_online/:id', function (req, res, next) 
     next();
 });
 router.get('/api/job/speed_checkPosition_online/:id', function(req, res,next){
-    console.log(req.params.id)
     // req.params.id
-    axios.get('http://topic.lagou.com/job/speed_checkPosition/'+req.params.id)
+    // http://local.lagou.com:8080/job/speed_checkPosition/
+    // http://topic.lagou.com/job/speed_checkPosition/
+    // axios.get('http://local.lagou.com:8080/job/speed_checkPosition/'+req.params.id)
+    // console.log(req.headers.cookie)
+    fetch('http://local.lagou.com:8080/job/speed_checkPosition/'+req.params.id,{
+        method: 'GET',
+        // mode: 'cors',//'same-origin',
+        // credentials:'include',//'same-origin',
+        // headers: {
+        //     'Accept': 'application/json',
+        //     'Content-Type': 'application/json',
+        //     Cookie: req.headers.cookie//'user_trace_token=20170803122515-bfe20816-7803-11e7-9c60-525400f775ce; LGUID=20170803122515-bfe20f07-7803-11e7-9c60-525400f775ce; fromsite="10.1.255.114:8888"; utm_source=""; index_location_city=%E5%8C%97%E4%BA%AC; _ga=GA1.3.1861536858.1502699035; LGSID=20170906134412-69808573-92c6-11e7-87c3-525400f775ce; LGRID=20170906144643-24cb44fd-92cf-11e7-911d-5254005c3644; _ga=GA1.2.1861536858.1502699035; _gid=GA1.2.1155321645.1504450239; Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1504450242,1504492744,1504512736,1504512913; Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1504680404; _putrc=838B03ABF547FAB5; JSESSIONID=12o6gjxfqptf72zcddnlkqpo4; login=true; unick="%E9%AB%98%E8%BE%89"'//req.headers.cookie
+        // }
+    })
     .then(function (response) {
-        // console.log(response.data);
-        res.json({
-            state:200,
-            success:true,
-            result:response.data.result
-        })
+        // if(!response.data && /(passport.lagou.com)/g.test(response.url)){
+        //     fetch(response.url,{
+        //         method: 'GET',
+        //         mode: 'cors',//'same-origin',
+        //         credentials:'include',//'same-origin',
+        //         headers: {
+        //             'Access-Control-Allow-Origin':'*',
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json',
+        //             Cookie: req.headers.cookie
+        //         }
+        //     }).then(function (response) {
+        //         res.json({
+        //             state:200,
+        //             success:true,
+        //             result:response.data
+        //         })
+        //     }).catch(function (error) {
+        //         res.json({
+        //             state:500,
+        //             message:'获取失败！',
+        //             success:false
+        //         })
+        //         next(error)
+        //     })
+        // }else{
+            console.log(response.data);
+            res.json({
+                state:200,
+                success:true,
+                result:response.data
+            })
+        // }
     })
     .catch(function (error) {
         res.json({

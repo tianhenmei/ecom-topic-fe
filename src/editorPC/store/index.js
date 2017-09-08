@@ -40,14 +40,16 @@ let store = new Vuex.Store({
                 // http://topic.lagou.com/company/speed_checkCompany/
                 // http://localhost:9000/v3/api/company/speed_checkCompany/
                 // http://topic.lagou.com/v3/api/company/speed_checkCompany-online/
-                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/speed_checkCompany_online/' : 'http://localhost:9000/v3/api/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
+                // http://local.lagou.com:8080/company/speed_checkCompany/
+                url:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://local.lagou.com:8080/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
                 type:'POST'
             },
             Position:{
                 // http://topic.lagou.com/job/speed_checkPosition/
                 // http://localhost:9000/v3/api/job/speed_checkPosition/
                 // http://topic.lagou.com/v3/api/job/speed_checkPosition_online/
-                url:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://localhost:9000/v3/api/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
+                // http://local.lagou.com:8080/job/speed_checkPosition/
+                url:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://local.lagou.com:8080/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
                 type:'GET'
             },
             File:{

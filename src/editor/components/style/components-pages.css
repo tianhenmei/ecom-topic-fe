@@ -1,0 +1,119 @@
+[components-pages]{
+    width: 200px;
+    height: 500px;
+    padding:0 0 10px 0;
+    overflow:hidden;
+    background:#111;
+    position:absolute;
+    left:0;
+    top:60px;
+}
+[components-pages] ul.components-pages-list {
+    width: 180px;
+    padding:10px 0 0 0;
+    position:absolute;
+    left:0;
+    top:0;
+}
+[components-pages] ul.components-pages-list li[page]{
+    width:180px;
+    padding-bottom: 10px;
+    position:relative;
+}
+li[page] .yh-page-edit {
+    width:30px;
+    height:241px;
+    line-height:241px;
+    background:#333;
+    float:left;
+    text-align:center;
+    font-size:18px;
+    color:#fff;
+}
+li[page] .yh-page-center {
+    width:150px;
+    height:241px;
+    margin:0 auto;
+    background:#fff;
+    float:left;
+}
+li[page] .yh-page-center .yh-page-canvas {
+    width:300px;
+    height:482px;
+    -webkit-transform-origin:0 0;
+    transform-origin:0 0;
+    -webkit-transform:scaleX(0.5) scaleY(0.5);
+    transform:scaleX(0.5) scaleY(0.5);
+}
+li[page] .yh-page-selected {
+    width:150px;
+    height:30px;
+    position:absolute;
+    left:30px;
+    bottom:10px;
+    background:#000;
+    background:rgba(0,0,0,0.5);
+    filter:Alpha(opacity=50);
+    *zoom:1;
+}
+li[page] .yh-page-selected .yh-page-add{
+    width:26px;
+    height:26px;
+    line-height:22px;
+    margin:2px auto 0;
+    font-size:30px;
+    text-align:center;
+    color:#fff;
+    border-radius: 26px;
+    background: #666;
+    cursor:pointer;
+}
+li[page] .yh-page-remove {
+    width: 30px;
+    height: 30px;
+    background: #777 url(http:///localhost:9000/v3/static/images/close.png) no-repeat 5px 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor:pointer;
+}
+li[page] .yh-page-hide {
+    display:none;
+}
+
+[components-pages] .yh-page-bottom{
+    width:100%;
+    height:10px;
+    background:#111;
+    position:absolute;
+    left:0;
+    bottom:0;
+}
+[components-pages] [components-pages-bar-bg]{
+    width:4px;
+    height:100%;
+    background:#222;
+    position:absolute;
+    right:0;
+    top:0;
+}
+[components-pages] [components-pages-bar]{
+    width:4px;
+    height:100px;
+    margin:0 auto;
+    border-radius:4px;
+    background:#ff0084;
+    position:absolute;
+    left:0;
+    top:0;
+}
+[components-pages] [components-pages-bar-bg].search_hide{
+    display:none;
+}
+[components-pages] [components-pages-bar].search_hide{
+    display:none;
+}
+
+[components-pages] .white-bg {
+    background:transparent;
+}

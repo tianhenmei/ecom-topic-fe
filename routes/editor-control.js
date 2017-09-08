@@ -3,23 +3,29 @@
  */
 var fs = require('fs');
 var path = require('path');
-var bodyParser = require('body-parser');
+// var bodyParser = require('body-parser');
 var express = require('express');
 var multiparty = require('multiparty');
 var sizeOf = require('image-size');
 var child_process = require('child_process');
-var uglify = require('uglify-js');
+var uglify = require('uglify-js'),
+    crypto = require('crypto');
 
 var mysql = require("./mysql.js");
 // var test = require("../public/dist/demo/js/test-main.js");
 
 var router = express.Router(),
-saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/'
+    isProd = process.env.NODE_ENV === 'production',
+    // saveDir: 发布页面时保存的页面目录
+    saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/',
+    // getDataPath: 获取发布页面时保存的页面的数据目录
+    getDataPath = isProd ? '/data/data/topic-publish/topic/v3/' : '../publish/'
+    
 
 // router.use(bodyParser.json());
 // router.use(bodyParser.urlencoded());
 
-router.post('/save',function(req,res){
+router.post('/api/editor/save',function(req,res){
     var page = req.body,
         querey_string = 'select id from pages WHERE id='+page.id,
         pageString = '';
@@ -70,7 +76,7 @@ router.post('/save',function(req,res){
     });
 });
 
-router.post('/getList',function(req,res){
+router.post('/api/editor/getList',function(req,res){
     var querey_string = 'select * from pages',
         pageString = '';
     mysql.query(querey_string,function(err,rows,fields){
@@ -93,31 +99,105 @@ router.post('/getList',function(req,res){
     });
 });
 
-router.post('/getPageData',function(req,res){
-    var templateID = req.body.id ? req.body.id : 0,
-        querey_string = 'select * from pages WHERE id='+templateID,
-        pageString = '';
-    mysql.query(querey_string,function(err,rows,fields){
+router.post('/api/editor/getPageData',function(req,res){
+    var name = req.body.html ? req.body.html : 'test-h5',
+        templateId = req.body.id,
+        dirpath = saveDir+req.body.html
+    if(!fs.existsSync(dirpath) && !templateId && req.body.html){
+        let secret = new Date().getTime()+'',
+            // hash = crypto.createHmac('md5', secret)
+            //             .update('yh')
+            //             .digest('hex')
+            hash = crypto.randomBytes(8)
+                        .toString('hex'),
+            newdata = {
+                pageInfo:{
+                    templateId:hash,
+                    templateType:'H5',
+                    name:'YH EDITOR H5',
+                    templateCategory:'测试',
+                    title:'YH EDITOR H5',
+                    createTime:new Date(),
+                    createAuthor:'gaohui',
+                    updateTime:'',
+                    updateAuthor:'gaohui',
+                    html:req.body.html,
+                    description:'YH EDITOR H5 TEST',
+                    activeTimeStart:'',
+                    activeTimeEnd:'',
+                    keywords:'',
+                    lgID:'',
+                    lgH5ID:'',
+                    scriptsJson:[],
+                    share:{
+                        status:false,
+                        url:'',
+                        title:'',
+                        desc:'',
+                        pic:''
+                    }
+                },
+                elements:[],
+                includes:[],
+                count:0
+            }
+        mkdirsSync(dirpath+'/js','0777');
+        writeFile(dirpath+'/js/index.json',JSON.stringify(newdata))
+        res.json({
+            state:200,
+            success:true,
+            content:newdata
+        });
+    }
+    fs.readFile(path.resolve(__dirname,getDataPath+name+'/js/index.json'),'utf-8',function(err,data){
         if(err){
-            throw err;
-        }
-        if(rows && rows.length > 0){
+            console.log(err)
             res.json({
                 state:200,
-                success:true,
-                content:rows[0]
-            });
+                success:false,
+                content:{
+                    message:'NOT FOUND PAGE '+name.toLocaleUpperCase(),
+                    count:0,
+                    includes:[],
+                    elements:[]
+                }
+            })
         }else{
+            var data = JSON.parse(data)
+            if(data.count){
+                data.count = parseInt(data.count)
+            }
             res.json({
                 state:200,
                 success:true,
-                content:{}
+                content:data
             });
         }
-    });
+    })
+    // var templateID = req.body.id ? req.body.id : 0,
+    //     querey_string = 'select * from pages WHERE id='+templateID,
+    //     pageString = '';
+    // mysql.query(querey_string,function(err,rows,fields){
+    //     if(err){
+    //         throw err;
+    //     }
+    //     if(rows && rows.length > 0){
+    //         res.json({
+    //             state:200,
+    //             success:true,
+    //             content:rows[0]
+    //         });
+    //     }else{
+    //         res.json({
+    //             state:200,
+    //             success:true,
+    //             content:{}
+    //         });
+    //     }
+    // });
 });
 
-router.post('/upload',function(req,res){
+router.post('/api/editor/upload',function(req,res){
     //生成multiparty对象，并配置上传目标路径
     var form = new multiparty.Form({uploadDir: './public/files/'});
     //上传完成后处理
@@ -288,7 +368,8 @@ function writeFile(path,string){
 //创建多层文件夹 同步
 function mkdirsSync(dirpath, mode) { 
     if (!fs.existsSync(dirpath)) {
-        var pathtmp;
+        var pathtmp,
+            i = 0;
         dirpath.split(path.sep).forEach(function(dirname) {
             if(dirname){
                 if (pathtmp) {
@@ -301,12 +382,14 @@ function mkdirsSync(dirpath, mode) {
                         return false;
                     }
                 }
+            }else if(i == 0 && !dirname){
+                pathtmp = '/'
+                i++;
             }
         });
     }
     return true; 
 }
-
 
 router.use(function(req,res,next){
     // console.log(req.url);

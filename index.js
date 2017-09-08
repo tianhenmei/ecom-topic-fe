@@ -79,7 +79,7 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //设置跨域访问
 app.all('*', function(req, res, next) {
-    if(/(.html)|(.css)|(.png)|(.jpg)|(.jpeg)|(.gif)/.test(req.url)){
+    if(/(.html)|(.css)|(.png)|(.jpg)|(.jpeg)|(.gif)|(.otf)|(.ttf)/.test(req.url)){
         
     }else{
         // console.log(req.url);

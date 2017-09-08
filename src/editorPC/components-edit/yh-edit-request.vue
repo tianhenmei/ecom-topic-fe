@@ -14,6 +14,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import fetch from 'isomorphic-fetch'
     import {getRequestData} from '../components/Base/Node.js'
     export default {
         props:[
@@ -71,9 +72,27 @@
                 axios({
                     method: method,
                     url: src,
-                    // data: {
-                    // }
-                }).then(response => {
+                    withCredentials:true,
+                    // Accept:'application/json, text/javascript, */*',
+                    // 'X-Requested-With':'XMLHttpRequest'
+                //     // data: {
+                //     // }
+                })
+                // fetch(src,{
+                //     mode: 'cors',//'cors',  // 'same-origin'
+                //     method: method,
+                //     credentials: 'include',//'include',  // 'same-origin'
+                //     withCredentials:true,
+                //     // headers: {
+                //         // 'Access-Control-Allow-Origin':'*',
+                //         // 'Access-Control-Allow-Credentials': true,
+
+                //         // 'Accept': 'application/json,form-urlencoded',
+                //         // 'Content-Type': 'application/json;charset=utf-8',
+                //         // 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                //     // },
+                // })
+                .then(response => {
                     let result = response.data.result
                     if(result.hasOwnProperty('logo')){
                         if(result.logo.indexOf('http') == -1 ){
@@ -95,7 +114,12 @@
                         result:result
                     })
                 },response => {
-                    console.log(response.body.message)
+                    if(response.body){
+                        console.log(response.body.message)
+                    }else {
+                        console.log(response.message)
+                    }
+                    // console.log(response.body.message)
                 })
                 // getRequestData(this.$store,id,this.options.en)
             }
