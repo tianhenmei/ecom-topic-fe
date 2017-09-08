@@ -1105,7 +1105,7 @@ let store = new Vuex.Store({
                         for(i in result){
                             if(data.hasOwnProperty(i)){
                                 data[i].value = result[i]
-                            }else if(i == 'positionFirstType'){  // 职位类别
+                            }else if(i == 'positionFirstType' && result[i]){  // 职位类别
                                 data['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
                             }
                         }
@@ -1113,7 +1113,7 @@ let store = new Vuex.Store({
                         for(i in result){
                             if(data[payload.index].hasOwnProperty(i)){
                                 data[payload.index][i].value = result[i]
-                            }else if(i == 'positionFirstType'){  // 职位类别
+                            }else if(i == 'positionFirstType' && result[i]){  // 职位类别
                                 data[payload.index]['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
                             }
                         }
@@ -1131,7 +1131,7 @@ let store = new Vuex.Store({
                         for(i in result){
                             if(data.hasOwnProperty(i)){
                                 data[i].value = result[i]
-                            }else if(i == 'positionFirstType'){  // 职位类别
+                            }else if(i == 'positionFirstType' && result[i]){  // 职位类别
                                 data['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
                             }
                         }
@@ -1146,7 +1146,7 @@ let store = new Vuex.Store({
                         for(i in result){
                             if(data[payload.index].hasOwnProperty(i)){
                                 data[payload.index][i].value = result[i]
-                            }else if(i == 'positionFirstType'){  // 职位类别
+                            }else if(i == 'positionFirstType' && result[i]){  // 职位类别
                                 data[payload.index]['dynamic_type'].value = positionTag[result[i].split('/')[0].trim()]
                             }
                         }
