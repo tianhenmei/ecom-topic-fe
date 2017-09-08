@@ -16,6 +16,7 @@
                 marginLeft:props.css.content_position.value == 'yh-block-absolute' ? props.css.content_margin_left.value+'px': '',
                 top:props.css.content_position.value == 'yh-block-absolute' ? props.css.content_top.value+'px': '0px'}">
             <div v-for="(element,index) in props.elements" 
+                v-if="element.props.data.toPC.value && element"
                 :is="element.module" 
                 :props="element.props"
                 :path="element.path"

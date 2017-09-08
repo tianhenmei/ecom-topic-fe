@@ -15,6 +15,7 @@
             :style="{
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')}">
             <div v-for="(element,index) in props.elements" 
+                v-if="element.props.data.toPC.value && element"
                 :is="element.module" 
                 :props="element.props"
                 :path="element.path"

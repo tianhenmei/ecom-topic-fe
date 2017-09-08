@@ -16,7 +16,7 @@
             <li id="lookH5"><span class="yh-lib-icon"></span>H5预览</li>
         </ul>
         <div yh-editor-content ref="yh-editor-content">
-            <div v-for="(element,index) in elements" :is="element.module"
+            <div v-for="(element,index) in elements" v-if="element" :is="element.module"
                 :props="element.props"
                 :path="element.path"
                 @addChildComponent="addChildComponent"></div>

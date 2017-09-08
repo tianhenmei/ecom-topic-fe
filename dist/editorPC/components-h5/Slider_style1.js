@@ -360,7 +360,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.props.id + '-content'
     }
   }, _vm._l((_vm.props.elements), function(element, index) {
-    return (element.props.data.toH5.value) ? _c(element.module, {
+    return (element.props.data.toH5.value && element) ? _c(element.module, {
       tag: "div",
       attrs: {
         "props": element.props,
@@ -437,7 +437,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".slider-style1{width:100%;overflow:hidden}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://topic.lagou.com/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}", ""]);
+exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:16rem;position:absolute;left:50%;top:0;margin:0 0 0 -8rem}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://localhost:9000/v3/static/images/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}", ""]);
 
 // exports
 

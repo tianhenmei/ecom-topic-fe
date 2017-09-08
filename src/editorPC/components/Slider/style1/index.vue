@@ -27,6 +27,7 @@
                     // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
                 }">
                 <div v-for="(element,index) in props.elements" 
+                    v-if="element"
                     :is="element.module" 
                     :props="element.props"
                     :path="element.path"

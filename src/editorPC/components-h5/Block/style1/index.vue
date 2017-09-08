@@ -16,7 +16,7 @@
                 marginLeft:props.h5css.content_position.value == 'yh-block-absolute' ? getRemValue(props.h5css.content_margin_left.value)+'rem': '',
                 top:props.h5css.content_position.value == 'yh-block-absolute' ? getRemValue(props.h5css.content_top.value)+'rem': '0'}">
             <div v-for="(element,index) in props.elements" 
-                v-if="element.props.data.toH5.value"
+                v-if="element.props.data.toH5.value && element"
                 :is="element.module" 
                 :props="element.props"
                 :path="element.path"

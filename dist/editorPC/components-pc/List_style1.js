@@ -185,6 +185,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -343,14 +344,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.props.id + '-content'
     }
   }, _vm._l((_vm.props.elements), function(element, index) {
-    return _c(element.module, {
+    return (element.props.data.toPC.value && element) ? _c(element.module, {
       tag: "div",
       attrs: {
         "props": element.props,
         "path": element.path,
         "parentmodule": "List_style1"
       }
-    })
+    }) : _vm._e()
   }))])
 },staticRenderFns: []}
 module.exports.render._withStripped = true

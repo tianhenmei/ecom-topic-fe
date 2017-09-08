@@ -1209,7 +1209,9 @@ let store = new Vuex.Store({
                     elemData = elemData[value]
                 }
             }
-            elemData.splice(last,1)
+            // elemData[last] = null
+            elemData.splice(last,1,null)
+            // elemData.splice(last,1)
         }
     },
     actions:{

@@ -382,7 +382,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.props.id + '-content'
     }
   }, _vm._l((_vm.props.elements), function(element, index) {
-    return (element.props.data.toH5.value) ? _c(element.module, {
+    return (element.props.data.toH5.value && element) ? _c(element.module, {
       tag: "div",
       attrs: {
         "props": element.props,
