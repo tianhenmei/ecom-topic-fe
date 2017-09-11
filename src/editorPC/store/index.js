@@ -54,7 +54,8 @@ let store = new Vuex.Store({
             },
             File:{
                 // online: http://topic.lagou.com/file/upload
-                url:__isProd__ ? 'http://topic.lagou.com/v3/api/editorPC/upload_online' : 'http://localhost:9000/v3/api/editorPC/upload',
+                // http://topic.lagou.com/v3/api/editorPC/upload_online
+                url:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://localhost:9000/v3/api/editorPC/upload',
                 type:'POST'
             },
         },

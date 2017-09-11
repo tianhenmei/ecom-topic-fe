@@ -173,7 +173,8 @@
                     axios({
                         url:requestdata.url,
                         method:requestdata.type,
-                        data:fileData
+                        data:fileData,
+                        withCredentials:true,
                     }).then(response => {
                         let data = response.data,
                             name = self.options.mold,
