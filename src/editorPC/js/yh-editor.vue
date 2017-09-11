@@ -51,7 +51,7 @@
             @setListCol="setListCol"></yh-edit-prompt>
         <yh-edit-add-companyposition @addChildData="addChildData"></yh-edit-add-companyposition>
 
-        <yh-custom ></yh-custom>
+        <yh-custom v-show="customStatus"></yh-custom>
     </div>
 </template>
 <script>
@@ -599,6 +599,9 @@
 <style lang="scss">
     @import '../../../public/css/init.css';
     @import '../css/index.scss';
+    html,body {
+        font-size:46.875px;
+    }
     /**页面样式**/
     [yh-editor]{
         width:100%;

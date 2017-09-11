@@ -86,6 +86,7 @@
         position:relative;
         padding:0 0 0 20px;
         cursor:pointer;
+        font-size:14px;
     }
     .yh-uplist-set .yh-uplist-set-title .icon{
         width:0;

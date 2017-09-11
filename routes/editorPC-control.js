@@ -241,10 +241,12 @@ router.post('/api/editorPC/saveComponent',function(req,res,next){
             mkdirsSync('src/editorPC/components-h5/Custom/style'+max,'0777');
             writeFileSync('src/editorPC/components/Custom/style'+max+'/index.vue',page.html)
             writeFileSync('src/editorPC/components/Custom/style'+max+'/index.css',page.css)
+            writeFileSync('dist/editorPC/components/Custom_style'+max+'.css',page.css)
             writeFileSync('src/editorPC/components-pc/Custom/style'+max+'/index.vue',page.PC)
             writeFileSync('src/editorPC/components-pc/Custom/style'+max+'/index.css',page.css)
             writeFileSync('src/editorPC/components-h5/Custom/style'+max+'/index.vue',page.H5)
             writeFileSync('src/editorPC/components-h5/Custom/style'+max+'/index.css',page.h5css)
+            writeFileSync('dist/editorPC/components-h5/Custom_style'+max+'.css',page.h5css)
             res.json({
                 state:200,
                 success:true,
@@ -271,7 +273,9 @@ router.get('/api/editorPC/getCustomData',function(req,res,next){
         }else{
             let content = []
             files.forEach(function(item){
-                content.push(item)
+                if(!/(.DS_Store)/g.test(item)){
+                    content.push(item)
+                }
             })
             res.json({
                 state:200,

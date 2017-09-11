@@ -9,7 +9,6 @@ Vue.use(Vuex)
 
 let store = new Vuex.Store({
     state:{
-        customStatus:false,
         currentPage:0,
         pages:[],
         elements:[],
@@ -28,6 +27,7 @@ let store = new Vuex.Store({
         childClassify:'',
         parentmodule:'',
         yh_custom:[],   // 自定义组件
+        customStatus:false,
         yh_custom_status:'',
         ajaxUrl:{
             CompanyPositions:{
@@ -99,7 +99,21 @@ let store = new Vuex.Store({
             }
         },
         initCustom:(state,payload) => {
+            let max = 1,
+                start = 'style'.length,
+                current = 0,
+                length = payload.content.length,
+                i = 0
+            for(i = 0; i < length; i++){
+                current = parseInt(payload.content[i].slice(start))
+                if(current == max) {
+                    max++
+                }else if(current > max) {
+                    max = current + 1
+                }
+            }
             state.yh_custom = payload.content
+            state.yh_custom_status = 'style'+max
         },
         addCustom:(state,payload) => {
             state.yh_custom.push(payload.content)
@@ -109,12 +123,20 @@ let store = new Vuex.Store({
         },
         clearPage:(state) => {
             state.elements = []
+            state.includes = []
+            state.count = 0
+            state.selected = {
+                id:'',
+                elem:null,
+                yh_module:''
+            }
         },
         changeCount:(state) => {
             state.count++
         },
         setCustomStatus:(state) => {
-            state.customStatus  = !state.customStatus
+            let status = state.customStatus
+            state.customStatus  = !status
         },
         create:(state) => {
             state.pages = [

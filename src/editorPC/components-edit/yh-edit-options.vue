@@ -178,6 +178,7 @@
         z-index: 10;
     }
     .yh-edit-options .yh-edit-list > ul > li {
+        font-size: 12px;
         line-height:25px;
         text-align:center;
         cursor:pointer;

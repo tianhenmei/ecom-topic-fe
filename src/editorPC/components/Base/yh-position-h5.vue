@@ -2,8 +2,8 @@
     <div :id="props.id" :ref="props.id"
         :path="path"
         :style="{
-            left:props.css.left.value+'px',
-            top:props.css.top.value+'px',
+            left:props.css.left.realvalue+'rem',
+            top:props.css.top.realvalue+'rem',
             position: 'absolute'
         }"
         class="yh-custom-style yh-position"
@@ -15,14 +15,14 @@
         >
         <div class="yh-custom-position-content"
             :style="{
-                width:props.css.width.value+'px',
-                height:props.css.height.value+'px',
+                width:props.css.width.realvalue+'rem',
+                height:props.css.height.realvalue+'rem',
                 overflow:'hidden'
             }">
             <div v-for="index in props.col" class="yh-custom-position-one"
                 :style="{
-                    paddingRight:props.css.one_left.value+'px',
-                    paddingBottom:props.css.one_top.value+'px',
+                    paddingRight:props.css.one_left.realvalue+'rem',
+                    paddingBottom:props.css.one_top.realvalue+'rem',
                     float: 'left'
                 }">
                 <a class="yh-custom-style yh-custom-position-href yh-custom-href position-href" href="javascript:void(0);" 
@@ -35,11 +35,11 @@
                         :style="setPositionStyle">
                         <div class="yh-custom-style yh-custom-position-name position"
                             :style="{
-                                width:props.css.position_width.value+'px',
-                                height:props.css.position_height.value+'px',
-                                lineHeight:props.css.position_line_height.value+'px',
-                                paddingLeft:props.css.position_padding_left.value+'px',
-                                fontSize:props.css.position_font_size.value+'px',
+                                width:props.css.position_width.realvalue+'rem',
+                                height:props.css.position_height.realvalue+'rem',
+                                lineHeight:props.css.position_line_height.realvalue+'rem',
+                                paddingLeft:props.css.position_padding_left.realvalue+'rem',
+                                fontSize:props.css.position_font_size.realvalue+'rem',
                                 color:props.css.position_color.value,
                                 textAlign:props.css.position_text_align.value,
                                 fontStyle:props.css.position_font_style.value,
@@ -50,12 +50,12 @@
                             }">{{props.data.position.value}}</div>
                         <div class="yh-custom-style yh-custom-position-salary salary"
                             :style="{
-                                width:props.css.salary_width.value+'px',
-                                height:props.css.salary_height.value+'px',
-                                lineHeight:props.css.salary_line_height.value+'px',
-                                paddingLeft:props.css.salary_padding_left.value+'px',
-                                paddingRight:props.css.salary_padding_right.value+'px',
-                                fontSize:props.css.salary_font_size.value+'px',
+                                width:props.css.salary_width.realvalue+'rem',
+                                height:props.css.salary_height.realvalue+'rem',
+                                lineHeight:props.css.salary_line_height.realvalue+'rem',
+                                paddingLeft:props.css.salary_padding_left.realvalue+'rem',
+                                paddingRight:props.css.salary_padding_right.realvalue+'rem',
+                                fontSize:props.css.salary_font_size.realvalue+'rem',
                                 color:props.css.salary_color.value,
                                 textAlign:props.css.salary_text_align.value,
                                 fontStyle:props.css.salary_font_style.value,
@@ -85,7 +85,9 @@
     import {mapState} from 'vuex'
     import {
         settingBox,
-        initSelected
+        initSelected,
+        getRem,
+        getPx
     } from './Node.js'
     // edit-components
     import YHEditBase from '../../components-edit/yh-edit-base.vue'
@@ -100,6 +102,9 @@
                 cn:'宽',
                 en:'width',
                 value:250,
+                realvalue:250 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -108,6 +113,9 @@
                 cn:'高',
                 en:'height',
                 value:88,
+                realvalue:88 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -116,6 +124,9 @@
                 cn:'定位.左',
                 en:'left',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -124,6 +135,9 @@
                 cn:'定位.上',
                 en:'top',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -132,6 +146,9 @@
                 cn:'左右间距',
                 en:'one_left',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -140,6 +157,9 @@
                 cn:'上下间距',
                 en:'one_top',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -148,6 +168,9 @@
                 cn:'one-宽',
                 en:'one_width',
                 value:250,
+                realvalue:250 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -156,6 +179,9 @@
                 cn:'one-高',
                 en:'one_height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -274,6 +300,9 @@
                 cn:'阴影',
                 en:'box_shadow_x',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -282,6 +311,9 @@
                 cn:'', 
                 en:'box_shadow_y',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -290,6 +322,9 @@
                 cn:'',
                 en:'box_shadow_blur',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -306,6 +341,9 @@
                 cn:'圆角',
                 en:'border_radius',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -355,6 +393,9 @@
                 cn:'职位宽度',
                 en:'position_width',
                 value:120,
+                realvalue:120 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -363,6 +404,9 @@
                 cn:'职位高度',
                 en:'position_height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -371,6 +415,9 @@
                 cn:'职位行高',
                 en:'position_line_height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -379,6 +426,9 @@
                 cn:'职位-左',
                 en:'position_padding_left',
                 value:20,
+                realvalue:20 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -387,6 +437,9 @@
                 cn:'职位大小',
                 en:'position_font_size',
                 value:14,
+                realvalue:14 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -443,6 +496,9 @@
                 cn:'薪资宽度',
                 en:'salary_width',
                 value:80,
+                realvalue:80 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -451,6 +507,9 @@
                 cn:'薪资高度',
                 en:'salary_height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -459,6 +518,9 @@
                 cn:'薪资行高',
                 en:'salary_line_height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -467,6 +529,9 @@
                 cn:'薪资-左',
                 en:'salary_padding_left',
                 value:10,
+                realvalue:10 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -475,6 +540,9 @@
                 cn:'薪资-右',
                 en:'salary_padding_right',
                 value:20,
+                realvalue:20 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -483,6 +551,9 @@
                 cn:'薪资大小',
                 en:'salary_font_size',
                 value:14,
+                realvalue:14 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -586,11 +657,11 @@
             },
             setPositionStyle(){
                 let style = ''+
-                    'width:'+this.props.css.one_width.value+'px; ' +
-                    'height:'+this.props.css.one_height.value+'px; ' +
-                    'border-radius:'+this.props.css.border_radius.value+'px; ' +
+                    'width:'+this.props.css.one_width.realvalue+'rem; ' +
+                    'height:'+this.props.css.one_height.realvalue+'rem; ' +
+                    'border-radius:'+this.props.css.border_radius.realvalue+'rem; ' +
                     'border-color:'+this.props.css.border_color.value+'; '+
-                    'border-width:'+this.props.css.border_width.value+'px; '+
+                    'border-width:'+this.props.css.border_width.realvalue+'rem; '+
                     'border-style:'+this.props.css.border_style.value+'; '+
                     'box-shadow:'+this.setBoxShadow+'; '+
                     'overflow:hidden; '
@@ -628,9 +699,9 @@
             },
             setBoxShadow(){
                 let str = 
-                    this.props.css.box_shadow_x.value+'px ' + 
-                    this.props.css.box_shadow_y.value+'px ' + 
-                    this.props.css.box_shadow_blur.value+'px ' + 
+                    this.props.css.box_shadow_x.realvalue+'rem ' + 
+                    this.props.css.box_shadow_y.realvalue+'rem ' + 
+                    this.props.css.box_shadow_blur.realvalue+'rem ' + 
                     this.props.css.box_shadow_color.value
                 return str
             },
@@ -677,10 +748,10 @@
                     borderWidth = 0,
                     threhold = 2 * 2,
                     style = {
-                        left: parseInt(this.props.css.left.value) - threhold,
-                        top: parseInt(this.props.css.top.value) - threhold,
-                        width: parseInt(this.props.css.width.value) + borderWidth + threhold,
-                        height: parseInt(this.props.css.height.value) + borderWidth + threhold
+                        left: getPx(parseInt(this.props.css.left.realvalue)) - threhold,
+                        top: getPx(parseInt(this.props.css.top.realvalue)) - threhold,
+                        width: getPx(parseInt(this.props.css.width.realvalue)) + borderWidth + threhold,
+                        height: getPx(parseInt(this.props.css.height.realvalue)) + borderWidth + threhold
                     },
                     children = null,
                     i = 0

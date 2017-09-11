@@ -2,8 +2,8 @@
     <div :id="props.id" :ref="props.id"
         :path="path"
         :style="{
-            left:props.css.left.value+'px',
-            top:props.css.top.value+'px',
+            left:props.css.left.realvalue+'rem',
+            top:props.css.top.realvalue+'rem',
             position: 'absolute'
         }"
         class="yh-custom-style"
@@ -46,7 +46,9 @@
     import {mapState} from 'vuex'
     import {
         settingBox,
-        initSelected
+        initSelected,
+        getRem,
+        getPx
     } from './Node.js'
     // edit-components
     import YHEditBase from '../../components-edit/yh-edit-base.vue'
@@ -61,6 +63,9 @@
                 cn:'宽',
                 en:'width',
                 value:200,
+                realvalue:200 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -69,6 +74,9 @@
                 cn:'高',
                 en:'height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -77,6 +85,9 @@
                 cn:'行高',
                 en:'line_height',
                 value:22,
+                realvalue:22 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -85,6 +96,9 @@
                 cn:'定位.左',
                 en:'left',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -93,6 +107,9 @@
                 cn:'定位.上',
                 en:'top',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -101,6 +118,9 @@
                 cn:'字体大小',
                 en:'font_size',
                 value:14,
+                realvalue:14 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -326,18 +346,18 @@
             },
             setBoxShadow(){
                 let str = 
-                    this.props.css.box_shadow_x.value+'px ' + 
-                    this.props.css.box_shadow_y.value+'px ' + 
-                    this.props.css.box_shadow_blur.value+'px ' + 
+                    this.props.css.box_shadow_x.realvalue+'rem ' + 
+                    this.props.css.box_shadow_y.realvalue+'rem ' + 
+                    this.props.css.box_shadow_blur.realvalue+'rem ' + 
                     this.props.css.box_shadow_color.value
                 return str
             },
             getTextStyle(){
                 let style = {
-                    width:this.props.css.width.value+'px',
-                    height:this.props.css.height.value+'px',
-                    lineHeight:this.props.css.line_height.value+'px',
-                    fontSize:this.props.css.font_size.value+'px',
+                    width:this.props.css.width.realvalue+'rem',
+                    height:this.props.css.height.realvalue+'rem',
+                    lineHeight:this.props.css.line_height.realvalue+'rem',
+                    fontSize:this.props.css.font_size.realvalue+'rem',
                     color:this.props.css.font_color.value,
                     textAlign:this.props.css.text_align.value,
                     fontStyle:this.props.css.font_style.value,
@@ -407,10 +427,10 @@
                     borderWidth = 0,
                     threhold = 2 * 2,
                     style = {
-                        left: parseInt(this.props.css.left.value) - threhold,
-                        top: parseInt(this.props.css.top.value) - threhold,
-                        width: parseInt(this.props.css.width.value) + borderWidth + threhold,
-                        height: parseInt(this.props.css.height.value) + borderWidth + threhold
+                        left: getPx(parseInt(this.props.css.left.realvalue)) - threhold,
+                        top: getPx(parseInt(this.props.css.top.realvalue)) - threhold,
+                        width: getPx(parseInt(this.props.css.width.realvalue)) + borderWidth + threhold,
+                        height: getPx(parseInt(this.props.css.height.realvalue)) + borderWidth + threhold
                     },
                     children = null,
                     i = 0

@@ -37,7 +37,9 @@
 </template>
 <script>
     import {mapState} from 'vuex'
-    import {getComputedValue,getPointValue} from '../components/Base/Node.js'
+    import {getComputedValue,getPointValue,
+        getRem
+    } from '../components/Base/Node.js'
     export default {
         props:['eindex','index','options','type',
             'ischildset',  // 用于判断当前被选中元素是父级，设置项却是子集的设置 默认'' 为真时：'ischildset'
@@ -67,7 +69,7 @@
                     if(this.options.unit === this.options.realunit){
                         return value
                     }
-                    return this.getDesign(value)
+                    return value//this.getDesign(value)
                 }
                 return actualValue
             },
@@ -112,6 +114,7 @@
                 let choice = this.$refs['yh-edit-choice'],
                     value = parseInt(e.target.getAttribute('value')),
                     number = (value || value == 0) ? value : e.target.getAttribute('value'),
+                    actualValue = (value || value == 0) ? (this.options.unit && this.options.unit != this.options.realunit ? getRem(number) : number) : number,
                     type = this.options.edittype,
                     edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
                         : 'setValue'/*,
@@ -125,7 +128,7 @@
                 
                 choice.className += ' hide'
                 if(this.options.backstatus){
-                    this.$emit('setValue',this.options.stylename,number,number)   // this.options.def
+                    this.$emit('setValue',this.options.stylename,actualValue,number)   // this.options.def
                 }else{
                     this.$store.commit(edittype,{
                         parent:this.options.parent ? this.options.parent : 'css',
@@ -133,7 +136,7 @@
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                         ischildset:this.ischildset ? this.ischildset : '',
                         stylename:this.options.stylename,
-                        actualValue:number,
+                        actualValue:actualValue,
                         designValue:number,
                         path:this.path
                     })
@@ -171,7 +174,7 @@
                     unit = this.options.unit ? this.options.unit : '',
                     realunit = this.options.realunit ? this.options.realunit : '',
                     stylename = this.options.stylename,
-                    actualValue = value,
+                    actualValue = this.options.unit && this.options.unit != this.options.realunit ? getRem(parseFloat(value)) : value,
                     type = this.options.edittype,
                     edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
                         : 'setValue' // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
@@ -261,6 +264,7 @@
         background-color: #fff;
         z-index: 2;
         color: #666;
+        font-size:12px;
     }
     .yh-eidt-combine.yh-edit-input {
         width:82px;

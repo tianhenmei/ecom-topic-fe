@@ -39,8 +39,8 @@
                 optionsData:{
                     name:this.options.cn,
                     stylename:this.options.en,
-                    unit:this.options.nounit ? '' : 'px',
-                    realunit:this.options.nounit ? '' : 'px',
+                    unit:this.options.nounit ? '' : (this.options.unit ? this.options.unit : 'px'),
+                    realunit:this.options.nounit ? '' : this.options.realunit ? this.options.realunit : 'px',
                     type:type,
                     classname:'number',
                     style:this.parent,
@@ -76,7 +76,7 @@
                     edittype = type ? ('set'+type.substring(0,1).toUpperCase()+type.substring(1)+'Value')
                         : 'setValue'
                 if(this.options.backstatus){
-                    this.$emit('setValue',name,value,value)
+                    this.$emit('setValue',name,actualValue,value)
                 }else{
                     this.$store.commit(edittype,{
                         parent:this.options.parent ? this.options.parent : 'css',
@@ -84,7 +84,7 @@
                         index:!(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                         ischildset:this.ischildset ? this.ischildset : '',
                         stylename:name,
-                        actualValue:value,
+                        actualValue:actualValue,
                         designValue:value,
                         path:this.path,
                         store:this.$store

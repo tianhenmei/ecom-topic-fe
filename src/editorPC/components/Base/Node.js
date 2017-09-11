@@ -732,7 +732,13 @@ Node.getRequestData = (store,id,type) =>{
     }
 }
 
+Node.getRem = (value) => {
+    return value / (750 / 16)  //  + 'rem'
+}
 
+Node.getPx = (value) => {
+    return value * (750 / 16) // + 'rem';
+}
 
 Node.recoveryChildElementsData = (parent,baseData,components,parentmodule="",ignorestatus="") => {
     let data = [],

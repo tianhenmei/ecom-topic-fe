@@ -690,7 +690,8 @@ var CUSTOM = {
                 path = payload.path ? payload.path.split('.') : '',
                 value = '',
                 elemData = state,
-                i = 0
+                i = 0,
+                current = null
             
             if(path){
                 if(state.tempData.path == path && state.tempData.elemData){
@@ -706,22 +707,32 @@ var CUSTOM = {
                         }
                     }
                 }
-                elemData.props[parent][payload.stylename].value = payload.actualValue
+                current = elemData.props[parent][payload.stylename]
+                current.value = payload.designValue
+                // if(current.hasOwnProperty('realvalue')){
+                if(current.unit && current.unit != current.realunit){
+                    current.realvalue = payload.actualValue
+                }
                 if(payload.cnvalue){
-                    elemData.props[parent][payload.stylename].cnvalue = payload.cnvalue
+                    current.cnvalue = payload.cnvalue
                 }
                 payload.store.commit('setCustomConditionStatus',{
                     parent:elemData.props,
-                    child:elemData.props[parent][payload.stylename]
+                    child:current
                 })
             }else{  // 自定义外壳样式修改
-                state[parent][payload.stylename].value = payload.actualValue
+                current = state[parent][payload.stylename]
+                current.value = payload.designValue
+                // if(current.hasOwnProperty('realvalue')){
+                if(current.unit && current.unit != current.realunit){
+                    current.realvalue = payload.actualValue
+                }
                 if(payload.cnvalue){
-                    state[parent][payload.stylename].cnvalue = payload.cnvalue
+                    current.cnvalue = payload.cnvalue
                 }
                 payload.store.commit('setCustomConditionStatus',{
                     parent:state,
-                    child:state[parent][payload.stylename]
+                    child:current
                 })
             }
         },
@@ -731,7 +742,8 @@ var CUSTOM = {
                 path = payload.path ? payload.path.split('.') : '',
                 value = '',
                 elemData = state,
-                i = 0
+                i = 0,
+                current = null
             
             if(path){
                 if(state.tempData.path == path && state.tempData.elemData){
@@ -749,25 +761,35 @@ var CUSTOM = {
                 }
                 for(i = 0; i < payload.list.length; i++){
                     parent = payload.list[i].parent ? payload.list[i].parent : 'css'
-                    elemData.props[parent][payload.list[i].stylename].value = payload.list[i].actualValue
+                    current = elemData.props[parent][payload.list[i].stylename]
+                    current.value = payload.list[i].designValue
+                    // if(current.hasOwnProperty('realvalue')){
+                    if(current.unit && current.unit != current.realunit){
+                        current.realvalue = payload.actualValue
+                    }
                     if(payload.list[i].cnvalue){
-                        elemData.props[parent][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
+                        current.cnvalue = payload.list[i].cnvalue
                     }
                     payload.store.commit('setCustomConditionStatus',{
                         parent:elemData.props,
-                        child:elemData.props[parent][payload.list[i].stylename]
+                        child:current
                     })
                 }
             }else{  // 自定义外壳样式修改
                 for(i = 0; i < payload.list.length; i++){
                     parent= payload.list[i].parent ? payload.list[i].parent : 'css'
-                    state[parent][payload.list[i].stylename].value = payload.list[i].actualValue
+                    current = state[parent][payload.list[i].stylename]
+                    current.value = payload.list[i].designValue
+                    // if(current.hasOwnProperty('realvalue')){
+                    if(current.unit && current.unit != current.realunit){
+                        current.realvalue = payload.actualValue
+                    }
                     if(payload.list[i].cnvalue){
-                        state[parent][payload.list[i].stylename].cnvalue = payload.list[i].cnvalue
+                        current.cnvalue = payload.list[i].cnvalue
                     }
                     payload.store.commit('setCustomConditionStatus',{
                         parent:state,
-                        child:state[parent][payload.list[i].stylename]
+                        child:current
                     })
                 }
             }

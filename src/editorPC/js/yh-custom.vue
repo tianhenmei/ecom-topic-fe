@@ -335,7 +335,7 @@
                             '    @import "./index.css";\n'+
                             '</style>\n'+
                             '<template>\n',
-                    customElemStart = '    <div class="custom-style1 yh-custom-base-element00" :id="props.id" yh-module="Custom_style1" \n'+
+                    customElemStart = '    <div class="custom-'+this.yh_custom_status+' yh-custom-'+this.yh_custom_status+'-base-element00" :id="props.id" yh-module="Custom_'+this.yh_custom_status+'" \n'+
                                     '        :ref="props.id" \n'+
                                     '        :style="setCustomBackgroundStyle"\n'+
                                     '        >\n',
@@ -495,6 +495,8 @@
                     length = 0,
                     i = 0,ii = 0, j = 0,
                     parent = null,
+                    pcHasCompanyId = pcdata.data.hasOwnProperty('companyId'),
+                    hasCompanyId = false,
                     customStyle = '',
                     cssText = '',
                     style = '',
@@ -504,7 +506,10 @@
                     elemData = {},
                     imageIndex = 0,
                     status = true,
-                    path = ''
+                    path = '',
+                    text_start = 0,
+                    image_start = 0,
+                    button_start = 0
                 // 删除没必要的HTML
                 length = selection.length
                 for(i = 0,ii = 0; ii < length; ii++,i++){
@@ -516,7 +521,7 @@
                 }
                 // 获取自定义组件的所有样式
                 cssText = elem.style.cssText
-                style += '.yh-custom-base-element00 { margin:0 auto; '+cssText+'}'
+                style += '.yh-custom-'+this.yh_custom_status+'-base-element00 { margin:0 auto; '+cssText+'}'
                 length = styleElem.length
                 for(i = 0,ii = 0; ii < length; ii++ ){
                     cssText = styleElem[i].style.cssText
@@ -544,12 +549,36 @@
                                 enname = 'h5css.'+elemData.props.data.imageen.value+'_src'
                                 break
                         }
+                        if(!pcHasCompanyId){
+                            if(!hasCompanyId && (elemData.props.data.imagetype.value == 'logo' || elemData.props.data.imagetype.value == 'manager_logo')){
+                                hasCompanyId = true
+                                baseData.data.companyId = {
+                                    cn:'公司ID',
+                                    en:'companyId',
+                                    value:147,
+                                    type:'request',
+                                    parent:'data'
+                                }
+                            }
+                        }
                         styleElem[i].outerHTML = styleElem[i].outerHTML.replace(/src=\"([^\"]*)\"/g,':src="props.'+enname+'.value"')
                     }else if(/(yh-custom-href)/g.test(styleElem[i].className)){
                         styleElem[i].removeAttribute('href')
                         if(/(yh-custom-position-href)/g.test(styleElem[i].className)){
                             styleElem[i].setAttribute(':href',"\'https:\/\/www.lagou.com\/center\/job_\'+one.positionId.value+\'.html\'")
                         }else{
+                            if(!pcHasCompanyId){
+                                if(!hasCompanyId && /(props.data.companyId)/g.test(styleElem[i].getAttribute('lagou-href'))){
+                                    hasCompanyId = true
+                                    baseData.data.companyId = {
+                                        cn:'公司ID',
+                                        en:'companyId',
+                                        value:147,
+                                        type:'request',
+                                        parent:'data'
+                                    }
+                                }
+                            }
                             styleElem[i].setAttribute(':href',styleElem[i].getAttribute('lagou-href'))
                         }
                         styleElem[i].outerHTML = styleElem[i].outerHTML.replace(/lagou-href=\"([^\"]*)\"/g,':lagou-href="'+styleElem[i].getAttribute('lagou-href')+'"')
@@ -567,7 +596,11 @@
                             }
                         }
                         enname = elemData.props.data.buttonen.value
-                        styleElem[i].innerHTML = "{{props.data."+enname+"_button_text.value}}\n"
+                        if(!pcdata.data.hasOwnProperty(enname+'_button_text')){
+                            styleElem[i].innerHTML = "{{props.data.yh_h5data.value."+enname+"_button_text.value}}\n"
+                        }else{
+                            styleElem[i].innerHTML = "{{props.data."+enname+"_button_text.value}}\n"
+                        }
                         // tempstr = "{"+
                                 // "color:props.css."+enname+"_color.value,"
                                 // "backgroundColor:props.css."+enname+"_background_color.value,"+
@@ -589,7 +622,23 @@
                             }
                         }
                         enname = elemData.props.data.text_type.value == 'other' ? elemData.props.data.texten.value+'_text' : elemData.props.data.text_type.value
-                        styleElem[i].setAttribute('v-html',elemData.props.data.text_lines.value > 1 ? ("dealStringLine("+elemData.props.data.text_limit.value+","+elemData.props.data.each_line.value+","+elemData.props.data.text_lines.value+",props.data."+enname+".value,false)") : ("props.data."+enname+".value"))
+                        if(!pcHasCompanyId){
+                            if(!hasCompanyId && elemData.props.data.text_type.value == 'name'){
+                                hasCompanyId = true
+                                baseData.data.companyId = {
+                                    cn:'公司ID',
+                                    en:'companyId',
+                                    value:147,
+                                    type:'request',
+                                    parent:'data'
+                                }
+                            }
+                        }
+                        if(!pcdata.data.hasOwnProperty(enname)){
+                            styleElem[i].setAttribute('v-html',elemData.props.data.text_lines.value > 1 ? ("dealStringLine("+elemData.props.data.text_limit.value+","+elemData.props.data.each_line.value+","+elemData.props.data.text_lines.value+",props.data."+enname+".value,false)") : ("props.data.yh_h5data.value."+enname+".value"))
+                        }else{
+                            styleElem[i].setAttribute('v-html',elemData.props.data.text_lines.value > 1 ? ("dealStringLine("+elemData.props.data.text_limit.value+","+elemData.props.data.each_line.value+","+elemData.props.data.text_lines.value+",props.data."+enname+".value,false)") : ("props.data."+enname+".value"))
+                        }
                         styleElem[i].innerHTML = ''
                         enname = elemData.props.data.text_type.value == 'other' ? elemData.props.data.texten.value : elemData.props.data.text_type.value
                         tempstr = "{\n"+
@@ -651,9 +700,13 @@
                                    "}"
                         styleElem[i].setAttribute(':style',tempstr) 
                     }
-                    name = 'yh-custom-base-element'+ii
+                    name = 'yh-custom-'+this.yh_custom_status+'-base-element'+ii
                     style += '.'+name+'{'+cssText+'}'
                     styleElem[i].removeAttribute('style')
+                    if(styleElem[i].attributes['id']){
+                        styleElem[i].removeAttribute('id')
+                        styleElem[i].removeAttribute('path')
+                    }
                     styleElem[i].className = styleElem[i].className.replace('yh-custom-style',name)
                 }
                 length = yhPosition.length
@@ -1063,6 +1116,79 @@
                                     condition:['gradient-left-right'],
                                     status:elemData.props.css.background_type.value == 'gradient-left-right'
                                 }
+                                if(!pcdata.data.hasOwnProperty('position')){
+                                    baseData.data.position = {
+                                        cn:'职位设置',
+                                        en:'position',
+                                        type:'uplist',
+                                        name:'positionName',
+                                        parent:'data',
+                                        removeStatus:true,
+                                        value:[{
+                                            dynamic_type:{
+                                                cn:'职位类别',
+                                                en:'dynamic_type',
+                                                value:'设计',
+                                                type:'none',
+                                                parent:'data.position.value'
+                                            },
+                                            positionId:{
+                                                cn:'职位ID',
+                                                en:'positionId',
+                                                value:'1777398',
+                                                type:'request',
+                                                parent:'data.position.value'
+                                            },
+                                            positionName:{
+                                                cn:'职位名称',
+                                                en:'positionName',
+                                                value:elemData.props.data.position.value,
+                                                type:'text',
+                                                parent:'data.position.value'
+                                            },
+                                            salary:{
+                                                cn:'职位薪资',
+                                                en:'salary',
+                                                value:elemData.props.data.salary.value,
+                                                type:'text',
+                                                parent:'data.position.value'
+                                            }
+                                        }]
+                                    }
+                                    baseData.positionData = {
+                                        dynamic_type:{
+                                            cn:'职位类别',
+                                            en:'dynamic_type',
+                                            value:'设计',
+                                            type:'none',
+                                            parent:'data.position.value'
+                                        },
+                                        positionId:{
+                                            cn:'职位ID',
+                                            en:'positionId',
+                                            value:'1777398',
+                                            type:'request',
+                                            parent:'data.position.value'
+                                        },
+                                        positionName:{
+                                            cn:'职位名称',
+                                            en:'positionName',
+                                            value:'UI设计师',
+                                            type:'text',
+                                            parent:'data.position.value'
+                                        },
+                                        salary:{
+                                            cn:'职位薪资',
+                                            en:'salary',
+                                            value:'7k-12k',
+                                            type:'text',
+                                            parent:'data.position.value'
+                                        }
+                                    }
+                                    for(j = 1; j < elemData.props.col; j++){
+                                        baseData.data.position.value.push(baseData.positionData)
+                                    }
+                                }
                             }
                             break
                     }
@@ -1078,7 +1204,7 @@
                             '    @import "./index.css";\n'+
                             '</style>\n'+
                             '<template>\n',
-                    customElemStart = '    <div class="custom-style1 yh-custom-base-element00" :id="props.id" yh-module="Custom_style1" \n'+
+                    customElemStart = '    <div class="custom-'+this.yh_custom_status+' yh-custom-'+this.yh_custom_status+'-base-element00" :id="props.id" yh-module="Custom_'+this.yh_custom_status+'" \n'+
                                     '        :ref="props.id" \n'+
                                     '        :style="setCustomBackgroundStyle"\n',
 
@@ -1447,7 +1573,7 @@
                 }
                 // 获取自定义组件的所有样式
                 cssText = elem.style.cssText
-                style += '.yh-custom-base-element00 { margin:0 auto; '+cssText+'}'
+                style += '.yh-custom-'+this.yh_custom_status+'-base-element00 { margin:0 auto; '+cssText+'}'
                 length = styleElem.length
                 for(i = 0,ii = 0; ii < length; ii++ ){
                     cssText = styleElem[i].style.cssText
@@ -1612,7 +1738,7 @@
                                    "}"
                         styleElem[i].setAttribute(':style',tempstr) 
                     }
-                    name = 'yh-custom-base-element'+ii
+                    name = 'yh-custom-'+this.yh_custom_status+'-base-element'+ii
                     style += '.'+name+'{'+cssText+'}'
                     styleElem[i].removeAttribute('style')
                     styleElem[i].className = styleElem[i].className.replace('yh-custom-style',name)
@@ -2118,9 +2244,10 @@
                 }
                 let h5data = this.saveComponentH5(baseData)
                 baseData.h5css = h5data.data.h5css
-                if(h5data.data.data.hasOwnProperty('yh_h5data')){
-                    baseData.data.yh_h5data = h5data.data.data.yh_h5data
-                }
+                // if(h5data.data.data.hasOwnProperty('yh_h5data')){
+                //     baseData.data.yh_h5data = h5data.data.data.yh_h5data
+                // }
+                Object.assign(baseData.data,h5data.data.data)
                 
                 let self = this
                 axios.post(this.connhost+'v3/api/editorPC/saveComponent',{
@@ -2146,10 +2273,11 @@
                         self.$store.commit('setYHCustomStatus',{
                             content:content.name
                         })
+                    }
                         self.$store.commit('addCustom',{
                             content:content.name
                         })
-                    }
+                    // }
                     alert(response.data.message)
                     // self.$store.commit('initData',{
                     //     includes:content.includes,
@@ -2352,13 +2480,13 @@
                 this.$store.commit('clearCustomElements')
             },
             closeCustomSet(e){
-                self.$store.commit('setYHCustomStatus',{
+                this.$store.commit('setYHCustomStatus',{
                     content:''
                 })
                 this.$store.commit('setCustomStatus')
             },
             undoAddCustom(e){
-                self.$store.commit('setYHCustomStatus',{
+                this.$store.commit('setYHCustomStatus',{
                     content:''
                 })
                 this.$store.commit('setCustomStatus')

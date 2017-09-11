@@ -2,8 +2,8 @@
     <div :id="props.id" :ref="props.id"
         :path="path"
         :style="{
-            left:props.css.left.value+'px',
-            top:props.css.top.value+'px',
+            left:props.css.left.realvalue+'rem',
+            top:props.css.top.realvalue+'rem',
             position: 'absolute'
         }"
         class="yh-custom-style"
@@ -46,7 +46,9 @@
     import {mapState} from 'vuex'
     import {
         settingBox,
-        initSelected
+        initSelected,
+        getRem,
+        getPx
     } from './Node.js'
     // edit-components
     import YHEditBase from '../../components-edit/yh-edit-base.vue'
@@ -61,6 +63,9 @@
                 cn:'宽',
                 en:'width',
                 value:200,
+                realvalue:200 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -69,6 +74,9 @@
                 cn:'高',
                 en:'height',
                 value:50,
+                realvalue:50 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -77,6 +85,9 @@
                 cn:'行高',
                 en:'line_height',
                 value:50,
+                realvalue:50 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -85,6 +96,9 @@
                 cn:'定位.左',
                 en:'left',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -93,6 +107,9 @@
                 cn:'定位.上',
                 en:'top',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -247,6 +264,9 @@
                 cn:'圆角',
                 en:'border_radius',
                 value:8,
+                realvalue:8 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -255,6 +275,9 @@
                 cn:'阴影',
                 en:'box_shadow_x',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -263,6 +286,9 @@
                 cn:'', 
                 en:'box_shadow_y',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -271,6 +297,9 @@
                 cn:'',
                 en:'box_shadow_blur',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -327,7 +356,10 @@
             font_size:{
                 cn:'字体大小',
                 en:'font_size',
-                value:14,
+                value:28,
+                realvalue:28 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -478,6 +510,7 @@
         },
         props:['props','path','eindex'],
         computed:{
+            getRem,
             ...mapState([
                 'custom'
             ]),
@@ -494,9 +527,9 @@
             },
             setBoxShadow(){
                 let str = 
-                    this.props.css.box_shadow_x.value+'px ' + 
-                    this.props.css.box_shadow_y.value+'px ' + 
-                    this.props.css.box_shadow_blur.value+'px ' + 
+                    this.props.css.box_shadow_x.realvalue+'rem ' + 
+                    this.props.css.box_shadow_y.realvalue+'rem ' + 
+                    this.props.css.box_shadow_blur.realvalue+'rem ' + 
                     this.props.css.box_shadow_color.value
                 return str
             },
@@ -505,15 +538,15 @@
                 // 'background-image:'+this.setImage+'; '+
                 // 'background-repeat:'+this.props.css.background_repeat.value+'; '+
                 let style = ''+
-                        'width:'+this.props.css.width.value+'px; '+
-                        'height:'+this.props.css.height.value+'px; '+
-                        'line-height:'+this.props.css.line_height.value+'px; '+
+                        'width:'+this.props.css.width.realvalue+'rem; '+
+                        'height:'+this.props.css.height.realvalue+'rem; '+
+                        'line-height:'+this.props.css.line_height.realvalue+'rem; '+
                         'border-color:'+this.props.css.border_color.value+'; '+
                         'border-width:'+this.props.css.border_width.value+'px; '+
                         'border-style:'+this.props.css.border_style.value+'; '+
-                        'border-radius:'+this.props.css.border_radius.value+'px; '+
+                        'border-radius:'+this.props.css.border_radius.realvalue+'rem; '+
                         'box-shadow:'+this.setBoxShadow+'; '+
-                        'font-size:'+this.props.css.font_size.value+'px; '+
+                        'font-size:'+this.props.css.font_size.realvalue+'rem; '+
                         'color:'+this.props.css.font_color.value+'; '+
                         'text-align:center; '
                 switch(this.props.css.background_type.value){
@@ -606,10 +639,10 @@
                     borderWidth = this.props.css.border_style.value == 'none' ? 0 : parseInt(this.props.css.border_width.value) * 2,
                     threhold = 2 * 2,
                     style = {
-                        left: parseInt(this.props.css.left.value) - threhold,
-                        top: parseInt(this.props.css.top.value) - threhold,
-                        width: parseInt(this.props.css.width.value) + borderWidth + threhold,
-                        height: parseInt(this.props.css.height.value) + borderWidth + threhold
+                        left: getPx(parseInt(this.props.css.left.realvalue)) - threhold,
+                        top: getPx(parseInt(this.props.css.top.realvalue)) - threhold,
+                        width: getPx(parseInt(this.props.css.width.realvalue)) + borderWidth + threhold,
+                        height: getPx(parseInt(this.props.css.height.realvalue)) + borderWidth + threhold
                     },
                     children = null,
                     i = 0

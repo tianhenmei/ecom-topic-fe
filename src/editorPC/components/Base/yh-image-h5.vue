@@ -2,8 +2,8 @@
     <div :id="props.id" :ref="props.id"
         :path="path"
         :style="{
-            left:props.css.left.value+'px',
-            top:props.css.top.value+'px',
+            left:props.css.left.realvalue+'rem',
+            top:props.css.top.realvalue+'rem',
             position: 'absolute'
         }"
         class="yh-custom-style"
@@ -18,13 +18,13 @@
                 :class="props.data.imagetype.value"
                 :src="props.css.src.value" 
                 :style="{
-                    width:props.css.width.value+'px',
-                    height:props.css.height.value+'px',
+                    width:props.css.width.realvalue+'rem',
+                    height:props.css.height.realvalue+'rem',
                     backgroundColor:props.css.background_color.value,
                     borderColor:props.css.border_color.value,
                     borderWidth:props.css.border_width.value+'px',
                     borderStyle:props.css.border_style.value,
-                    borderRadius:props.css.border_radius.value+'px',
+                    borderRadius:props.css.border_radius.realvalue+'rem',
                     boxShadow:setBoxShadow
                 }"/>
             <a class="yh-custom-style yh-custom-image-href yh-custom-href" :class="props.data.imagetype.value+'-href'" href="javascript:void(0);" :lagou-href="getImageHref"
@@ -55,7 +55,9 @@
     import {mapState} from 'vuex'
     import {
         settingBox,
-        initSelected
+        initSelected,
+        getRem,
+        getPx
     } from './Node.js'
     // edit-components
     import YHEditBase from '../../components-edit/yh-edit-base.vue'
@@ -70,6 +72,9 @@
                 cn:'宽',
                 en:'width',
                 value:100,
+                realvalue:100 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -78,6 +83,9 @@
                 cn:'高',
                 en:'height',
                 value:100,
+                realvalue:100 / (750 / 16),
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -86,6 +94,9 @@
                 cn:'定位.左',
                 en:'left',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -94,6 +105,9 @@
                 cn:'定位.上',
                 en:'top',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 edittype:'custom',
                 parent:'css'
@@ -158,6 +172,9 @@
                 cn:'圆角',
                 en:'border_radius',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -166,6 +183,9 @@
                 cn:'阴影',
                 en:'box_shadow_x',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -174,6 +194,9 @@
                 cn:'', 
                 en:'box_shadow_y',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -182,6 +205,9 @@
                 cn:'',
                 en:'box_shadow_blur',
                 value:0,
+                realvalue:0,
+                unit:'px',
+                realunit:'rem',
                 type:'number',
                 parent:'css',
                 edittype:'custom'
@@ -438,9 +464,9 @@
             },
             setBoxShadow(){
                 let str = 
-                    this.props.css.box_shadow_x.value+'px ' + 
-                    this.props.css.box_shadow_y.value+'px ' + 
-                    this.props.css.box_shadow_blur.value+'px ' + 
+                    this.props.css.box_shadow_x.realvalue+'rem ' + 
+                    this.props.css.box_shadow_y.realvalue+'rem ' + 
+                    this.props.css.box_shadow_blur.realvalue+'rem ' + 
                     this.props.css.box_shadow_color.value
                 return str
             },
@@ -502,10 +528,10 @@
                     borderWidth = this.props.css.border_style.value == 'none' ? 0 : parseInt(this.props.css.border_width.value) * 2,
                     threhold = 2 * 2,
                     style = {
-                        left: parseInt(this.props.css.left.value) - threhold,
-                        top: parseInt(this.props.css.top.value) - threhold,
-                        width: parseInt(this.props.css.width.value) + borderWidth + threhold,
-                        height: parseInt(this.props.css.height.value) + borderWidth + threhold
+                        left: getPx(parseFloat(this.props.css.left.realvalue)) - threhold,
+                        top: getPx(parseFloat(this.props.css.top.realvalue)) - threhold,
+                        width: getPx(parseFloat(this.props.css.width.realvalue)) + borderWidth + threhold,
+                        height: getPx(parseFloat(this.props.css.height.realvalue)) + borderWidth + threhold
                     },
                     children = null,
                     i = 0
