@@ -193,6 +193,25 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -211,13 +230,43 @@ exports.default = {
                 default:
                     return 'url(' + src + ')';
             }
+        },
+        getAutoplay: function getAutoplay() {
+            if (this.props.data.autoplay.value) {
+                return 'autoplay';
+            } else {
+                return false;
+            }
+        },
+        setArrowLeftStyle: function setArrowLeftStyle() {
+            var style = {
+                top: this.getRem(this.props.h5css.navigation_top.value)
+            };
+            if (this.props.h5css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png') {
+                style.backgroundImage = 'url(' + this.props.h5css.navigation_left_background.value + ')';
+                style.backgroundPosition = '0 0';
+            }
+            return style;
+        },
+        setArrowRightStyle: function setArrowRightStyle() {
+            var style = {
+                top: this.getRem(this.props.h5css.navigation_top.value)
+            };
+            if (this.props.h5css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png') {
+                style.backgroundImage = 'url(' + this.props.h5css.navigation_right_background.value + ')';
+                style.backgroundPosition = '0 0';
+            }
+            return style;
         }
     },
     mounted: function mounted() {},
 
     methods: {
+        getRem: function getRem(value) {
+            return parseFloat(value) / (750 / 16) + 'rem';
+        },
         getRemValue: function getRemValue(value) {
-            return (value / (750 / 16)).toFixed(2);
+            return (parseFloat(value) / (750 / 16)).toFixed(2);
         }
     }
 };
@@ -327,25 +376,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "slider-style1",
-    style: ({
-      height: (_vm.props.h5css.height.value == 'auto' ? 'auto' : _vm.getRemValue(_vm.props.h5css.height.value) + 'rem'),
-      minHeight: (_vm.props.h5css.background_min_height.value == 'auto' ? 'auto' : _vm.getRemValue(_vm.props.h5css.background_min_height.value) + 'rem')
-    }),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Slider_style1",
-      "autoplay": _vm.props.data.autoplay.value,
+      "autoplay": _vm.getAutoplay,
       "animation": _vm.props.data.animation.value,
       "yh-vessel": ""
     }
   }, [_c('div', {
     staticClass: "yh-slider-container clearfix",
     style: ({
-      height: (_vm.props.h5css.height.value == 'auto' ? 'auto' : _vm.getRemValue(_vm.props.h5css.height.value) + 'rem'),
       backgroundColor: _vm.props.h5css.background_background_color.value,
       backgroundImage: _vm.setImage,
       backgroundRepeat: _vm.props.h5css.background_background_repeat.value,
-      minHeight: (_vm.props.h5css.background_min_height.value == 'auto' ? 'auto' : _vm.props.h5css.background_min_height.value + 'rem')
     }),
     attrs: {
       "id": _vm.props.id + '-container'
@@ -368,17 +411,38 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "parentmodule": "Slider_style1"
       }
     }) : _vm._e()
-  }))]), _vm._v(" "), _c('a', {
+  }))]), _vm._v(" "), (_vm.props.data.navigation.value) ? _c('a', {
     staticClass: "arrow-left",
+    style: (_vm.setArrowLeftStyle),
     attrs: {
       "href": "javascript:void(0);"
     }
-  }), _vm._v(" "), _c('a', {
+  }) : _vm._e(), _vm._v(" "), (_vm.props.data.navigation.value) ? _c('a', {
     staticClass: "arrow-right",
+    style: (_vm.setArrowRightStyle),
     attrs: {
       "href": "javascript:void(0);"
     }
-  })])
+  }) : _vm._e(), _vm._v(" "), (_vm.props.elements.length > 0) ? _c('div', {
+    staticClass: "pagination",
+    style: ({
+      width: _vm.getRemValue(28 * (_vm.props.elements.length + 1)) + 'rem',
+      marginLeft: _vm.getRemValue(28 * (_vm.props.elements.length + 1) / 2 * -1) + 'rem'
+    }),
+    attrs: {
+      "id": _vm.props.id + '-pagination'
+    }
+  }, _vm._l((_vm.props.elements), function(one, index) {
+    return _c('div', {
+      staticClass: "one",
+      class: {
+        'active': index == _vm.props.data.currentIndex.value
+      },
+      style: ({
+        backgroundColor: _vm.props.h5css.pagination_color.value
+      })
+    })
+  })) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -437,7 +501,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:16rem;position:absolute;left:50%;top:0;margin:0 0 0 -8rem}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://localhost:9000/v3/static/images/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}", ""]);
+exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:16rem}.slider-style1 .yh-slider-content{width:90000px}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:1.28rem;height:2.56rem;background:url(https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png) no-repeat 0 0;background-size:6.74133rem 8rem;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:0}.slider-style1 .arrow-right{background-position:-4.11733rem 0;right:0}.slider-style1 .pagination{width:1.28rem;height:.32rem;position:absolute;left:50%;bottom:.32rem;margin:0 0 0 -.64rem;z-index:10}.slider-style1 .pagination>div,.slider-style1 .pagination>span{width:.32rem;height:.32rem;margin:0 .10667rem;border-radius:.42667rem;opacity:.5;background:#00c99b;float:left}.slider-style1 .pagination>div.active,.slider-style1 .pagination>span.active{opacity:1}", ""]);
 
 // exports
 

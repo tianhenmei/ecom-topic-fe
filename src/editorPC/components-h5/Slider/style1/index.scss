@@ -6,16 +6,17 @@
     position: relative;
     .yh-slider-container {
         width:rem(750);
-        position: absolute;
-        left: 50%;
-        top:0;
-        margin:0 0 0 rem(-375);
+        padding:0 0 rem(20) 0;
+        // position: absolute;
+        // left: 50%;
+        // top:0;
+        // margin:0 0 0 rem(-375);
     }
     .yh-slider-content {
         width:90000px;
-        position: absolute;
-        left: 0;
-        top:0;
+        // position: absolute;
+        // left: 0;
+        // top:0;
     }
     .yh-slider-content > .block-style1 {
         // width: 100%;
@@ -27,9 +28,10 @@
     }
     .arrow-left,
     .arrow-right {
-        width: 80px;
-        height: 80px;
-        background: url($host+'static/images/carouselButton.png') no-repeat -80px 0;
+        width: rem(60);
+        height: rem(120);
+        background: url(https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png) no-repeat 0 0;
+        background-size: rem(316) rem(375);
         position: absolute;
         top: 0;
         z-index: 10;
@@ -37,17 +39,34 @@
         display:block;
     }
     .arrow-left {
-        left: 40px;
-    }
-    .arrow-left:hover {
-        background-position:-80px -80px;
+        left: 0;
     }
     .arrow-right {
-        background-position: 0 0;
-        right: 40px;
+        background-position: rem(-193) 0;
+        right: 0;
     }
-    .arrow-right:hover {
-        background-position:0 -80px;
+    .pagination {
+        width:rem(60);
+        height:rem(15);
+        position:absolute;
+        left:50%;
+        bottom:rem(15);
+        margin:0 0 0 rem(-30);
+        z-index: 10;
+        > span,
+        > div {
+            width:rem(15);
+            height:rem(15);
+            margin:0 rem(5);
+            border-radius:rem(20);
+            opacity:0.5;
+            background:#00c99b;
+            float:left;
+        }
+        > span.active,
+        > div.active {
+            opacity:1;
+        }
     }
 }
 /*slider-style1**************************************************************************/

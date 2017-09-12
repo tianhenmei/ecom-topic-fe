@@ -1,21 +1,23 @@
 <template>
     <div class="slider-style1" :id="props.id" yh-module="Slider_style1"
         :ref="props.id"
-        :autoplay="props.data.autoplay.value"
+        :autoplay="getAutoplay"
         :animation="props.data.animation.value"
-        :style="{
+        yh-vessel>
+        <!--:style="{
             height:(props.h5css.height.value == 'auto' ? 'auto' : getRemValue(props.h5css.height.value)+'rem'),
             minHeight:(props.h5css.background_min_height.value == 'auto' ? 'auto' : getRemValue(props.h5css.background_min_height.value)+'rem')
-        }"
-        yh-vessel>
+        }"-->
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
-                height:(props.h5css.height.value == 'auto' ? 'auto' : getRemValue(props.h5css.height.value)+'rem'),
                 backgroundColor:props.h5css.background_background_color.value,
                 backgroundImage:setImage,
                 backgroundRepeat:props.h5css.background_background_repeat.value,
-                minHeight:(props.h5css.background_min_height.value == 'auto' ? 'auto' : props.h5css.background_min_height.value+'rem')
             }">
+            <!-- 
+            height:(props.h5css.height.value == 'auto' ? 'auto' : getRemValue(props.h5css.height.value)+'rem'),
+            minHeight:(props.h5css.background_min_height.value == 'auto' ? 'auto' : props.h5css.background_min_height.value+'rem')
+            -->
             <div :id="props.id+'-content'" class="yh-slider-content clearfix"
                 :style="{
                     left:0,
@@ -29,8 +31,25 @@
                     parentmodule="Slider_style1"></div>
             </div>
         </div>
-        <a class="arrow-left" href="javascript:void(0);"></a>
-        <a class="arrow-right" href="javascript:void(0);"></a>
+        <a v-if="props.data.navigation.value" 
+            :style="setArrowLeftStyle"
+            class="arrow-left" href="javascript:void(0);"></a>
+        <a v-if="props.data.navigation.value" 
+            :style="setArrowRightStyle"
+            class="arrow-right" href="javascript:void(0);"></a>
+        <div v-if="props.elements.length > 0"
+            class="pagination"
+            :id="props.id+'-pagination'"
+            :style="{
+                width:getRemValue(28 * (props.elements.length + 1)) + 'rem',
+                marginLeft:getRemValue(28 * (props.elements.length + 1)/ 2 * -1)+'rem'
+            }">
+            <div v-for="(one,index) in props.elements" class="one"
+                :class="{'active':index == props.data.currentIndex.value}"
+                :style="{
+                    backgroundColor:props.h5css.pagination_color.value
+                }"></div>
+        </div>
     </div>
 </template>
 <script>
@@ -50,14 +69,44 @@
                     default:
                         return 'url('+src+')'
                 }
+            },
+            getAutoplay(){
+                if(this.props.data.autoplay.value){
+                    return 'autoplay'
+                }else {
+                    return false
+                }
+            },
+            setArrowLeftStyle(){
+                let style = {
+                    top:this.getRem(this.props.h5css.navigation_top.value),
+                }
+                if(this.props.h5css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png'){
+                    style.backgroundImage = 'url('+this.props.h5css.navigation_left_background.value+')'
+                    style.backgroundPosition = '0 0'
+                }
+                return style
+            },
+            setArrowRightStyle(){
+                let style = {
+                    top:this.getRem(this.props.h5css.navigation_top.value),
+                }
+                if(this.props.h5css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png'){
+                    style.backgroundImage = 'url('+this.props.h5css.navigation_right_background.value+')'
+                    style.backgroundPosition = '0 0'
+                }
+                return style
             }
         },
         mounted(){
             
         },
         methods:{
+            getRem(value){
+                return parseFloat(value) / (750 / 16) + 'rem'
+            },
             getRemValue(value){
-                return (value / (750 / 16)).toFixed(2)
+                return (parseFloat(value) / (750 / 16)).toFixed(2)
             }
         }
     }

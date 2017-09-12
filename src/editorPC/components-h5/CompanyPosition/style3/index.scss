@@ -1,0 +1,165 @@
+@import 'http://localhost:9000/static/css/init-h5.scss';
+@function getEleN($n) {
+    @return $n / (750/16) + rem;
+}
+/*companyPosition style3**************************************************************************/
+[yh-module="List_style1"] .company-position-style3 {
+    // width:getEleN(750);
+    // padding: getEleN(30) 0 getEleN(5) 0;
+	// margin: 0 auto;
+}
+.company-position-style3 {
+    width: getEleN(691); 
+    height: getEleN(660);
+    margin:getEleN(23) auto getEleN(23);
+    background-color:#ffffff;
+    //box-shadow: 0 0 getEleN(40) getEleN(10) #eae9e9;
+    box-shadow: 0 0 getEleN(23) 0 rgba(0,0,0,.4);
+    // overflow:hidden;
+    position: relative;
+}
+
+.company-position-style3.hide {
+    display:none;
+}
+.company-position-style3 .title {
+    height:getEleN(376);
+    // background:#fff;
+    position:relative;
+    overflow: hidden;
+}
+
+.company-position-style3 .title .colorBlock .rect{
+    -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    -ms-transform:rotate(-45deg);
+    -o-transform:rotate(-45deg);
+    transform:rotate(-45deg);
+    position:absolute;
+    left:getEleN(49);
+    top:0;
+}
+.company-position-style3 .title .colorBlock .rect1 {
+    width:getEleN(125);
+    height:getEleN(125);
+    background:#00c99b;
+    opacity:0.6;
+    top: getEleN(-62);
+}
+.company-position-style3 .title .colorBlock .rect2 {
+    width:getEleN(80);
+    height:getEleN(80);
+    background:#00c99b;
+    opacity:0.8;
+    left:getEleN(178);
+    top: getEleN(-40);
+}
+
+.company-position-style3 .title .topContent {
+    padding:getEleN(140) 0 0 getEleN(46);
+}
+.company-position-style3 .title .topContent > div {
+    float:left;
+}
+.company-position-style3 .title .topContent .tcLeft .slogan {
+    width: getEleN(358);
+    height:getEleN(46);
+    line-height:getEleN(36);
+    padding:getEleN(8) getEleN(48) 0 0;
+    color:#252525;
+    font-size:getEleN(30);
+    text-align:left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.company-position-style3 .title .topContent .tcLeft .description {
+    width: getEleN(406);
+    height:getEleN(144);
+    line-height: getEleN(36);
+    color: #333333;
+    font-size: getEleN(24);
+    text-align: left;
+    word-break: break-all;
+    overflow:hidden;
+}
+
+.company-position-style3 .title .topContent .tcRight a{
+    display:block;
+    text-decoration:none;
+}
+.company-position-style3 .title .topContent .tcRight a.logo img {
+    width:getEleN(142);
+    height:getEleN(142);
+    margin:0 0 0 getEleN(32);
+    border:2px solid #f1f1f1;
+}
+.company-position-style3 .title .topContent .tcRight a.name {
+    width:getEleN(220);
+    padding:getEleN(18) 0 0 0;
+    font-size:getEleN(30);
+    color:#333333;
+    text-align:center;
+}
+.company-position-style3 .bottom {
+    width:100%;
+    height:getEleN(284);
+    background-color:#f1f1f1;
+    background: rgba(0,0,0,0.05);
+    filter:Alpha(opacity=5);
+    position: relative;
+    *zoom:1;
+}
+.company-position-style3 .positionList {
+    height:getEleN(166);
+    padding:getEleN(5) getEleN(21) getEleN(30) getEleN(50);
+    overflow:hidden;
+}
+.company-position-style3 .positionList li {
+    float:left;
+}
+.company-position-style3 .positionList li .positionUrl {
+    width:getEleN(285);
+    height:getEleN(72.6);
+    line-height:getEleN(72.6);
+    margin:getEleN(20) getEleN(9) 0 getEleN(9);
+    background:#fff url(https://activity.lagou.com/topic/static/img/newEdit/gIcon.png) no-repeat getEleN(160) getEleN(-145);
+    background-size:getEleN(256) getEleN(512);
+    display:block;
+}
+.company-position-style3 .positionList li .positionUrl span {
+    height:getEleN(72.6); line-height:getEleN(72.6);
+    font-size:getEleN(24);
+    float:left; font-family: Arial;
+    color:#00c99b;
+}
+.company-position-style3 .positionList li .positionUrl span.positionName {
+    width: getEleN(138);
+    padding:0 getEleN(6) 0 getEleN(16);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+.company-position-style3 .positionList li .positionUrl span.salary {
+    width:getEleN(100);
+    font-family: Helvetica;
+}
+.company-position-style3 .more {
+    width:getEleN(200);
+    height:getEleN(36);
+    line-height:getEleN(36);
+    padding:0 getEleN(50) 0 0 ;
+    color:#777777;
+    text-align:right;
+    font-size:getEleN(28);
+    text-decoration:none;
+    position:absolute;
+    right:getEleN(20);
+    bottom:getEleN(30);
+    display:block;
+    background: url(https://activity.lagou.com/topic/static/img/newEdit/gIcon.png) no-repeat getEleN(-6) getEleN(-455);
+    background-size:getEleN(256) getEleN(512);
+}
+
+/*companyPosition style3**************************************************************************/

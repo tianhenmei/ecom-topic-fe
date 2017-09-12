@@ -121,7 +121,7 @@
 <style>
 .yh-edit-add-CompanyPosition {
     width: 400px;
-    height: 210px;
+    height: 230px;
     border: 1px solid #00c99b;
     box-shadow: 0 0 50px #00c99b;
     position: fixed;

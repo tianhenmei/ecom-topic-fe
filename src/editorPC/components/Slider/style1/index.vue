@@ -3,29 +3,31 @@
         :ref="props.id"
         :yh-path="path"
         @click.stop="setAll"
-        :autoplay="props.data.autoplay.value"
+        :autoplay="getAutoplay"
         :animation="props.data.animation.value"
-        :style="{
-            height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
-            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
-        }"
         @mouseenter.stop.prevent="showAddLayer"
         @mouseleave.stop.prevent="hideAddLayer"
         yh-vessel>
+        <!--:style="{
+            height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
+            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
+        }"-->
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px'),
-                height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
                 backgroundColor:props.css.background_background_color.value,
                 backgroundImage:setImage,
-                backgroundRepeat:props.css.background_background_repeat.value,
-                minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
+                backgroundRepeat:props.css.background_background_repeat.value
             }">
+            <!--
+            height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
+            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
+            -->
             <div :id="props.id+'-content'" class="yh-slider-content clearfix"
-                :style="{
-                    left:getLeft+ 'px',
-                    // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
-                }">
+                :style="getLeft">
+                <!--
+                // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
+                -->
                 <div v-for="(element,index) in props.elements" 
                     v-if="element"
                     :is="element.module" 
@@ -35,9 +37,24 @@
             </div>
         </div>
         <a class="arrow-left" href="javascript:void(0);"
+            :style="setArrowLeftStyle"
             @click.stop.prevent="leftEvent"></a>
         <a class="arrow-right" href="javascript:void(0);"
+            :style="setArrowRightStyle"
             @click.stop.prevent="rightEvent"></a>
+        <div v-show="props.elements.length > 0"
+            class="pagination"
+            :id="props.id+'-pagination'"
+            :style="{
+                width:20 * props.elements.length + 'px',
+                marginLeft:(20 * props.elements.length / 2 * -1)+'px'
+            }">
+            <div v-for="(one,index) in props.elements" class="one"
+                :class="{'active':index == props.data.currentIndex.value}"
+                :style="{
+                    backgroundColor:props.css.pagination_color.value
+                }"></div>
+        </div>
         <div 
             v-show="props.elements.length > 0" 
             class="yh-vessel-add yh-slider-addone hide"
@@ -121,23 +138,23 @@
                 ivalue:document.documentElement.clientWidth,//100,   // 初始值
                 type:'none'
             },
-            background_height:{
-                cn:'高度',
-                en:'background_height',
-                value:100,//'auto',
-                default:'auto',  // 默认值
-                ivalue:100,//document.documentElement.clientWidth,   // 初始值
-                type:'number'
-            },
-            background_min_height:{
-                cn:'最小高度',
-                en:'background_min_height',
-                value:'auto',
-                default:'auto',
-                ivalue:100,
-                type:'none',
-                parent:'css'
-            },
+            // background_height:{
+            //     cn:'高度',
+            //     en:'background_height',
+            //     value:100,//'auto',
+            //     default:'auto',  // 默认值
+            //     ivalue:100,//document.documentElement.clientWidth,   // 初始值
+            //     type:'number'
+            // },
+            // background_min_height:{
+            //     cn:'最小高度',
+            //     en:'background_min_height',
+            //     value:'auto',
+            //     default:'auto',
+            //     ivalue:100,
+            //     type:'none',
+            //     parent:'css'
+            // },
             background_background_image:{
                 cn:'背景图片',
                 en:'background_background_image',
@@ -164,6 +181,31 @@
                     value:'repeat-y'
                 }]
             },
+            pagination_color:{
+                cn:'分页背景',
+                en:'pagination_color',
+                value:'#00c99b'
+            },
+            navigation_left_background:{
+                cn:'左按钮背景',
+                en:'navigation_left_background',
+                value:'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png',
+                type:'image',
+                mold:'bg'
+            },
+            navigation_right_background:{
+                cn:'右按钮背景',
+                en:'navigation_right_background',
+                value:'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png',
+                type:'image',
+                mold:'bg'
+            },
+            navigation_top:{
+                cn:'按钮-上',
+                en:'navigation_top',
+                value:0,
+                type:'number',
+            },
             // slider_width:{
             //     cn:'slider宽度',
             //     en:'slider_width',
@@ -174,24 +216,24 @@
             // },
         },
         h5css:{
-            height:{
-                cn:'高度',
-                en:'height',
-                value:100,//'auto',
-                default:'auto',  // 默认值
-                ivalue:100,//100,   // 初始值
-                type:'number',
-                parent:'h5css'
-            },
-            background_min_height:{
-                cn:'最小高度',
-                en:'background_min_height',
-                value:'auto',
-                default:'auto',
-                ivalue:100,
-                type:'none',
-                parent:'h5css'
-            },
+            // height:{
+            //     cn:'高度',
+            //     en:'height',
+            //     value:100,//'auto',
+            //     default:'auto',  // 默认值
+            //     ivalue:100,//100,   // 初始值
+            //     type:'number',
+            //     parent:'h5css'
+            // },
+            // background_min_height:{
+            //     cn:'最小高度',
+            //     en:'background_min_height',
+            //     value:'auto',
+            //     default:'auto',
+            //     ivalue:100,
+            //     type:'none',
+            //     parent:'h5css'
+            // },
             background_background_color:{
                 cn:'背景颜色',
                 en:'background_background_color',
@@ -226,7 +268,36 @@
                     cn:'纵向重复',
                     value:'repeat-y'
                 }]
-            }
+            },
+            pagination_color:{
+                cn:'分页背景',
+                en:'pagination_color',
+                value:'#00c99b',
+                parent:'h5css'
+            },
+            navigation_left_background:{
+                cn:'左按钮背景',
+                en:'navigation_left_background',
+                value:'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png',
+                type:'image',
+                mold:'bg',
+                parent:'h5css'
+            },
+            navigation_right_background:{
+                cn:'右按钮背景',
+                en:'navigation_right_background',
+                value:'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png',
+                type:'image',
+                mold:'bg',
+                parent:'h5css'
+            },
+            navigation_top:{
+                cn:'按钮-上',
+                en:'navigation_top',
+                value:0,
+                type:'number',
+                parent:'h5css'
+            },
         },
         elements:[],
         common:{
@@ -274,8 +345,9 @@
             pagination:{
                 cn:'分页器',
                 en:'pagination',
-                value:0,
-                type:'checkbox',
+                value:1,
+                // type:'checkbox',
+                type:'none',
                 parent:'data'
             },
             autoplay:{
@@ -295,7 +367,7 @@
                     cn:'平移',
                     value:'move'
                 },{
-                    cn:'从小到大',
+                    cn:'3D缩小',
                     value:'zoomIn'
                 }],
             },
@@ -334,7 +406,38 @@
                 }
             },
             getLeft(){
-                return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1
+                let str = '',
+                    value = this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1 + 'px'
+                str = 'transform:translate3d('+value+',0,0); '+
+                      '-webkit-transform:translate3d('+value+',0,0)'
+                return str
+            },
+            getAutoplay(){
+                if(this.props.data.autoplay.value){
+                    return 'autoplay'
+                }else {
+                    return false
+                }
+            },
+            setArrowLeftStyle(){
+                let style = {
+                    top:this.props.css.navigation_top.value+'px',
+                }
+                if(this.props.css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png'){
+                    style.backgroundImage = 'url('+this.props.css.navigation_left_background.value+')'
+                    style.backgroundPosition = '0 0'
+                }
+                return style
+            },
+            setArrowRightStyle(){
+                let style = {
+                    top:this.props.css.navigation_top.value+'px',
+                }
+                if(this.props.css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png'){
+                    style.backgroundImage = 'url('+this.props.css.navigation_right_background.value+')'
+                    style.backgroundPosition = '0 0'
+                }
+                return style
             }
         },
         mounted(){
@@ -528,6 +631,14 @@
 <style>
     /* @import '../../../../../public/css/lib/swiper.min.css';*/
     @import './index.css';
+    .slider-style1 .yh-slider-container {
+        /* position:absolute; */
+    }
+    .slider-style1 .yh-slider-content {
+        /*position:absolute;
+        left:0;
+        top:0; */
+    }
     .yh-module-selected > .yh-slider-container > .yh-slider-content{
         top:20px;
     }

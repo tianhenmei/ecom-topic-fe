@@ -1525,6 +1525,14 @@ Node.getRequestData = function (store, id, type) {
     }
 };
 
+Node.getRem = function (value) {
+    return value / (750 / 16); //  + 'rem'
+};
+
+Node.getPx = function (value) {
+    return value * (750 / 16); // + 'rem';
+};
+
 Node.recoveryChildElementsData = function (parent, baseData, components) {
     var parentmodule = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
     var ignorestatus = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "";
@@ -3830,6 +3838,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // import Swiper from '../../../../../public/js/lib/swiper.min.js'
 
@@ -3892,23 +3917,23 @@ var baseData = {
             ivalue: document.documentElement.clientWidth, //100,   // 初始值
             type: 'none'
         },
-        background_height: {
-            cn: '高度',
-            en: 'background_height',
-            value: 100, //'auto',
-            default: 'auto', // 默认值
-            ivalue: 100, //document.documentElement.clientWidth,   // 初始值
-            type: 'number'
-        },
-        background_min_height: {
-            cn: '最小高度',
-            en: 'background_min_height',
-            value: 'auto',
-            default: 'auto',
-            ivalue: 100,
-            type: 'none',
-            parent: 'css'
-        },
+        // background_height:{
+        //     cn:'高度',
+        //     en:'background_height',
+        //     value:100,//'auto',
+        //     default:'auto',  // 默认值
+        //     ivalue:100,//document.documentElement.clientWidth,   // 初始值
+        //     type:'number'
+        // },
+        // background_min_height:{
+        //     cn:'最小高度',
+        //     en:'background_min_height',
+        //     value:'auto',
+        //     default:'auto',
+        //     ivalue:100,
+        //     type:'none',
+        //     parent:'css'
+        // },
         background_background_image: {
             cn: '背景图片',
             en: 'background_background_image',
@@ -3934,27 +3959,52 @@ var baseData = {
                 cn: '纵向重复',
                 value: 'repeat-y'
             }]
+        },
+        pagination_color: {
+            cn: '分页背景',
+            en: 'pagination_color',
+            value: '#00c99b'
+        },
+        navigation_left_background: {
+            cn: '左按钮背景',
+            en: 'navigation_left_background',
+            value: 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png',
+            type: 'image',
+            mold: 'bg'
+        },
+        navigation_right_background: {
+            cn: '右按钮背景',
+            en: 'navigation_right_background',
+            value: 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png',
+            type: 'image',
+            mold: 'bg'
+        },
+        navigation_top: {
+            cn: '按钮-上',
+            en: 'navigation_top',
+            value: 0,
+            type: 'number'
         }
     },
     h5css: {
-        height: {
-            cn: '高度',
-            en: 'height',
-            value: 100, //'auto',
-            default: 'auto', // 默认值
-            ivalue: 100, //100,   // 初始值
-            type: 'number',
-            parent: 'h5css'
-        },
-        background_min_height: {
-            cn: '最小高度',
-            en: 'background_min_height',
-            value: 'auto',
-            default: 'auto',
-            ivalue: 100,
-            type: 'none',
-            parent: 'h5css'
-        },
+        // height:{
+        //     cn:'高度',
+        //     en:'height',
+        //     value:100,//'auto',
+        //     default:'auto',  // 默认值
+        //     ivalue:100,//100,   // 初始值
+        //     type:'number',
+        //     parent:'h5css'
+        // },
+        // background_min_height:{
+        //     cn:'最小高度',
+        //     en:'background_min_height',
+        //     value:'auto',
+        //     default:'auto',
+        //     ivalue:100,
+        //     type:'none',
+        //     parent:'h5css'
+        // },
         background_background_color: {
             cn: '背景颜色',
             en: 'background_background_color',
@@ -3989,6 +4039,35 @@ var baseData = {
                 cn: '纵向重复',
                 value: 'repeat-y'
             }]
+        },
+        pagination_color: {
+            cn: '分页背景',
+            en: 'pagination_color',
+            value: '#00c99b',
+            parent: 'h5css'
+        },
+        navigation_left_background: {
+            cn: '左按钮背景',
+            en: 'navigation_left_background',
+            value: 'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png',
+            type: 'image',
+            mold: 'bg',
+            parent: 'h5css'
+        },
+        navigation_right_background: {
+            cn: '右按钮背景',
+            en: 'navigation_right_background',
+            value: 'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png',
+            type: 'image',
+            mold: 'bg',
+            parent: 'h5css'
+        },
+        navigation_top: {
+            cn: '按钮-上',
+            en: 'navigation_top',
+            value: 0,
+            type: 'number',
+            parent: 'h5css'
         }
     },
     elements: [],
@@ -4033,8 +4112,9 @@ var baseData = {
         pagination: {
             cn: '分页器',
             en: 'pagination',
-            value: 0,
-            type: 'checkbox',
+            value: 1,
+            // type:'checkbox',
+            type: 'none',
             parent: 'data'
         },
         autoplay: {
@@ -4054,7 +4134,7 @@ var baseData = {
                 cn: '平移',
                 value: 'move'
             }, {
-                cn: '从小到大',
+                cn: '3D缩小',
                 value: 'zoomIn'
             }]
         },
@@ -4091,7 +4171,37 @@ exports.default = {
             }
         },
         getLeft: function getLeft() {
-            return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1;
+            var str = '',
+                value = this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1 + 'px';
+            str = 'transform:translate3d(' + value + ',0,0); ' + '-webkit-transform:translate3d(' + value + ',0,0)';
+            return str;
+        },
+        getAutoplay: function getAutoplay() {
+            if (this.props.data.autoplay.value) {
+                return 'autoplay';
+            } else {
+                return false;
+            }
+        },
+        setArrowLeftStyle: function setArrowLeftStyle() {
+            var style = {
+                top: this.props.css.navigation_top.value + 'px'
+            };
+            if (this.props.css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png') {
+                style.backgroundImage = 'url(' + this.props.css.navigation_left_background.value + ')';
+                style.backgroundPosition = '0 0';
+            }
+            return style;
+        },
+        setArrowRightStyle: function setArrowRightStyle() {
+            var style = {
+                top: this.props.css.navigation_top.value + 'px'
+            };
+            if (this.props.css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png') {
+                style.backgroundImage = 'url(' + this.props.css.navigation_right_background.value + ')';
+                style.backgroundPosition = '0 0';
+            }
+            return style;
         }
     }),
     mounted: function mounted() {
@@ -4275,15 +4385,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "slider-style1",
-    style: ({
-      height: _vm.props.css.background_height.value + (_vm.props.css.background_height.value == 'auto' ? '' : 'px'),
-      minHeight: _vm.props.css.background_min_height.value + (_vm.props.css.background_min_height.value == 'auto' ? '' : 'px')
-    }),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Slider_style1",
       "yh-path": _vm.path,
-      "autoplay": _vm.props.data.autoplay.value,
+      "autoplay": _vm.getAutoplay,
       "animation": _vm.props.data.animation.value,
       "yh-vessel": ""
     },
@@ -4307,21 +4413,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "yh-slider-container clearfix",
     style: ({
       width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px'),
-      height: _vm.props.css.background_height.value + (_vm.props.css.background_height.value == 'auto' ? '' : 'px'),
       backgroundColor: _vm.props.css.background_background_color.value,
       backgroundImage: _vm.setImage,
-      backgroundRepeat: _vm.props.css.background_background_repeat.value,
-      minHeight: _vm.props.css.background_min_height.value + (_vm.props.css.background_min_height.value == 'auto' ? '' : 'px')
+      backgroundRepeat: _vm.props.css.background_background_repeat.value
     }),
     attrs: {
       "id": _vm.props.id + '-container'
     }
   }, [_c('div', {
     staticClass: "yh-slider-content clearfix",
-    style: ({
-      left: _vm.getLeft + 'px',
-      // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
-    }),
+    style: (_vm.getLeft),
     attrs: {
       "id": _vm.props.id + '-content'
     }
@@ -4336,6 +4437,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }) : _vm._e()
   }))]), _vm._v(" "), _c('a', {
     staticClass: "arrow-left",
+    style: (_vm.setArrowLeftStyle),
     attrs: {
       "href": "javascript:void(0);"
     },
@@ -4348,6 +4450,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('a', {
     staticClass: "arrow-right",
+    style: (_vm.setArrowRightStyle),
     attrs: {
       "href": "javascript:void(0);"
     },
@@ -4359,6 +4462,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   }), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.props.elements.length > 0),
+      expression: "props.elements.length > 0"
+    }],
+    staticClass: "pagination",
+    style: ({
+      width: 20 * _vm.props.elements.length + 'px',
+      marginLeft: (20 * _vm.props.elements.length / 2 * -1) + 'px'
+    }),
+    attrs: {
+      "id": _vm.props.id + '-pagination'
+    }
+  }, _vm._l((_vm.props.elements), function(one, index) {
+    return _c('div', {
+      staticClass: "one",
+      class: {
+        'active': index == _vm.props.data.currentIndex.value
+      },
+      style: ({
+        backgroundColor: _vm.props.css.pagination_color.value
+      })
+    })
+  })), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -6077,7 +6205,8 @@ exports.default = {
                 (0, _axios2.default)({
                     url: requestdata.url,
                     method: requestdata.type,
-                    data: fileData
+                    data: fileData,
+                    withCredentials: true
                 }).then(function (response) {
                     var data = response.data,
                         name = self.options.mold,
@@ -6242,7 +6371,7 @@ exports.default = {
                 if (this.options.unit === this.options.realunit) {
                     return value;
                 }
-                return this.getDesign(value);
+                return value; //this.getDesign(value)
             }
             return actualValue;
         },
@@ -6282,6 +6411,7 @@ exports.default = {
             var choice = this.$refs['yh-edit-choice'],
                 value = parseInt(e.target.getAttribute('value')),
                 number = value || value == 0 ? value : e.target.getAttribute('value'),
+                actualValue = value || value == 0 ? this.options.unit && this.options.unit != this.options.realunit ? (0, _Node.getRem)(number) : number : number,
                 type = this.options.edittype,
                 edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue'; /*,
                                                                                                                          elem = document.getElementsByClassName('setting')[0],
@@ -6294,7 +6424,7 @@ exports.default = {
 
             choice.className += ' hide';
             if (this.options.backstatus) {
-                this.$emit('setValue', this.options.stylename, number, number); // this.options.def
+                this.$emit('setValue', this.options.stylename, actualValue, number); // this.options.def
             } else {
                 this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
@@ -6302,7 +6432,7 @@ exports.default = {
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                     ischildset: this.ischildset ? this.ischildset : '',
                     stylename: this.options.stylename,
-                    actualValue: number,
+                    actualValue: actualValue,
                     designValue: number,
                     path: this.path
                 });
@@ -6341,7 +6471,7 @@ exports.default = {
             unit = this.options.unit ? this.options.unit : '',
                 realunit = this.options.realunit ? this.options.realunit : '',
                 stylename = this.options.stylename,
-                actualValue = value,
+                actualValue = this.options.unit && this.options.unit != this.options.realunit ? (0, _Node.getRem)(parseFloat(value)) : value,
                 type = this.options.edittype,
                 edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue'; // unit == realunit ? (value + realunit) : (this.getRemValue(parseFloat(value)) + realunit)
 
@@ -6616,8 +6746,8 @@ exports.default = {
             optionsData: {
                 name: this.options.cn,
                 stylename: this.options.en,
-                unit: this.options.nounit ? '' : 'px',
-                realunit: this.options.nounit ? '' : 'px',
+                unit: this.options.nounit ? '' : this.options.unit ? this.options.unit : 'px',
+                realunit: this.options.nounit ? '' : this.options.realunit ? this.options.realunit : 'px',
                 type: type,
                 classname: 'number',
                 style: this.parent,
@@ -6653,7 +6783,7 @@ exports.default = {
             var type = this.options.edittype,
                 edittype = type ? 'set' + type.substring(0, 1).toUpperCase() + type.substring(1) + 'Value' : 'setValue';
             if (this.options.backstatus) {
-                this.$emit('setValue', name, value, value);
+                this.$emit('setValue', name, actualValue, value);
             } else {
                 this.$store.commit(edittype, {
                     parent: this.options.parent ? this.options.parent : 'css',
@@ -6661,7 +6791,7 @@ exports.default = {
                     index: !(this.index == -1 || this.index == undefined || typeof this.index == 'string') ? this.index : -1,
                     ischildset: this.ischildset ? this.ischildset : '',
                     stylename: name,
-                    actualValue: value,
+                    actualValue: actualValue,
                     designValue: value,
                     path: this.path,
                     store: this.$store
@@ -7248,7 +7378,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-options {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-options .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-options .yh-edit-value{\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    float: left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    margin: 0 5px 0 0;\n    float: left;\n}\n.yh-edit-options .yh-edit-arrow{\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    margin: 2px 0 0 0;\n    cursor: pointer;\n    position:relative;\n    float:left;\n    background: #ff47a3;\n}\n.yh-edit-options .yh-edit-arrow:after {\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    content: \"\\F0D7\";\n    font-family: FontAwesome;\n    font-size: 12px;\n    color: #fff;\n    text-align: center;\n    position: absolute;\n    left: 0;\n    top: 0;\n}\n.yh-edit-options .yh-edit-list > ul > li,\n.yh-edit-options .yh-edit-list > ul,\n.yh-edit-options .yh-edit-list{\n    width:100px;\n    color:#666;\n}\n.yh-edit-options .yh-edit-list {\n    width: 113px;\n    display: none;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    border: 1px solid #ccc;\n    /* height: 200px; */\n    max-height: 200px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    z-index: 10;\n}\n.yh-edit-options .yh-edit-list > ul > li {\n    line-height:25px;\n    text-align:center;\n    cursor:pointer;\n    background:#fff;\n}\n.yh-edit-options .yh-edit-list > ul > li:hover {\n    background:#eee;\n}\n.yh-edit-options .yh-edit-list > ul > li.active {\n    background:#ff0084;\n    color:#fff;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-options {\n    width: 100%;\n    padding: 0 0 5px 0;\n    position: relative;\n}\n.yh-edit-options .yh-edit-text {\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float: left;\n    text-align: right;\n    font-size: 12px;\n    color: #666;\n}\n.yh-edit-options .yh-edit-value{\n    width: 113px;\n    height: 23px;\n    line-height: 23px;\n    border: 1px solid #ccc;\n    float: left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n    margin: 0 5px 0 0;\n    float: left;\n}\n.yh-edit-options .yh-edit-arrow{\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    margin: 2px 0 0 0;\n    cursor: pointer;\n    position:relative;\n    float:left;\n    background: #ff47a3;\n}\n.yh-edit-options .yh-edit-arrow:after {\n    width: 20px;\n    height: 20px;\n    line-height: 20px;\n    content: \"\\F0D7\";\n    font-family: FontAwesome;\n    font-size: 12px;\n    color: #fff;\n    text-align: center;\n    position: absolute;\n    left: 0;\n    top: 0;\n}\n.yh-edit-options .yh-edit-list > ul > li,\n.yh-edit-options .yh-edit-list > ul,\n.yh-edit-options .yh-edit-list{\n    width:100px;\n    color:#666;\n}\n.yh-edit-options .yh-edit-list {\n    width: 113px;\n    display: none;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    border: 1px solid #ccc;\n    /* height: 200px; */\n    max-height: 200px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    z-index: 10;\n}\n.yh-edit-options .yh-edit-list > ul > li {\n    font-size: 12px;\n    line-height:25px;\n    text-align:center;\n    cursor:pointer;\n    background:#fff;\n}\n.yh-edit-options .yh-edit-list > ul > li:hover {\n    background:#eee;\n}\n.yh-edit-options .yh-edit-list > ul > li.active {\n    background:#ff0084;\n    color:#fff;\n}\n", ""]);
 
 // exports
 
@@ -7262,7 +7392,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-image {\n  width: 100%;\n  padding: 0 0 5px 0;\n  position: relative;\n}\n.yh-edit-image .yh-edit-text {\n  width: 80px;\n  height: 25px;\n  line-height: 25px;\n  text-align: right;\n  font-size: 12px;\n  color: #666;\n  float: left;\n}\n.yh-edit-image .yh-edit-value {\n  width: 113px;\n  height: 23px;\n  line-height: 23px;\n  border: 1px solid #ccc;\n  font-size: 12px;\n  color: #666;\n  background: transparent;\n  float: left;\n}\n.yh-edit-image .yh-edit-image-local {\n  width: 20px;\n  height: 20px;\n  background: url(\"http://localhost:9000/v3/static/images/icons.png\") no-repeat -2px -194px;\n  position: absolute;\n  left: 200px;\n  top: 3px;\n}\n.yh-edit-image .yh-edit-imagefile {\n  width: 20px;\n  height: 20px;\n  border: none;\n  opacity: 0;\n  display: block;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-image {\n  width: 100%;\n  padding: 0 0 5px 0;\n  position: relative;\n}\n.yh-edit-image .yh-edit-text {\n  width: 80px;\n  height: 25px;\n  line-height: 25px;\n  text-align: right;\n  font-size: 12px;\n  color: #666;\n  float: left;\n}\n.yh-edit-image .yh-edit-value {\n  width: 113px;\n  height: 23px;\n  line-height: 23px;\n  border: 1px solid #ccc;\n  font-size: 12px;\n  color: #666;\n  background: transparent;\n  float: left;\n}\n.yh-edit-image .yh-edit-image-local {\n  width: 20px;\n  height: 20px;\n  background: url(\"http://topic.lagou.com/v3/static/images/icons.png\") no-repeat -2px -194px;\n  position: absolute;\n  left: 200px;\n  top: 3px;\n}\n.yh-edit-image .yh-edit-imagefile {\n  width: 20px;\n  height: 20px;\n  border: none;\n  opacity: 0;\n  display: block;\n}\n", ""]);
 
 // exports
 
@@ -7290,7 +7420,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 exports.i(__webpack_require__(72), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* @import '../../../../../public/css/lib/swiper.min.css';*/\n.yh-module-selected > .yh-slider-container > .yh-slider-content{\n    top:20px;\n}\n.yh-slider-addone {\n    width: 100%;\n    height: 50px;\n    line-height: 50px;\n    margin: 0;\n    border: 1px solid #ccc;\n    font-size: 40px;\n    text-align: center;\n    background-color: #fff;\n    color: #666;\n    cursor: pointer;\n    box-sizing: border-box;\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    z-index: 1000;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* @import '../../../../../public/css/lib/swiper.min.css';*/\n.slider-style1 .yh-slider-container {\n    /* position:absolute; */\n}\n.slider-style1 .yh-slider-content {\n    /*position:absolute;\n    left:0;\n    top:0; */\n}\n.yh-module-selected > .yh-slider-container > .yh-slider-content{\n    top:20px;\n}\n.yh-slider-addone {\n    width: 100%;\n    height: 50px;\n    line-height: 50px;\n    margin: 0;\n    border: 1px solid #ccc;\n    font-size: 40px;\n    text-align: center;\n    background-color: #fff;\n    color: #666;\n    cursor: pointer;\n    box-sizing: border-box;\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    z-index: 1000;\n}\n", ""]);
 
 // exports
 
@@ -7388,7 +7518,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n.yh-uplist-set .yh-uplist-set-title .remove {\n    display: block;\n    width: 14px;\n    height: 14px;\n    line-height: 14px;\n    border: 1px solid #ff0084;\n    border-radius: 50%;\n    text-align: center;\n    font-size: 12px;\n    color: #ff0084;\n    position: absolute;\n    right: 0;\n    top: 2.5px;\n    cursor:pointer;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*******************\nuplist 样式\n***********************/\n.yh-uplist-set {\n    margin:5px 0;\n    background: #fff7fb;\n}\n.yh-uplist-set .yh-uplist-set-title {\n    position:relative;\n    padding:0 0 0 20px;\n    cursor:pointer;\n    font-size:14px;\n}\n.yh-uplist-set .yh-uplist-set-title .icon{\n    width:0;\n    height:0;\n    position:absolute;\n    left:5px;\n    top:2px;\n    border-top:7px solid transparent;\n    border-bottom:7px solid transparent;\n    border-left:7px solid #ff0084;\n}\n.yh-uplist-set .yh-uplist-set-title .listshow{\n    border-left:7px solid transparent;\n    border-right:7px solid transparent;\n    border-top:7px solid #ff0084;\n    top:6px;\n}\n.showup{\n    -webkit-animation:showup 0.3 both linear;\n    animation:showup 0.3 both linear;\n}\n@-webkit-keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n@keyframes showup{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(90deg);\n        transform:rotateZ(90deg);\n}\n}\n.hidedown{\n    -webkit-animation:hidedown 0.3 both linear;\n    animation:hidedown 0.3 both linear;\n}\n@-webkit-keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n@keyframes hidedown{\n0% {\n}\n100% {\n        -webkit-transform:rotateZ(0deg);\n        transform:rotateZ(0deg);\n}\n}\n.yh-uplist-set .yh-uplist-set-title .name {\n    color:#ff0084;\n    font-size:14px;\n    text-align:left;\n}\n.yh-uplist-set .yh-uplist-set-title .remove {\n    display: block;\n    width: 14px;\n    height: 14px;\n    line-height: 14px;\n    border: 1px solid #ff0084;\n    border-radius: 50%;\n    text-align: center;\n    font-size: 12px;\n    color: #ff0084;\n    position: absolute;\n    right: 0;\n    top: 2.5px;\n    cursor:pointer;\n}\n", ""]);
 
 // exports
 
@@ -7416,7 +7546,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-chooser {\n  width: 25px;\n  height: 25px;\n  float: left;\n  position: relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n  width: 25px;\n  height: 25px;\n  border: none;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.yh-edit-chooser .yh-edit-list {\n  width: 176px;\n  position: absolute;\n  right: 0;\n  top: 100%;\n  background: #fff;\n  padding: 2px 0 0 2px;\n  box-shadow: 0 0 10px #ccc;\n  display: none;\n  z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n  width: 18px;\n  height: 18px;\n  margin: 0 2px 2px 0;\n  border: 1px solid #efefef;\n  cursor: pointer;\n  float: left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent {\n  background: url(\"http://localhost:9000/v3/static/images/icons.png\") no-repeat 0 -1700px;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-chooser {\n  width: 25px;\n  height: 25px;\n  float: left;\n  position: relative;\n}\n.yh-edit-chooser .yh-edit-vcolor {\n  width: 25px;\n  height: 25px;\n  border: none;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.yh-edit-chooser .yh-edit-list {\n  width: 176px;\n  position: absolute;\n  right: 0;\n  top: 100%;\n  background: #fff;\n  padding: 2px 0 0 2px;\n  box-shadow: 0 0 10px #ccc;\n  display: none;\n  z-index: 10;\n}\n.yh-edit-chooser .yh-edit-list li {\n  width: 18px;\n  height: 18px;\n  margin: 0 2px 2px 0;\n  border: 1px solid #efefef;\n  cursor: pointer;\n  float: left;\n}\n.yh-edit-chooser .yh-edit-list li.transparent {\n  background: url(\"http://topic.lagou.com/v3/static/images/icons.png\") no-repeat 0 -1700px;\n}\n", ""]);
 
 // exports
 
@@ -7430,7 +7560,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.yh-edit-input {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-input .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-input .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-input .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-input .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-input .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-input .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n}\n.yh-eidt-combine.yh-edit-input {\n    width:82px;\n}\n.yh-eidt-combine.yh-edit-input .yh-edit-value{\n    width:82px;\n}\n.yh-eidt-combine.yh-edit-input .yh-edit-value input {\n    width:60px;\n}\n.yh-eidt-combine.yh-edit-color {\n    width:92px;\n}\n.yh-eidt-combine.yh-edit-color .yh-edit-value {\n    width:62px;\n}\n", ""]);
+exports.push([module.i, "\n.yh-edit-input {\n    width:100%;\n    padding:0 0 5px 0;\n    position:relative;\n}\n.yh-edit-input .yh-edit-text{\n    width: 80px;\n    height: 25px;\n    line-height: 25px;\n    float:left;\n    text-align:right;\n    font-size:12px;\n    color:#666;\n    /*background: #fff;*/\n}\n.yh-edit-input .yh-edit-value{\n    width:115px;\n    padding:0 5px 0 0;\n    /*background: #fff;*/\n    float:left;\n}\n.yh-edit-input .yh-edit-value input {\n    width: 93px;\n    height: 23px;\n    line-height: 23px;\n    border:1px solid #ccc;\n    float:left;\n    font-size: 12px;\n    color: #666;\n    background: transparent;\n}\n.yh-edit-input .yh-edit-value input.yh-edit-value-input-long{\n    width:113px;\n}\n.yh-edit-input .yh-edit-value span {\n    width: 20px;\n    height: 25px;\n    line-height: 25px;\n    text-align: center;\n    font-size: 12px;\n    color: #666;\n    float:left;\n}\n.yh-edit-input .yh-edit-choice {\n    width: 145px;\n    height: 30px;\n    line-height: 30px;\n    border: 1px solid #ccc;\n    position: absolute;\n    left: 80px;\n    top: 24px;\n    background-color: #fff;\n    z-index: 2;\n    color: #666;\n    font-size:12px;\n}\n.yh-eidt-combine.yh-edit-input {\n    width:82px;\n}\n.yh-eidt-combine.yh-edit-input .yh-edit-value{\n    width:82px;\n}\n.yh-eidt-combine.yh-edit-input .yh-edit-value input {\n    width:60px;\n}\n.yh-eidt-combine.yh-edit-color {\n    width:92px;\n}\n.yh-eidt-combine.yh-edit-color .yh-edit-value {\n    width:62px;\n}\n", ""]);
 
 // exports
 
@@ -7444,7 +7574,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:absolute;left:50%;top:0;margin:0 0 0 -960px}.slider-style1 .yh-slider-content{width:90000px;position:absolute;left:0;top:0}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://topic.lagou.com/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}", ""]);
+exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:relative;left:50%;top:0;margin:0 0 0 -960px;padding:0 0 20px 0}.slider-style1 .yh-slider-content{width:90000px}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(http://topic.lagou.com/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}.slider-style1 .pagination{width:60px;height:10px;position:absolute;left:50%;bottom:10px;margin:0 0 0 -30px;z-index:10}.slider-style1 .pagination>div,.slider-style1 .pagination>span{width:10px;height:10px;margin:0 5px;border-radius:10px;opacity:.5;background:#00c99b;float:left}.slider-style1 .pagination>div.active,.slider-style1 .pagination>span.active{opacity:1}", ""]);
 
 // exports
 

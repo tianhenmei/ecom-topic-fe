@@ -65,6 +65,7 @@
 }
 .yh-edit-prompt-content{
     padding: 30px 40px;
+    font-size:14px;
 }
 .yh-edit-prompt-text{
     height: 40px;

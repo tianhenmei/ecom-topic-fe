@@ -191,6 +191,42 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -308,76 +344,79 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "company-position-style3",
+    style: ({
+      backgroundColor: _vm.props.css.background_background_color.value,
+      boxShadow: '0 0 23px 0 ' + _vm.props.css.shadow_color.value
+    }),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "CompanyPosition_style3",
       "industryfield": _vm.props.data.industryfield.value
     }
-  }, [_c('div', {
-    staticClass: "leftDiv background",
-    style: ({
-      'background-color': _vm.props.css.background_background_color.value
-    })
   }, [_c('h3', {
-    staticClass: "title"
+    staticClass: "title clearfix"
+  }, [_c('p', {
+    staticClass: "backgroundColor",
+    style: ({
+      backgroundColor: _vm.props.css.line_background_color.value
+    })
+  }), _vm._v(" "), _c('div', {
+    staticClass: "topContent clearfix"
+  }, [_c('div', {
+    staticClass: "tcLeft"
+  }, [_c('div', {
+    staticClass: "slogan allColor",
+    style: ({
+      color: _vm.props.css.all_color.value
+    })
+  }, [_vm._v(_vm._s(_vm.props.data.slogan.value))]), _vm._v(" "), _c('div', {
+    staticClass: "description allColor",
+    style: ({
+      color: _vm.props.css.all_color.value
+    }),
+    domProps: {
+      "innerHTML": _vm._s(_vm.props.data.description.value)
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "tcRight"
   }, [_c('a', {
-    staticClass: "nameTop companyLink",
+    staticClass: "logo",
     attrs: {
       "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
+      "target": "_blank",
       "data-link": "1",
       "data-lg-tj-id": "",
       "data-lg-tj-no": "",
-      "data-lg-tj-cid": _vm.props.data.companyId.value,
-      "target": "_blank"
+      "data-lg-tj-cid": _vm.props.data.companyId.value
     }
   }, [_c('img', {
-    staticClass: "logo",
     attrs: {
       "src": _vm.props.data.logo.value
     }
-  }), _vm._v(" "), _c('p', {
+  })]), _vm._v(" "), _c('a', {
     staticClass: "name",
     style: ({
-      'color': _vm.props.css.name_color.value
-    })
-  }, [_vm._v(_vm._s(_vm.props.data.name.value))])])]), _vm._v(" "), _c('div', {
-    staticClass: "infoWord button",
-    style: ({
-      'color': _vm.props.css.button_color.value,
-      'background-color': _vm.props.css.button_background_color.value
-    })
-  }, [_c('a', {
-    staticClass: "more",
+      color: _vm.props.css.name_color.value
+    }),
     attrs: {
-      "href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId.value + '.html',
+      "href": 'https://www.lagou.com/gongsi/' + _vm.props.data.companyId.value + '.html',
+      "target": "_blank",
       "data-link": "1",
       "data-lg-tj-id": "",
       "data-lg-tj-no": "",
-      "data-lg-tj-cid": _vm.props.data.companyId.value,
-      "target": "_blank"
+      "data-lg-tj-cid": _vm.props.data.companyId.value
     }
-  }, [_c('span', {
-    staticClass: "background-color button",
-    style: ({
-      'background-color': _vm.props.css.button_background_color.value,
-      'color': _vm.props.css.button_color.value
-    })
-  }, [_vm._v("更多职位 >")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "rightDiv"
-  }, [_c('div', {
-    staticClass: "slogan all",
-    style: ({
-      'color': _vm.props.css.all_color.value
-    })
-  }, [_vm._v(_vm._s(_vm.props.data.slogan.value))]), _vm._v(" "), _c('ul', {
-    staticClass: "position positionList clearfix"
-  }, _vm._l((_vm.props.data.position.value), function(one) {
+  }, [_vm._v("\n                    " + _vm._s(_vm.props.data.name.value) + "\n                ")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "bottom"
+  }, [_c('ul', {
+    staticClass: "positionList clearfix"
+  }, _vm._l((_vm.props.data.position.value), function(one, index) {
     return _c('li', {
       attrs: {
         "dynamic_type": one.dynamic_type.value
       }
     }, [_c('a', {
-      staticClass: "positionUrl positionLink clearfix",
+      staticClass: "positionUrl clearfix",
       attrs: {
         "href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html',
         "lagou-href": 'https://www.lagou.com/jobs/' + one.positionId.value + '.html?source=pl&i=pl-0',
@@ -390,15 +429,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('p', {
       staticClass: "positionName",
       style: ({
-        'color': _vm.props.css.positionName_color.value
+        color: _vm.props.css.positionName_color.value
       })
     }, [_vm._v(_vm._s(one.positionName.value))]), _vm._v(" "), _c('p', {
       staticClass: "salary",
       style: ({
-        'color': _vm.props.css.salary_color.value
+        color: _vm.props.css.salary_color.value
       })
     }, [_vm._v(_vm._s(one.salary.value))])])])
-  }))])])
+  })), _vm._v(" "), _c('a', {
+    staticClass: "more",
+    attrs: {
+      "href": 'https://www.lagou.com/gongsi/j' + _vm.props.data.companyId + '.html',
+      "target": "_blank",
+      "data-link": "1",
+      "data-lg-tj-id": "",
+      "data-lg-tj-no": "",
+      "data-lg-tj-cid": _vm.props.data.companyId.value
+    }
+  }, [_vm._v(_vm._s(_vm.props.data.more.value))])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
