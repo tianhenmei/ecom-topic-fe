@@ -181,12 +181,14 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
-//
-//
-//
 
 exports.default = {
-    props: ['props', 'path', 'parentmodule'],
+    props: ['props', 'path', 'parentmodule',
+    // 当作为slider-style1的子元素时,设置的类名
+    'classname',
+    // 当作为slider-style1的子元素时，用此元素主要控制block-content宽度
+    // 当animation == 'zoomIn'时，宽为100%；否则为设置的
+    'animation'],
     data: function data() {
         return {};
     },
@@ -204,7 +206,7 @@ exports.default = {
             }
         },
         setLayerClass: function setLayerClass() {
-            return this.props.css.layer_position.value;
+            return this.props.css.layer_position.value + ' ' + this.classname;
         },
         setLayerStyle: function setLayerStyle() {
             var style = {
@@ -234,6 +236,25 @@ exports.default = {
                 case 'yh-block-fixed-bright':
                     style.right = this.props.css.layer_right.value + 'px';
                     style.bottom = this.props.css.layer_bottom.value + 'px';
+                    break;
+            }
+            switch (this.animation) {
+                case 'zoomIn':
+                    style.overflow = 'visible';
+                    break;
+            }
+            return style;
+        },
+        getContentStyle: function getContentStyle() {
+            var style = {
+                marginLeft: this.props.css.content_position.value == 'yh-block-absolute' ? this.props.css.content_margin_left.value + 'px' : '',
+                top: this.props.css.content_position.value == 'yh-block-absolute' ? this.props.css.content_top.value + 'px' : '0px'
+            };
+            switch (this.animation) {
+                case 'zoomIn':
+                    break;
+                default:
+                    style.width = this.props.css.background_width.value + (this.props.css.background_width.value == 'auto' ? '' : 'px');
                     break;
             }
             return style;
@@ -363,11 +384,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'yh-block-init': !_vm.props.elements.length,
         'yh-block-absolute': _vm.props.css.content_position.value == 'yh-block-absolute'
     },
-    style: ({
-      width: _vm.props.css.background_width.value + (_vm.props.css.background_width.value == 'auto' ? '' : 'px'),
-      marginLeft: _vm.props.css.content_position.value == 'yh-block-absolute' ? _vm.props.css.content_margin_left.value + 'px' : '',
-      top: _vm.props.css.content_position.value == 'yh-block-absolute' ? _vm.props.css.content_top.value + 'px' : '0px'
-    }),
+    style: (_vm.getContentStyle),
     attrs: {
       "id": _vm.props.id + '-content'
     }

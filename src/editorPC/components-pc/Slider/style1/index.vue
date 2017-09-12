@@ -12,6 +12,7 @@
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px'),
+                marginLeft:(props.css.width.value == '-50%' ? '' : (-parseFloat(props.css.width.value) / 2)+'px'),
                 backgroundColor:props.css.background_background_color.value,
                 backgroundImage:setImage,
                 backgroundRepeat:props.css.background_background_repeat.value,
@@ -21,24 +22,32 @@
             minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
             -->
             <div :id="props.id+'-content'" class="yh-slider-content clearfix"
-                :style="{
-                    left:0,
-                    // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
-                }">
+                :class="{
+                    'yh-slider-zoomin':props.data.animation.value == 'zoomIn'
+                }"
+                :style="getLeft"
+                >
+                <!--
+                // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
+                -->
                 <div v-for="(element,index) in props.elements" 
                     v-if="element.props.data.toPC.value && element"
                     :is="element.module" 
                     :index="index"
                     :props="element.props"
                     :path="element.path"
-                    parentmodule="Slider_style1"></div>
+                    parentmodule="Slider_style1"
+                    classname="yh-slider-slide"
+                    :animation="props.data.animation.value"></div>
             </div>
         </div>
-        <a v-if="props.data.navigation.value"
+        <a v-if="props.css.navigation.value"
             :style="setArrowLeftStyle"
+            :id="props.id+'-arrow-left'"
             class="arrow-left" href="javascript:void(0);"></a>
-        <a v-if="props.data.navigation.value"
+        <a v-if="props.css.navigation.value"
             :style="setArrowRightStyle"
+            :id="props.id+'-arrow-right'"
             class="arrow-right" href="javascript:void(0);"></a>
         <div v-if="props.elements.length > 0"
             class="pagination"
@@ -74,7 +83,14 @@
                 }
             },
             getLeft(){
-                return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1
+                let str = 'left: 0; '
+                switch(this.props.data.animation.value){
+                    case 'zoomIn':
+                        str += 'width:'+this.props.css.width.value+'px; '
+                        break
+                }
+                return str
+                // return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1
             },
             getAutoplay(){
                 if(this.props.data.autoplay.value){
@@ -86,6 +102,7 @@
             setArrowLeftStyle(){
                 let style = {
                     top:this.props.css.navigation_top.value+'px',
+                    left:this.props.css.navigation_left.value+'px'
                 }
                 if(this.props.css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png'){
                     style.backgroundImage = 'url('+this.props.css.navigation_left_background.value+')'
@@ -96,6 +113,7 @@
             setArrowRightStyle(){
                 let style = {
                     top:this.props.css.navigation_top.value+'px',
+                    right:this.props.css.navigation_left.value+'px'
                 }
                 if(this.props.css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png'){
                     style.backgroundImage = 'url('+this.props.css.navigation_right_background.value+')'

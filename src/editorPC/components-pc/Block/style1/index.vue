@@ -11,10 +11,7 @@
         <div :id="props.id+'-content'" class="yh-block-content clearfix" 
             :class="{'yh-block-init':!props.elements.length,
             'yh-block-absolute':props.css.content_position.value == 'yh-block-absolute'}"
-            :style="{
-                width:props.css.background_width.value+(props.css.background_width.value == 'auto' ? '' : 'px'),
-                marginLeft:props.css.content_position.value == 'yh-block-absolute' ? props.css.content_margin_left.value+'px': '',
-                top:props.css.content_position.value == 'yh-block-absolute' ? props.css.content_top.value+'px': '0px'}">
+            :style="getContentStyle">
             <div v-for="(element,index) in props.elements" 
                 v-if="element.props.data.toPC.value && element"
                 :is="element.module" 
@@ -26,7 +23,13 @@
 </template>
 <script>
     export default {
-        props:['props','path','parentmodule'],
+        props:['props','path','parentmodule',
+            // 当作为slider-style1的子元素时,设置的类名
+            'classname',
+            // 当作为slider-style1的子元素时，用此元素主要控制block-content宽度
+            // 当animation == 'zoomIn'时，宽为100%；否则为设置的
+            'animation'
+        ],
         data(){
             return {
                 
@@ -45,7 +48,7 @@
                 }
             },
             setLayerClass(){
-                return this.props.css.layer_position.value
+                return this.props.css.layer_position.value + ' '+this.classname
             },
             setLayerStyle(){
                 let style = {
@@ -77,8 +80,27 @@
                         style.bottom = this.props.css.layer_bottom.value+'px'
                         break
                 }
+                switch(this.animation){
+                    case 'zoomIn':
+                        style.overflow = 'visible'
+                        break
+                }
                 return style
-            }
+            },
+            getContentStyle(){
+                let style = {
+                    marginLeft:this.props.css.content_position.value == 'yh-block-absolute' ? this.props.css.content_margin_left.value+'px': '',
+                    top:this.props.css.content_position.value == 'yh-block-absolute' ? this.props.css.content_top.value+'px': '0px'
+                }
+                switch(this.animation){
+                    case 'zoomIn':
+                        break
+                    default:
+                        style.width = this.props.css.background_width.value+(this.props.css.background_width.value == 'auto' ? '' : 'px')
+                        break
+                }
+                return style
+            },
         },
         mounted(){
             

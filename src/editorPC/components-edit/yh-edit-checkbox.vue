@@ -58,6 +58,7 @@
                 // actualValue : 实际上使用的值
                 // value : 展示用的值 （designValue）
                 // this.$emit('setValue',stylename,actualValue,value)
+                console.log(target.checked)
                 if(this.backstatus){
                     this.$emit('setValue',
                         stylename,

@@ -215,6 +215,15 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -235,7 +244,14 @@ exports.default = {
             }
         },
         getLeft: function getLeft() {
-            return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1;
+            var str = 'left: 0; ';
+            switch (this.props.data.animation.value) {
+                case 'zoomIn':
+                    str += 'width:' + this.props.css.width.value + 'px; ';
+                    break;
+            }
+            return str;
+            // return this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1
         },
         getAutoplay: function getAutoplay() {
             if (this.props.data.autoplay.value) {
@@ -246,7 +262,8 @@ exports.default = {
         },
         setArrowLeftStyle: function setArrowLeftStyle() {
             var style = {
-                top: this.props.css.navigation_top.value + 'px'
+                top: this.props.css.navigation_top.value + 'px',
+                left: this.props.css.navigation_left.value + 'px'
             };
             if (this.props.css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png') {
                 style.backgroundImage = 'url(' + this.props.css.navigation_left_background.value + ')';
@@ -256,7 +273,8 @@ exports.default = {
         },
         setArrowRightStyle: function setArrowRightStyle() {
             var style = {
-                top: this.props.css.navigation_top.value + 'px'
+                top: this.props.css.navigation_top.value + 'px',
+                right: this.props.css.navigation_left.value + 'px'
             };
             if (this.props.css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png') {
                 style.backgroundImage = 'url(' + this.props.css.navigation_right_background.value + ')';
@@ -387,6 +405,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "yh-slider-container clearfix",
     style: ({
       width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px'),
+      marginLeft: (_vm.props.css.width.value == '-50%' ? '' : (-parseFloat(_vm.props.css.width.value) / 2) + 'px'),
       backgroundColor: _vm.props.css.background_background_color.value,
       backgroundImage: _vm.setImage,
       backgroundRepeat: _vm.props.css.background_background_repeat.value,
@@ -396,10 +415,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "yh-slider-content clearfix",
-    style: ({
-      left: 0,
-      // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
-    }),
+    class: {
+      'yh-slider-zoomin': _vm.props.data.animation.value == 'zoomIn'
+    },
+    style: (_vm.getLeft),
     attrs: {
       "id": _vm.props.id + '-content'
     }
@@ -410,19 +429,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "index": index,
         "props": element.props,
         "path": element.path,
-        "parentmodule": "Slider_style1"
+        "parentmodule": "Slider_style1",
+        "classname": "yh-slider-slide",
+        "animation": _vm.props.data.animation.value
       }
     }) : _vm._e()
-  }))]), _vm._v(" "), (_vm.props.data.navigation.value) ? _c('a', {
+  }))]), _vm._v(" "), (_vm.props.css.navigation.value) ? _c('a', {
     staticClass: "arrow-left",
     style: (_vm.setArrowLeftStyle),
     attrs: {
+      "id": _vm.props.id + '-arrow-left',
       "href": "javascript:void(0);"
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.props.data.navigation.value) ? _c('a', {
+  }) : _vm._e(), _vm._v(" "), (_vm.props.css.navigation.value) ? _c('a', {
     staticClass: "arrow-right",
     style: (_vm.setArrowRightStyle),
     attrs: {
+      "id": _vm.props.id + '-arrow-right',
       "href": "javascript:void(0);"
     }
   }) : _vm._e(), _vm._v(" "), (_vm.props.elements.length > 0) ? _c('div', {
@@ -503,7 +526,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:relative;left:50%;top:0;margin:0 0 0 -960px}.slider-style1 .yh-slider-content{width:90000px}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}.slider-style1 .pagination{width:60px;height:10px;position:absolute;left:50%;bottom:10px;margin:0 0 0 -30px;z-index:10}.slider-style1 .pagination>div,.slider-style1 .pagination>span{width:10px;height:10px;margin:0 5px;border-radius:10px;opacity:.5;background:#00c99b;float:left}.slider-style1 .pagination>div.active,.slider-style1 .pagination>span.active{opacity:1}", ""]);
+exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:relative;left:50%;top:0;margin:0 0 0 -960px;padding:0 0 20px 0;overflow:hidden}.slider-style1 .yh-slider-content{width:90000px;position:relative}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}.slider-style1 .pagination{width:60px;height:10px;position:absolute;left:50%;bottom:10px;margin:0 0 0 -30px;z-index:10}.slider-style1 .pagination>div,.slider-style1 .pagination>span{width:10px;height:10px;margin:0 5px;border-radius:10px;opacity:.5;background:#00c99b;float:left}.slider-style1 .pagination>div.active,.slider-style1 .pagination>span.active{opacity:1}.yh-slider-zoomin{position:relative;width:100%;height:100%;z-index:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transition-property:-webkit-transform;transition-property:-webkit-transform;transition-property:transform;transition-property:transform,-webkit-transform;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);-webkit-box-sizing:content-box;box-sizing:content-box}.swiper-container-3d .swiper-cube-shadow,.swiper-container-3d .swiper-slide-shadow-bottom,.swiper-container-3d .swiper-slide-shadow-left,.swiper-container-3d .swiper-slide-shadow-right,.swiper-container-3d .swiper-slide-shadow-top,.swiper-container-3d .yh-slider-slide,.swiper-container-3d .yh-slider-zoomin{-webkit-transform-style:preserve-3d;transform-style:preserve-3d}.swiper-container-coverflow .yh-slider-zoomin{-ms-perspective:1200px}.swiper-container-3d .yh-slider-slide{-webkit-transform-origin:0 50%;transform-origin:0 50%;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-flex-shrink:0;-ms-flex:0 0 auto;-ms-flex-negative:0;flex-shrink:0;width:100%;height:100%;position:relative}.swiper-container-3d .swiper-slide-shadow-left,.swiper-container-3d .swiper-slide-shadow-right{display:none}", ""]);
 
 // exports
 

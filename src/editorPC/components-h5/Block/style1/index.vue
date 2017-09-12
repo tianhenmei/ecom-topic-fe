@@ -12,9 +12,7 @@
         <div :id="props.id+'-content'" class="yh-block-content clearfix" 
             :class="{'yh-block-init':!props.elements.length,
             'yh-block-absolute':props.h5css.content_position.value == 'yh-block-absolute'}"
-            :style="{
-                marginLeft:props.h5css.content_position.value == 'yh-block-absolute' ? getRemValue(props.h5css.content_margin_left.value)+'rem': '',
-                top:props.h5css.content_position.value == 'yh-block-absolute' ? getRemValue(props.h5css.content_top.value)+'rem': '0'}">
+            :style="getContentStyle">
             <div v-for="(element,index) in props.elements" 
                 v-if="element.props.data.toH5.value && element"
                 :is="element.module" 
@@ -26,7 +24,13 @@
 </template>
 <script>
     export default {
-        props:['props','path','parentmodule'],
+        props:['props','path','parentmodule',
+            // 当作为slider-style1的子元素时,设置的类名
+            'classname',
+            // 当作为slider-style1的子元素时，用此元素主要控制block-content宽度
+            // 当animation == 'zoomIn'时，宽为100%；否则为设置的
+            'animation'
+        ],
         data(){
             return {
                 
@@ -45,7 +49,7 @@
                 }
             },
             setLayerClass(){
-                return this.props.h5css.layer_position.value
+                return this.props.h5css.layer_position.value + ' '+this.classname
             },
             setLayerStyle(){
                 let style = {
@@ -79,8 +83,27 @@
                         style.bottom = this.getRemValue(this.props.h5css.layer_bottom.value)+'rem'
                         break
                 }
+                switch(this.animation){
+                    case 'zoomIn':
+                        style.overflow = 'visible'
+                        break
+                }
                 return style
-            }
+            },
+            getContentStyle(){
+                let style = {
+                    marginLeft:this.props.h5css.content_position.value == 'yh-block-absolute' ? getRemValue(this.props.h5css.content_margin_left.value)+'rem': '',
+                    top:this.props.h5css.content_position.value == 'yh-block-absolute' ? getRemValue(this.props.h5css.content_top.value)+'rem': '0'
+                }
+                // switch(this.animation){
+                //     case 'zoomIn':
+                //         break
+                //     default:
+                //         style.width = this.props.css.background_width.value+(this.props.css.background_width.value == 'auto' ? '' : 'px')
+                //         break
+                // }
+                return style
+            },
         },
         mounted(){
             

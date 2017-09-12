@@ -133,7 +133,14 @@ for(i = 0; i < sliderStyle1.length; i++){
         animation:animation,
         // pagination_color:$('#'+id+'-pagination > div').eq(0).css('background-color')
     }
-    initSliderStyle1Move(id)
+    switch(animation){
+        case 'zoomIn':
+            initSliderStyle1ZoomIn(id)
+            break
+        default:
+            initSliderStyle1Move(id)
+            break
+    }
 }
 }
 
@@ -151,6 +158,8 @@ function initSliderStyle1Move(id){
         paginationClickable:true,
         bulletClass:'one',
         bulletActiveClass:'active',
+        prevButton:'#'+id+'-arrow-left',
+        nextButton:'#'+id+'-arrow-right',
         // paginationElement:'span',
         // paginationBulletRender: function (swiper, index, className) {
         //     return '<span class="' + className + '" style="background-color:'+sliderStyle1Swiper[id].pagination_color+';"></span>';
@@ -168,6 +177,69 @@ function initSliderStyle1Move(id){
                 // id = ul.attr('id'),
                 // logo = $('.' + id + 'Button').children('img'),
                 endIndex = index - 1;
+            if (endIndex == -1) {
+                endIndex = length - 1;
+            } else if (endIndex == totalLength) {
+                endIndex = 0;
+            }
+            pagination.removeClass('active').eq(endIndex).addClass('active');
+            // li.eq(index).removeClass('active').end().eq(index).addClass('active');
+        }
+    })
+}
+
+function initSliderStyle1ZoomIn(id){
+    let pagination = $('#'+id+'-pagination').children(),
+        length = pagination.length,
+        totalLength = 3
+    sliderStyle1SwiperAni[id] = new Swiper('#'+id+'-container', {
+        wrapperClass : 'yh-slider-content',
+        slideClass : 'yh-slider-slide',
+        autoplay: sliderStyle1Swiper[id].autoplay ? 3000 : 0,//可选选项，自动滑动
+        // loop : true,
+        // loopedSlides:1,
+        // pagination : '#'+id+'-pagination',
+        // paginationClickable:true,
+        bulletClass:'one',
+        bulletActiveClass:'active',
+        prevButton:'#'+id+'-arrow-left',
+        nextButton:'#'+id+'-arrow-right',
+        // paginationElement:'span',
+        // paginationBulletRender: function (swiper, index, className) {
+        //     return '<span class="' + className + '" style="background-color:'+sliderStyle1Swiper[id].pagination_color+';"></span>';
+        // },
+        mode: 'horizontal',
+        // paginationClickable: true,
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 1.1,
+        // slidesPerView: 1.56,
+        initialSlide: 1,
+        autoplayDisableOnInteraction: false,
+        // prevButton: '.' + id + 'Pre',
+        // nextButton: '.' + id + 'Next',
+        coverflow: {
+            rotate: 0,
+            stretch: 230,
+            depth: 300,
+            modifier: 1,
+            slideShadows: true
+        },
+        onInit:function(swiper){
+            totalLength = $('#'+id+'-pagination').children().length
+            pagination.removeClass('active').eq(1).addClass('active')
+            // $('#'+id+'-pagination').children().css('background-color',sliderStyle1Swiper[id].pagination_color)
+        },
+        onSlideChangeEnd: function(swiper) {
+            // var ul = $(elemClass).children(),
+                // li = ul.children('li'),
+                // activeLi = ul.children('.' + this.slideActiveClass).length > 0 ? ul.children('.' + this.slideActiveClass) : ul.children('.active'),
+                // index = activeLi.index(),
+            let index = swiper.activeIndex,
+                // id = ul.attr('id'),
+                // logo = $('.' + id + 'Button').children('img'),
+                endIndex = index //index - 1;
             if (endIndex == -1) {
                 endIndex = length - 1;
             } else if (endIndex == totalLength) {

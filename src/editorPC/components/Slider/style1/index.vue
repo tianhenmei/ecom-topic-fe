@@ -15,6 +15,7 @@
         <div :id="props.id+'-container'" class="yh-slider-container clearfix"
             :style="{
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px'),
+                marginLeft:(props.css.width.value == '-50%' ? '' : (-parseFloat(props.css.width.value) / 2)+'px'),
                 backgroundColor:props.css.background_background_color.value,
                 backgroundImage:setImage,
                 backgroundRepeat:props.css.background_background_repeat.value
@@ -186,25 +187,52 @@
                 en:'pagination_color',
                 value:'#00c99b'
             },
+            navigation:{
+                cn:'左右按钮',
+                en:'navigation',
+                value:0,
+                type:'checkbox',
+                parent:'css',
+                effect:[
+                    'css.navigation_left_background',
+                    'css.navigation_right_background',
+                    'css.navigation_top',
+                    'css.navigation_left'
+                ]
+            },
             navigation_left_background:{
                 cn:'左按钮背景',
                 en:'navigation_left_background',
                 value:'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png',
                 type:'image',
-                mold:'bg'
+                mold:'bg',
+                status:false,
+                condition:[1]
             },
             navigation_right_background:{
                 cn:'右按钮背景',
                 en:'navigation_right_background',
                 value:'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png',
                 type:'image',
-                mold:'bg'
+                mold:'bg',
+                status:false,
+                condition:[1]
             },
             navigation_top:{
-                cn:'按钮-上',
+                cn:'按钮-Y',
                 en:'navigation_top',
                 value:0,
                 type:'number',
+                status:false,
+                condition:[1]
+            },
+            navigation_left:{
+                cn:'按钮-X',
+                en:'navigation_left',
+                value:0,
+                type:'number',
+                status:false,
+                condition:[1]
             },
             // slider_width:{
             //     cn:'slider宽度',
@@ -275,13 +303,28 @@
                 value:'#00c99b',
                 parent:'h5css'
             },
+            navigation:{
+                cn:'左右按钮',
+                en:'navigation',
+                value:0,
+                type:'checkbox',
+                parent:'h5css',
+                effect:[
+                    'h5css.navigation_left_background',
+                    'h5css.navigation_right_background',
+                    'h5css.navigation_top',
+                    'h5css.navigation_left'
+                ]
+            },
             navigation_left_background:{
                 cn:'左按钮背景',
                 en:'navigation_left_background',
                 value:'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png',
                 type:'image',
                 mold:'bg',
-                parent:'h5css'
+                parent:'h5css',
+                status:false,
+                condition:[1]
             },
             navigation_right_background:{
                 cn:'右按钮背景',
@@ -289,14 +332,27 @@
                 value:'https://activity.lagou.com/topic/static/img/newEdit/gIcon3_h5.png',
                 type:'image',
                 mold:'bg',
-                parent:'h5css'
+                parent:'h5css',
+                status:false,
+                condition:[1]
             },
             navigation_top:{
                 cn:'按钮-上',
                 en:'navigation_top',
                 value:0,
                 type:'number',
-                parent:'h5css'
+                parent:'h5css',
+                status:false,
+                condition:[1]
+            },
+            navigation_left:{
+                cn:'按钮-X',
+                en:'navigation_left',
+                value:0,
+                type:'number',
+                parent:'h5css',
+                status:false,
+                condition:[1]
             },
         },
         elements:[],
@@ -333,13 +389,6 @@
                 en:'currentIndex',
                 value:0,
                 type:'none',
-                parent:'data'
-            },
-            navigation:{
-                cn:'左右按钮',
-                en:'navigation',
-                value:0,
-                type:'checkbox',
                 parent:'data'
             },
             pagination:{
@@ -408,8 +457,14 @@
             getLeft(){
                 let str = '',
                     value = this.props.data.currentIndex.value * this.props.elements[0].props.css.background_width.value * -1 + 'px'
-                str = 'transform:translate3d('+value+',0,0); '+
-                      '-webkit-transform:translate3d('+value+',0,0)'
+                // str = 'transform:translate('+value+',0); '+
+                //       '-webkit-transform:translate('+value+',0)'
+                str = 'left:'+value+'; '
+                // switch(this.props.data.animation.value){
+                //     case 'zoomIn':
+                //         str += 'width:'+this.props.css.width.value+'px; '
+                //         break
+                // }
                 return str
             },
             getAutoplay(){
