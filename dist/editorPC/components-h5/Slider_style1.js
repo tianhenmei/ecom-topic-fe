@@ -432,21 +432,33 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "animation": _vm.props.data.animation.value
       }
     }) : _vm._e()
-  }))]), _vm._v(" "), (_vm.props.h5css.navigation.value) ? _c('a', {
+  }))]), _vm._v(" "), _c('a', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.props.h5css.navigation.value),
+      expression: "props.h5css.navigation.value"
+    }],
     staticClass: "arrow-left",
     style: (_vm.setArrowLeftStyle),
     attrs: {
       "id": _vm.props.id + '-arrow-left',
       "href": "javascript:void(0);"
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.props.h5css.navigation.value) ? _c('a', {
+  }), _vm._v(" "), _c('a', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.props.h5css.navigation.value),
+      expression: "props.h5css.navigation.value"
+    }],
     staticClass: "arrow-right",
     style: (_vm.setArrowRightStyle),
     attrs: {
       "id": _vm.props.id + '-arrow-right',
       "href": "javascript:void(0);"
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.props.elements.length > 0) ? _c('div', {
+  }), _vm._v(" "), (_vm.props.elements.length > 0) ? _c('div', {
     staticClass: "pagination",
     style: ({
       width: _vm.getRemValue(28 * (_vm.props.elements.length + 1)) + 'rem',

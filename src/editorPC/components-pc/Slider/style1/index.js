@@ -1,10 +1,11 @@
 let sliderStyle1 = $('[yh-module="Slider_style1"]'),
 sliderStyle1Swiper = {},
 sliderStyle1SwiperAni = {},
-isAppendSliderStyle1 = 0
+isAppendSliderStyle1 = 0,
+browserType = 0
 
 function loadSliderStyle1Swiper(){
-let browserType = sliderStyle1CheckBrower()
+browserType = sliderStyle1CheckBrower()
 switch (browserType) {
     case 0:  // Opera浏览器
     case 1:  // Firefox浏览器
@@ -104,50 +105,69 @@ return browserType;
 }
 
 function initSliderStyle1Animate(){
-let i = 0,
-    autoplay = false,
-    animation = 'move',
-    id = '',
-    content = null,
-    childs = null,
-    first = null,
-    length = 3
-for(i = 0; i < sliderStyle1.length; i++){
-    id = sliderStyle1.eq(i).attr('id')
-    autoplay = sliderStyle1.eq(i).attr('autoplay')
-    autoplay = autoplay ? true : false
-    animation = sliderStyle1.eq(i).attr('animation')
-    animation = animation ? animation : 'move'
+    let i = 0,
+        autoplay = false,
+        animation = 'move',
+        id = '',
+        content = null,
+        childs = null,
+        first = null,
+        length = 3
+    for(i = 0; i < sliderStyle1.length; i++){
+        id = sliderStyle1.eq(i).attr('id')
+        autoplay = sliderStyle1.eq(i).attr('autoplay')
+        autoplay = autoplay ? true : false
+        animation = sliderStyle1.eq(i).attr('animation')
+        animation = animation ? animation : 'move'
 
-    content = sliderStyle1.eq(i).find('#'+id+'-content')
-    childs = content.children()
-    length = childs.length
-    first = childs.eq(0)
-    // first.clone(true).appendTo(content)
-    content.css('left',0)
-    sliderStyle1Swiper[id] = {
-        width:first.children().eq(0).width(),
-        currentIndex:0,
-        length:length,
-        autoplay:autoplay,
-        animation:animation,
-        // pagination_color:$('#'+id+'-pagination > div').eq(0).css('background-color')
+        content = sliderStyle1.eq(i).find('#'+id+'-content')
+        childs = content.children()
+        length = childs.length
+        first = childs.eq(0)
+        // first.clone(true).appendTo(content)
+        content.css('left',0)
+        sliderStyle1Swiper[id] = {
+            width:first.children().eq(0).width(),
+            currentIndex:0,
+            length:length,
+            autoplay:autoplay,
+            animation:animation,
+            // pagination_color:$('#'+id+'-pagination > div').eq(0).css('background-color')
+        }
+        
+        switch (browserType) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                switch(animation){
+                    case 'zoomIn':
+                        initSliderStyle1ZoomIn(id)
+                        break
+                    default:
+                        initSliderStyle1Move(id)
+                        break
+                }
+                break
+            case 4:
+            case 5:
+            case 33: // safri
+                initSliderStyle1Move(id)
+                break
+            default:
+                initSliderStyle1JQuery(id)
+                break
+        }
     }
-    switch(animation){
-        case 'zoomIn':
-            initSliderStyle1ZoomIn(id)
-            break
-        default:
-            initSliderStyle1Move(id)
-            break
-    }
-}
 }
 
 function initSliderStyle1Move(id){
     let pagination = $('#'+id+'-pagination').children(),
+        content = $('#'+id+'-content'),
+        container = $('#'+id+'-container'),
         length = pagination.length,
         totalLength = 3
+    content.attr('style','left:0;')
     sliderStyle1SwiperAni[id] = new Swiper('#'+id+'-container', {
         wrapperClass : 'yh-slider-content',
         slideClass : 'block-style1',
@@ -194,7 +214,7 @@ function initSliderStyle1ZoomIn(id){
         totalLength = 3
     sliderStyle1SwiperAni[id] = new Swiper('#'+id+'-container', {
         wrapperClass : 'yh-slider-content',
-        slideClass : 'block-style1',
+        slideClass : 'yh-slider-slide',
         autoplay: sliderStyle1Swiper[id].autoplay ? 3000 : 0,//可选选项，自动滑动
         // loop : true,
         // loopedSlides:1,
@@ -248,6 +268,75 @@ function initSliderStyle1ZoomIn(id){
             // li.eq(index).removeClass('active').end().eq(index).addClass('active');
         }
     })
+}
+
+function initSliderStyle1JQuery(id){
+    let pagination = $('#'+id+'-pagination').children(),
+        prevButton = $('#'+id+'-arrow-left'),
+        nextButton = $('#'+id+'-arrow-right'),
+        content = $('#'+id+'-content'),
+        container = $('#'+id+'-container'),
+        length = pagination.length
+
+    prevButton.show()
+    nextButton.show()
+    content.children().eq(0).clone(true).appendTo(content)
+    container.css({
+        'width':sliderStyle1Swiper[id].width+'px',
+        // 'margin-left':sliderStyle1Swiper[id].width / 2 * -1 +'px'
+    })
+    // content.css('width',sliderStyle1Swiper[id].width+'px')
+    content.attr('style','left:0;')
+    sliderStyle1Swiper[id].currentIndex = 0
+    
+    if(sliderStyle1Swiper[id].autoplay){
+        sliderStyle1SwiperAni[id] = setInterval(function() {
+            nextLun(); // 轮播
+        }, 3000);
+    }
+    prevButton.click(prevEvent)
+    nextButton.click(nextLun)
+
+    function nextLun(e){
+        if(e){
+            e.stopPropagation()
+            e.preventDefault()
+        }
+        sliderStyle1Swiper[id].currentIndex++
+        let endIndex = sliderStyle1Swiper[id].currentIndex
+        if (endIndex == length) {
+            endIndex = 0;
+        }
+        content.animate({
+            'left':sliderStyle1Swiper[id].width * sliderStyle1Swiper[id].currentIndex * -1+'px'
+        },function(){
+            if(sliderStyle1Swiper[id].currentIndex == sliderStyle1Swiper[id].length){
+                sliderStyle1Swiper[id].currentIndex = 0
+                content.css({
+                    'left':0
+                })
+            }
+        })
+        pagination.removeClass('active').eq(endIndex).addClass('active');
+    }
+
+    function prevEvent(e){
+        e.stopPropagation()
+        e.preventDefault()
+
+        sliderStyle1Swiper[id].currentIndex--
+        if (sliderStyle1Swiper[id].currentIndex == -1) {
+            sliderStyle1Swiper[id].currentIndex = length - 1
+            content.css({
+                'left':sliderStyle1Swiper[id].length * sliderStyle1Swiper[id].width * -1 + 'px'
+            })
+        }
+        let endIndex = sliderStyle1Swiper[id].currentIndex
+        content.animate({
+            'left':sliderStyle1Swiper[id].width * sliderStyle1Swiper[id].currentIndex * -1+'px'
+        })
+        pagination.removeClass('active').eq(endIndex).addClass('active');
+    }
 }
 
 function initSliderStyle1Move2(){

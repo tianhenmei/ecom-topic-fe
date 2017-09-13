@@ -36,11 +36,11 @@
                     :animation="props.data.animation.value"></div>
             </div>
         </div>
-        <a v-if="props.h5css.navigation.value" 
+        <a v-show="props.h5css.navigation.value" 
             :style="setArrowLeftStyle"
             :id="props.id+'-arrow-left'"
             class="arrow-left" href="javascript:void(0);"></a>
-        <a v-if="props.h5css.navigation.value" 
+        <a v-show="props.h5css.navigation.value" 
             :style="setArrowRightStyle"
             :id="props.id+'-arrow-right'"
             class="arrow-right" href="javascript:void(0);"></a>

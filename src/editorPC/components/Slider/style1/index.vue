@@ -5,6 +5,11 @@
         @click.stop="setAll"
         :autoplay="getAutoplay"
         :animation="props.data.animation.value"
+        :style="{
+            backgroundColor:props.css.background_background_color.value,
+            backgroundImage:setImage,
+            backgroundRepeat:props.css.background_background_repeat.value
+        }"
         @mouseenter.stop.prevent="showAddLayer"
         @mouseleave.stop.prevent="hideAddLayer"
         yh-vessel>
@@ -12,37 +17,39 @@
             height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
             minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
         }"-->
-        <div :id="props.id+'-container'" class="yh-slider-container clearfix"
+        <div :id="props.id+'-layer'" class="yh-slider-layer clearfix"
             :style="{
                 width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px'),
-                marginLeft:(props.css.width.value == '-50%' ? '' : (-parseFloat(props.css.width.value) / 2)+'px'),
-                backgroundColor:props.css.background_background_color.value,
-                backgroundImage:setImage,
-                backgroundRepeat:props.css.background_background_repeat.value
+                marginLeft:(props.css.width.value == '-50%' ? '' : (-parseFloat(props.css.width.value) / 2)+'px')
             }">
-            <!--
-            height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
-            minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
-            -->
-            <div :id="props.id+'-content'" class="yh-slider-content clearfix"
-                :style="getLeft">
+            <div :id="props.id+'-container'" class="yh-slider-container clearfix"
+                :style="{
+                    width:props.css.width.value+(props.css.width.value == 'auto' ? '' : 'px')
+                }">
                 <!--
-                // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
+                height:props.css.background_height.value+(props.css.background_height.value == 'auto' ? '' : 'px'),
+                minHeight:props.css.background_min_height.value+(props.css.background_min_height.value == 'auto' ? '' : 'px')
                 -->
-                <div v-for="(element,index) in props.elements" 
-                    v-if="element"
-                    :is="element.module" 
-                    :props="element.props"
-                    :path="element.path"
-                    parentmodule="Slider_style1"></div>
+                <div :id="props.id+'-content'" class="yh-slider-content clearfix"
+                    :style="getLeft">
+                    <!--
+                    // width:(props.css.slider_width.value == 'auto' ? 'auto' : (props.css.slider_width.value * props.elements.length)+'px')
+                    -->
+                    <div v-for="(element,index) in props.elements" 
+                        v-if="element"
+                        :is="element.module" 
+                        :props="element.props"
+                        :path="element.path"
+                        parentmodule="Slider_style1"></div>
+                </div>
             </div>
+            <a class="arrow-left" href="javascript:void(0);"
+                :style="setArrowLeftStyle"
+                @click.stop.prevent="leftEvent"></a>
+            <a class="arrow-right" href="javascript:void(0);"
+                :style="setArrowRightStyle"
+                @click.stop.prevent="rightEvent"></a>
         </div>
-        <a class="arrow-left" href="javascript:void(0);"
-            :style="setArrowLeftStyle"
-            @click.stop.prevent="leftEvent"></a>
-        <a class="arrow-right" href="javascript:void(0);"
-            :style="setArrowRightStyle"
-            @click.stop.prevent="rightEvent"></a>
         <div v-show="props.elements.length > 0"
             class="pagination"
             :id="props.id+'-pagination'"
@@ -227,9 +234,9 @@
                 condition:[1]
             },
             navigation_left:{
-                cn:'按钮-X',
+                cn:'中心-X',
                 en:'navigation_left',
-                value:0,
+                value:500,
                 type:'number',
                 status:false,
                 condition:[1]
@@ -346,9 +353,9 @@
                 condition:[1]
             },
             navigation_left:{
-                cn:'按钮-X',
+                cn:'中心-X',
                 en:'navigation_left',
-                value:0,
+                value:500,
                 type:'number',
                 parent:'h5css',
                 status:false,
@@ -477,6 +484,7 @@
             setArrowLeftStyle(){
                 let style = {
                     top:this.props.css.navigation_top.value+'px',
+                    marginLeft:-1*this.props.css.navigation_left.value+'px'
                 }
                 if(this.props.css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png'){
                     style.backgroundImage = 'url('+this.props.css.navigation_left_background.value+')'
@@ -487,6 +495,7 @@
             setArrowRightStyle(){
                 let style = {
                     top:this.props.css.navigation_top.value+'px',
+                    marginRight:-1 * this.props.css.navigation_left.value+'px'
                 }
                 if(this.props.css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png'){
                     style.backgroundImage = 'url('+this.props.css.navigation_right_background.value+')'

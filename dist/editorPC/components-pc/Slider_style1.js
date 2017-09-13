@@ -224,6 +224,13 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['props', 'path', 'parentmodule'],
@@ -263,7 +270,8 @@ exports.default = {
         setArrowLeftStyle: function setArrowLeftStyle() {
             var style = {
                 top: this.props.css.navigation_top.value + 'px',
-                left: this.props.css.navigation_left.value + 'px'
+                marginLeft: -1 * this.props.css.navigation_left.value + 'px'
+                // left:this.props.css.navigation_left.value+'px'
             };
             if (this.props.css.navigation_left_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png') {
                 style.backgroundImage = 'url(' + this.props.css.navigation_left_background.value + ')';
@@ -274,7 +282,8 @@ exports.default = {
         setArrowRightStyle: function setArrowRightStyle() {
             var style = {
                 top: this.props.css.navigation_top.value + 'px',
-                right: this.props.css.navigation_left.value + 'px'
+                // right:this.props.css.navigation_left.value+'px'
+                marginRight: -1 * this.props.css.navigation_left.value + 'px'
             };
             if (this.props.css.navigation_right_background.value != 'https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png') {
                 style.backgroundImage = 'url(' + this.props.css.navigation_right_background.value + ')';
@@ -393,6 +402,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     ref: _vm.props.id,
     staticClass: "slider-style1",
+    style: ({
+      backgroundColor: _vm.props.css.background_background_color.value,
+      backgroundImage: _vm.setImage,
+      backgroundRepeat: _vm.props.css.background_background_repeat.value,
+    }),
     attrs: {
       "id": _vm.props.id,
       "yh-module": "Slider_style1",
@@ -402,13 +416,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "yh-vessel": ""
     }
   }, [_c('div', {
-    staticClass: "yh-slider-container clearfix",
+    staticClass: "yh-slider-layer clearfix",
     style: ({
       width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px'),
-      marginLeft: (_vm.props.css.width.value == '-50%' ? '' : (-parseFloat(_vm.props.css.width.value) / 2) + 'px'),
-      backgroundColor: _vm.props.css.background_background_color.value,
-      backgroundImage: _vm.setImage,
-      backgroundRepeat: _vm.props.css.background_background_repeat.value,
+      marginLeft: (_vm.props.css.width.value == '-50%' ? '' : (-parseFloat(_vm.props.css.width.value) / 2) + 'px')
+    }),
+    attrs: {
+      "id": _vm.props.id + '-layer'
+    }
+  }, [_c('div', {
+    staticClass: "yh-slider-container clearfix",
+    style: ({
+      width: _vm.props.css.width.value + (_vm.props.css.width.value == 'auto' ? '' : 'px')
     }),
     attrs: {
       "id": _vm.props.id + '-container'
@@ -434,21 +453,33 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "animation": _vm.props.data.animation.value
       }
     }) : _vm._e()
-  }))]), _vm._v(" "), (_vm.props.css.navigation.value) ? _c('a', {
+  }))]), _vm._v(" "), _c('a', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.props.css.navigation.value),
+      expression: "props.css.navigation.value"
+    }],
     staticClass: "arrow-left",
     style: (_vm.setArrowLeftStyle),
     attrs: {
       "id": _vm.props.id + '-arrow-left',
       "href": "javascript:void(0);"
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.props.css.navigation.value) ? _c('a', {
+  }), _vm._v(" "), _c('a', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.props.css.navigation.value),
+      expression: "props.css.navigation.value"
+    }],
     staticClass: "arrow-right",
     style: (_vm.setArrowRightStyle),
     attrs: {
       "id": _vm.props.id + '-arrow-right',
       "href": "javascript:void(0);"
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.props.elements.length > 0) ? _c('div', {
+  })]), _vm._v(" "), (_vm.props.elements.length > 0) ? _c('div', {
     staticClass: "pagination",
     style: ({
       width: 20 * (_vm.props.elements.length + 1) + 'px',
@@ -526,7 +557,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:relative;left:50%;top:0;margin:0 0 0 -960px;padding:0 0 20px 0;overflow:hidden}.slider-style1 .yh-slider-content{width:90000px;position:relative}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:40px}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:40px}.slider-style1 .arrow-right:hover{background-position:0 -80px}.slider-style1 .pagination{width:60px;height:10px;position:absolute;left:50%;bottom:10px;margin:0 0 0 -30px;z-index:10}.slider-style1 .pagination>div,.slider-style1 .pagination>span{width:10px;height:10px;margin:0 5px;border-radius:10px;opacity:.5;background:#00c99b;float:left}.slider-style1 .pagination>div.active,.slider-style1 .pagination>span.active{opacity:1}.yh-slider-zoomin{position:relative;width:100%;height:100%;z-index:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transition-property:-webkit-transform;transition-property:-webkit-transform;transition-property:transform;transition-property:transform,-webkit-transform;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);-webkit-box-sizing:content-box;box-sizing:content-box}.swiper-container-3d .swiper-cube-shadow,.swiper-container-3d .swiper-slide-shadow-bottom,.swiper-container-3d .swiper-slide-shadow-left,.swiper-container-3d .swiper-slide-shadow-right,.swiper-container-3d .swiper-slide-shadow-top,.swiper-container-3d .yh-slider-slide,.swiper-container-3d .yh-slider-zoomin{-webkit-transform-style:preserve-3d;transform-style:preserve-3d}.swiper-container-coverflow .yh-slider-zoomin{-ms-perspective:1200px}.swiper-container-3d .yh-slider-slide{-webkit-transform-origin:0 50%;transform-origin:0 50%;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-flex-shrink:0;-ms-flex:0 0 auto;-ms-flex-negative:0;flex-shrink:0;width:100%;height:100%;position:relative}.swiper-container-3d .swiper-slide-shadow-left,.swiper-container-3d .swiper-slide-shadow-right{display:none}", ""]);
+exports.push([module.i, ".slider-style1{width:100%;overflow:hidden;position:relative}.slider-style1 .yh-slider-layer{width:1920px;margin:0 auto;left:50%;top:0;margin:0 0 0 -960px;padding:0 0 20px 0;position:relative}.slider-style1 .yh-slider-container{width:1920px;position:relative;overflow:hidden}.slider-style1 .yh-slider-content{width:90000px;position:relative}.slider-style1 .yh-slider-content>.block-style1{float:left}.slider-style1 .yh-slider-content>.block-style1>.yh-block-content{margin:0}.slider-style1 .arrow-left,.slider-style1 .arrow-right{width:80px;height:80px;background:url(https://activity.lagou.com/topic/static/img/newEdit/carouselButton.png) no-repeat -80px 0;position:absolute;top:0;margin:0 0 0 -500px;z-index:10;cursor:pointer;display:block}.slider-style1 .arrow-left{left:50%}.slider-style1 .arrow-left:hover{background-position:-80px -80px}.slider-style1 .arrow-right{background-position:0 0;right:50%;margin:0 -500px 0 0}.slider-style1 .arrow-right:hover{background-position:0 -80px}.slider-style1 .pagination{width:60px;height:10px;position:absolute;left:50%;bottom:10px;margin:0 0 0 -30px;z-index:10}.slider-style1 .pagination>div,.slider-style1 .pagination>span{width:10px;height:10px;margin:0 5px;border-radius:10px;opacity:.5;background:#00c99b;float:left}.slider-style1 .pagination>div.active,.slider-style1 .pagination>span.active{opacity:1}.yh-slider-zoomin{position:relative;width:100%;height:100%;z-index:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transition-property:-webkit-transform;transition-property:-webkit-transform;transition-property:transform;transition-property:transform,-webkit-transform;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);-webkit-box-sizing:content-box;box-sizing:content-box}.swiper-container-3d .swiper-cube-shadow,.swiper-container-3d .swiper-slide-shadow-bottom,.swiper-container-3d .swiper-slide-shadow-left,.swiper-container-3d .swiper-slide-shadow-right,.swiper-container-3d .swiper-slide-shadow-top,.swiper-container-3d .yh-slider-slide,.swiper-container-3d .yh-slider-zoomin{-webkit-transform-style:preserve-3d;transform-style:preserve-3d}.swiper-container-coverflow .yh-slider-zoomin{-ms-perspective:1200px}.swiper-container-3d .yh-slider-slide{-webkit-transform-origin:0 50%;transform-origin:0 50%;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-flex-shrink:0;-ms-flex:0 0 auto;-ms-flex-negative:0;flex-shrink:0;width:100%;height:100%;position:relative}.swiper-container-3d .swiper-slide-shadow-left,.swiper-container-3d .swiper-slide-shadow-right{display:none}", ""]);
 
 // exports
 
