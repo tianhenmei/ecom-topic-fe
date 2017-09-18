@@ -218,8 +218,11 @@
             },
             removeElement(e){
                 var elem = $('.setting'),
-                    elemID = elem.attr('id');
-                this.$store.commit('removeElement',elemID)
+                    elemID = elem.attr('id'),
+                    path = elem.attr('yh-path');
+                this.$store.commit('removeElement',{
+                    path:path
+                })
                 $('.yh-selection').hide()
             },
             undoElement(e){

@@ -3,13 +3,14 @@
     <head>
         <meta charset="utf-8">
         <title>YH EDITOR PC 3.0 CREATE SET</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:9000/static/css/init.css" />
+        <link type="text/css" rel="stylesheet" href="http://localhost:9000/v3/static/css/init.css" />
+        <!-- <link type="text/css" rel="stylesheet" href="http://topic.lagou.com/v3/static/css/init.css" /> -->
         <!--<link type="text/css" rel="stylesheet" href="./css/style.scss" />-->
     </head>
     <body>
         <div id="app">
             <div class="top clearfix">
-                <img class="logo" src="http://localhost:9000/static/images/logo.png" />
+                <img class="logo" :src="host+'static/images/logo.png'" />
                 <h1 class="title">拉勾 活动发布系统 <i>3.0版</i></h1>
             </div>
             <div class="content">
@@ -36,19 +37,19 @@
                                         @input.stop.prevent="checkNullOptionsEvent"
                                         name="templateCategory"
                                         cnname="专题标签">
-                                        <option value="-------" selected="selected">-------</option>
-                                        <option value="测试专题">测试专题</option>
-                                        <option value="言职专题">言职专题</option>
-                                        <option value="日常运营专题">日常运营专题</option>
-                                        <option value="日常市场专题">日常市场专题</option>
-                                        <option value="日常商服专题">日常商服专题</option>
-                                        <option value="野心时代">野心时代</option>
-                                        <option value="梦想合伙人">梦想合伙人</option>
-                                        <option value="实力派">实力派</option>
-                                        <option value="全民升职季">全民升职季</option>
-                                        <option value="升职进化论">升职进化论</option>
-                                        <option value="移路狂飙">移路狂飙</option>
-                                        <option value="全民跳槽月">全民跳槽月</option>
+                                        <option value="-------" :selected="one.templateCategory == '-------' ? true : false">-------</option>
+                                        <option value="测试专题" :selected="one.templateCategory == '测试专题' ? true : false">测试专题</option>
+                                        <option value="言职专题" :selected="one.templateCategory == '言职专题' ? true : false">言职专题</option>
+                                        <option value="日常运营专题" :selected="one.templateCategory == '日常运营专题' ? true : false">日常运营专题</option>
+                                        <option value="日常市场专题" :selected="one.templateCategory == '日常市场专题' ? true : false">日常市场专题</option>
+                                        <option value="日常商服专题" :selected="one.templateCategory == '日常商服专题' ? true : false">日常商服专题</option>
+                                        <option value="野心时代" :selected="one.templateCategory == '野心时代' ? true : false">野心时代</option>
+                                        <option value="梦想合伙人" :selected="one.templateCategory == '梦想合伙人' ? true : false">梦想合伙人</option>
+                                        <option value="实力派" :selected="one.templateCategory == '实力派' ? true : false">实力派</option>
+                                        <option value="全民升职季" :selected="one.templateCategory == '全民升职季' ? true : false">全民升职季</option>
+                                        <option value="升职进化论" :selected="one.templateCategory == '升职进化论' ? true : false">升职进化论</option>
+                                        <option value="移路狂飙" :selected="one.templateCategory == '移路狂飙' ? true : false">移路狂飙</option>
+                                        <option value="全民跳槽月" :selected="one.templateCategory == '全民跳槽月' ? true : false">全民跳槽月</option>
                                     </select>
                                 </div>
                                 <span class="tips hide" ref="templateCategory-tips"></span>
@@ -155,6 +156,7 @@
                 </div><!--<div class="right">-->
             </div><!--<div class="content">-->
         </div><!--<div id="app">-->
-        <script type="text/javascript" src="http://localhost:9000/static/js/lib/jquery.1.10.1.min.js"></script>
+            <script type="text/javascript" src="http://localhost:9000/v3/static/js/lib/jquery.1.10.1.min.js"></script>
+            <!-- <script type="text/javascript" src="http://topic.lagou.com/v3/static/js/lib/jquery.1.10.1.min.js"></script> -->
     </body>
 </html>

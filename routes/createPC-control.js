@@ -68,8 +68,11 @@ router.post('/api/createPC/create',function(req,res){
     });
 });
 router.post('/api/createPC/update',function(req,res){
-    let data = req.body || {},
-        dirpath = data.html,
+    let data = req.body || {}
+    if(data.html != data.oldhtml){
+        fs.renameSync(saveDir+data.oldhtml,saveDir+data.html)
+    }
+    let dirpath = data.html,
         secret = new Date().getTime()+'',
         // hash = crypto.createHmac('md5', secret)
         //             .update('yh')

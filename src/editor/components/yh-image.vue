@@ -57,6 +57,9 @@
 </template>
 <script>
     import Editor from './editor.js'
+    import {
+        updateData
+    } from '../js/Node.js'
     // edit-components
     import YHEdit from '../edit-components/yh-edit.vue'
     const baseData = {
@@ -407,7 +410,8 @@
             //     conditionKey:'event.linkClassify',
             //     status:false
             // }
-        }
+        },
+        states:[]
     }
     export default {
         components:{
@@ -459,6 +463,9 @@
             }
         },
         methods:{
+            resetData(data){
+                return updateData(data,baseData)
+            },
             getRem(value){
                 return value / (750 / 16) + 'rem';
             },

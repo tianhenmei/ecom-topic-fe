@@ -295,6 +295,45 @@ Node.settingBox = (elem,ischild,parentHeight = 0) => {   // 选中框
     }
 }
 
+Node.updateData = (data,baseData) =>{
+    let i = '',
+        j = '',
+        status = false,
+        newdata = {}
+    for( i in baseData){
+        switch(i){
+            case 'sync':
+            case 'data':
+            case 'css':
+            case 'rotate':
+            case 'event':
+            case 'states':
+                newdata[i] = {}
+                if(data[i]){
+                    for(j in baseData[i]){
+                        // status = Node.isArray(baseData[i][j].value) || Node.isObject(baseData[i][j].value)
+                        if(data[i][j]){
+                            newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]))
+                            newdata[i][j].value = data[i][j].value
+                            if(data[i][j].hasOwnProperty('status')){
+                                newdata[i][j].status = data[i][j].status
+                            }
+                        }else{
+                            newdata[i][j] = JSON.parse(JSON.stringify(baseData[i][j]))
+                        }
+                    }
+                }else{
+                    newdata[i] = JSON.parse(JSON.stringify(baseData[i]))
+                }
+                break
+            default:
+                newdata[i] =  data[i]
+                break
+        }
+    }
+    return newdata
+}
+
 module.exports = {
     ...Node
 }

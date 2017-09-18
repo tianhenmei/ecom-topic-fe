@@ -80,7 +80,7 @@ router.post('/api/editorPC/getPageData',function(req,res,next){
                     templateId:hash,
                     templateType:'PC',
                     name:'YH EDITOR PC',
-                    templateCategory:'测试',
+                    templateCategory:'测试专题',
                     title:'YH EDITOR PC',
                     createTime:new Date(),
                     createAuthor:'gaohui',

@@ -10,9 +10,10 @@ var pageVue = new Vue({
     data(){
         return {
             title:'YH LIST',
-            host:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
+            host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/v3/',
             editPage:__isProd__ ? 'http://topic.lagou.com/v3/dist/editorPC/index.html'
-                : 'http://localhost:9000/dist/editorPC/index.html',
+                : 'http://localhost:9000/v3/dist/editorPC/index.html',
+            listPage:__isProd__ ? 'http://topic.lagou.com/v3/dist/dist/index.html' : 'http://localhost:9000/v3/dist/list/index.html',
             href:'/dist/editorPC/index.html',
             chref:'/dist/createPC/index.html',
             total:0,
@@ -66,9 +67,19 @@ var pageVue = new Vue({
             let arr = e.target.value.split(/[(\n)(\t)]/g)
             this.one.scriptsJson = arr
         },
+        getDay(num = 0){
+            let now = new Date()
+            now.setDate(now.getDate() + num)
+            let year = now.getFullYear(),
+                month = now.getMonth() + 1,
+                day = now.getDate()
+            return '0000'.slice((year+'').length)+year+'-'+
+                   '00'.slice((month+'').length)+month+'-'+
+                   '00'.slice((day+'').length)+day
+        },
         getData(html){
             let self = this
-            this.$http.post(this.host+'v3/api/createPC/getPageData',{
+            this.$http.post(this.host+'api/createPC/getPageData',{
                 html:html
             },{
                 emulateJSON:true
@@ -81,8 +92,6 @@ var pageVue = new Vue({
                             case 'templateId':
                             case 'name':
                             case 'templateCategory':
-                            case 'activeTimeStart':
-                            case 'activeTimeEnd':
                             case 'keywords':
                             case 'scriptsJson':
                             case 'file':
@@ -92,6 +101,18 @@ var pageVue = new Vue({
                             case 'createTime':
                             case 'createAuthor':
                                 self.one[arr] = (!data.content[arr] || data.content[arr] == 'undefined') ? self.one[arr] : data.content[arr]
+                                break
+                            case 'activeTimeStart':
+                                self.one[arr] = (!data.content[arr] || data.content[arr] == 'undefined') ? self.one[arr] : data.content[arr]
+                                if(!self.one[arr]){
+                                    self.one[arr] = this.getDay()
+                                }
+                                break
+                            case 'activeTimeEnd':
+                                self.one[arr] = (!data.content[arr] || data.content[arr] == 'undefined') ? self.one[arr] : data.content[arr]
+                                if(!self.one[arr]){
+                                    self.one[arr] = this.getDay(30)
+                                }
                                 break
                             case 'supportH5':
                                 self.one['supportH5'] = (!data.content['share'].status || data.content['share'].status == 'undefined') ? '' : data.content['share'].status
@@ -110,6 +131,7 @@ var pageVue = new Vue({
                                 break
                             case 'html':
                                 self.one[arr] = data.content[arr] +'.html'
+                                self.oldhtml = data.content[arr]
                                 break
                             case 'scripts':
                                 if(!data.content['scriptsJson'] || data.content['scriptsJson'] == 'undefined'){
@@ -131,13 +153,14 @@ var pageVue = new Vue({
         sendData(){
             let self = this,
                 html = this.one.html ? this.one.html.split('.')[0] : 'test'+new Date().getTime(),
-                requestUrl = this.updateStatus ? this.host+'v3/api/createPC/update' 
-                    : this.host+'v3/api/createPC/create',
+                requestUrl = this.updateStatus ? this.host+'api/createPC/update' 
+                    : this.host+'api/createPC/create',
                 data = {
                     name:this.one.name,
                     templateCategory:this.one.templateCategory,
                     title:this.one.title,
                     html:html,
+                    oldhtml:this.oldhtml,
                     activeTimeStart:this.one.activeTimeStart,
                     activeTimeEnd:this.one.activeTimeEnd,
                     keywords:this.one.keywords,
@@ -359,14 +382,18 @@ var pageVue = new Vue({
                     return;
                 }
             }
-            // if(this.one.lgID){
+            if(__isProd__){
+                if(this.one.lgID){
+                    this.sendData()
+                }else{
+                    this.getLgID()
+                }
+            }else{
                 this.sendData()
-            // }else{
-                // this.getLgID()
-            // }
+            }
         },
         backToHome(e){
-
+            window.location.href = this.listPage
         }
     }
 })

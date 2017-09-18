@@ -14,7 +14,8 @@ var editor_control = require('./editor-control.js');
 var list_control = require('./list-control.js');
 var editorPC_control = require('./editorPC-control.js');
 var company_control = require('./company-control.js');
-var createPC_control = require('./createPC-control.js');
+var createPC_control = require('./createPC-control.js'),
+    create_control = require('./create-control.js');
 
 var fetch = require('isomorphic-fetch');
 
@@ -24,10 +25,13 @@ var fetch = require('isomorphic-fetch');
 router.use('/v3/static',express.static('public'));  // 指定挂载路径（虚拟）
 router.use('/v3/dist',express.static('dist'));  // 指定挂载路径（虚拟）
 router.use('/v3',express.static('publish')); // 指定挂载路径（虚拟）
-router.use('/list',list_control);
+// router.use('/list',list_control);
 // router.use('/editor',editor_control);
 // router.use('/v3',createPC_control);
-router.use('/v3',[editorPC_control,company_control,createPC_control,editor_control]);  // /v3/api/editorPC
+router.use('/v3',[
+    editorPC_control,company_control,list_control,createPC_control,
+    editor_control,create_control
+]);  // /v3/api/editorPC
 // router.use('/v3/static',express.static('public'));  // 指定挂载路径（虚拟）
 // router.use('/v3',company_control);  // /v3/api/company
 // router.use('/v3',createPC_control);

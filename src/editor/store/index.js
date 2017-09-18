@@ -8,11 +8,19 @@ let store = new Vuex.Store({
         connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
         currentPage:0,
         pages:[{
-            status:true
+            status:true,
+            elements:[],
+            background:{
+                backgroundColor:'transparent',
+                backgroundImage:'',
+                backgroundRepeat:'no-repeat',
+                backgroundPosition:'0 0',
+                backgroundSize:'100% 100%'
+            }
         }],
-        elements:[  // 二维数组
-            []
-        ],
+        // elements:[  // 二维数组
+        //     []
+        // ],
         includes:[],
         eventList:[],
         data:{
@@ -40,6 +48,9 @@ let store = new Vuex.Store({
         changeCount:(state) => {
             state.count++
         },
+        addIncludes:(state,name) => {
+            state.includes.push(name)
+        },
         setCurrentPage:(state,index) => {
             state.currentPage = index
         },
@@ -59,11 +70,25 @@ let store = new Vuex.Store({
         setPageData:(state,payload) => {
 
         },
+        addPage:(state) => {
+            state.pages.push({
+                status:false,
+                elements:[],
+                background:{
+                    backgroundColor:'transparent',
+                    backgroundImage:'',
+                    backgroundRepeat:'no-repeat',
+                    backgroundPosition:'0 0',
+                    backgroundSize:'100% 100%'
+                }
+            })
+        },
         addElement:(state,payload) => {
             // state.pages[state.currentPage].elements.push(payload)
-            let length = state.elements[state.currentPage].length
+            let length = state.pages[state.currentPage].elements.length
             payload.path = payload.path.replace('index',length)
-            state.elements[state.currentPage].push(payload)
+            // state.elements[state.currentPage].push(payload)
+            state.pages[state.currentPage].elements.push(payload)
         },
         addComplexElement:(state,payload) => {
             store.commit('getData')
@@ -86,13 +111,14 @@ let store = new Vuex.Store({
             for(i = 0; i < path.length - 1; i++){
                 value = path[i]
                 if(value){
-                    if(/[0-9]/g.test(path[i])){
-                        value = parseInt(path[i])
+                    if(/[0-9]/g.test(value)){
+                        value = parseInt(value)
                     }
                     elemData = elemData[value]
                 }
             }
-            elemData.splice(last,1)
+            // elemData.splice(last,1)
+            elemData.splice(last,1,null)
         },
         addEventList:(state,name) => {
             if(state.eventList.indexOf(name) == -1){

@@ -19,61 +19,28 @@ var router = express.Router(),
     // saveDir: 发布页面时保存的页面目录
     saveDir = isProd ? '/data/data/topic-publish/topic/v3/' : 'publish/',
     // getDataPath: 获取发布页面时保存的页面的数据目录
-    getDataPath = isProd ? '/data/data/topic-publish/topic/v3/' : '../publish/'
+    getDataPath = isProd ? '/data/data/topic-publish/topic/v3/' : '../publish/',
+    // concatPath: 开发与生成应该属于同一个目录，所以不会改变
+    concatPath = isProd ? './dist/editor/publish/' : './dist/editor/publish/'
     
 
 // router.use(bodyParser.json());
 // router.use(bodyParser.urlencoded());
 
-router.post('/api/editor/save',function(req,res){
+router.post('/api/editor/save',function(req,res,next){
     var page = req.body,
-        querey_string = 'select id from pages WHERE id='+page.id,
         pageString = '';
-    mysql.query(querey_string,function(err,rows,fields){
-        if(err){
-            throw err;
-        }
-        if(rows && rows.length > 0){  // 修改
-            querey_string = "update pages SET " +
-                        "name='"+page.name+"',"+
-                        "style='"+(page.style ? page.style : "")+"',"+
-                        "html='"+(page.html ? page.html : "")+"',"+
-                        "js='"+(page.js ? page.js : "")+"',"+
-                        "json='"+(page.json ? page.json : "")+"',"+
-                        "editor='"+page.author+"',"+
-                        "modifyTime=NOW() "+
-                        "WHERE id="+page.id;
-        }else{  // 新增
-            pageString = "'"+page.name+"',"
-                    +(page.style ? "'"+page.style+"'" : "''")+","
-                    +(page.html ? "'"+page.html+"'" : "''")+","
-                    +(page.js ? "'"+page.js+"'" : "''")+","
-                    +(page.json ? "'"+page.json+"'" : "''")+","
-                    +"'"+page.author+"',"
-                    +"'"+page.author+"',"
-                    +"NOW(),"
-                    +"NOW()";
-            querey_string = "INSERT INTO pages " +
-                        "(name,style,html,js,json,author,editor,createTime,modifyTime) " +
-                        "values("+pageString+")";
-        }
-        // 创建文件及文件夹
-        setFile(page);
 
-        mysql.query(querey_string,function(err,rows,fields){
-            if(err){
-                throw err;
-            }
-            res.json({
-                state:200,
-                success:true,
-                message:'保存成功',
-                content:{
-                    id:rows.insertId ? rows.insertId : page.id,
-                }
-            });
-        });
-    });
+    // 创建文件及文件夹
+    setFile(page,res);
+    // res.json({
+    //     state:200,
+    //     success:true,
+    //     message:'保存成功',
+    //     content:{
+    //         id:rows.insertId ? rows.insertId : page.id,
+    //     }
+    // });
 });
 
 router.post('/api/editor/getList',function(req,res){
@@ -115,7 +82,7 @@ router.post('/api/editor/getPageData',function(req,res){
                     templateId:hash,
                     templateType:'H5',
                     name:'YH EDITOR H5',
-                    templateCategory:'测试',
+                    templateCategory:'测试专题',
                     title:'YH EDITOR H5',
                     createTime:new Date(),
                     createAuthor:'gaohui',
@@ -246,16 +213,24 @@ router.post('/api/editor/upload',function(req,res){
     });
 });
 
-function setFile(page){
+function setFile(page,res){
     mkdirsSync(saveDir+page.name+'/js','0777');
     mkdirsSync(saveDir+page.name+'/css','0777');
+    if(!page.includes){
+        page.includes = [];
+    }
     if(page.js){
         writeJS(JSON.parse(page.js),saveDir+page.name+'/js/index.js');
     }
     // writeFile(saveDir+page.name+'/js/index.js',page.js ? writeJS(JSON.parse(page.js)) : '')
     writeFile(saveDir+page.name+'/css/index.css',page.style ? page.style.replace(/(http:\/\/localhost:9000\/)/g,'/') : '')
-    writeFile(saveDir+page.name+'/index.json',page.json ? page.json : '')
+    writeFile(saveDir+page.name+'/js/index.json',page.elemDatas ? page.elemDatas : '')
     writeFile(saveDir+page.name+'/index.html',writeHTML(page.html.replace(/(http:\/\/localhost:9000\/)/g,'/')))
+    res.json({
+        state:200,
+        success:true,
+        message:'保存成功！'
+    })
 }
 
 function concat(fileIn,fileOut,data){
@@ -263,14 +238,18 @@ function concat(fileIn,fileOut,data){
         origCode,
         ast,
         finalCode='';
+    console.log(fileArray)
     for(var i = 0; i < fileArray.length; i++) {
-        origCode = fs.readFileSync('./publish/base/js/'+fileArray[i]+'.js', 'utf8');
+        if(!fileArray[i]){
+            continue
+        }
+        origCode = fs.readFileSync(concatPath+'js/'+fileArray[i]+'.js', 'utf8');
         switch(fileArray[i]){
             case 'state':
                 finalCode += 'elementStates = '+JSON.stringify(data.elementsStates)+';\n'
                 break
             case 'event':
-                finalCode += 'elementsEvent = '+JSON.stringify(data.elementsEvent)+';\n'
+                finalCode += 'elementsEvent = {};\n'//+JSON.stringify(data.elementsEvent)+';\n'
                 break
         }
         // ast = uglify.parser.parse(origCode);
@@ -305,9 +284,9 @@ function writeHTML(pageHTML){
                 '<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">'+'\n'+
                 '<meta charset="utf-8">'+'\n'+
                 '<title>首页</title>'+'\n'+
-                '<link type="text/css" rel="stylesheet" href="/static/css/init.css" />'+'\n'+
-                '<link type="text/css" rel="stylesheet" href="/static/css/common.css" />'+'\n'+
-                '<link type="text/css" rel="stylesheet" href="/static/css/animation.css" />'+'\n'+
+                '<link type="text/css" rel="stylesheet" href="../static/css/init.css" />'+'\n'+
+                '<link type="text/css" rel="stylesheet" href="../static/css/editor-common.css" />'+'\n'+
+                '<link type="text/css" rel="stylesheet" href="../static/css/animation.css" />'+'\n'+
                 '<link type="text/css" rel="stylesheet" href="./css/index.css" />'+'\n'+
                 '<script type="text/javascript">'+
                     'var RC = {'+
@@ -338,8 +317,8 @@ function writeHTML(pageHTML){
                 '<div class="main">'+'\n'+
                     pageHTML.replace(/[’‘]/g,'\'') + '\n'+
                 '</div>'+ '\n'+
-                '<script type="text/javascript" src="/static/js/lib/jquery.1.10.1.min.js"></script>'+'\n'+
-                '<script type="text/javascript" src="./js/index.bundle.js"></script>'+'\n'+
+                '<script type="text/javascript" src="../static/js/lib/jquery.1.10.1.min.js"></script>'+'\n'+
+                '<script type="text/javascript" src="./js/index.js"></script>'+'\n'+
             '</body>'+'\n'+
         '</html>'+
     ''
@@ -357,12 +336,13 @@ function writeFile(path,string){
     //         console.log('update: '+path);
     //     });
     // });
-    fs.writeFile(path,string,function(err) {
-        if(err) {
-            return console.log(err);
-        }
-        console.log('update: '+path);
-    });
+    fs.writeFileSync(path,string);
+    // fs.writeFile(path,string,function(err) {
+    //     if(err) {
+    //         return console.log(err);
+    //     }
+    //     console.log('update: '+path);
+    // });
 }
 
 //创建多层文件夹 同步

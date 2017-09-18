@@ -38,6 +38,9 @@
 </template>
 <script>
     import Editor from './editor.js'
+    import {
+        updateData
+    } from '../js/Node.js'
 
     // edit-components
     import YHEdit from '../edit-components/yh-edit.vue'
@@ -333,17 +336,21 @@
             eventtype:{
                 cn:'事件类型',
                 en:'eventtype',
-                value:'click',
-                cnvalue:'点击',
+                value:'none',
+                cnvalue:'无',
                 type:'options',
                 parent:'event',
                 options:[{  // 选项的类容
+                    cn:'无',   // 选项中文
+                    value:'none' // 选项真正的值
+                },{  // 选项的类容
                     cn:'点击',   // 选项中文
                     value:'click' // 选项真正的值
                 },{  // 选项的类容
                     cn:'鼠标滑过',   // 选项中文
                     value:'mouseenter' // 选项真正的值
-                }]
+                }],
+                effect:['event.eventmethod']
             },
             eventmethod:{
                 cn:'响应方式',
@@ -359,7 +366,10 @@
                     cn:'浮层',   // 选项中文
                     value:'float' // 选项真正的值
                 }],
-                effect:['event.floatDirection','event.linkClassify']
+                effect:['event.floatDirection','event.linkClassify'],
+                condition:["none"],
+                limitop:'!=',
+                status:false
             },
             floatDirection:{
                 cn:'浮层方向',
@@ -417,7 +427,7 @@
                     value:'userdefined'
                 }],
                 condition:["link"],
-                status:true
+                status:false
             }
         },
         states:[]
@@ -532,6 +542,9 @@
 
         },
         methods:{
+            resetData(data){
+                return updateData(data,baseData)
+            },
             /*button***/
             showEditLayer(e){
                 var target = $(e.target)

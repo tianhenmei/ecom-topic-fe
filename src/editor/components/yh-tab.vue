@@ -70,6 +70,9 @@
 <script>
     import {mapState} from 'vuex'
     import Editor from './editor.js'
+    import {
+        updateData
+    } from '../js/Node.js'
 
     import YHImage from './yh-image.vue'
     import YHText from './yh-text.vue'
@@ -181,6 +184,9 @@
             }
         },
         methods:{
+            resetData(data){
+                return updateData(data,baseData)
+            },
             /*yh-tab***/
             showEditLayer(e){
                 var target = $(e.target).closest('[yh-tab]')

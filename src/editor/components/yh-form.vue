@@ -27,6 +27,9 @@
 </template>
 <script>
     import Editor from './editor.js'
+    import {
+        updateData
+    } from '../js/Node.js'
     import YHFormText from './yh-form-text.vue'
     // edit-components
     import YHEdit from '../edit-components/yh-edit.vue'

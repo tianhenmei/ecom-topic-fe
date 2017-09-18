@@ -249,6 +249,38 @@ gulp.task('dev:watch',function(){
             })
             watchFileCompile(config)
         })
+    watch('./src/'+systemName+'/publish/js/*.js')
+        .on('change',function(filepath){
+            gulp.src(filepath)
+                // .pipe(rename(function (path) {
+                //     if(path.basename.indexOf('.min') == -1){
+                //         path.basename += ".min";
+                //     }
+                //     path.extname = ".js";
+                // }))
+                // .pipe(uglify())
+                .pipe(gulp.dest('./dist/'+systemName+'/publish/js'));  // path.dirname(paths.srcPath)
+            // var dirArr = path.dirname(filepath).split('/'),
+            //     componentsname = dirArr[dirArr.length-2],
+            //     filename = path.basename(filepath).split('.')[0]
+
+            // var config = Object.assign({},getConfig(systemName,filename,'jsDevPlugins'),{
+            //     entry: path.resolve(__dirname,`./src/${systemName}/${componentsname}/js/${filename}.js`),
+            //     output: {
+            //         path: path.resolve(__dirname,'./dist/'+systemName+'/publish/js'),//path.resolve(__dirname, `../dist/${systemName}/js/`),
+            //         publicPath: '',
+            //         filename:filename+'.js',
+            //         hashDigestLength:8
+            //     }
+            // })
+
+            // watchFileCompile(config)
+        })
+        .on('unlink',function(filepath){
+            var dirArr = filepath.split('/'),
+                filename = dirArr[dirArr.length-1].split('.')[0]
+            fs.unlink(path.resolve(__dirname,'./dist/'+systemName+'/publish/js/'+filename+'.js'))
+        })
     watch('./src/'+systemName+'/components*/common/*.js')
         .on('change',function(filepath){
             var dirArr = path.dirname(filepath).split('/'),

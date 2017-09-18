@@ -3,7 +3,9 @@
         <div class="yh-components-content">
             <div class="yh-content-center">
                 <div v-for="(page,index) in pages" :class="'page page'+index+getClassname(index)" :style="page.background">
-                    <div v-for="element in elements[index]" :is="element.module"
+                    <div v-for="element in page.elements"
+                        v-if="element"
+                        :is="element.module"
                         :props="element.props"
                         :path="element.path"
                         :eindex="index"
@@ -118,35 +120,6 @@
                         pic:''
                     }
                 },
-                // pages:[{
-                //         elements:[/*{
-                //             yh_id:'element0',
-                //             yh_module:YHImage,
-                //             module:'image',
-                //             props:{
-                //                 id:'element0',
-                //                 style:{
-                //                     width:this.getRem(181),
-                //                     height:this.getRem(181)
-                //                 },
-                //                 position:{
-                //                     left:0,
-                //                     top:0
-                //                 },
-                //                 src:MW.host+'static/images/Helen.png',
-                //                 href:''
-                //             }
-                //         }*/],
-                //         background:{
-                //             backgroundColor:'transparent',
-                //             backgroundImage:'',
-                //             backgroundRepeat:'no-repeat',
-                //             backgroundPosition:'0 0',
-                //             backgroundSize:'100% 100%'
-                //         }
-                //     }
-                // ],
-                // currentPage:MW.currentPage,
                 drag:null,
                 fontSize:16,
                 distance:15,
@@ -164,6 +137,7 @@
             'currentPage',
             'pages',
             'elements',
+            'includes',
             'connhost'
         ]),
         created(){
@@ -475,7 +449,7 @@
                             eindex = -1,
                             value = '',
                             status = false,
-                            elemData = self.elements
+                            elemData = self.pages
                         last.width = getPointOuterWidth(move_box[0])
                         last.height = getPointOuterHeight(move_box[0])
                         last.left = getPointValue(move_box[0],'left') - distance
@@ -483,14 +457,15 @@
                         last.transform = move_box[0].style.transform
                         
                         for(i = 0; i < arr.length; i++){
-                            if(arr[i].trim()){
-                                if(/[0-9]/g.test(arr[i])){
-                                    value = parseInt(arr[i])
+                            value = arr[i].trim()
+                            if(value){
+                                if(/[0-9]/g.test(value)){
+                                    value = parseInt(value)
                                     if(status){
                                         eindex = value
                                         status = false
                                     }
-                                }else if(arr[i] == 'elements'){
+                                }else if(value == 'elements'){
                                     status = true
                                 }
                                 elemData = elemData[value]
@@ -746,21 +721,22 @@
                     eindex = -1,
                     value = '',
                     status = false,
-                    elemData = this.elements
+                    elemData = this.pages  //  this.elements
                         
                 if(elem.closest('[yh-tab-title]').length > 0){
                     down = false
                     return
                 }
                 for(i = 0; i < arr.length; i++){
-                    if(arr[i].trim()){
-                        if(/[0-9]/g.test(arr[i])){
-                            value = parseInt(arr[i])
+                    value = arr[i].trim()
+                    if(value){
+                        if(/[0-9]/g.test(value)){
+                            value = parseInt(value)
                             if(status){
                                 eindex = value
                                 status = false
                             }
-                        }else if(arr[i] == 'elements'){
+                        }else if(value == 'elements'){
                             status = true
                         }
                         elemData = elemData[value]
@@ -811,11 +787,14 @@
                 let elemID = 'element'+this.count
 
                 this.$store.commit('changeCount')
+                if(this.includes.indexOf(name) == -1){
+                    this.$store.commit('addIncludes',name)
+                }
                 this.$store.commit('addElement',{
                     id:elemID,
                     module:components[name],
                     yh_module:name,
-                    path:'elements.'+this.currentPage+'.index',
+                    path:'pages.'+this.currentPage+'.elements.index',
                     props:components[name].initCtor({
                         id:elemID
                     },this,components)
@@ -979,8 +958,10 @@
                 }).then(response => {
                     let content = response.data.content,
                         i = '',j = ''
-                    
-                    self.loadComponents(content.includes,content.elements)
+                    if(!content.includes){
+                        content.includes = []
+                    }
+                    self.loadComponents(content.includes,content.pages);//content.elements)
                     if(content.pageInfo){
                         for(i in self.pageInfo){
                             if(isObject(self.pageInfo[i])){
@@ -1016,19 +997,23 @@
                     console.log(response.body.message)
                 })
             },
-            loadComponents(includes,elements){
+            loadComponents(includes,pages){  // elements
                 let path = '',
+                    yhmodule = '',
+                    i = 0,
+                    elemDatas = {},
                     self = this
                 this.loadStatus = 0
                 this.finishLength = includes.length
-                for(let i = 0; i < includes.length; i++){
-                    path = includes[i].replace('_','/');
+                for(i = 0; i < includes.length; i++){
+                    yhmodule = includes[i]
+                    path = yhmodule.replace('-','/');
                     if(components.hasOwnProperty(yhmodule)){
                         self.loadStatus++
                         if(self.loadStatus == self.finishLength){
                             // self.bindElement(html)
-                            let elemDatas = self.recoveryElements(elements)
-                            self.$store.commit('initElements',elemDatas)
+                            elemDatas = self.recoveryPages(pages)
+                            self.$store.commit('initData',elemDatas)
                             self.initStatus = true
                             self.$refs['yh-toast'].className += ' hide'
                         }
@@ -1040,13 +1025,13 @@
                                 self.loadStatus++
                                 if(self.loadStatus == self.finishLength){
                                     // self.bindElement(html)
-                                    let elemDatas = self.recoveryElements(elements)
-                                    self.$store.commit('initElements',elemDatas)
+                                    let elemDatas = self.recoveryPages(pages)
+                                    self.$store.commit('initData',elemDatas)
                                     self.initStatus = true
                                     self.$refs['yh-toast'].className += ' hide'
                                 }
                             })
-                        })(includes[i])
+                        })(yhmodule)
                     }
                 }
                 if(includes.length == 0){
@@ -1054,40 +1039,90 @@
                     self.$refs['yh-toast'].className += ' hide'
                 }
             },
-            recoveryElements(elements,path = ''){
+            recoveryPages(pageData,path = ''){  // elements
                 let data = [],
                     childElements = [],
                     current = [],
-                    i = 0,j = 0
+                    i = 0,j = 0,
+                    attr = '',
+                    attr2 = ''
+                for(attr in pageData){
+                    switch(attr){
+                        case 'pages':
+                            data[attr] = []
+                            for(i = 0; i < pageData[attr].length; i++){
+                                current = pageData[attr][i]
+                                data[attr].push({
+                                    status:i == 0 ? true : false
+                                })
+                                for(attr2 in current){
+                                    switch(attr2){
+                                        case 'elements':
+                                            data[attr][i][attr2] = this.recoveryElements(current[attr2])
+                                            break
+                                        default:
+                                            data[attr][i][attr2] = current[attr2]
+                                            break
+                                    }
+                                }
+                            }
+                            break
+                        case 'fontSize':
+                        case 'eventList':
+                            data[attr] = pageData[attr]
+                            break
+                        default:
+                            this[attr] = pageData[attr]
+                            break
+                    }
+                }
+                // for(j = 0; j < current.length; j++){
+                //     data[i].elements.push(JSON.parse(JSON.stringify(current[j])))
+                //     data[i][j].module = components[data[i][j]['yh-module']]
+                //     data[i][j].props = data[i][j].module.methods.resetData(data[i][j].props)
+                //     if(!data[i][j].path){
+                //         data[i][j].path = (path ? path+'.' : '') + 'elements.' + i
+                //     }
+                //     if(!data[i][j].props.data.anchorID.value){
+                //         data[i][j].props.data.anchorID.value = data[i][j].id
+                //     }
+                //     childElements = current[j].props.elements
+                //     if(childElements && childElements.length > 0){
+                //         data[i][j].props.elements = []
+                //         data[i][j].props.elements = this.recoveryElements(childElements,data[i][j].path+'.props')
+                //     }
+                // }
+                return data
+            },
+            recoveryElements(elements,path = ''){
+                let i = 0,
+                    data = [],
+                    childElements = []
                 for(i = 0; i < elements.length; i++){
-                    current = elements[i]
-                    data.push([])
-                    for(j = 0; j < current.length; j++){
-                        data[i].push(JSON.parse(JSON.stringify(current[j])))
-                        data[i][j].module = components[data[i][j]['yh-module']]
-                        data[i][j].props = data[i][j].module.methods.resetData(data[i][j].props)
-                        if(!data[i][j].path){
-                            data[i][j].path = (path ? path+'.' : '') + 'elements.' + i
-                        }
-                        if(!data[i][j].props.data.anchorID.value){
-                            data[i][j].props.data.anchorID.value = data[i][j].id
-                        }
-                        childElements = current[j].props.elements
-                        if(childElements && childElements.length > 0){
-                            data[i][j].props.elements = []
-                            data[i][j].props.elements = this.recoveryElements(childElements,data[i][j].path+'.props')
-                        }
+                    data.push(JSON.parse(JSON.stringify(elements[i])))
+                    data[i].module = components[data[i]['yh_module']]
+                    data[i].props = data[i].module.methods.resetData(data[i].props)
+                    if(!data[i].path){
+                        data[i].path = (path ? path+'.' : '') + 'elements.' + i
+                    }
+                    if(!data[i].props.data.anchorID.value){
+                        data[i].props.data.anchorID.value = data[i].id
+                    }
+                    childElements = elements[i].props.elements
+                    if(childElements && childElements.length > 0){
+                        data[i].props.elements = []
+                        data[i].props.elements = this.recoveryElements(childElements,data[i].path+'.props')
                     }
                 }
                 return data
             },
             getElementsEvent(data,elementsEvent){
-                switch(data.entype){
+                switch(data.eventtype){
                     case 'none':
                         break
                     default:
                         elementsEvent[data.id] = {
-                            'entype':data.entype,
+                            'entype':data.eventtype,
                             'href':data.href
                         }
                         break
@@ -1165,11 +1200,14 @@
                     classname = '',
                     statesStyle = ''
                 for(let j = 0; j < elements.length; j++){
-                    elements[j].yh_module = null;
-                    if(elements[j].props.classname){
-                        elements[j].props.classname = document.getElementById(elements[j].yh_id).className.replace('setting','');
+                    if(!elements[j]){
+                        continue
                     }
-                    statesStyle += this.getElementsState(elements[j].props.states,elementsStates,elements[j].yh_id)
+                    // elements[j].yh_module = null;
+                    if(elements[j].props.classname){
+                        elements[j].props.classname = document.getElementById(elements[j].id).className.replace('setting','');
+                    }
+                    statesStyle += this.getElementsState(elements[j].props.states,elementsStates,elements[j].id)
                     this.getElementsEvent(elements[j].props.event,elementsEvent)
                     
                     switch(elements[j].module){
@@ -1191,8 +1229,9 @@
                 var elem = totalElement.find('[style]'),
                     count = 0,
                     style = '',
-                    name = '';
-                for(let i = 0; i < elem.length; i++){
+                    name = '',
+                    i = 0, j = 0;
+                for(i = 0; i < elem.length; i++){
                     name = 'elemStyle'+count;
                     count++;
                     style += '.'+name+'{'+elem.eq(i).attr('style')+'}';
@@ -1205,8 +1244,10 @@
                 let data = {},
                     elementsStates = {},
                     elementsEvent = {},
-                    statesStyle = ''
-                for(let attr in this.$data){
+                    statesStyle = '',
+                    attr = '',
+                    attr2 = ''
+                for(attr in this.$data){
                     switch(attr){
                         case 'pages':
                             break;
@@ -1218,29 +1259,54 @@
                     }
                 }
                 data.pages = [];
-                for(let i = 0; i < this.$store.state.pages.length; i++){
-                    data.pages.push(JSON.parse(JSON.stringify(this.$store.state.pages[i])));
+                for(i = 0; i < this.pages.length; i++){
+                    data.pages.push({})
+                    for(attr in this.pages[i]){
+                        switch(attr){
+                            case 'elements':
+                                data.pages[i][attr] = []
+                                for(j = 0; j < this.pages[i].elements.length; j++){
+                                    data.pages[i][attr].push({
+                                        ...this.pages[i].elements[j]
+                                    })
+                                    data.pages[i][attr][j].module = null
+                                }
+                                break
+                            default:
+                                data.pages[i][attr] = this.pages[i][attr]
+                                break
+                        }
+                    }
                     statesStyle += this.changePageDataSave(data.pages[i].elements,elementsStates,elementsEvent)
                 }
+                name = getQueryString('name');
                 $.ajax({
                     type:'post',
-                    url:MW.host+'editor/save',
+                    url:MW.host+'v3/api/editor/save',
                     data:{
-                        id:10002,
-                        name:'test',
+                        // id:10002,
+                        name:name,
+                        includes:this.includes,
+                        count:this.count,
                         style:style+statesStyle,
+                        elemDatas:JSON.stringify({
+                            pageInfo:this.pageInfo,
+                            pages:data,
+                            includes:this.includes,
+                            count:this.count
+                        }),
                         html:totalElement.html().replace(/\'/g,'‘'),
-                        json:JSON.stringify(data).replace(/\'/g,'‘').replace(/(url\(\")/g,'url\(').replace(/(\"\))/g,')'),
+                        // json:JSON.stringify(data).replace(/\'/g,'‘').replace(/(url\(\")/g,'url\(').replace(/(\"\))/g,')'),
                         js:JSON.stringify({
                             pageAnimation:this.pageAnimation,
                             eventList:this.eventList,
                             elementsStates:elementsStates,
                             elementsEvent:elementsEvent
-                        }),
-                        author:'yh'
+                        })// ,
+                        // author:'yh'
                     },
                     success(data){
-                        console.log(data.content);
+                        console.log(data.message);
                     },
                     error(error){
                         console.log(error.message);

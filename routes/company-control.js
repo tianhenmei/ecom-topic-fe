@@ -467,8 +467,9 @@ router.use(function(req,res,next){
 });
 
 router.use(function(err,req,res,next){
-    console.log(err.stack);
-    res.status(500).send('Something broke!');
+    // console.log(err.stack);
+    // res.status(500).send('Something broke!');
+    next(err);
 });
 
 module.exports = router;

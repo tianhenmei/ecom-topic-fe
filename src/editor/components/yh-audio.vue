@@ -55,6 +55,9 @@
 </template>
 <script>
     import Editor from './editor.js'
+    import {
+        updateData
+    } from '../js/Node.js'
     // edit-components
     import YHEditOptions from '../edit-components/yh-edit-options'
     import YHEditImage from '../edit-components/yh-edit-image'
@@ -175,6 +178,9 @@
             })
         },
         methods:{
+            resetData(data){
+                return updateData(data,baseData)
+            },
             getRem(value){
                 return value / (750 / 16) + 'rem';
             },

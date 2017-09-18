@@ -2,14 +2,15 @@
 <html lang="zh">
     <head>
         <meta charset="utf-8">
-        <title>YH EDITOR PC 3.0</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:9000/static/css/init.css" />
+        <title>YH EDITOR-LIST 3.0</title>
+        <link type="text/css" rel="stylesheet" href="http://localhost:9000/v3/static/css/init.css" />
+        <!-- <link type="text/css" rel="stylesheet" href="http://topic.lagou.com/v3/static/css/init.css" /> -->
         <!--<link type="text/css" rel="stylesheet" href="./css/style.scss" />-->
     </head>
     <body>
         <div id="app">
             <div class="top clearfix">
-                <img class="logo" src="http://localhost:9000/static/images/logo.png" />
+                <img class="logo" :src="host+'static/images/logo.png'" />
                 <h1 class="title">拉勾 活动发布系统 <i>3.0版</i></h1>
             </div>
             <div class="content">
@@ -22,7 +23,7 @@
                     <div class="right-content">
                         <div class="right-top">
                             <a class="create-pc" :href="host+href" target="_blank">创建PC</a>
-                            <div class="create-h5">创建移动端</div>
+                            <a class="create-h5" :href="host+chref" target="_blank">创建移动端</a>
                         </div>
                         <div class="right-detail">ALL专题列表</div>
                         <div id="list">
@@ -30,7 +31,7 @@
                                 <div v-for="(item,index) in list" class="item clearfix">
                                     <div class="item-left">
                                         <div class="item-top clearfix">
-                                            <a class="item-title" :href="host+'/yh/'+item.html+'/index.html'" target="_blank">{{item.title}}</a>
+                                            <a class="item-title" :href="pageHost+''+item.html+'/index.html'" target="_blank">{{item.name}}</a>
                                             <div class="item-type">{{item.templateType}}</div>
                                             <div class="item-theme">{{item.templateCategory}}</div>
                                         </div>
@@ -40,9 +41,10 @@
                                         </div>
                                     </div>
                                     <div class="item-right clearfix">
-                                        <a class="item-edit" :href="host+href+'?templateId='+item.templateId" target="_blank">编辑</a>
-                                        <div class="item-publish" :template_id="item.templateId" @click.stop.prevent="publishTheme">发布</div>
-                                        <div class="item-delete" :template_id="item.templateId" @click.stop.prevent="deleteTheme">删除</div>
+                                        <a class="item-edit" :href="host+(item.templateType == 'H5' ? chref : href)+'?templateId='+item.templateId+'&name='+item.html" target="_blank">编辑</a>
+                                        <div class="item-publish" :template_id="item.templateId" :template_type="item.templateType" :template_name="item.html" @click.stop.prevent="publishTheme">发布</div>
+                                        <div class="item-copy" :template_id="item.templateId" :template_type="item.templateType" :template_name="item.html" @click.stop.prevent="copyTheme">拷贝</div>
+                                        <div class="item-delete" :template_id="item.templateId" :template_type="item.templateType" :template_name="item.html" @click.stop.prevent="deleteTheme">删除</div>
                                     </div>
                                 </div>
                             </div>
@@ -60,6 +62,7 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="http://localhost:9000/static/js/lib/jquery.1.10.1.min.js"></script>
+        <script type="text/javascript" src="http://localhost:9000/v3/static/js/lib/jquery.1.10.1.min.js"></script>
+        <!-- <script type="text/javascript" src="http://topic.lagou.com/v3/static/js/lib/jquery.1.10.1.min.js"></script> -->
     </body>
 </html>

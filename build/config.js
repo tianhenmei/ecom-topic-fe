@@ -81,6 +81,9 @@ function getConfigPlugins(systemName,name,plugins){
                 }
             })
         ],
+        jsDevPlugins = [
+            
+        ],
         cssPlugins = [
             new webpack.optimize.UglifyJsPlugin({
                 compress: {

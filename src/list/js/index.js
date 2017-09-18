@@ -7,9 +7,12 @@ var pageVue = new Vue({
     data(){
         return {
             title:'YH LIST',
-            host:'http://localhost:9000',
-            href:'/dist/createPC/index.html',
-            chref:'/dist/createPC/index.html',
+            // 图片或接口访问host
+            host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/v3/',
+            // 页面访问host
+            pageHost:__isProd__ ? 'https://activity.lagou.com/topic/v3/' : 'http://localhost:9000/v3/',
+            href:'dist/createPC/index.html',
+            chref:'dist/create/index.html',
             total:0,
             eachPage:10,
             currentPage:1,
@@ -39,7 +42,7 @@ var pageVue = new Vue({
             let self = this
             $.ajax({
                 type:'post',
-                url:this.host+'/list/getListData',
+                url:this.host+'api/list/getListData',
                 data:{
                     page:this.currentPage,
                     eachPage:this.eachPage
@@ -84,12 +87,14 @@ var pageVue = new Vue({
             }
         },
         publishTheme(e){
-            let templateId = e.target.attributes['template_id'].value
+            let templateId = e.target.attributes['template_id'].value,
+                name = e.target.attributes['template_name'].value
             $.ajax({
                 type:'get',
-                url:this.host+'/list/publish',
+                url:this.host+'api/list/publish',
                 data:{
-                    templateId:templateId
+                    templateId:templateId,
+                    name:name,
                 },
                 success(data){
                     if(data.success){
@@ -103,17 +108,56 @@ var pageVue = new Vue({
                 }
             })
         },
-        deleteTheme(e){
-            let templateId = e.target.attributes['template_id'].value
+        copyTheme(e){
+            let templateId = e.target.attributes['template_id'].value,
+                name = e.target.attributes['template_name'].value,
+                self = this
             $.ajax({
                 type:'get',
-                url:this.host+'/list/delete',
+                url:this.host+'api/list/copy',
                 data:{
-                    templateId:templateId
+                    templateId:templateId,
+                    name:name,
                 },
                 success(data){
                     if(data.success){
-                        alert('删除成功！')
+                        let result = data.result
+                        self.currentPage = 0
+                        self.list = result.list
+                        self.total = result.total
+                        self.totalPage = result.totalPage
+                        alert('拷贝成功！')
+                    }else {
+                        alert('可能网络问题，请稍后重试！')
+                    }
+                },
+                error(error){
+                    console.log(error.message)
+                }
+            })
+        },
+        deleteTheme(e){
+            let templateId = e.target.attributes['template_id'].value,
+                name = e.target.attributes['template_name'].value,
+                self = this
+            $.ajax({
+                type:'get',
+                url:this.host+'api/list/delete',
+                data:{
+                    templateId:templateId,
+                    name:name,
+                    page:this.currentPage
+                },
+                success(data){
+                    let result = data.result
+                    if(data.success){
+                        if(result.totalPage < self.currentPage){
+                            self.currentPage = result.totalPage
+                        }
+                        self.list = result.list
+                        self.total = result.total
+                        self.totalPage = result.totalPage
+                        alert(data.message)
                     }else {
                         alert('可能网络问题，请稍后重试！')
                     }

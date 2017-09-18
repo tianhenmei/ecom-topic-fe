@@ -7,7 +7,8 @@
                 </div>
                 <div class="yh-page-center" :id="'pageCanvas'+index">
                     <div class="yh-page-canvas" :style="page.background">
-                        <div v-for="element in elements[index]" :is="element.module"
+                        <div v-for="element in page.elements" :is="element.module"
+                            v-if="element"
                             :props="element.props"
                             :path="element.path"
                             :withoutedit="true"
@@ -66,21 +67,16 @@
         watch:{
             pages(newv,oldv){
                 if(this.pages.length > 1){
-                    if(this.pageStatus.length == 0){
-                        // this.initScroll(this.pages.length - 1)
-                        this.initScroll(this.pages.length)
-                    }else{
-                        this.initScroll(1)
-                    }
+                    // if(this.pageStatus.length == 0){
+                    //     // this.initScroll(this.pages.length - 1)
+                    //     this.initScroll(this.pages.length)
+                    // }else{
+                        
+                    // }
+                    this.initScroll(1)
                 }else{
                     this.initScroll(1)
                 }
-                for(let i = this.pageStatus.length; i < this.pages.length; i++){
-                    this.pageStatus.push({
-                        status:false
-                    })
-                }
-                this.pageStatus[this.currentPage].status = true
             },
             currentPage(newv,oldv){
                 this.$store.commit('changePageStatus',{

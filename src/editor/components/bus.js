@@ -27,6 +27,7 @@ module.exports = {
 // setPages          components-content.vue      components-pages.vue
 // updateContent     button.vue                  components-content.vue
 // addChild          components-edit.vue         components-content.vue    // 添加组件  
+// savePage          components-edit.vue         components-content.vue    // 保存页面  
 
 
 
