@@ -317,7 +317,7 @@ var pageVue = new Vue({
             if(this.updateStatus && html.split('.')[0] == this.oldhtml){
                 return true
             }
-			this.$http.post(this.host+"v3/api/createPC/checkurl",{
+			this.$http.post(this.host+"api/createPC/checkurl",{
                 "url":html.split('.')[0]
             },{
                 emulateJSON:true
