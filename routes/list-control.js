@@ -218,20 +218,24 @@ router.post('/api/list/getListData',function(req,res){
 
 function getList(callback){
     let list = []
-    exec('ls -t '+path.resolve(__dirname,'../publish'), function(err, stdout, stderr) {
+    exec('ls -t '+path.resolve(__dirname,getDataPath), function(err, stdout, stderr) {
         if(stderr){
             return console.log(stderr)
         }
         let arr = stdout.split(/[\n\r,]/g),
             files = [],
+            value = '',
             i = 0
         for(i = 0; i < arr.length; i++){
-            if(arr[i].trim()){
-                files.push(arr[i].trim())
+            value = arr[i].trim()
+            if(value){
+                if(value != 'static'){
+                    files.push(value)
+                }
             }
         }
         files.forEach(function(file){
-            let filePath = path.resolve(__dirname,'../publish/'+file),
+            let filePath = path.resolve(__dirname,getDataPath+file),
                 statInfo = fs.statSync(filePath)
             
             if(statInfo.isDirectory()){  // 目录
@@ -241,12 +245,12 @@ function getList(callback){
         })
         callback(list)
     })
-    // fs.readdir(path.resolve(__dirname,'../publish'),function(err,files){
+    // fs.readdir(path.resolve(__dirname,getDataPath),function(err,files){
     //     if(err){
     //         return console.log(err)
     //     }
     //     files.forEach(function(file){
-    //         let filePath = path.resolve(__dirname,'../publish/'+file),
+    //         let filePath = path.resolve(__dirname,getDataPath+file),
     //             statInfo = fs.statSync(filePath)
             
     //         if(statInfo.isDirectory()){  // 目录
