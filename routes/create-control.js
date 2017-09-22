@@ -186,7 +186,8 @@ function writeFile(path,string){
 //创建多层文件夹 同步
 function mkdirsSync(dirpath, mode) { 
     if (!fs.existsSync(dirpath)) {
-        var pathtmp;
+        var pathtmp,
+            i = 0;
         dirpath.split(path.sep).forEach(function(dirname) {
             if(dirname){
                 if (pathtmp) {
@@ -199,6 +200,9 @@ function mkdirsSync(dirpath, mode) {
                         return false;
                     }
                 }
+            }else if(i == 0 && !dirname){
+                pathtmp = '/'
+                i++;
             }
         });
     }
