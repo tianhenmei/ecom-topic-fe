@@ -349,23 +349,35 @@ var pageVue = new Vue({
             },{
                 emulateJSON:true
             })*/
-            axios({
+            $.ajax({
+                type:'GET',
+                async: false,
                 url:"http://meta.lagou.com/code/create-jsonp",
-                method:'GET',
                 jsonp:'callback',
-                dataType:'jsonp',
-                withCredentials:true,
-            }).then(response => {
-                // $('.lgID').attr('value',data.data.code);
-                // $('#dataForm').submit();
-                let data = response.data
-                if(data.success){
-                    self.one.lgID = data.code
-                    self.sendData()
-				}
-            },response =>{
+                dataType:'jsonp'
+            }).done(function(data){
+                self.one.lgID = data.data.code
+                self.sendData()
+            }).fail(function(error){
                 alert('meta.lagou.com服务器繁忙，请刷新重试\n如还不行，可联系数据组gim！');
-            })
+            });
+            // axios({
+            //     url:"http://meta.lagou.com/code/create-jsonp",
+            //     method:'GET',
+            //     jsonp:'callback',
+            //     dataType:'jsonp',
+            //     withCredentials:true,
+            // }).then(response => {
+            //     // $('.lgID').attr('value',data.data.code);
+            //     // $('#dataForm').submit();
+            //     let data = response.data
+            //     if(data.success){
+            //         self.one.lgID = data.code
+            //         self.sendData()
+			// 	}
+            // },response =>{
+            //     alert('meta.lagou.com服务器繁忙，请刷新重试\n如还不行，可联系数据组gim！');
+            // })
         },
         createSubject(e){
             var checkArray = [
