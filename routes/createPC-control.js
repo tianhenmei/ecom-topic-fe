@@ -136,7 +136,7 @@ router.post('/api/createPC/getPageData',function(req,res){
         });
         return
     }
-    fs.readFile(path.resolve(__dirname,'../'+dirpath+'/js/index.json'),'utf-8',function(err,data){
+    fs.readFile(path.resolve(__dirname,(isProd ? '': '../')+dirpath+'/js/index.json'),'utf-8',function(err,data){
         if(err){
             console.log(err)
             res.json({
