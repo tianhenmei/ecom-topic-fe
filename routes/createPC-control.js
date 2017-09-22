@@ -79,7 +79,7 @@ router.post('/api/createPC/update',function(req,res){
         //             .digest('hex')
         hash = crypto.randomBytes(8)
                     .toString('hex'),
-        str = fs.readFileSync(path.resolve(__dirname,'../'+saveDir+dirpath+'/js/index.json'),{
+        str = fs.readFileSync(path.resolve(__dirname,(isProd ? '': '../')+saveDir+dirpath+'/js/index.json'),{
             encoding:'utf-8'
         }),
         newdata = JSON.parse(str)
