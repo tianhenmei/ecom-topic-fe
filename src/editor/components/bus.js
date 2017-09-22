@@ -9,7 +9,7 @@ module.exports = {
     isMoving:isMoving,
     moveStatus:false,
     textEditing:false,
-    host:'http://localhost:9000/',
+    host:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
     pageData:{
         elements:[],
         background:{

@@ -167,55 +167,58 @@
                     fileData = new FormData(),
                     requestdata = this.$store.state.ajaxUrl.File,
                     self = this
-                fileData.append('files',file,file.name);
-                (function(self,that){
+                // fileData.append('files',file,file.name);
+                fileData.append('files',file);
+                // (function(self){
                     //self.$store.state.connhost+'v3/api/editorPC/upload'
-                    axios({
-                        url:requestdata.url,
-                        method:requestdata.type,
-                        data:fileData,
-                        withCredentials:true,
-                    }).then(response => {
-                        let data = response.data,
-                            name = self.options.mold,
-                            stylename = '',
-                            value = ''
-                        if(self.type){
-                            switch(name){
-                                case 'src':
-                                    stylename = 'yh-src'
-                                    value = self.$store.state.fileHost+data.filename
-                                    break
-                                case 'bg':
-                                    stylename = 'background-image'
-                                    value = self.$store.state.fileHost+data.filename
-                                    break
-                            }
-                            self.$store.commit('setValue',{
-                                parent:self.parent,
-                                index:self.index,
-                                ischildset:self.ischildset ? self.ischildset : '',
-                                stylename:stylename,
-                                actualValue:value,
-                                designValue:value
-                            })
-                        }else{
-                            switch(name){
-                                case 'src':
-                                    self.imageChange(self,data)
-                                    break
-                                case 'audiosrc':
-                                    self.otherChange(self,data)
-                                    break    
-                                case 'bg':
-                                    self.setBackgroundImage(self,data)
-                                    break
-                            }
+                axios({
+                    url:requestdata.url,
+                    method:requestdata.type,
+                    data:fileData,
+                    autoUpload: true,
+                    dataType: "json",
+                    withCredentials:true,
+                }).then(response => {
+                    let data = response.data,
+                        name = self.options.mold,
+                        stylename = '',
+                        value = ''
+                    if(self.type){
+                        switch(name){
+                            case 'src':
+                                stylename = 'yh-src'
+                                value = self.$store.state.fileHost+data.filename
+                                break
+                            case 'bg':
+                                stylename = 'background-image'
+                                value = self.$store.state.fileHost+data.filename
+                                break
                         }
-                    },response => {
-                        console.log(response.body.message)
-                    })
-                })(self,that)
+                        self.$store.commit('setValue',{
+                            parent:self.parent,
+                            index:self.index,
+                            ischildset:self.ischildset ? self.ischildset : '',
+                            stylename:stylename,
+                            actualValue:value,
+                            designValue:value
+                        })
+                    }else{
+                        switch(name){
+                            case 'src':
+                                self.imageChange(self,data)
+                                break
+                            case 'audiosrc':
+                                self.otherChange(self,data)
+                                break    
+                            case 'bg':
+                                self.setBackgroundImage(self,data)
+                                break
+                        }
+                    }
+                },response => {
+                    console.log(response.body.message)
+                })
+                // })(self)
             },
             otherChange(self,data){
                 let src = self.$store.state.fileHost+data.filename

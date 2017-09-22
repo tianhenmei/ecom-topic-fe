@@ -1282,7 +1282,7 @@
                 name = getQueryString('name');
                 $.ajax({
                     type:'post',
-                    url:MW.host+'v3/api/editor/save',
+                    url:this.connhost+'v3/api/editor/save',
                     data:{
                         // id:10002,
                         name:name,

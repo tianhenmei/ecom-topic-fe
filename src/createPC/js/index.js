@@ -1,7 +1,7 @@
 import '../css/style.scss'
 import Vue from 'vue'
 import VueResource from 'vue-resource'
-// import axios from 'axios'
+import axios from 'axios'
 
 Vue.use(VueResource)
 Vue.config.debug = true;//开启错误提示
@@ -343,11 +343,18 @@ var pageVue = new Vue({
         },
         getLgID(){
             let self = this
-            this.$http.get("http://meta.lagou.com/code/create-jsonp",{
+            /*this.$http.get("http://meta.lagou.com/code/create-jsonp",{
                 jsonp:'callback',
                 dataType:'jsonp'
             },{
                 emulateJSON:true
+            })*/
+            axios({
+                url:"http://meta.lagou.com/code/create-jsonp",
+                method:'GET',
+                jsonp:'callback',
+                dataType:'jsonp',
+                withCredentials:true,
             }).then(response => {
                 // $('.lgID').attr('value',data.data.code);
                 // $('#dataForm').submit();
