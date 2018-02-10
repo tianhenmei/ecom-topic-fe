@@ -111,7 +111,7 @@ function getConfig(systemName,name,plugins='defalutPlugins'){
         // loader: "style!css"
         use:ExtractTextPlugin.extract({
             fallback:'style-loader', 
-            use:['css-loader','postcss-loader','sass-loader'],
+            use:['css-loader','postcss-loader','sass-loader','less-loader'],
             allChunks:true
         })
     };
@@ -129,6 +129,11 @@ function getConfig(systemName,name,plugins='defalutPlugins'){
                 loader: 'postcss-loader'
             },{
                 loader: 'sass-loader',
+                options: {
+                noIeCompat: true
+                }
+            },{
+                loader: 'less-loader',
                 options: {
                 noIeCompat: true
                 }

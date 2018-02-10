@@ -15,13 +15,13 @@ let store = new Vuex.Store({
         includes:[],
         count:0,
         ENV_STATUS:__isProd__,
-        host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://localhost:9000/v3/',  // https://activity.lagou.com/topic/v3/
-        connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
-        topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://localhost:9000/',
-        // uploadFile:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://localhost:9000/v3/api/editorPC/upload',
-        fileHost:__isProd__ ? 'https://www.lgstatic.com/' : 'http://localhost:9000/v3/',
-        // companyHost:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://localhost:9000/v3/api/editorPC/company/speed_checkCompany/',
-        // positionHost:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://localhost:9000/v3/api/editorPC/job/speed_checkPosition/',        
+        host:__isProd__ ? 'http://topic.lagou.com/v3/' : 'http://172.18.8.93:9000/v3/',  // https://activity.lagou.com/topic/v3/
+        connhost:__isProd__ ? 'http://topic.lagou.com/' : 'http://172.18.8.93:9000/',
+        topic:window.location.host == 'topic.lagou.com' ? 'http://topic.lagou.com/' : 'http://172.18.8.93:9000/',
+        // uploadFile:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://172.18.8.93:9000/v3/api/editorPC/upload',
+        fileHost:__isProd__ ? 'https://www.lgstatic.com/' : 'http://172.18.8.93:9000/v3/',
+        // companyHost:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://172.18.8.93:9000/v3/api/editorPC/company/speed_checkCompany/',
+        // positionHost:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://172.18.8.93:9000/v3/api/editorPC/job/speed_checkPosition/',        
         triggerId:'',
         triggerClassify:'',
         childClassify:'',
@@ -32,13 +32,13 @@ let store = new Vuex.Store({
         ajaxUrl:{
             CompanyPositions:{
                 // http://topic.lagou.com/company/getCompanyandPosition
-                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/getCompanyandPosition_online' : 'http://localhost:9000/v3/api/company/getCompanyandPosition',
+                url:__isProd__ ? 'http://topic.lagou.com/v3/api/company/getCompanyandPosition_online' : 'http://172.18.8.93:9000/v3/api/company/getCompanyandPosition',
                 type:'GET',
                 param:'comAndPosi'
             },
             CompanyPosition:{
                 // http://topic.lagou.com/company/speed_checkCompany/
-                // http://localhost:9000/v3/api/company/speed_checkCompany/
+                // http://172.18.8.93:9000/v3/api/company/speed_checkCompany/
                 // http://topic.lagou.com/v3/api/company/speed_checkCompany-online/
                 // http://local.lagou.com:8080/company/speed_checkCompany/
                 url:__isProd__ ? 'http://topic.lagou.com/company/speed_checkCompany/' : 'http://local.lagou.com:8080/company/speed_checkCompany/',//'v3/api/company/speed_checkCompany/$id$',
@@ -46,7 +46,7 @@ let store = new Vuex.Store({
             },
             Position:{
                 // http://topic.lagou.com/job/speed_checkPosition/
-                // http://localhost:9000/v3/api/job/speed_checkPosition/
+                // http://172.18.8.93:9000/v3/api/job/speed_checkPosition/
                 // http://topic.lagou.com/v3/api/job/speed_checkPosition_online/
                 // http://local.lagou.com:8080/job/speed_checkPosition/
                 url:__isProd__ ? 'http://topic.lagou.com/job/speed_checkPosition/' : 'http://local.lagou.com:8080/job/speed_checkPosition/',       // 'v3/api/job/speed_checkPosition/$id$',
@@ -55,7 +55,7 @@ let store = new Vuex.Store({
             File:{
                 // online: http://topic.lagou.com/file/upload
                 // http://topic.lagou.com/v3/api/editorPC/upload_online
-                // http://localhost:9000/v3/api/editorPC/upload
+                // http://172.18.8.93:9000/v3/api/editorPC/upload
                 url:__isProd__ ? 'http://topic.lagou.com/file/upload' : 'http://local.lagou.com:8080/file/upload',
                 type:'POST'
             },

@@ -9,3 +9,4 @@ jspm_packages
 *.map
 .sass-cache
 /publish
+/english

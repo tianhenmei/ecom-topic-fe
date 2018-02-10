@@ -407,9 +407,12 @@
         width:45px;
         height:17px;
         font-family: serif;
-        position: absolute;
+        /*position: absolute;
         left: 0;
-        top: 0;
+        top: 0;*/
+        position: fixed;
+        right: 250px;
+        top: 80px;
     }
     .yh-delete-undo .yh-delete,
     .yh-delete-undo .yh-undo {

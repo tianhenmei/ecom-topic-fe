@@ -1,4 +1,4 @@
-@import 'http://localhost:9000/static/css/init-h5.scss';
+@import 'http://172.18.8.93:9000/static/css/init-h5.scss';
 @function getEleN($n) {
     @return $n / (750/16) + rem;
 }

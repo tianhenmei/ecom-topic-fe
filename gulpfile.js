@@ -821,3 +821,33 @@ gulp.task('upload:server',function() {
 })
 /** 推送线上单台 */
 gulp.task('upload-test', ['upload:server'])
+
+
+
+gulp.task('separate:file',function(){
+    let englishpath = path.resolve(__dirname,'./english/2000')
+    fs.readdir(englishpath,function(err,files){
+        var i = 0,
+            newpath = '',
+            all = [],
+            one = '',
+            current = [],
+            length = 0,
+            destin = 500,
+            newdir = path.resolve(__dirname,'./english/'+destin)
+        console.log(files)    
+        for(i = 0; i < files.length; i++){
+            newpath = path.join(englishpath,files[i])
+            one = fs.readFileSync(newpath).toString()
+            current = one.match(/(<item>[\s\S]*?<\/item>)/g)
+            all = all.concat(current)
+        }
+        mkdirp(newdir, function(err) {
+            if (err) console.error(err)
+            length = Math.ceil(all.length / destin)
+            for(i = 0; i < length; i++){
+                fs.writeFileSync(path.resolve(newdir,(i+1)+'.xml'),'<wordbook>\n'+all.slice(i*destin,(i+1)*destin).join('\n')+'\n</wordbook>')
+            }
+        })
+    })
+})
